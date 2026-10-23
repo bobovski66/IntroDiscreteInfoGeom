@@ -1,0 +1,1 @@
+Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths.

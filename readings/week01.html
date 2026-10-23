@@ -1,0 +1,358 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 1: Sequences, growth, and proportions · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="1"><p class="eyebrow">Week 1 · Reading</p><h1>Sequences, growth, and proportions</h1><nav class="week-nav" aria-label="Week 1 resources"><a aria-current=page href="../readings/week01.html">Reading</a><a  href="../demos/week01.html">Demonstration</a><a  href="../labs/week01.html">Lab</a><a  href="../quizzes/week01.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter01.pdf">Chapter 1 PDF</a> · <a href="../textbook/latex/chapter01.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Solve a constant-multiplier recurrence.</li><li>Derive and interpret normalized growth.</li><li>Use odds to find a target step and distinguish counts from proportions.</li></ul></aside><article class="reading-text"><p>A population, a collection of observations, and a set of possible
+messages can all be described by lists of nonnegative numbers. Dividing
+each entry by the total produces proportions. The proportions retain the
+composition of the collection even when its size changes. This simple
+operation connects growth models with probability.</p>
+<p>Our time variable takes the values <span
+class="math inline">\(t=0,1,2,\ldots\)</span>. One step might represent
+a generation, a round of a game, or the arrival of another batch of
+data. A rule that determines the next state from the present state is a
+<strong>difference equation</strong>. We will study such rules by
+calculating successive states, solving some rules exactly, and comparing
+quantities before and after a step.</p>
+<h2 id="sequences-and-repeated-multiplication">Sequences and repeated
+multiplication</h2>
+<p>A sequence is an ordered list <span
+class="math inline">\(a_0,a_1,a_2,\ldots\)</span>. The recurrence <span
+class="math inline">\(a_{t+1}=r a_t\)</span>, together with an initial
+value <span class="math inline">\(a_0\)</span>, determines every term.
+Substitution gives <span class="math inline">\(a_1=ra_0\)</span>, <span
+class="math inline">\(a_2=r^2a_0\)</span>, and, after <span
+class="math inline">\(t\)</span> steps, <span
+class="math display">\[a_t=a_0r^t.\]</span> Here <span
+class="math inline">\(r\)</span> is the multiplier per step. A
+multiplier of <span class="math inline">\(1.2\)</span> means a <span
+class="math inline">\(20\%\)</span> increase in one step; a multiplier
+of <span class="math inline">\(0.8\)</span> means a <span
+class="math inline">\(20\%\)</span> decrease. The percentage change and
+the multiplier are different numbers.</p>
+<p>Suppose two types, <span class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span>, have positive counts <span
+class="math inline">\(N_{A,t}\)</span> and <span
+class="math inline">\(N_{B,t}\)</span>. With constant multipliers <span
+class="math inline">\(w_A,w_B&gt;0\)</span>, their counts satisfy <span
+class="math display">\[N_{A,t+1}=w_A N_{A,t},\qquad N_{B,t+1}=w_B
+N_{B,t}.\]</span> Counts may be interpreted as expected counts or
+amounts when a multiplier produces a noninteger result. A model of
+literal indivisible individuals would require an additional sampling or
+rounding rule. We will state explicitly when such a rule is present.</p>
+<div class="example" title="The same population at two scales">
+<p><strong>Example. The same population at two scales</strong></p>
+<p>Begin with <span class="math inline">\(20\)</span> individuals of
+type <span class="math inline">\(A\)</span> and <span
+class="math inline">\(80\)</span> of type <span
+class="math inline">\(B\)</span>. Let <span
+class="math inline">\(w_A=2\)</span> and <span
+class="math inline">\(w_B=1\)</span>. The count pairs are <span
+class="math inline">\((20,80)\)</span>, <span
+class="math inline">\((40,80)\)</span>, <span
+class="math inline">\((80,80)\)</span>, and <span
+class="math inline">\((160,80)\)</span>. Their <span
+class="math inline">\(A\)</span> proportions are <span
+class="math inline">\(1/5\)</span>, <span
+class="math inline">\(1/3\)</span>, <span
+class="math inline">\(1/2\)</span>, and <span
+class="math inline">\(2/3\)</span>. Beginning instead at <span
+class="math inline">\((200,800)\)</span> produces exactly the same
+proportions. Multiplying every count by a common positive number leaves
+composition unchanged.</p>
+</div>
+<h2 id="normalization-gives-an-exact-update">Normalization gives an
+exact update</h2>
+<p>Write <span
+class="math inline">\(x_t=N_{A,t}/(N_{A,t}+N_{B,t})\)</span>. The other
+proportion is <span class="math inline">\(1-x_t\)</span>. Dividing the
+new <span class="math inline">\(A\)</span> count by the new total gives
+<span class="math display">\[x_{t+1}=\frac{x_t w_A}{x_t
+w_A+(1-x_t)w_B}.\]</span> The denominator is the average multiplier in
+the current population. It accounts for the growth of the total. We
+often write <span class="math inline">\(x^+\)</span> for the next value
+of <span class="math inline">\(x\)</span> and <span
+class="math inline">\(Z=xw_A+(1-x)w_B\)</span> for this average. Then
+<span class="math display">\[x^+-x=\frac{x(1-x)(w_A-w_B)}{Z}.\]</span>
+To verify the formula, put <span class="math inline">\(xw_A/Z-x\)</span>
+over the denominator <span class="math inline">\(Z\)</span> and factor
+the numerator. This identity gives a complete sign test: an interior
+proportion increases when <span
+class="math inline">\(w_A&gt;w_B\)</span>, decreases when <span
+class="math inline">\(w_A&lt;w_B\)</span>, and remains fixed when the
+multipliers agree.</p>
+<p>The endpoints also have a direct meaning. If <span
+class="math inline">\(x=0\)</span>, there are no <span
+class="math inline">\(A\)</span> individuals to multiply, so <span
+class="math inline">\(x^+=0\)</span>. If <span
+class="math inline">\(x=1\)</span>, the next state is again <span
+class="math inline">\(1\)</span>. An absent type remains absent under
+this particular rule. Introducing a type by migration or mutation
+requires another term in the model.</p>
+<div class="example"
+title="Both counts can grow while one proportion falls">
+<p><strong>Example. Both counts can grow while one proportion
+falls</strong></p>
+<p>Take equal initial counts and multipliers <span
+class="math inline">\(w_A=1.1\)</span>, <span
+class="math inline">\(w_B=1.3\)</span>. Both types increase in number.
+Nevertheless, <span
+class="math inline">\(x^+=1.1/(1.1+1.3)=11/24\)</span>, which is smaller
+than <span class="math inline">\(1/2\)</span>. The proportion compares
+one type with the total; its change depends on relative
+multiplication.</p>
+</div>
+<h2 id="odds-turn-normalization-into-multiplication">Odds turn
+normalization into multiplication</h2>
+<p>For <span class="math inline">\(0&lt;x&lt;1\)</span>, the
+<strong>odds</strong> of <span class="math inline">\(A\)</span> relative
+to <span class="math inline">\(B\)</span> are <span
+class="math inline">\(O=x/(1-x)\)</span>. Odds of <span
+class="math inline">\(3\)</span> mean three <span
+class="math inline">\(A\)</span> individuals per <span
+class="math inline">\(B\)</span> individual, so the corresponding
+proportion is <span class="math inline">\(3/4\)</span>. Solving the
+definition for <span class="math inline">\(x\)</span> gives <span
+class="math inline">\(x=O/(1+O)\)</span>.</p>
+<p>The normalized rule has a particularly simple form in odds: <span
+class="math display">\[O_{t+1}=\frac{x_{t+1}}{1-x_{t+1}}=\frac{w_A}{w_B}O_t.\]</span>
+Let <span class="math inline">\(r=w_A/w_B\)</span>. Repeated
+multiplication now yields an explicit solution: <span
+class="math display">\[O_t=O_0r^t,\qquad
+x_t=\frac{x_0r^t}{1-x_0+x_0r^t}.\]</span> The expression is valid for
+every nonnegative integer <span class="math inline">\(t\)</span> and for
+the endpoint initial states as well. It solves the normalized recurrence
+without computing intermediate states.</p>
+<div class="example" title="Reaching a target proportion">
+<p><strong>Example. Reaching a target proportion</strong></p>
+<p>Let <span class="math inline">\(x_0=1/5\)</span> and <span
+class="math inline">\(r=2\)</span>. Then <span
+class="math inline">\(O_t=2^t/4\)</span>. The condition <span
+class="math inline">\(x_t\geq 0.9\)</span> is equivalent to <span
+class="math inline">\(O_t\geq9\)</span>, hence to <span
+class="math inline">\(2^t\geq36\)</span>. Since <span
+class="math inline">\(2^5=32\)</span> and <span
+class="math inline">\(2^6=64\)</span>, the first qualifying step is
+<span class="math inline">\(t=6\)</span>. Checking integer powers is
+often the clearest way to answer a discrete timing question.</p>
+</div>
+<p>If <span class="math inline">\(r&gt;1\)</span> and both types are
+initially present, the odds become arbitrarily large and <span
+class="math inline">\(x_t\)</span> approaches <span
+class="math inline">\(1\)</span>. If <span
+class="math inline">\(r&lt;1\)</span>, the odds approach zero and <span
+class="math inline">\(x_t\)</span> approaches zero. Approaching an
+endpoint does not mean reaching it at a finite step: all finite powers
+of a positive number are positive, so both types remain present in exact
+arithmetic.</p>
+<h2 id="probability-vectors-and-weighted-averages">Probability vectors
+and weighted averages</h2>
+<p>For <span class="math inline">\(k\)</span> types, let <span
+class="math inline">\(p_i\)</span> denote the proportion of type <span
+class="math inline">\(i\)</span>. A <strong>probability vector</strong>
+satisfies <span class="math inline">\(p_i\geq0\)</span> and <span
+class="math inline">\(\sum_{i=1}^k p_i=1\)</span>. The symbol <span
+class="math inline">\(\sum\)</span> means addition over the indicated
+indices. Thus <span
+class="math inline">\(\sum_{i=1}^3p_i=p_1+p_2+p_3\)</span>.</p>
+<p>With positive multipliers <span class="math inline">\(w_i\)</span>,
+the general update is <span
+class="math display">\[p_i^+=\frac{p_iw_i}{Z},\qquad Z=\sum_{j=1}^k
+p_jw_j.\]</span> All new entries are nonnegative, and adding them gives
+<span class="math inline">\(Z/Z=1\)</span>. This verifies that the rule
+remains inside the set of probability vectors. The quantity <span
+class="math inline">\(Z\)</span> is a <strong>weighted average</strong>
+of the multipliers: a common type contributes more to the average than a
+rare type.</p>
+<div class="example" title="Three types in one step">
+<p><strong>Example. Three types in one step</strong></p>
+<p>Let <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> and <span
+class="math inline">\(w=(1,2,3)\)</span>. The unnormalized entries are
+<span class="math inline">\((1/2,2/3,1/2)\)</span> and their sum is
+<span class="math inline">\(5/3\)</span>. Dividing by that sum gives
+<span class="math inline">\(p^+=(3/10,2/5,3/10)\)</span>. The entries
+add to one, providing a quick arithmetic check.</p>
+</div>
+<p>Multiplying every <span class="math inline">\(w_i\)</span> by the
+same positive constant leaves the normalized result unchanged, because
+that constant cancels between numerator and denominator. This freedom is
+useful when comparing models and when computing with very large or small
+weights.</p>
+<h2 id="what-a-finite-model-specifies">What a finite model
+specifies</h2>
+<p>A recurrence needs an initial state and a rule for each step. Its
+interpretation also needs a meaning for one step. Changing a step from
+one generation to ten generations can change the appropriate multiplier.
+For constant multipliers, ten consecutive steps multiply the odds by
+<span class="math inline">\(r^{10}\)</span>. A state-dependent
+multiplier requires reevaluation after every step and usually cannot be
+replaced by its tenth power at the initial state.</p>
+<p>Throughout the course, a <strong>fixed point</strong> is a state that
+one update leaves unchanged. A <strong>trajectory</strong> is the
+sequence of states generated by repeated updates. A quantity is
+<strong>invariant</strong> if it has exactly the same value at every
+step. These definitions refer to the stated recurrence. They will let us
+ask precise questions even when a closed formula for the trajectory is
+unavailable.</p>
+<figure><img src="../assets/fig-growth.svg" alt="Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step." loading="lazy"><figcaption>Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.</figcaption></figure>
+<h2 id="reversing-an-update-and-checking-a-formula">Reversing an update
+and checking a formula</h2>
+<p>An explicit formula is more than a shortcut. It lets us answer an
+inverse question: which initial composition would produce a given final
+composition? For a constant relative multiplier <span
+class="math inline">\(r&gt;0\)</span>, the odds relation <span
+class="math inline">\(O_t=r^tO_0\)</span> gives <span
+class="math inline">\(O_0=O_t/r^t\)</span>. Convert the observed final
+proportion to odds, divide by the accumulated multiplier, and convert
+back to a proportion. These operations reverse the update when both
+types are present.</p>
+<div class="example" title="Reconstructing an initial composition">
+<p><strong>Example. Reconstructing an initial composition</strong></p>
+<p>After four steps with relative multiplier <span
+class="math inline">\(3/2\)</span>, the A proportion is <span
+class="math inline">\(3/5\)</span>. Its final odds are <span
+class="math inline">\(3/2\)</span>. Dividing by <span
+class="math inline">\((3/2)^4=81/16\)</span> gives initial odds <span
+class="math inline">\(8/27\)</span>. The initial A proportion was
+therefore <span class="math inline">\((8/27)/(1+8/27)=8/35\)</span>.
+Substituting <span class="math inline">\(x_0=8/35\)</span> into the
+explicit formula recovers <span class="math inline">\(3/5\)</span> at
+step four.</p>
+</div>
+<p>Sometimes the multiplier is unknown instead. If both <span
+class="math inline">\(O_0\)</span> and <span
+class="math inline">\(O_t\)</span> are known, then <span
+class="math inline">\(r^t=O_t/O_0\)</span>. For example, doubling the
+odds in three steps requires <span
+class="math inline">\(r=2^{1/3}\)</span> per step. This is a relative
+multiplier. Many absolute pairs <span
+class="math inline">\((w_A,w_B)\)</span> have this ratio, so
+compositions alone do not determine absolute population growth.</p>
+<p>The exact solution can be verified by <strong>mathematical
+induction</strong>. First check the initial step <span
+class="math inline">\(t=0\)</span>, where the formula returns <span
+class="math inline">\(x_0\)</span>. Then assume the formula holds at a
+particular step <span class="math inline">\(t\)</span>. Substituting
+into the recurrence and canceling its common denominator gives the same
+formula with <span class="math inline">\(t+1\)</span> in place of <span
+class="math inline">\(t\)</span>. These two statements establish the
+formula for every nonnegative integer step. Induction is particularly
+well suited to recurrences because the proof follows the way the
+sequence is constructed.</p>
+<h2 id="replenishment-gives-an-affine-recurrence">Replenishment gives an
+affine recurrence</h2>
+<p>Repeated multiplication is one useful mechanism; partial replacement
+is another. Suppose a fixed-size collection replaces a fraction <span
+class="math inline">\(\lambda\)</span> of its members each round with an
+external source whose A proportion is <span
+class="math inline">\(q\)</span>. The next composition is <span
+class="math display">\[x^+=(1-\lambda)x+\lambda q,\qquad
+0&lt;\lambda\leq1.\]</span> This is an <strong>affine
+recurrence</strong>, consisting of a multiple of <span
+class="math inline">\(x\)</span> plus a constant. Its fixed point is
+<span class="math inline">\(q\)</span>. Subtracting that fixed point
+gives a pure multiplication rule for the error: <span
+class="math display">\[x^+-q=(1-\lambda)(x-q).\]</span> Thus <span
+class="math inline">\(x_t=q+(1-\lambda)^t(x_0-q)\)</span>. This
+technique, shifting coordinates to a fixed point, will recur in later
+chapters.</p>
+<div class="example" title="Replacing one quarter of a collection">
+<p><strong>Example. Replacing one quarter of a collection</strong></p>
+<p>Let <span class="math inline">\(x_0=0.8\)</span>, let the external
+source have proportion <span class="math inline">\(q=0.2\)</span>, and
+replace one quarter each round. Then <span
+class="math inline">\(x_t=0.2+0.6(3/4)^t\)</span>. The first two new
+values are <span class="math inline">\(0.65\)</span> and <span
+class="math inline">\(0.5375\)</span>. Every step removes one quarter of
+the remaining difference from the source composition. It does not remove
+one quarter of the current A proportion.</p>
+</div>
+<p>The multiplying-growth model and the replacement model can be
+distinguished by their formulas. Positive multiplication preserves
+absence. Replacement introduces A from the source whenever <span
+class="math inline">\(q&gt;0\)</span> and <span
+class="math inline">\(\lambda&gt;0\)</span>, even if A is initially
+absent. Choosing a recurrence therefore includes choosing the mechanisms
+that can change a population.</p>
+<h2 id="a-calculation-routine">A calculation routine</h2>
+<p>To compute an update reliably, make a short table with columns for
+the old proportion, multiplier, and product. Add the products to obtain
+<span class="math inline">\(Z\)</span>, then divide every product by
+<span class="math inline">\(Z\)</span>. Check the new sum before
+rounding the displayed values. Store more digits than are printed, since
+feeding rounded output back into the next step changes the recurrence.
+Finally, compare a simple diagnostic, such as the two-type odds ratio,
+with its expected update. An independent identity often detects an
+indexing error that a unit-sum check alone would miss.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Starting from <span class="math inline">\(a_0=12\)</span>, list the
+first five terms of <span
+class="math inline">\(a_{t+1}=(3/2)a_t\)</span>, including <span
+class="math inline">\(a_0\)</span>.</li>
+<li>A quantity decreases by <span class="math inline">\(15\%\)</span>
+each step. Write its multiplier and its value after eight steps in terms
+of its initial value.</li>
+<li>Normalize the count triples <span
+class="math inline">\((6,9,15)\)</span> and <span
+class="math inline">\((14,21,35)\)</span>. Explain why the results
+agree.</li>
+<li>Starting with counts <span class="math inline">\((30,70)\)</span>
+and multipliers <span class="math inline">\((3,2)\)</span>, find the
+counts and proportions after two steps.</li>
+<li>Derive the formula for <span class="math inline">\(x^+-x\)</span> by
+putting the two fractions over a common denominator.</li>
+<li>Convert proportions <span class="math inline">\(1/4\)</span>, <span
+class="math inline">\(2/3\)</span>, and <span
+class="math inline">\(0.9\)</span> to odds. Convert odds <span
+class="math inline">\(1/5\)</span>, <span
+class="math inline">\(1\)</span>, and <span
+class="math inline">\(7\)</span> to proportions.</li>
+<li>Let <span class="math inline">\(x_0=1/10\)</span> and <span
+class="math inline">\(w_A/w_B=3\)</span>. Find the first integer step at
+which <span class="math inline">\(x_t\geq1/2\)</span>.</li>
+<li>Prove that the general normalized update preserves the sum of the
+entries and preserves all zero entries.</li>
+<li>Compute one update for <span
+class="math inline">\(p=(1/4,1/4,1/2)\)</span> and <span
+class="math inline">\(w=(4,2,1)\)</span>. Repeat with <span
+class="math inline">\(w=(20,10,5)\)</span>.</li>
+<li>Show that, for constant multipliers, <span
+class="math inline">\(p_{i,t}=p_{i,0}w_i^t/\sum_jp_{j,0}w_j^t\)</span>.</li>
+<li>A program rounds each new proportion to two decimal places. Explain
+how this can remove a type that the exact recurrence would preserve.
+Give numerical values.</li>
+<li>Two populations have the same initial composition but different
+total sizes. State assumptions under which their compositions remain
+identical, and describe one modification of the model that can break
+this conclusion.</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>1.</strong> The terms are <span
+class="math inline">\(12,18,27,81/2,243/4\)</span>. Each is obtained by
+multiplying its predecessor by <span
+class="math inline">\(3/2\)</span>.</p>
+<p><strong>3.</strong> Both triples normalize to <span
+class="math inline">\((1/5,3/10,1/2)\)</span>. The second count triple
+is <span class="math inline">\(7/3\)</span> times the first, and this
+factor cancels upon normalization.</p>
+<p><strong>4.</strong> The new counts are <span
+class="math inline">\((90,140)\)</span> and then <span
+class="math inline">\((270,280)\)</span>. The <span
+class="math inline">\(A\)</span> proportions are <span
+class="math inline">\(9/23\)</span> and <span
+class="math inline">\(27/55\)</span>.</p>
+<p><strong>7.</strong> Initial odds are <span
+class="math inline">\(1/9\)</span>. At step <span
+class="math inline">\(t\)</span> they are <span
+class="math inline">\(3^t/9\)</span>. Reaching <span
+class="math inline">\(1/2\)</span> means reaching odds at least one,
+which first occurs at <span class="math inline">\(t=2\)</span>.</p>
+<p><strong>9.</strong> The unnormalized weights are <span
+class="math inline">\((1,1/2,1/2)\)</span>, so the answer is <span
+class="math inline">\((1/2,1/4,1/4)\)</span> in both calculations.</p>
+<p><strong>10.</strong> The formula holds at <span
+class="math inline">\(t=0\)</span>. If it holds at <span
+class="math inline">\(t\)</span>, multiplying each numerator by <span
+class="math inline">\(w_i\)</span> and normalizing cancels the previous
+common denominator, giving the formula with <span
+class="math inline">\(t+1\)</span>. This is a proof by induction.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><span></span><a href="../readings/week02.html">Week 2 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

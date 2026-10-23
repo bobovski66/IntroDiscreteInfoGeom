@@ -1,0 +1,1 @@
+Mixture contraction toward binary target (0.5,0.5) from (0.9,0.1), with mixture fraction 0.25. The proven bound lies above the actual divergence.

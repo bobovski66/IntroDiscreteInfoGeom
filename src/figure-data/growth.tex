@@ -1,0 +1,9 @@
+
+\begin{tikzpicture}
+\begin{axis}[width=6.7cm,height=5.3cm,xlabel={Step $t$},ylabel={Count},xmin=0,xmax=6,ymin=0,legend pos=north west]
+\addplot[teal,mark=*] coordinates {(0,20) (1,40) (2,80) (3,160) (4,320) (5,640) (6,1280)};\addlegendentry{$A$}
+\addplot[copper,mark=square*] coordinates {(0,80) (1,80) (2,80) (3,80) (4,80) (5,80) (6,80)};\addlegendentry{$B$}
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.7cm,height=5.3cm,xlabel={Step $t$},ylabel={$A$ proportion},xmin=0,xmax=6,ymin=0,ymax=1]
+\addplot[teal,mark=*] coordinates {(0,0.2) (1,0.333333) (2,0.5) (3,0.666667) (4,0.8) (5,0.888889) (6,0.941176)};
+\end{axis}\end{tikzpicture}

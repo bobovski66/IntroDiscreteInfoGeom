@@ -1,0 +1,13 @@
+tmp/
+dist/
+.openai/
+__pycache__/
+*.aux
+*.log
+*.toc
+*.out
+*.idx
+*.ilg
+*.ind
+*.fls
+*.fdb_latexmk

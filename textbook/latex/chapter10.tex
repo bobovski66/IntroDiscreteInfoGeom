@@ -1,0 +1,306 @@
+\documentclass[11pt,oneside,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[paperwidth=7.5in,paperheight=10in,inner=.85in,outer=.85in,top=.85in,bottom=.85in,headheight=15pt,headsep=20pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor,graphicx,booktabs,array,longtable}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{arrows.meta,calc,patterns,decorations.markings}
+\pgfplotsset{compat=1.18}
+\definecolor{ink}{HTML}{17334B}
+\definecolor{teal}{HTML}{137C83}
+\definecolor{copper}{HTML}{AE5932}
+\definecolor{soft}{HTML}{EEF3F5}
+\pgfplotsset{every axis/.append style={axis line style={black!65},tick style={black!60},tick label style={font=\small},label style={font=\small},legend style={font=\small,draw=none,fill=white},grid style={black!10},major grid style={black!10},line width=.6pt},every axis plot/.append style={line width=1.15pt}}
+\usepackage{enumitem,needspace,etoolbox}
+\setlist[enumerate]{topsep=5pt,itemsep=5pt,parsep=0pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt,parsep=0pt}
+\usepackage{titlesec,fancyhdr}
+\titleformat{\chapter}[display]{\normalfont\color{ink}}{\large\sffamily\MakeUppercase{Chapter \thechapter}}{12pt}{\huge\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}[\vspace{12pt}\titlerule]
+\titlespacing*{\chapter}{0pt}{-10pt}{24pt}
+\titleformat{\section}{\large\bfseries\color{ink}}{\thesection}{.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{18pt plus 3pt minus 2pt}{7pt}
+\titlespacing*{\subsection}{0pt}{12pt plus 2pt minus 2pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{float,placeins}
+\floatplacement{figure}{htbp}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.8}
+\usepackage{makeidx}
+\makeindex
+\usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}[chapter]
+\BeforeBeginEnvironment{example}{\par\addvspace{4pt}\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{example}{\end{minipage}\par\addvspace{4pt}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newenvironment{solution}{\par\smallskip\noindent\textit{Solution.}\ }{\par\medskip}
+\newenvironment{exercises}{\begin{enumerate}[label=\thechapter.\arabic*,ref=\thechapter.\arabic*,leftmargin=2.8em,itemsep=6pt]}{\end{enumerate}}
+\newenvironment{answers}{\begin{description}[leftmargin=2.9em,labelwidth=2.5em,labelsep=.4em,itemsep=8pt,font=\normalfont\bfseries]}{\end{description}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\KL}[2]{D\!\left(#1\,\middle\|\,#2\right)}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\arcosh}{\operatorname{arcosh}}
+\newcommand{\sech}{\operatorname{sech}}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\p}{\mathbf{p}}
+\newcommand{\q}{\mathbf{q}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
+\newcommand{\ones}{\mathbf{1}}
+\newcommand{\simp}{\Delta^{n-1}}
+\newcommand{\simpi}{\Delta^{n-1}_{\!\circ}}
+\numberwithin{equation}{chapter}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\linespread{1.07}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{2}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
+
+\begin{document}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 10\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\setcounter{chapter}{9}
+
+\chapter{Information networks and coarse-graining}
+An observation can be recorded at several resolutions. A detailed label may be replaced by a broader group, passed through a noisy channel, or transported among nodes of a network. These operations transform probability tables by finite weighted sums. They connect graph dynamics with a basic principle of information geometry: applying the same observation rule to two models cannot make them more distinguishable by the discrepancies studied here.
+
+\hypertarget{ch10-a-stochastic-matrix-describes-one-step}{%
+\section{A stochastic matrix describes one step}\label{ch10-a-stochastic-matrix-describes-one-step}}
+
+Let \(K_{ji}\) be the probability of arriving at output label \(j\) from input label \(i\). Our convention places the input in the column. Thus \[K_{ji}\geq0,\qquad \sum_jK_{ji}=1\quad\hbox{for each }i.\] Such a table is \textbf{column-stochastic}. If input probabilities are \(p_i\), the output probabilities are \[p_j^+=\sum_iK_{ji}p_i,\qquad p^+=Kp.\] The product symbol \(Kp\) abbreviates these weighted sums. Adding over \(j\) gives \(\sum_jp_j^+=\sum_ip_i\sum_jK_{ji}=1\). This is a linear difference equation on probability vectors.
+
+Repeated application gives \(p_t=K^tp_0\). A probability vector \(\pi\) is \textbf{stationary} if \(K\pi=\pi\). Stationarity is a fixed-point condition. It does not by itself imply that every trajectory converges to \(\pi\).
+
+\begin{example}[A lazy walk on a three-node path]
+
+Consider \[K=\begin{pmatrix}3/4&1/4&0\\1/4&1/2&1/4\\0&1/4&3/4\end{pmatrix}.\] Each column describes remaining at a node or moving to a neighbor. Starting at \(p_0=(1,0,0)\) gives \(p_1=(3/4,1/4,0)\) and \(p_2=(5/8,5/16,1/16)\). The uniform table is stationary because the rows, as well as the columns, sum to one. This particular walk approaches uniform, as can be checked from its repeated finite updates.
+
+\end{example}
+
+A matrix whose rows and columns both sum to one is \textbf{doubly stochastic}. The cyclic permutation matrix is also doubly stochastic, but every noncentral three-category state repeats with period three. To establish convergence in a general network, additional conditions are required. Our contraction inequalities below concern one-step comparisons and do not require a claim of convergence.
+
+\hypertarget{ch10-coarse-graining-is-a-deterministic-channel}{%
+\section{Coarse-graining is a deterministic channel}\label{ch10-coarse-graining-is-a-deterministic-channel}}
+
+Partition the input labels into groups. The output reports only the group containing the input. Set \(K_{ji}=1\) if label \(i\) belongs to group \(j\), and zero otherwise. Each column contains exactly one entry equal to one. The output probabilities are sums over the groups.
+
+\begin{example}[A distinction erased by grouping]
+
+Let \(q=(0.4,0.1,0.4,0.1)\) and \(p=(0.1,0.4,0.1,0.4)\). Group labels \(1,2\) together and labels \(3,4\) together. Both output distributions are \((1/2,1/2)\). Before grouping, \(D(q\|p)=0.6\ln4\approx0.8318\). After grouping, it is zero. The within-group differences cannot be recovered from the recorded group alone.
+
+\end{example}
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}[every node/.style={font=\small},>=Stealth]
+\node[anchor=west] at (0,4.5){Input label};\node[anchor=west] at (2,4.5){$q_i$};\node[anchor=west] at (3.1,4.5){$p_i$};
+\node[anchor=west] at (7,4.5){Recorded group};
+\foreach \i/\y/\q/\p in {1/3.5/.4/.1,2/2.5/.1/.4,3/1.5/.4/.1,4/.5/.1/.4}{
+\node at (.5,\y){\i};\node at (2.3,\y){\q};\node at (3.4,\y){\p};}
+\draw[->,teal,thick] (4,3.5)--(7,3);\draw[->,teal,thick] (4,2.5)--(7,3);
+\draw[->,copper,thick] (4,1.5)--(7,1);\draw[->,copper,thick] (4,.5)--(7,1);
+\node[anchor=west,align=left] at (7.2,3){Group $\{1,2\}$\\Both models: $1/2$};
+\node[anchor=west,align=left] at (7.2,1){Group $\{3,4\}$\\Both models: $1/2$};
+\node[anchor=west] at (0,-.5){$D(q\Vert p)=0.6\ln4\quad\longrightarrow\quad D(Kq\Vert Kp)=0$};
+\end{tikzpicture}}
+\caption{Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.}\end{figure}
+
+\hypertarget{ch10-the-log-sum-inequality}{%
+\section{The log-sum inequality}\label{ch10-the-log-sum-inequality}}
+
+Let \(a_i,b_i\) be nonnegative numbers with positive totals \(A=\sum_i a_i\) and \(B=\sum_i b_i\), and suppose \(b_i>0\) wherever \(a_i>0\). Applying Gibbs' inequality to \(a_i/A\) and \(b_i/B\) gives \[\sum_i a_i\ln\frac{a_i}{b_i}\geq A\ln\frac AB.\] To see this directly, multiply \(D(a/A\|b/B)\geq0\) by \(A\) and expand the logarithm. This is the \textbf{log-sum inequality}. It compares the divergence contributions before and after a set of entries is merged.
+
+Apply it separately to each output label \(j\), using \(a_i=K_{ji}q_i\) and \(b_i=K_{ji}p_i\). The output totals are \((Kq)_j\) and \((Kp)_j\). Summing over outputs gives \[D(Kq\|Kp)\leq\sum_{j,i}K_{ji}q_i\ln\frac{q_i}{p_i}
+=D(q\|p),\] because each column of \(K\) sums to one. Terms with \(K_{ji}=0\) contribute zero. The usual support conventions cover zero totals and infinite divergences.
+
+\begin{proposition}[Data processing for relative entropy]
+
+For a column-stochastic matrix applied to both distributions, \(D(Kq\|Kp)\leq D(q\|p)\).
+
+\end{proposition}
+
+The same channel must be used for both tables. Applying different recording rules can create differences caused by those rules themselves. For deterministic grouping with positive probabilities, equality holds exactly when \(q_i/p_i\) is constant within each group: no distinction relevant to that ratio is lost within a group.
+
+\hypertarget{ch10-square-root-overlap-also-contracts-distance}{%
+\section{Square-root overlap also contracts distance}\label{ch10-square-root-overlap-also-contracts-distance}}
+
+For each output label, Cauchy--Schwarz gives \[\sqrt{\left(\sum_iK_{ji}q_i\right)\left(\sum_iK_{ji}p_i\right)}
+\geq\sum_iK_{ji}\sqrt{q_ip_i}.\] Adding over \(j\) and using column sums yields \[B(Kq,Kp)\geq B(q,p).\] Since inverse cosine decreases as its argument increases, the spherical distance satisfies \[d(Kq,Kp)\leq d(q,p).\] Hellinger distance also cannot increase, because its square is \(1-B\). Thus two different constructions, a logarithmic discrepancy and a square-root distance, both obey an information-loss principle under the same finite observation rule.
+
+\begin{example}[A noisy binary observation]
+
+Suppose a binary label is flipped with probability \(1/4\), so \(K=\left(\begin{smallmatrix}3/4&1/4\\1/4&3/4\end{smallmatrix}\right)\). The tables \((0.9,0.1)\) and \((0.1,0.9)\) become \((0.7,0.3)\) and \((0.3,0.7)\). Their overlap increases from \(0.6\) to \(2\sqrt{0.21}\approx0.9165\). Their spherical distance decreases from approximately \(1.8546\) to \(0.8230\).
+
+\end{example}
+
+\hypertarget{ch10-when-does-entropy-increase-on-a-network}{%
+\section{When does entropy increase on a network?}\label{ch10-when-does-entropy-increase-on-a-network}}
+
+A stochastic channel can lower entropy. A channel that sends every input to one output converts every distribution into a certain outcome with entropy zero. The data-processing inequality compares two models through the same channel; entropy measures the uncertainty of one table. The questions are related but distinct.
+
+For a doubly stochastic matrix, uniform \(u\) is stationary. Data processing then gives \[D(Kp\|u)=D(Kp\|Ku)\leq D(p\|u).\] Using \(D(p\|u)=\ln k-H(p)\) shows \(H(Kp)\geq H(p)\). This is an exact entropy-increase statement with a specific assumption on the channel. Equality can occur at a nonuniform table, as a permutation simply rearranges its probabilities.
+
+\hypertarget{ch10-a-finite-statistical-family}{%
+\section{A finite statistical family}\label{ch10-a-finite-statistical-family}}
+
+A collection of probability tables indexed by one or more parameters is a \textbf{statistical family}. On fixed labels \(x_i\), for example, the weights \[p_i(m,a)=\frac{e^{-a(x_i-m)^2}}{\sum_je^{-a(x_j-m)^2}},\qquad a>0,\] form a finite bell-shaped family. Changing \(m\) shifts the emphasis across the labels, and changing \(a\) changes its concentration. These are normalized weights on a fixed finite set. Their entropy, relative entropy, and spherical distance can all be computed by the formulas already developed. Grouping labels produces a coarser family and contracts pairwise discrepancies by the same theorems.
+
+This offers a capstone investigation: choose two parameter values, calculate their tables, apply a recording channel, and quantify the distinctions retained. The finite sums, token graphs, and exact updates developed throughout the course provide the tools for carrying out the investigation and explaining its assumptions.
+
+\hypertarget{ch10-solving-the-three-node-walk-exactly}{%
+\section{Solving the three-node walk exactly}\label{ch10-solving-the-three-node-walk-exactly}}
+
+The particular walk introduced earlier can be solved by tracking two contrasts. Write \[a_t=p_{1,t}-p_{3,t},\qquad b_t=p_{1,t}-2p_{2,t}+p_{3,t}.\] Substituting the three update equations and collecting coefficients gives \[a_{t+1}=\frac34a_t,\qquad b_{t+1}=\frac14b_t.\] Both are geometric sequences. Combining these contrasts with \(p_{1,t}+p_{2,t}+p_{3,t}=1\) recovers the probabilities: \[p_{1,t}=\frac13+\frac{b_t}{6}+\frac{a_t}{2},\quad
+p_{2,t}=\frac13-\frac{b_t}{3},\quad
+p_{3,t}=\frac13+\frac{b_t}{6}-\frac{a_t}{2}.\] Because \((3/4)^t\) and \((1/4)^t\) approach zero, every initial table for this walk approaches uniform. This proves the claim for the stated matrix by two scalar recurrences, without needing a general matrix convergence theorem.
+
+\begin{example}[An exact three-step distribution]
+
+From \((1,0,0)\), both initial contrasts are one. At step three, \(a_3=27/64\) and \(b_3=1/64\). The recovered table is \((35/64,21/64,8/64)\). Direct multiplication of the step-two table \((5/8,5/16,1/16)\) by the walk matrix gives the same answer.
+
+\end{example}
+
+\hypertarget{ch10-where-the-lost-divergence-goes-under-grouping}{%
+\section{Where the lost divergence goes under grouping}\label{ch10-where-the-lost-divergence-goes-under-grouping}}
+
+For deterministic groups \(G_j\), define output masses \(Q_j=\sum_{i\in G_j}q_i\) and \(P_j=\sum_{i\in G_j}p_i\). Assume positive input tables. Within group \(j\), form conditional tables \(q_i/Q_j\) and \(p_i/P_j\). Splitting the logarithm gives \[D(q\|p)=D(Q\|P)+\sum_j Q_j D\left(q(\cdot\mid G_j)\middle\|p(\cdot\mid G_j)\right).\] The first term is the discrepancy retained in the group labels. The second is the average discrepancy among labels inside a group. Every lost contribution is nonnegative. Equality under grouping occurs exactly when the two within-group conditional tables agree, equivalent to a constant ratio \(q_i/p_i\) in each group.
+
+\begin{example}[Retained and lost distinctions]
+
+For the four-label tables \((0.4,0.1,0.4,0.1)\) and \((0.1,0.4,0.1,0.4)\), adjacent-pair grouping gives the same output masses. All the divergence is in the conditional tables \((0.8,0.2)\) and \((0.2,0.8)\) within each pair. Grouping labels \(1,3\) together instead gives outputs \((0.8,0.2)\) and \((0.2,0.8)\), while each within-group conditional table is uniform. This second grouping preserves the full divergence.
+
+\end{example}
+
+\hypertarget{ch10-composing-observation-rules}{%
+\section{Composing observation rules}\label{ch10-composing-observation-rules}}
+
+If channel \(K\) is followed by channel \(L\), the combined rule is the matrix product \(LK\). Its entries are \((LK)_{hi}=\sum_jL_{hj}K_{ji}\). Each term represents passing through intermediate output \(j\). Nonnegativity is immediate, and adding over \(h\) gives one for every input column. Thus the composition is again a stochastic channel.
+
+Applying data processing twice gives \[D(LKq\|LKp)\leq D(Kq\|Kp)\leq D(q\|p).\] The spherical distances obey the same succession of inequalities. This gives a mathematical description of a recording pipeline: sampling labels, adding noise, grouping outputs, and recording an even coarser category can be analyzed one finite operation at a time. A stage may preserve a particular pair's discrepancy, but a later common stage cannot restore a distinction already erased from those output tables.
+
+\hypertarget{ch10-exercises}{%
+\section{Exercises}\label{ch10-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Verify the column sums of the three-node walk matrix and compute one update of \((1/2,1/4,1/4)\).
+
+\item 
+
+Show algebraically that a column-stochastic matrix maps probability vectors to probability vectors.
+
+\item 
+
+Find the stationary table of the binary flip channel in the example.
+
+\item 
+
+Write the matrix for the cyclic permutation \((p_A,p_B,p_C)\mapsto(p_C,p_A,p_B)\) and verify its period.
+
+\item 
+
+For \(q=(0.4,0.1,0.4,0.1)\) and \(p=(0.1,0.4,0.1,0.4)\), compute their overlap before and after the stated grouping.
+
+\item 
+
+Derive the log-sum inequality from Gibbs' inequality.
+
+\item 
+
+Give a grouping for which two distinct positive tables retain their relative entropy exactly. Explain the ratio condition within groups.
+
+\item 
+
+Verify the relative-entropy contraction numerically for the binary flip example.
+
+\item 
+
+Prove that a doubly stochastic matrix preserves the uniform distribution.
+
+\item 
+
+Give a stochastic channel that strictly lowers the entropy of the uniform distribution. Explain why this does not violate data processing.
+
+\item 
+
+On labels \(-2,-1,0,1,2\), calculate the finite bell-shaped table with \(m=0\) and \(a=\ln2\). Compare its entropy with uniform entropy.
+
+\item 
+
+Design a capstone comparing two probability models before and after grouping. Include a data table, both directed relative entropies, spherical distance, a channel specification, and an interpretation of any lost distinction.
+
+\end{exercises}
+
+\hypertarget{ch10-selected-solutions}{%
+\section{Selected solutions}\label{ch10-selected-solutions}}
+
+\textbf{1.} The new table is \((7/16,5/16,1/4)\).
+
+\textbf{3.} Solving \(x=(3/4)x+(1/4)(1-x)\) gives \(x=1/2\), so the stationary table is uniform.
+
+\textbf{5.} The input overlap is \(4\sqrt{0.04}=0.8\). The equal outputs have overlap one.
+
+\textbf{7.} Group labels \(1,2\) together and \(3,4\) together. Take \(p=(0.1,0.2,0.3,0.4)\) and \(q=(0.2,0.4,6/35,8/35)\). Both sum to one, and the within-group ratios are \(2\) and \(4/7\). Log-sum has equality in each group, so the divergence is preserved.
+
+\textbf{9.} For \(u_i=1/k\), the output entry is \((Ku)_j=(1/k)\sum_iK_{ji}=1/k\) by the row-sum condition.
+
+\textbf{11.} The unnormalized weights are \((1/16,1/2,1,1/2,1/16)\) with total \(17/8\). The table is \((1/34,4/17,8/17,4/17,1/34)\). It is nonuniform and has entropy strictly less than \(\ln5\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For the three-node walk in the reading, verify the row and column sums and compute three updates from \((1,0,0)\). Check that uniform is stationary. Compare this with a cyclic permutation, which preserves uniform but has periodic trajectories.
+\item
+  In the demonstration, begin with its two four-label tables and apply within-pair noise at levels \(0\), \(0.25\), and \(0.5\). Record both directed relative entropies, overlap, and spherical distance. Explain why the same channel must be applied to both tables.
+\item
+  Compare the two offered groupings of the four labels. Find a grouping that erases the distinction between the default models and a grouping that retains it. Explain the result through the ratios inside each group.
+\item
+  Derive the log-sum inequality from Gibbs' inequality, then use it to prove the relative-entropy data-processing bound. Separately prove overlap increases using Cauchy--Schwarz.
+\item
+  Prepare a capstone report using two positive finite models of your choice. Specify a recording channel, show input and output tables, compute all discrepancies, and interpret the information retained. Include one example showing why entropy alone need not increase under a general channel.
+\end{enumerate}
+
+\FloatBarrier
+
+\end{document}

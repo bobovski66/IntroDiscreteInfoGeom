@@ -1,0 +1,1 @@
+Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.

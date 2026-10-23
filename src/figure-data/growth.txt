@@ -1,0 +1,1 @@
+Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.

@@ -1,0 +1,310 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 3: Three strategies and probability triangles · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="3"><p class="eyebrow">Week 3 · Reading</p><h1>Three strategies and probability triangles</h1><nav class="week-nav" aria-label="Week 3 resources"><a aria-current=page href="../readings/week03.html">Reading</a><a  href="../demos/week03.html">Demonstration</a><a  href="../labs/week03.html">Lab</a><a  href="../quizzes/week03.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter03.pdf">Chapter 3 PDF</a> · <a href="../textbook/latex/chapter03.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Convert between triangle and probability coordinates.</li><li>Count and connect finite token states.</li><li>Use a product diagnostic to analyze a finite cyclic update.</li></ul></aside><article class="reading-text"><p>Three types allow motion in two independent directions. A triangle
+provides a complete picture of their proportions, including mixtures on
+its edges and pure states at its vertices. Integer population counts
+supply a natural lattice inside the triangle. These two representations
+connect geometry with combinatorics.</p>
+<h2 id="reading-a-probability-triangle">Reading a probability
+triangle</h2>
+<p>Write <span class="math inline">\(p=(p_A,p_B,p_C)\)</span> with
+nonnegative entries adding to one. Place the pure states at <span
+class="math inline">\(A=(0,0)\)</span>, <span
+class="math inline">\(B=(1,0)\)</span>, and <span
+class="math inline">\(C=(1/2,\sqrt3/2)\)</span>. Represent <span
+class="math inline">\(p\)</span> by the weighted point <span
+class="math display">\[X=p_AA+p_BB+p_CC=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\]</span>
+These are <strong>barycentric coordinates</strong>: the coefficients
+tell us how much of each vertex contributes. The midpoint of edge <span
+class="math inline">\(AB\)</span> is <span
+class="math inline">\((1/2,1/2,0)\)</span> in probability coordinates.
+The center is <span class="math inline">\((1/3,1/3,1/3)\)</span>. A
+point on edge <span class="math inline">\(AB\)</span> has <span
+class="math inline">\(p_C=0\)</span>.</p>
+<p>To recover probabilities from a plotted point <span
+class="math inline">\((u,v)\)</span>, solve the two coordinate
+equations: <span class="math display">\[p_C=\frac{2v}{\sqrt3},\qquad
+p_B=u-\frac{v}{\sqrt3},\qquad p_A=1-u-\frac{v}{\sqrt3}.\]</span> The
+point is inside the triangle precisely when these three values are
+nonnegative.</p>
+<div class="example" title="Locating a state">
+<p><strong>Example. Locating a state</strong></p>
+<p>The distribution <span class="math inline">\((1/2,1/3,1/6)\)</span>
+is plotted at <span class="math inline">\((5/12,\sqrt3/12)\)</span>. Its
+height is one sixth of the triangle’s altitude, reflecting its <span
+class="math inline">\(C\)</span> proportion. Its position is closer to
+vertex <span class="math inline">\(A\)</span> than to either of the
+other vertices, consistent with <span class="math inline">\(A\)</span>
+being the most common type.</p>
+</div>
+<h2 id="tokens-produce-a-triangular-lattice">Tokens produce a triangular
+lattice</h2>
+<p>Suppose the total count is a fixed integer <span
+class="math inline">\(N\)</span>. A count triple <span
+class="math inline">\((a,b,c)\)</span> with <span
+class="math inline">\(a+b+c=N\)</span> gives the probability vector
+<span class="math inline">\((a/N,b/N,c/N)\)</span>. The possible states
+form a lattice. Moving one token from <span
+class="math inline">\(A\)</span> to <span
+class="math inline">\(B\)</span> changes the counts by <span
+class="math inline">\((-1,1,0)\)</span> and the probabilities by <span
+class="math inline">\((-1/N,1/N,0)\)</span>.</p>
+<p>There are <span
+class="math display">\[\frac{(N+1)(N+2)}2=\binom{N+2}{2}\]</span>
+possible triples. One proof fixes <span
+class="math inline">\(c\)</span>: for <span
+class="math inline">\(c=0,1,\ldots,N\)</span>, there are <span
+class="math inline">\(N-c+1\)</span> choices for <span
+class="math inline">\(a\)</span>, with <span
+class="math inline">\(b\)</span> then determined. Adding gives <span
+class="math inline">\((N+1)+N+\cdots+1\)</span>. A second proof encodes
+the triple as <span class="math inline">\(N\)</span> stars separated
+into three groups by two bars; choosing the two bar positions among
+<span class="math inline">\(N+2\)</span> positions determines the
+triple.</p>
+<div class="example" title="A lattice of fifteen states">
+<p><strong>Example. A lattice of fifteen states</strong></p>
+<p>With <span class="math inline">\(N=4\)</span>, the lattice has <span
+class="math inline">\(\binom62=15\)</span> states. The count triple
+<span class="math inline">\((2,1,1)\)</span> is adjacent to six states
+obtained by moving a token between two distinct types. At <span
+class="math inline">\((4,0,0)\)</span>, only two moves are possible
+because an empty type cannot donate a token.</p>
+</div>
+<p>A normalized growth update generally does not land on this lattice.
+It defines a deterministic map on all probability vectors. Sampling
+<span class="math inline">\(N\)</span> new individuals from the updated
+proportions produces a random lattice state instead. These are two
+distinct models with different sources of variation.</p>
+<figure><img src="../assets/fig-lattice.svg" alt="The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1)." loading="lazy"><figcaption>The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).</figcaption></figure>
+<h2 id="cyclic-interactions">Cyclic interactions</h2>
+<p>For three strategies, a score table is a <span
+class="math inline">\(3\)</span> by <span
+class="math inline">\(3\)</span> matrix. The average score of type <span
+class="math inline">\(i\)</span> is <span
+class="math inline">\(f_i=\sum_jM_{ij}p_j\)</span>. Consider <span
+class="math display">\[M_s=\begin{pmatrix}0&amp;1&amp;-s\\-s&amp;0&amp;1\\1&amp;-s&amp;0\end{pmatrix},\qquad
+s&gt;0.\]</span> Type <span class="math inline">\(A\)</span> gains
+against <span class="math inline">\(B\)</span>, type <span
+class="math inline">\(B\)</span> gains against <span
+class="math inline">\(C\)</span>, and type <span
+class="math inline">\(C\)</span> gains against <span
+class="math inline">\(A\)</span>. Each suffers a loss of magnitude <span
+class="math inline">\(s\)</span> against the remaining opponent. At the
+center, all three scores equal <span
+class="math inline">\((1-s)/3\)</span>, so the center is fixed for both
+normalized multiplier rules.</p>
+<p>For exponential multipliers, a step is <span
+class="math display">\[p_i^+=\frac{p_i e^{\eta f_i}}{Z},\qquad
+Z=\sum_jp_j e^{\eta f_j}.\]</span> The current scores must be recomputed
+before the next step. Using the same scores repeatedly instead would
+describe fixed external advantages, rather than this interaction
+game.</p>
+<div class="example" title="Computing a cyclic step">
+<p><strong>Example. Computing a cyclic step</strong></p>
+<p>Let <span class="math inline">\(s=1\)</span> and <span
+class="math inline">\(p=(1/2,1/3,1/6)\)</span>. The scores are <span
+class="math inline">\((1/6,-1/3,1/6)\)</span>. With <span
+class="math inline">\(\eta=1\)</span>, cancelling the common factor
+<span class="math inline">\(e^{1/6}\)</span> leaves unnormalized entries
+<span class="math inline">\((1/2,e^{-1/2}/3,1/6)\)</span>. After
+normalization the result is approximately <span
+class="math inline">\((0.5755,0.2327,0.1918)\)</span>. The two equally
+scoring types retain their ratio <span
+class="math inline">\(3:1\)</span> during this step.</p>
+</div>
+<h2 id="a-finite-inequality-detects-outward-drift">A finite inequality
+detects outward drift</h2>
+<p>The <strong>weighted arithmetic-geometric mean inequality</strong>
+states that, for positive <span class="math inline">\(a_i\)</span> and
+nonnegative weights <span class="math inline">\(p_i\)</span> adding to
+one, <span class="math display">\[\sum_i p_i a_i\ \geq\ \prod_i
+a_i^{p_i}.\]</span> For rational weights, it follows from the ordinary
+arithmetic-geometric mean inequality by repeating each entry the
+appropriate number of times. The real-weight version follows by
+approximation. Equality holds when all entries carrying positive weight
+are equal. We will use this finite inequality several times.</p>
+<p>For the balanced cyclic table <span
+class="math inline">\(s=1\)</span>, direct cancellation gives <span
+class="math display">\[\sum_i f_i=0,\qquad \sum_i p_if_i=0.\]</span> Let
+<span class="math inline">\(P(p)=p_Ap_Bp_C\)</span>. Under exponential
+normalization, <span
+class="math display">\[P(p^+)=\frac{P(p)e^{\eta(f_A+f_B+f_C)}}{Z^3}=\frac{P(p)}{Z^3}.\]</span>
+Applying weighted arithmetic-geometric mean to <span
+class="math inline">\(a_i=e^{\eta f_i}\)</span> gives <span
+class="math inline">\(Z\geq e^{\eta\sum_i p_if_i}=1\)</span>. For an
+interior state other than the center, the scores are not all equal, so
+<span class="math inline">\(Z&gt;1\)</span> and <span
+class="math inline">\(P\)</span> strictly decreases.</p>
+<p>The product is largest at the center: the ordinary
+arithmetic-geometric mean inequality gives <span
+class="math inline">\(p_Ap_Bp_C\leq(1/3)^3\)</span>. Decreasing product
+therefore records movement through product contours toward the boundary.
+It does not imply that every individual coordinate moves monotonically,
+nor does it by itself identify a limit point. A trajectory may continue
+circulating while this diagnostic decreases.</p>
+<div class="proposition"
+title="The balanced finite rule does not conserve the product">
+<p><strong>Proposition. The balanced finite rule does not conserve the
+product</strong></p>
+<p>For every positive intensity, an exponential update of the balanced
+cyclic game strictly decreases <span
+class="math inline">\(p_Ap_Bp_C\)</span> at every interior state other
+than the center.</p>
+</div>
+<p>There is a similar conclusion for linear multipliers whenever they
+are positive. Since the weighted mean score is zero, their normalizing
+denominator is <span class="math inline">\(1\)</span>. Their unweighted
+sum is <span class="math inline">\(3\)</span>, so their product is at
+most <span class="math inline">\(1\)</span>. Multiplying the three
+updated coordinates shows <span class="math inline">\(P(p^+)\leq
+P(p)\)</span>, again strictly away from the center. These exact
+calculations explain why changing the size of a finite step can affect a
+cyclic picture.</p>
+<h2 id="comparing-a-different-recurrence">Comparing a different
+recurrence</h2>
+<p>The permutation rule <span
+class="math display">\[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\]</span> also moves
+states cyclically. It satisfies <span
+class="math inline">\(T^3(p)=p\)</span> and preserves the coordinate
+product exactly. Its trajectories contain at most three states. This
+recurrence is useful as a simple example of exact periodicity and as a
+check on a plotting program. It is a different update from score-based
+selection, with a different algebraic structure.</p>
+<figure><img src="../assets/fig-cyclic.svg" alt="Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases." loading="lazy"><figcaption>Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.</figcaption></figure>
+<h2 id="reading-distances-and-contours-in-a-triangle">Reading distances
+and contours in a triangle</h2>
+<p>Barycentric coordinates have another useful interpretation. The
+perpendicular distance from a point to side <span
+class="math inline">\(AB\)</span>, divided by the triangle’s full
+altitude, is <span class="math inline">\(p_C\)</span>. To verify this,
+note that the side is horizontal and that the point’s height is <span
+class="math inline">\((\sqrt3/2)p_C\)</span>. By symmetry, the same
+statement holds for the other two coordinates and their opposite sides.
+Lines of constant <span class="math inline">\(p_C\)</span> are therefore
+parallel to side <span class="math inline">\(AB\)</span>.</p>
+<div class="example"
+title="Recovering a composition from height ratios">
+<p><strong>Example. Recovering a composition from height
+ratios</strong></p>
+<p>Suppose a point lies at one fifth of the full altitude from side
+<span class="math inline">\(AB\)</span> and at one half of the full
+altitude from side <span class="math inline">\(BC\)</span>. The first
+measurement gives <span class="math inline">\(p_C=1/5\)</span>, and the
+second gives <span class="math inline">\(p_A=1/2\)</span>. The remaining
+coordinate is <span class="math inline">\(p_B=3/10\)</span>. The three
+normalized distances add to one because they are barycentric
+coordinates.</p>
+</div>
+<p>A contour of a function is a set of states with the same function
+value. For the coordinate product, a contour is described by <span
+class="math inline">\(p_Ap_Bp_C=c\)</span>. The product is zero on the
+boundary and at most <span class="math inline">\(1/27\)</span> in the
+interior. Product contours surround the center, but a one-step decrease
+in product does not specify a unique direction along a contour or a
+unique next coordinate. A scalar diagnostic compresses a two-dimensional
+state into one number, so it necessarily discards some detail.</p>
+<h2 id="counting-the-interior-and-the-boundary">Counting the interior
+and the boundary</h2>
+<p>The stars-and-bars argument extends to <span
+class="math inline">\(k\)</span> types. Nonnegative integer counts
+summing to <span class="math inline">\(N\)</span> are encoded by <span
+class="math inline">\(N\)</span> stars and <span
+class="math inline">\(k-1\)</span> bars, so their number is <span
+class="math inline">\(\binom{N+k-1}{k-1}\)</span>. Empty groups
+correspond to zero counts. If every count must be positive, first give
+one token to each type. The remaining <span
+class="math inline">\(N-k\)</span> tokens can be distributed freely,
+giving <span class="math inline">\(\binom{N-1}{k-1}\)</span> states when
+<span class="math inline">\(N\geq k\)</span>.</p>
+<p>For three types, the number of boundary states is the total minus the
+strictly positive count. For <span
+class="math inline">\(N\geq3\)</span>, this is <span
+class="math display">\[\binom{N+2}{2}-\binom{N-1}{2}=3N.\]</span> One
+can also count <span class="math inline">\(N+1\)</span> points on each
+of three edges and subtract three to correct the double counting of
+vertices. The two answers agree. Comparing two counting arguments is a
+useful way to verify a combinatorial formula.</p>
+<div class="example" title="A larger lattice">
+<p><strong>Example. A larger lattice</strong></p>
+<p>At <span class="math inline">\(N=8\)</span>, there are <span
+class="math inline">\(\binom{10}{2}=45\)</span> total states and <span
+class="math inline">\(\binom72=21\)</span> strictly positive states. The
+remaining <span class="math inline">\(24\)</span> are on the boundary. A
+uniform distribution over these 45 lattice vertices would be a
+probability model on compositions. It is different from independently
+sampling eight individuals from a uniform three-type population: the
+latter assigns each count vector a multinomial weight.</p>
+</div>
+<h2 id="sampling-can-change-support">Sampling can change support</h2>
+<p>At a positive state, deterministic positive multiplication keeps
+every type present. A sample of <span class="math inline">\(N\)</span>
+individuals can omit a type by chance. On an edge of the triangle, a
+sampling model without mutation cannot restore the missing type, because
+its sampling probability is zero. A finite sampled population may
+therefore reach an edge and subsequently evolve on that edge, even when
+a deterministic trajectory remains in the interior for every finite
+step.</p>
+<p>This observation explains why a deterministic trajectory and a
+simulated finite population should be labeled separately. Both can be
+useful descriptions. The deterministic rule isolates state-dependent
+reweighting; the sampled model also includes fluctuations associated
+with finitely many individuals. Chapter 4 provides exact probabilities
+for those fluctuations.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Plot <span class="math inline">\((1,0,0)\)</span>, <span
+class="math inline">\((0,1/2,1/2)\)</span>, and <span
+class="math inline">\((1/4,1/4,1/2)\)</span> using barycentric
+coordinates.</li>
+<li>Recover the probabilities of the point <span
+class="math inline">\((u,v)=(1/2,\sqrt3/6)\)</span>.</li>
+<li>List all count triples with <span
+class="math inline">\(N=2\)</span>. Verify the formula for their
+number.</li>
+<li>How many lattice states are there for <span
+class="math inline">\(N=10\)</span>? How many have all three counts
+positive?</li>
+<li>List the neighbors of <span class="math inline">\((2,1,1)\)</span>
+under one-token moves.</li>
+<li>Compute the scores of the balanced cyclic table at <span
+class="math inline">\((1/5,1/2,3/10)\)</span>.</li>
+<li>Verify algebraically that <span class="math inline">\(\sum_i
+p_if_i=0\)</span> for the balanced table.</li>
+<li>Derive the product update formula for exponential multipliers for
+any three scores, without assuming balance.</li>
+<li>Explain why the product test says nothing new on an edge of the
+triangle. Determine whether the update can leave that edge.</li>
+<li>Show that the center is the unique interior state where all balanced
+cyclic scores agree.</li>
+<li>For the permutation rule, determine all fixed states and all
+possible periods.</li>
+<li>Compare deterministic normalization with sampling a fixed number of
+individuals after normalization. Which can lose a type in a single step
+when every initial proportion is positive?</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>2.</strong> The recovered probabilities are <span
+class="math inline">\((1/3,1/3,1/3)\)</span>, the center.</p>
+<p><strong>4.</strong> There are <span
+class="math inline">\(\binom{12}{2}=66\)</span> states. Subtract one
+token from each positive count; the remaining three nonnegative counts
+sum to <span class="math inline">\(7\)</span>, giving <span
+class="math inline">\(\binom92=36\)</span> strictly positive states.</p>
+<p><strong>5.</strong> The neighbors are <span
+class="math inline">\((1,2,1)\)</span>, <span
+class="math inline">\((1,1,2)\)</span>, <span
+class="math inline">\((3,0,1)\)</span>, <span
+class="math inline">\((2,0,2)\)</span>, <span
+class="math inline">\((3,1,0)\)</span>, and <span
+class="math inline">\((2,2,0)\)</span>.</p>
+<p><strong>6.</strong> The scores are <span
+class="math inline">\((1/5,1/10,-3/10)\)</span>.</p>
+<p><strong>8.</strong> Multiplying the three update equations gives
+<span class="math inline">\(P(p^+)=P(p)e^{\eta\sum_i f_i}/Z^3\)</span>.
+Balance is needed only to simplify the exponential factor to one.</p>
+<p><strong>11.</strong> A fixed state has three equal coordinates and is
+therefore the center. Every other state has period three, since applying
+the permutation three times is the identity and a period dividing three
+is either one or three.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week02.html">← Week 2</a><a href="../readings/week04.html">Week 4 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

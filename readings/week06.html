@@ -1,0 +1,300 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 6: Relative entropy and finite contraction · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="6"><p class="eyebrow">Week 6 · Reading</p><h1>Relative entropy and finite contraction</h1><nav class="week-nav" aria-label="Week 6 resources"><a aria-current=page href="../readings/week06.html">Reading</a><a  href="../demos/week06.html">Demonstration</a><a  href="../labs/week06.html">Lab</a><a  href="../quizzes/week06.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter06.pdf">Chapter 6 PDF</a> · <a href="../textbook/latex/chapter06.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Keep the two arguments of relative entropy in their intended roles.</li><li>Derive likelihood and nonnegativity identities.</li><li>Prove and test a one-step mixture bound.</li></ul></aside><article class="reading-text"><p>Two probability tables can describe competing models of the same
+observations. Relative entropy measures a discrepancy between those
+tables, with a definite role for each argument. Its most useful
+properties follow from finite inequalities. We will also construct a
+recurrence for which relative entropy decreases at a provable rate.</p>
+<h2 id="cross-entropy-and-relative-entropy">Cross-entropy and relative
+entropy</h2>
+<p>Suppose observations follow distribution <span
+class="math inline">\(q\)</span>, while a proposed model assigns
+probabilities <span class="math inline">\(p\)</span>. The average
+surprisal under the proposed model is the <strong>cross-entropy</strong>
+<span class="math display">\[H(q,p)=-\sum_iq_i\ln p_i.\]</span>
+Subtracting the actual entropy of <span class="math inline">\(q\)</span>
+defines the <strong>Kullback–Leibler divergence</strong>, or
+<strong>relative entropy</strong>: <span
+class="math display">\[D(q\|p)=\sum_iq_i\ln\frac{q_i}{p_i}=H(q,p)-H(q).\]</span>
+All logarithms in this chapter are natural, so the units are nats. To
+express the same quantity in bits, divide by <span
+class="math inline">\(\ln2\)</span>. Terms with <span
+class="math inline">\(q_i=0\)</span> contribute zero. If <span
+class="math inline">\(q_i&gt;0\)</span> and <span
+class="math inline">\(p_i=0\)</span> for any label, the divergence is
+infinite: the proposed model makes an actually possible observation
+impossible.</p>
+<div class="example" title="The argument order matters">
+<p><strong>Example. The argument order matters</strong></p>
+<p>For <span class="math inline">\(q=(1/2,1/2)\)</span> and <span
+class="math inline">\(p=(3/4,1/4)\)</span>, <span
+class="math display">\[D(q\|p)=\tfrac12\ln(2/3)+\tfrac12\ln2=\tfrac12\ln(4/3)\approx0.1438.\]</span>
+Reversing the arguments gives <span
+class="math inline">\((3/4)\ln(3/2)+(1/4)\ln(1/2)\approx0.1308\)</span>.
+The values differ. Relative entropy is a directed discrepancy rather
+than a distance satisfying symmetry.</p>
+</div>
+<h2
+id="nonnegativity-from-an-arithmetic-geometric-inequality">Nonnegativity
+from an arithmetic-geometric inequality</h2>
+<p>First assume every <span class="math inline">\(q_i\)</span> is
+positive and all corresponding <span class="math inline">\(p_i\)</span>
+are positive. Weighted arithmetic-geometric mean gives <span
+class="math display">\[\prod_i\left(\frac{p_i}{q_i}\right)^{q_i}\leq\sum_iq_i\frac{p_i}{q_i}=1.\]</span>
+Taking logarithms and reversing the sign proves <span
+class="math inline">\(D(q\|p)\geq0\)</span>. If some <span
+class="math inline">\(q_i\)</span> vanish, apply the inequality on the
+support of <span class="math inline">\(q\)</span>; the sum on the right
+is then at most one. The same conclusion holds. Equality requires <span
+class="math inline">\(p=q\)</span>, including agreement on the zero
+entries.</p>
+<p>This is <strong>Gibbs’ inequality</strong>. It implies that, averaged
+under <span class="math inline">\(q\)</span>, no proposed probability
+table has a smaller logarithmic surprise than <span
+class="math inline">\(q\)</span> itself. The conclusion is about a
+specified average; it does not say that every single observation favors
+the same model.</p>
+<div class="example" title="Uniform reference and entropy">
+<p><strong>Example. Uniform reference and entropy</strong></p>
+<p>Let <span class="math inline">\(u_i=1/k\)</span>. Expanding the
+definition gives <span class="math display">\[D(p\|u)=\sum_i p_i\ln
+p_i+\ln k=\ln k-H(p).\]</span> Gibbs’ inequality therefore gives <span
+class="math inline">\(H(p)\leq\ln k\)</span>, and equality occurs
+exactly at the uniform distribution. Relative entropy expresses the gap
+from maximum entropy.</p>
+</div>
+<h2 id="finite-data-give-an-exact-likelihood-comparison">Finite data
+give an exact likelihood comparison</h2>
+<p>Suppose an ordered sample has counts <span
+class="math inline">\(n_i\)</span> and empirical distribution <span
+class="math inline">\(\widehat q_i=n_i/N\)</span>. Under independent
+observations, its likelihood under model <span
+class="math inline">\(p\)</span> is <span
+class="math inline">\(L(p)=\prod_i p_i^{n_i}\)</span>. Taking
+logarithms, <span class="math display">\[\ln L(p)=N\sum_i\widehat q_i\ln
+p_i.\]</span> Consequently, <span class="math display">\[\ln L(\widehat
+q)-\ln L(p)=N D(\widehat q\|p).\]</span> The same identity holds for the
+likelihood of the count vector, since its multinomial coefficient
+cancels in the ratio. It proves that the empirical table maximizes the
+likelihood over all distributions, using only Gibbs’ inequality. A table
+with zero entries can maximize likelihood for the observed sample while
+assigning zero probability to a category that could appear in a later
+sample.</p>
+<div class="example" title="Comparing a sample with a proposed model">
+<p><strong>Example. Comparing a sample with a proposed
+model</strong></p>
+<p>For ten binary observations with counts <span
+class="math inline">\((8,2)\)</span>, compare the empirical table <span
+class="math inline">\((0.8,0.2)\)</span> with the fair model <span
+class="math inline">\((0.5,0.5)\)</span>. The divergence is <span
+class="math inline">\(0.8\ln1.6+0.2\ln0.4\approx0.1927\)</span>. The
+log-likelihood advantage is ten times this, approximately <span
+class="math inline">\(1.9274\)</span>, and the likelihood ratio is
+approximately <span class="math inline">\(6.872\)</span>.</p>
+</div>
+<h2 id="a-recurrence-with-guaranteed-contraction">A recurrence with
+guaranteed contraction</h2>
+<p>Fix a target distribution <span class="math inline">\(q\)</span> and
+choose <span class="math inline">\(0&lt;\lambda\leq1\)</span>. Define
+the <strong>mixture update</strong> <span
+class="math display">\[p^+=(1-\lambda)p+\lambda q.\]</span> Each
+coordinate is an ordinary weighted average. The difference from the
+target satisfies <span
+class="math inline">\(p^+-q=(1-\lambda)(p-q)\)</span>. Repeating this
+identity yields <span class="math display">\[p_t=(1-\lambda)^t
+p_0+\bigl[1-(1-\lambda)^t\bigr]q.\]</span> Thus the target is approached
+geometrically when <span
+class="math inline">\(0&lt;\lambda&lt;1\)</span> and is reached in one
+step when <span class="math inline">\(\lambda=1\)</span>.</p>
+<p>Relative entropy satisfies a matching one-step bound: <span
+class="math display">\[D(q\|p^+)\leq(1-\lambda)D(q\|p).\]</span> For
+<span class="math inline">\(0&lt;\lambda&lt;1\)</span> and positive
+entries, arithmetic-geometric mean gives, coordinate by coordinate,
+<span class="math display">\[p_i^+=(1-\lambda)p_i+\lambda q_i\geq
+p_i^{1-\lambda}q_i^\lambda.\]</span> Taking logarithms, multiplying by
+<span class="math inline">\(q_i\)</span>, and adding proves the bound.
+Zero terms can be handled by the stated conventions, or by approaching
+them with positive tables. The case <span
+class="math inline">\(\lambda=1\)</span> is immediate. Iteration gives
+<span class="math inline">\(D(q\|p_t)\leq(1-\lambda)^tD(q\|p_0)\)</span>
+whenever the initial divergence is finite.</p>
+<div class="example" title="Checking the bound numerically">
+<p><strong>Example. Checking the bound numerically</strong></p>
+<p>Take <span class="math inline">\(q=(1/2,1/2)\)</span>, <span
+class="math inline">\(p=(0.9,0.1)\)</span>, and <span
+class="math inline">\(\lambda=1/2\)</span>. Then <span
+class="math inline">\(p^+=(0.7,0.3)\)</span>. The old divergence is
+approximately <span class="math inline">\(0.5108\)</span> and the new
+divergence approximately <span class="math inline">\(0.08718\)</span>.
+The bound permits at most <span class="math inline">\(0.2554\)</span>,
+so it holds with room to spare. A bound need not be an equality to be
+useful.</p>
+</div>
+<p>The recurrence was chosen to have this property. A state-dependent
+payoff update is a different rule and requires its own analysis. A
+plotted decrease over a short run provides evidence for that run; an
+algebraic bound establishes the claim for every state covered by its
+assumptions.</p>
+<figure><img src="../assets/fig-contraction.svg" alt="Mixture contraction toward binary target (0.5,0.5) from (0.9,0.1), with mixture fraction 0.25. The proven bound lies above the actual divergence." loading="lazy"><figcaption>Mixture contraction toward binary target (0.5,0.5) from (0.9,0.1), with mixture fraction 0.25. The proven bound lies above the actual divergence.</figcaption></figure>
+<h2 id="mixing-and-the-value-of-entropy">Mixing and the value of
+entropy</h2>
+<p>Let <span class="math inline">\(m=(1-\lambda)p+\lambda r\)</span>.
+Expanding the definitions gives the identity <span
+class="math display">\[H(m)-(1-\lambda)H(p)-\lambda H(r)
+=(1-\lambda)D(p\|m)+\lambda D(r\|m).\]</span> The right side is
+nonnegative, so entropy is <strong>concave</strong>: the entropy of a
+mixture is at least the mixture of the entropies. For <span
+class="math inline">\(0&lt;\lambda&lt;1\)</span>, equality holds
+precisely when <span class="math inline">\(p=r\)</span>. The identity
+explains how much uncertainty is gained when two different probability
+tables are pooled without retaining their source label.</p>
+<p>As another application of Gibbs’ inequality, let a prefix code have
+lengths <span class="math inline">\(\ell_i\)</span> and Kraft sum <span
+class="math inline">\(C=\sum_i2^{-\ell_i}\leq1\)</span>. Put <span
+class="math inline">\(r_i=2^{-\ell_i}/C\)</span>. Then <span
+class="math display">\[D(p\|r)=-H(p)+(\ln2)\sum_i p_i\ell_i+\ln
+C\geq0.\]</span> Hence the expected code length satisfies <span
+class="math inline">\(\sum_i p_i\ell_i\geq H_2(p)-\log_2C\geq
+H_2(p)\)</span>. The lower bound comes from a probability inequality
+combined with a counting restriction on trees.</p>
+<h2 id="likelihood-ratios-accumulate-by-addition">Likelihood ratios
+accumulate by addition</h2>
+<p>Suppose two models <span class="math inline">\(q\)</span> and <span
+class="math inline">\(p\)</span> assign positive probabilities to the
+same labels. For an ordered sample <span
+class="math inline">\((i_1,\ldots,i_N)\)</span>, the likelihood ratio is
+<span class="math inline">\(\prod_{t=1}^Nq_{i_t}/p_{i_t}\)</span>. Its
+logarithm is the sum of the individual log-likelihood ratios. If the
+sample really follows <span class="math inline">\(q\)</span>
+independently, the expected value of each summand is <span
+class="math inline">\(D(q\|p)\)</span>. Linearity of expectation gives
+expected total log-likelihood ratio <span
+class="math inline">\(ND(q\|p)\)</span>.</p>
+<p>This expectation does not require every observed sample to favor
+<span class="math inline">\(q\)</span>. A particular run may contain
+unusual outcomes that favor <span class="math inline">\(p\)</span>. The
+divergence concerns average evidence under the specified sampling model.
+Reversing the model that generates the data changes the averaging
+weights and changes the relevant directed divergence.</p>
+<div class="example"
+title="Evidence can point either way in a single trial">
+<p><strong>Example. Evidence can point either way in a single
+trial</strong></p>
+<p>Let <span class="math inline">\(q=(3/4,1/4)\)</span> and <span
+class="math inline">\(p=(1/2,1/2)\)</span>. Observing the first label
+contributes <span class="math inline">\(\ln(3/2)&gt;0\)</span> to the
+log-likelihood ratio in favor of <span class="math inline">\(q\)</span>.
+Observing the second contributes <span
+class="math inline">\(\ln(1/2)&lt;0\)</span>. Averaging with
+probabilities <span class="math inline">\(3/4\)</span> and <span
+class="math inline">\(1/4\)</span> gives <span
+class="math inline">\(D(q\|p)\approx0.1308&gt;0\)</span>. The expected
+evidence favors the generating model even though one possible
+observation favors the other.</p>
+</div>
+<h2 id="a-finite-method-for-avoiding-zero-estimates">A finite method for
+avoiding zero estimates</h2>
+<p>Given counts <span class="math inline">\(n_i\)</span>, one may add a
+positive number <span class="math inline">\(\alpha\)</span> to every
+count and normalize: <span class="math display">\[\widetilde
+p_i=\frac{n_i+\alpha}{N+k\alpha}.\]</span> This <strong>additive
+smoothing</strong> produces a positive table, including for labels not
+observed in the sample. If <span class="math inline">\(N&gt;0\)</span>,
+it can be written as a mixture of the empirical table and uniform: <span
+class="math display">\[\widetilde p=\frac{N}{N+k\alpha}\widehat
+p+\frac{k\alpha}{N+k\alpha}u.\]</span> The added counts have an explicit
+weight. For a fixed <span class="math inline">\(\alpha\)</span>, that
+weight decreases as more observations arrive. Smoothing is a choice of
+estimator; the empirical likelihood-maximizing property by itself does
+not force it.</p>
+<div class="example" title="A sample with an unobserved category">
+<p><strong>Example. A sample with an unobserved category</strong></p>
+<p>For counts <span class="math inline">\((4,1,0)\)</span> and <span
+class="math inline">\(\alpha=1\)</span>, the smoothed table is <span
+class="math inline">\((5/8,2/8,1/8)\)</span>. It is the mixture <span
+class="math inline">\((5/8)(4/5,1/5,0)+(3/8)(1/3,1/3,1/3)\)</span>.
+Every category now receives a positive probability. A later observation
+of the third label has finite surprisal under this table, whereas it
+would have infinite surprisal under the unsmoothed empirical table.</p>
+</div>
+<h2 id="a-symmetric-discrepancy-built-from-two-directed-ones">A
+symmetric discrepancy built from two directed ones</h2>
+<p>Although relative entropy is directed, a symmetric finite comparison
+can be formed by introducing the midpoint <span
+class="math inline">\(m=(p+r)/2\)</span>: <span
+class="math display">\[\operatorname{JS}(p,r)=\frac12D(p\|m)+\frac12D(r\|m).\]</span>
+This is the <strong>Jensen–Shannon divergence</strong>. By the
+entropy-mixture identity, it also equals <span
+class="math inline">\(H(m)-(H(p)+H(r))/2\)</span>. It is symmetric and
+nonnegative. It is finite even for disjoint supports, because the
+midpoint is positive wherever either input is positive.</p>
+<p>Furthermore, <span class="math inline">\(m_i\geq p_i/2\)</span> gives
+<span class="math inline">\(\ln(p_i/m_i)\leq\ln2\)</span> on the support
+of <span class="math inline">\(p\)</span>, so <span
+class="math inline">\(D(p\|m)\leq\ln2\)</span>. The same argument holds
+for <span class="math inline">\(r\)</span>, and consequently <span
+class="math inline">\(\operatorname{JS}(p,r)\leq\ln2\)</span>. For two
+disjoint pure states the value is exactly <span
+class="math inline">\(\ln2\)</span>. This provides another example of
+deriving a useful finite bound by comparing coordinates directly.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Compute <span class="math inline">\(D(q\|p)\)</span> for <span
+class="math inline">\(q=(1,0)\)</span> and <span
+class="math inline">\(p=(1/4,3/4)\)</span>. What happens if the first
+entry of <span class="math inline">\(p\)</span> is zero?</li>
+<li>Calculate both directed divergences between <span
+class="math inline">\((0.6,0.4)\)</span> and <span
+class="math inline">\((0.3,0.7)\)</span>.</li>
+<li>Prove that <span class="math inline">\(D(q\|p)=0\)</span> implies
+<span class="math inline">\(p=q\)</span>, including the case where <span
+class="math inline">\(q\)</span> has zero entries.</li>
+<li>Verify <span class="math inline">\(D(p\|u)=\ln k-H(p)\)</span> for a
+uniform reference on <span class="math inline">\(k\)</span> labels.</li>
+<li>For counts <span class="math inline">\((3,1)\)</span>, find the
+likelihood ratio of the empirical model to the fair model directly and
+through relative entropy.</li>
+<li>Starting from <span class="math inline">\(p_0=(1,0,0)\)</span> with
+target <span class="math inline">\(q=(1/3,1/3,1/3)\)</span> and <span
+class="math inline">\(\lambda=1/4\)</span>, find <span
+class="math inline">\(p_1\)</span> and <span
+class="math inline">\(p_2\)</span>.</li>
+<li>Prove the explicit formula for the mixture recurrence by
+induction.</li>
+<li>Starting with finite <span class="math inline">\(D(q\|p_0)\)</span>,
+find a sufficient integer number of mixture steps to reduce its bound by
+a factor of <span class="math inline">\(16\)</span> when <span
+class="math inline">\(\lambda=1/2\)</span>.</li>
+<li>Derive the entropy concavity identity by expanding all four
+terms.</li>
+<li>Take <span class="math inline">\(p=(1,0)\)</span> and <span
+class="math inline">\(r=(0,1)\)</span>. Compare their entropies with the
+entropy of their equally weighted mixture.</li>
+<li>Use the prefix-code argument to bound the expected length of a code
+with lengths <span class="math inline">\((2,2,2)\)</span> under uniform
+probabilities on three labels.</li>
+<li>Propose a numerical experiment that tests divergence contraction.
+State which direction of the divergence you will compute and why the
+initial support matters.</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>1.</strong> The divergence is <span
+class="math inline">\(\ln4\)</span>. If <span
+class="math inline">\(p_1=0\)</span>, it is infinite.</p>
+<p><strong>5.</strong> The direct likelihood ratio is <span
+class="math inline">\([(3/4)^3(1/4)]/(1/2)^4=27/16\)</span>. Taking
+logarithms also gives <span
+class="math display">\[4D\bigl((3/4,1/4)\|(1/2,1/2)\bigr)=\ln(27/16).\]</span></p>
+<p><strong>6.</strong> The first two states are <span
+class="math inline">\((5/6,1/12,1/12)\)</span> and <span
+class="math inline">\((17/24,7/48,7/48)\)</span>.</p>
+<p><strong>8.</strong> Four steps suffice for the bound, since <span
+class="math inline">\((1/2)^4=1/16\)</span>. The actual divergence may
+decrease faster.</p>
+<p><strong>10.</strong> The two unmixed entropies are zero. The equal
+mixture has entropy <span class="math inline">\(\ln2\)</span> nats.</p>
+<p><strong>11.</strong> The Kraft sum is <span
+class="math inline">\(3/4\)</span>. The stronger bound is <span
+class="math inline">\(\log_23-\log_2(3/4)=2\)</span> bits. The actual
+expected length is exactly two bits.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week05.html">← Week 5</a><a href="../readings/week07.html">Week 7 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

@@ -1,0 +1,309 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 10: Information networks and coarse-graining · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="10"><p class="eyebrow">Week 10 · Reading</p><h1>Information networks and coarse-graining</h1><nav class="week-nav" aria-label="Week 10 resources"><a aria-current=page href="../readings/week10.html">Reading</a><a  href="../demos/week10.html">Demonstration</a><a  href="../labs/week10.html">Lab</a><a  href="../quizzes/week10.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter10.pdf">Chapter 10 PDF</a> · <a href="../textbook/latex/chapter10.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Interpret and iterate a column-stochastic matrix.</li><li>Prove data processing through the log-sum inequality.</li><li>Explain entropy behavior under general and doubly stochastic channels.</li></ul></aside><article class="reading-text"><p>An observation can be recorded at several resolutions. A detailed
+label may be replaced by a broader group, passed through a noisy
+channel, or transported among nodes of a network. These operations
+transform probability tables by finite weighted sums. They connect graph
+dynamics with a basic principle of information geometry: applying the
+same observation rule to two models cannot make them more
+distinguishable by the discrepancies studied here.</p>
+<h2 id="a-stochastic-matrix-describes-one-step">A stochastic matrix
+describes one step</h2>
+<p>Let <span class="math inline">\(K_{ji}\)</span> be the probability of
+arriving at output label <span class="math inline">\(j\)</span> from
+input label <span class="math inline">\(i\)</span>. Our convention
+places the input in the column. Thus <span
+class="math display">\[K_{ji}\geq0,\qquad \sum_jK_{ji}=1\quad\hbox{for
+each }i.\]</span> Such a table is <strong>column-stochastic</strong>. If
+input probabilities are <span class="math inline">\(p_i\)</span>, the
+output probabilities are <span
+class="math display">\[p_j^+=\sum_iK_{ji}p_i,\qquad p^+=Kp.\]</span> The
+product symbol <span class="math inline">\(Kp\)</span> abbreviates these
+weighted sums. Adding over <span class="math inline">\(j\)</span> gives
+<span
+class="math inline">\(\sum_jp_j^+=\sum_ip_i\sum_jK_{ji}=1\)</span>. This
+is a linear difference equation on probability vectors.</p>
+<p>Repeated application gives <span
+class="math inline">\(p_t=K^tp_0\)</span>. A probability vector <span
+class="math inline">\(\pi\)</span> is <strong>stationary</strong> if
+<span class="math inline">\(K\pi=\pi\)</span>. Stationarity is a
+fixed-point condition. It does not by itself imply that every trajectory
+converges to <span class="math inline">\(\pi\)</span>.</p>
+<div class="example" title="A lazy walk on a three-node path">
+<p><strong>Example. A lazy walk on a three-node path</strong></p>
+<p>Consider <span
+class="math display">\[K=\begin{pmatrix}3/4&amp;1/4&amp;0\\1/4&amp;1/2&amp;1/4\\0&amp;1/4&amp;3/4\end{pmatrix}.\]</span>
+Each column describes remaining at a node or moving to a neighbor.
+Starting at <span class="math inline">\(p_0=(1,0,0)\)</span> gives <span
+class="math inline">\(p_1=(3/4,1/4,0)\)</span> and <span
+class="math inline">\(p_2=(5/8,5/16,1/16)\)</span>. The uniform table is
+stationary because the rows, as well as the columns, sum to one. This
+particular walk approaches uniform, as can be checked from its repeated
+finite updates.</p>
+</div>
+<p>A matrix whose rows and columns both sum to one is <strong>doubly
+stochastic</strong>. The cyclic permutation matrix is also doubly
+stochastic, but every noncentral three-category state repeats with
+period three. To establish convergence in a general network, additional
+conditions are required. Our contraction inequalities below concern
+one-step comparisons and do not require a claim of convergence.</p>
+<h2 id="coarse-graining-is-a-deterministic-channel">Coarse-graining is a
+deterministic channel</h2>
+<p>Partition the input labels into groups. The output reports only the
+group containing the input. Set <span
+class="math inline">\(K_{ji}=1\)</span> if label <span
+class="math inline">\(i\)</span> belongs to group <span
+class="math inline">\(j\)</span>, and zero otherwise. Each column
+contains exactly one entry equal to one. The output probabilities are
+sums over the groups.</p>
+<div class="example" title="A distinction erased by grouping">
+<p><strong>Example. A distinction erased by grouping</strong></p>
+<p>Let <span class="math inline">\(q=(0.4,0.1,0.4,0.1)\)</span> and
+<span class="math inline">\(p=(0.1,0.4,0.1,0.4)\)</span>. Group labels
+<span class="math inline">\(1,2\)</span> together and labels <span
+class="math inline">\(3,4\)</span> together. Both output distributions
+are <span class="math inline">\((1/2,1/2)\)</span>. Before grouping,
+<span class="math inline">\(D(q\|p)=0.6\ln4\approx0.8318\)</span>. After
+grouping, it is zero. The within-group differences cannot be recovered
+from the recorded group alone.</p>
+</div>
+<figure><img src="../assets/fig-network.svg" alt="Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical." loading="lazy"><figcaption>Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.</figcaption></figure>
+<h2 id="the-log-sum-inequality">The log-sum inequality</h2>
+<p>Let <span class="math inline">\(a_i,b_i\)</span> be nonnegative
+numbers with positive totals <span class="math inline">\(A=\sum_i
+a_i\)</span> and <span class="math inline">\(B=\sum_i b_i\)</span>, and
+suppose <span class="math inline">\(b_i&gt;0\)</span> wherever <span
+class="math inline">\(a_i&gt;0\)</span>. Applying Gibbs’ inequality to
+<span class="math inline">\(a_i/A\)</span> and <span
+class="math inline">\(b_i/B\)</span> gives <span
+class="math display">\[\sum_i a_i\ln\frac{a_i}{b_i}\geq A\ln\frac
+AB.\]</span> To see this directly, multiply <span
+class="math inline">\(D(a/A\|b/B)\geq0\)</span> by <span
+class="math inline">\(A\)</span> and expand the logarithm. This is the
+<strong>log-sum inequality</strong>. It compares the divergence
+contributions before and after a set of entries is merged.</p>
+<p>Apply it separately to each output label <span
+class="math inline">\(j\)</span>, using <span
+class="math inline">\(a_i=K_{ji}q_i\)</span> and <span
+class="math inline">\(b_i=K_{ji}p_i\)</span>. The output totals are
+<span class="math inline">\((Kq)_j\)</span> and <span
+class="math inline">\((Kp)_j\)</span>. Summing over outputs gives <span
+class="math display">\[D(Kq\|Kp)\leq\sum_{j,i}K_{ji}q_i\ln\frac{q_i}{p_i}
+=D(q\|p),\]</span> because each column of <span
+class="math inline">\(K\)</span> sums to one. Terms with <span
+class="math inline">\(K_{ji}=0\)</span> contribute zero. The usual
+support conventions cover zero totals and infinite divergences.</p>
+<div class="proposition" title="Data processing for relative entropy">
+<p><strong>Proposition. Data processing for relative
+entropy</strong></p>
+<p>For a column-stochastic matrix applied to both distributions, <span
+class="math inline">\(D(Kq\|Kp)\leq D(q\|p)\)</span>.</p>
+</div>
+<p>The same channel must be used for both tables. Applying different
+recording rules can create differences caused by those rules themselves.
+For deterministic grouping with positive probabilities, equality holds
+exactly when <span class="math inline">\(q_i/p_i\)</span> is constant
+within each group: no distinction relevant to that ratio is lost within
+a group.</p>
+<h2 id="square-root-overlap-also-contracts-distance">Square-root overlap
+also contracts distance</h2>
+<p>For each output label, Cauchy–Schwarz gives <span
+class="math display">\[\sqrt{\left(\sum_iK_{ji}q_i\right)\left(\sum_iK_{ji}p_i\right)}
+\geq\sum_iK_{ji}\sqrt{q_ip_i}.\]</span> Adding over <span
+class="math inline">\(j\)</span> and using column sums yields <span
+class="math display">\[B(Kq,Kp)\geq B(q,p).\]</span> Since inverse
+cosine decreases as its argument increases, the spherical distance
+satisfies <span class="math display">\[d(Kq,Kp)\leq d(q,p).\]</span>
+Hellinger distance also cannot increase, because its square is <span
+class="math inline">\(1-B\)</span>. Thus two different constructions, a
+logarithmic discrepancy and a square-root distance, both obey an
+information-loss principle under the same finite observation rule.</p>
+<div class="example" title="A noisy binary observation">
+<p><strong>Example. A noisy binary observation</strong></p>
+<p>Suppose a binary label is flipped with probability <span
+class="math inline">\(1/4\)</span>, so <span
+class="math inline">\(K=\left(\begin{smallmatrix}3/4&amp;1/4\\1/4&amp;3/4\end{smallmatrix}\right)\)</span>.
+The tables <span class="math inline">\((0.9,0.1)\)</span> and <span
+class="math inline">\((0.1,0.9)\)</span> become <span
+class="math inline">\((0.7,0.3)\)</span> and <span
+class="math inline">\((0.3,0.7)\)</span>. Their overlap increases from
+<span class="math inline">\(0.6\)</span> to <span
+class="math inline">\(2\sqrt{0.21}\approx0.9165\)</span>. Their
+spherical distance decreases from approximately <span
+class="math inline">\(1.8546\)</span> to <span
+class="math inline">\(0.8230\)</span>.</p>
+</div>
+<h2 id="when-does-entropy-increase-on-a-network">When does entropy
+increase on a network?</h2>
+<p>A stochastic channel can lower entropy. A channel that sends every
+input to one output converts every distribution into a certain outcome
+with entropy zero. The data-processing inequality compares two models
+through the same channel; entropy measures the uncertainty of one table.
+The questions are related but distinct.</p>
+<p>For a doubly stochastic matrix, uniform <span
+class="math inline">\(u\)</span> is stationary. Data processing then
+gives <span class="math display">\[D(Kp\|u)=D(Kp\|Ku)\leq
+D(p\|u).\]</span> Using <span class="math inline">\(D(p\|u)=\ln
+k-H(p)\)</span> shows <span class="math inline">\(H(Kp)\geq
+H(p)\)</span>. This is an exact entropy-increase statement with a
+specific assumption on the channel. Equality can occur at a nonuniform
+table, as a permutation simply rearranges its probabilities.</p>
+<h2 id="a-finite-statistical-family">A finite statistical family</h2>
+<p>A collection of probability tables indexed by one or more parameters
+is a <strong>statistical family</strong>. On fixed labels <span
+class="math inline">\(x_i\)</span>, for example, the weights <span
+class="math display">\[p_i(m,a)=\frac{e^{-a(x_i-m)^2}}{\sum_je^{-a(x_j-m)^2}},\qquad
+a&gt;0,\]</span> form a finite bell-shaped family. Changing <span
+class="math inline">\(m\)</span> shifts the emphasis across the labels,
+and changing <span class="math inline">\(a\)</span> changes its
+concentration. These are normalized weights on a fixed finite set. Their
+entropy, relative entropy, and spherical distance can all be computed by
+the formulas already developed. Grouping labels produces a coarser
+family and contracts pairwise discrepancies by the same theorems.</p>
+<p>This offers a capstone investigation: choose two parameter values,
+calculate their tables, apply a recording channel, and quantify the
+distinctions retained. The finite sums, token graphs, and exact updates
+developed throughout the course provide the tools for carrying out the
+investigation and explaining its assumptions.</p>
+<h2 id="solving-the-three-node-walk-exactly">Solving the three-node walk
+exactly</h2>
+<p>The particular walk introduced earlier can be solved by tracking two
+contrasts. Write <span class="math display">\[a_t=p_{1,t}-p_{3,t},\qquad
+b_t=p_{1,t}-2p_{2,t}+p_{3,t}.\]</span> Substituting the three update
+equations and collecting coefficients gives <span
+class="math display">\[a_{t+1}=\frac34a_t,\qquad
+b_{t+1}=\frac14b_t.\]</span> Both are geometric sequences. Combining
+these contrasts with <span
+class="math inline">\(p_{1,t}+p_{2,t}+p_{3,t}=1\)</span> recovers the
+probabilities: <span
+class="math display">\[p_{1,t}=\frac13+\frac{b_t}{6}+\frac{a_t}{2},\quad
+p_{2,t}=\frac13-\frac{b_t}{3},\quad
+p_{3,t}=\frac13+\frac{b_t}{6}-\frac{a_t}{2}.\]</span> Because <span
+class="math inline">\((3/4)^t\)</span> and <span
+class="math inline">\((1/4)^t\)</span> approach zero, every initial
+table for this walk approaches uniform. This proves the claim for the
+stated matrix by two scalar recurrences, without needing a general
+matrix convergence theorem.</p>
+<div class="example" title="An exact three-step distribution">
+<p><strong>Example. An exact three-step distribution</strong></p>
+<p>From <span class="math inline">\((1,0,0)\)</span>, both initial
+contrasts are one. At step three, <span
+class="math inline">\(a_3=27/64\)</span> and <span
+class="math inline">\(b_3=1/64\)</span>. The recovered table is <span
+class="math inline">\((35/64,21/64,8/64)\)</span>. Direct multiplication
+of the step-two table <span
+class="math inline">\((5/8,5/16,1/16)\)</span> by the walk matrix gives
+the same answer.</p>
+</div>
+<h2 id="where-the-lost-divergence-goes-under-grouping">Where the lost
+divergence goes under grouping</h2>
+<p>For deterministic groups <span class="math inline">\(G_j\)</span>,
+define output masses <span class="math inline">\(Q_j=\sum_{i\in
+G_j}q_i\)</span> and <span class="math inline">\(P_j=\sum_{i\in
+G_j}p_i\)</span>. Assume positive input tables. Within group <span
+class="math inline">\(j\)</span>, form conditional tables <span
+class="math inline">\(q_i/Q_j\)</span> and <span
+class="math inline">\(p_i/P_j\)</span>. Splitting the logarithm gives
+<span class="math display">\[D(q\|p)=D(Q\|P)+\sum_j Q_j
+D\left(q(\cdot\mid G_j)\middle\|p(\cdot\mid G_j)\right).\]</span> The
+first term is the discrepancy retained in the group labels. The second
+is the average discrepancy among labels inside a group. Every lost
+contribution is nonnegative. Equality under grouping occurs exactly when
+the two within-group conditional tables agree, equivalent to a constant
+ratio <span class="math inline">\(q_i/p_i\)</span> in each group.</p>
+<div class="example" title="Retained and lost distinctions">
+<p><strong>Example. Retained and lost distinctions</strong></p>
+<p>For the four-label tables <span
+class="math inline">\((0.4,0.1,0.4,0.1)\)</span> and <span
+class="math inline">\((0.1,0.4,0.1,0.4)\)</span>, adjacent-pair grouping
+gives the same output masses. All the divergence is in the conditional
+tables <span class="math inline">\((0.8,0.2)\)</span> and <span
+class="math inline">\((0.2,0.8)\)</span> within each pair. Grouping
+labels <span class="math inline">\(1,3\)</span> together instead gives
+outputs <span class="math inline">\((0.8,0.2)\)</span> and <span
+class="math inline">\((0.2,0.8)\)</span>, while each within-group
+conditional table is uniform. This second grouping preserves the full
+divergence.</p>
+</div>
+<h2 id="composing-observation-rules">Composing observation rules</h2>
+<p>If channel <span class="math inline">\(K\)</span> is followed by
+channel <span class="math inline">\(L\)</span>, the combined rule is the
+matrix product <span class="math inline">\(LK\)</span>. Its entries are
+<span class="math inline">\((LK)_{hi}=\sum_jL_{hj}K_{ji}\)</span>. Each
+term represents passing through intermediate output <span
+class="math inline">\(j\)</span>. Nonnegativity is immediate, and adding
+over <span class="math inline">\(h\)</span> gives one for every input
+column. Thus the composition is again a stochastic channel.</p>
+<p>Applying data processing twice gives <span
+class="math display">\[D(LKq\|LKp)\leq D(Kq\|Kp)\leq D(q\|p).\]</span>
+The spherical distances obey the same succession of inequalities. This
+gives a mathematical description of a recording pipeline: sampling
+labels, adding noise, grouping outputs, and recording an even coarser
+category can be analyzed one finite operation at a time. A stage may
+preserve a particular pair’s discrepancy, but a later common stage
+cannot restore a distinction already erased from those output
+tables.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Verify the column sums of the three-node walk matrix and compute one
+update of <span class="math inline">\((1/2,1/4,1/4)\)</span>.</li>
+<li>Show algebraically that a column-stochastic matrix maps probability
+vectors to probability vectors.</li>
+<li>Find the stationary table of the binary flip channel in the
+example.</li>
+<li>Write the matrix for the cyclic permutation <span
+class="math inline">\((p_A,p_B,p_C)\mapsto(p_C,p_A,p_B)\)</span> and
+verify its period.</li>
+<li>For <span class="math inline">\(q=(0.4,0.1,0.4,0.1)\)</span> and
+<span class="math inline">\(p=(0.1,0.4,0.1,0.4)\)</span>, compute their
+overlap before and after the stated grouping.</li>
+<li>Derive the log-sum inequality from Gibbs’ inequality.</li>
+<li>Give a grouping for which two distinct positive tables retain their
+relative entropy exactly. Explain the ratio condition within
+groups.</li>
+<li>Verify the relative-entropy contraction numerically for the binary
+flip example.</li>
+<li>Prove that a doubly stochastic matrix preserves the uniform
+distribution.</li>
+<li>Give a stochastic channel that strictly lowers the entropy of the
+uniform distribution. Explain why this does not violate data
+processing.</li>
+<li>On labels <span class="math inline">\(-2,-1,0,1,2\)</span>,
+calculate the finite bell-shaped table with <span
+class="math inline">\(m=0\)</span> and <span
+class="math inline">\(a=\ln2\)</span>. Compare its entropy with uniform
+entropy.</li>
+<li>Design a capstone comparing two probability models before and after
+grouping. Include a data table, both directed relative entropies,
+spherical distance, a channel specification, and an interpretation of
+any lost distinction.</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>1.</strong> The new table is <span
+class="math inline">\((7/16,5/16,1/4)\)</span>.</p>
+<p><strong>3.</strong> Solving <span
+class="math inline">\(x=(3/4)x+(1/4)(1-x)\)</span> gives <span
+class="math inline">\(x=1/2\)</span>, so the stationary table is
+uniform.</p>
+<p><strong>5.</strong> The input overlap is <span
+class="math inline">\(4\sqrt{0.04}=0.8\)</span>. The equal outputs have
+overlap one.</p>
+<p><strong>7.</strong> Group labels <span
+class="math inline">\(1,2\)</span> together and <span
+class="math inline">\(3,4\)</span> together. Take <span
+class="math inline">\(p=(0.1,0.2,0.3,0.4)\)</span> and <span
+class="math inline">\(q=(0.2,0.4,6/35,8/35)\)</span>. Both sum to one,
+and the within-group ratios are <span class="math inline">\(2\)</span>
+and <span class="math inline">\(4/7\)</span>. Log-sum has equality in
+each group, so the divergence is preserved.</p>
+<p><strong>9.</strong> For <span class="math inline">\(u_i=1/k\)</span>,
+the output entry is <span
+class="math inline">\((Ku)_j=(1/k)\sum_iK_{ji}=1/k\)</span> by the
+row-sum condition.</p>
+<p><strong>11.</strong> The unnormalized weights are <span
+class="math inline">\((1/16,1/2,1,1/2,1/16)\)</span> with total <span
+class="math inline">\(17/8\)</span>. The table is <span
+class="math inline">\((1/34,4/17,8/17,4/17,1/34)\)</span>. It is
+nonuniform and has entropy strictly less than <span
+class="math inline">\(\ln5\)</span>.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week09.html">← Week 9</a><a href="../guide.html#capstone">Capstone guidance →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

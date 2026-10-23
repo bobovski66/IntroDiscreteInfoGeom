@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\draw[->,ink] (0,0)--(4.7,0) node[right]{$2\sqrt{x}$};\draw[->,ink] (0,0)--(0,4.7) node[above]{$2\sqrt{1-x}$};
+\draw[teal,line width=1.5pt] (4,0) arc[start angle=0,end angle=90,radius=4];
+\draw[ink!40] (0,0)--(2,3.464);\draw[ink!40] (0,0)--(2.828,2.828);
+\fill[copper] (2,3.464) circle(2.5pt) node[above right]{$x=1/4$};
+\fill[teal] (2.828,2.828) circle(2.5pt) node[above right]{$x=1/2$};
+\node[below] at (4,0){$x=1$};\node[left] at (0,4){$x=0$};
+\node[align=left] at (2,-1){Radius $2$\\Arc coordinate $2\arcsin\sqrt{x}$};
+\begin{axis}[at={(6.7cm,0)},anchor=south west,width=6.1cm,height=5.8cm,xlabel={Probability $x$},ylabel={Arc coordinate},xmin=0,xmax=1,ymin=0,ymax=3.2,ytick={0,1.570796,3.141593},yticklabels={$0$,$\pi/2$,$\pi$}]
+\addplot[teal,domain=0:1,samples=101]{2*asin(sqrt(x))*pi/180};
+\end{axis}\end{tikzpicture}

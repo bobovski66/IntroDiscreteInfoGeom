@@ -1,0 +1,1 @@
+Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.

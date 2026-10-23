@@ -1,0 +1,319 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 2: Payoff tables and finite selection · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="2"><p class="eyebrow">Week 2 · Reading</p><h1>Payoff tables and finite selection</h1><nav class="week-nav" aria-label="Week 2 resources"><a aria-current=page href="../readings/week02.html">Reading</a><a  href="../demos/week02.html">Demonstration</a><a  href="../labs/week02.html">Lab</a><a  href="../quizzes/week02.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter02.pdf">Chapter 2 PDF</a> · <a href="../textbook/latex/chapter02.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Read a score matrix using a stated row and column convention.</li><li>Find fixed points using the score difference.</li><li>Check positivity and investigate equilibrium crossing.</li></ul></aside><article class="reading-text"><p>An interaction changes the opportunities available to a type. A
+strategy may do well when it is rare and poorly when it becomes common.
+To describe this feedback, we assign scores to encounters and average
+them using the present composition. The resulting multipliers depend on
+the state, so the growth rule becomes a nonlinear difference
+equation.</p>
+<h2 id="a-matrix-is-a-table-of-encounter-scores">A matrix is a table of
+encounter scores</h2>
+<p>Consider two strategies, <span class="math inline">\(A\)</span> and
+<span class="math inline">\(B\)</span>, with score table <span
+class="math display">\[M=\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}.\]</span>
+The row specifies the focal strategy and the column specifies its
+opponent. Thus <span class="math inline">\(b\)</span> is the score of an
+<span class="math inline">\(A\)</span> individual meeting a <span
+class="math inline">\(B\)</span> individual. We assume opponents are
+encountered with frequencies <span class="math inline">\(x\)</span> and
+<span class="math inline">\(1-x\)</span>. The average scores are <span
+class="math display">\[f_A(x)=ax+b(1-x),\qquad
+f_B(x)=cx+d(1-x).\]</span> The assumption about encounters is part of
+the model. Assortment by type, spatial clustering, or a rule excluding
+encounters with oneself can produce different averages.</p>
+<p>The score difference is a straight-line expression: <span
+class="math display">\[\Delta(x)=f_A(x)-f_B(x)=(b-d)+(a-b-c+d)x.\]</span>
+Its sign records which strategy has the higher score at each
+composition. A zero of <span class="math inline">\(\Delta\)</span> is a
+candidate interior fixed point for the update rules below.</p>
+<div class="example" title="A coexistence score table">
+<p><strong>Example. A coexistence score table</strong></p>
+<p>For <span
+class="math inline">\(M=\left(\begin{smallmatrix}2&amp;4\\3&amp;1\end{smallmatrix}\right)\)</span>,
+the scores are <span class="math inline">\(f_A=4-2x\)</span> and <span
+class="math inline">\(f_B=1+2x\)</span>. Their difference is <span
+class="math inline">\(3-4x\)</span>, which vanishes at <span
+class="math inline">\(q=3/4\)</span>. Below <span
+class="math inline">\(q\)</span>, strategy <span
+class="math inline">\(A\)</span> has the higher score; above <span
+class="math inline">\(q\)</span>, strategy <span
+class="math inline">\(B\)</span> has the higher score. At <span
+class="math inline">\(q\)</span>, both scores are <span
+class="math inline">\(5/2\)</span>.</p>
+</div>
+<h2 id="turning-scores-into-positive-multipliers">Turning scores into
+positive multipliers</h2>
+<p>Scores and multipliers play different roles. A score may be negative,
+while a population multiplier must be positive. One possible conversion
+is the <strong>linear multiplier rule</strong> <span
+class="math display">\[w_i=1+\eta f_i,\]</span> where <span
+class="math inline">\(\eta&gt;0\)</span> controls the strength of the
+update. This rule requires <span class="math inline">\(1+\eta
+f_i&gt;0\)</span> for every score that can occur. If all encounter
+scores are at least <span class="math inline">\(m&lt;0\)</span>,
+choosing <span class="math inline">\(\eta&lt;-1/m\)</span> is
+sufficient. Equality would permit zero multipliers and falls outside the
+positive rule used here.</p>
+<p>Another conversion is the <strong>exponential multiplier
+rule</strong> <span class="math display">\[w_i=e^{\eta f_i}.\]</span>
+The number <span class="math inline">\(e\)</span> is approximately <span
+class="math inline">\(2.71828\)</span>. The exponential is positive for
+every real input, and it satisfies <span
+class="math inline">\(e^{u+v}=e^ue^v\)</span>. For computation, a
+calculator’s exponential function is enough. Its algebraic properties
+are what we need in this course.</p>
+<p>Normalizing linear multipliers gives <span
+class="math display">\[x^+=\frac{x(1+\eta f_A)}{1+\eta\bar f},\qquad
+\bar f=xf_A+(1-x)f_B,\]</span> and consequently <span
+class="math display">\[x^+-x=\frac{\eta x(1-x)\Delta(x)}{1+\eta\bar
+f}.\]</span> Normalizing exponential multipliers gives <span
+class="math display">\[x^+=\frac{xe^{\eta f_A}}{xe^{\eta
+f_A}+(1-x)e^{\eta f_B}}.\]</span> For either conversion, the change has
+the sign of <span class="math inline">\(\Delta\)</span> in the interior.
+The amount of change depends on the conversion and on <span
+class="math inline">\(\eta\)</span>.</p>
+<div class="example" title="One score table, two finite rules">
+<p><strong>Example. One score table, two finite rules</strong></p>
+<p>Use the coexistence table, <span
+class="math inline">\(x=1/4\)</span>, and <span
+class="math inline">\(\eta=1\)</span>. Then <span
+class="math inline">\((f_A,f_B)=(7/2,3/2)\)</span>. Linear multipliers
+are <span class="math inline">\((9/2,5/2)\)</span>, giving <span
+class="math inline">\(x^+=3/8\)</span>. Exponential multipliers give
+<span class="math inline">\(x^+=e^2/(e^2+3)\approx0.7112\)</span>. Both
+steps increase the <span class="math inline">\(A\)</span> proportion.
+Their sizes differ substantially.</p>
+</div>
+<h2 id="sign-diagrams-and-fixed-points">Sign diagrams and fixed
+points</h2>
+<p>For positive multipliers, the pure states <span
+class="math inline">\(0\)</span> and <span
+class="math inline">\(1\)</span> are fixed. An interior state is fixed
+precisely when the two scores agree. When <span
+class="math inline">\(a-b-c+d\ne0\)</span>, the candidate is <span
+class="math display">\[q=\frac{d-b}{a-b-c+d}.\]</span> It is an interior
+fixed point only if <span class="math inline">\(0&lt;q&lt;1\)</span>. If
+the score difference is zero everywhere, every state is fixed. If the
+difference is a nonzero constant, there is no interior fixed point.</p>
+<p>A <strong>sign diagram</strong> divides the interval at the zeros of
+<span class="math inline">\(\Delta\)</span> and records the direction of
+each single step. It provides useful information about motion. To prove
+convergence, we also need to control whether steps cross the proposed
+limit.</p>
+<div class="proposition"
+title="Monotone coexistence for the linear rule">
+<p><strong>Proposition. Monotone coexistence for the linear
+rule</strong></p>
+<p>For the coexistence table and any <span
+class="math inline">\(\eta&gt;0\)</span>, the linear rule sends every
+interior initial state toward <span class="math inline">\(q=3/4\)</span>
+without crossing it, and the resulting sequence converges to <span
+class="math inline">\(q\)</span>.</p>
+</div>
+<p>To prove this, first compute <span class="math inline">\(\bar
+f=1+5x-4x^2\)</span>. Since <span
+class="math inline">\(\Delta=-4(x-q)\)</span>, <span
+class="math display">\[x^+-q=(x-q)\left(1-\frac{4\eta x(1-x)}{1+\eta\bar
+f}\right).\]</span> The factor in parentheses is strictly between zero
+and one for <span class="math inline">\(0&lt;x&lt;1\)</span>. Positivity
+follows because subtracting <span class="math inline">\(4\eta
+x(1-x)\)</span> from the denominator leaves <span
+class="math inline">\(1+\eta(1+x)&gt;0\)</span>. The upper bound follows
+because the subtracted fraction is positive. Thus the error keeps its
+sign and decreases in magnitude.</p>
+<p>A sequence starting below <span class="math inline">\(q\)</span> is
+increasing and bounded above by <span class="math inline">\(q\)</span>;
+a sequence starting above <span class="math inline">\(q\)</span> is
+decreasing and bounded below by <span class="math inline">\(q\)</span>.
+Such a sequence has a limit. Substituting its limit into this rational
+update is valid because the denominator stays positive. The limit must
+be a fixed point, and the interval between the initial state and <span
+class="math inline">\(q\)</span> contains no other fixed point.
+Therefore the limit is <span class="math inline">\(q\)</span>.</p>
+<div class="example" title="A coordination threshold">
+<p><strong>Example. A coordination threshold</strong></p>
+<p>For <span
+class="math inline">\(M=\left(\begin{smallmatrix}4&amp;1\\2&amp;3\end{smallmatrix}\right)\)</span>,
+we have <span class="math inline">\(\Delta=4x-2\)</span>. If <span
+class="math inline">\(x&lt;1/2\)</span>, every step lowers <span
+class="math inline">\(x\)</span>; if <span
+class="math inline">\(x&gt;1/2\)</span>, every step raises it. Both
+rules therefore move away from the threshold. The bounded sequences
+converge to <span class="math inline">\(0\)</span> and <span
+class="math inline">\(1\)</span>, respectively. Starting exactly at
+<span class="math inline">\(1/2\)</span> leaves the state fixed.</p>
+</div>
+<h2 id="what-changes-when-a-score-table-changes">What changes when a
+score table changes?</h2>
+<p>Exponential normalization is unchanged if a common number <span
+class="math inline">\(C\)</span> is added to all current scores: each
+weight gains the same factor <span class="math inline">\(e^{\eta
+C}\)</span>, which cancels. Multiplying all scores by <span
+class="math inline">\(c&gt;0\)</span> is equivalent to replacing <span
+class="math inline">\(\eta\)</span> by <span
+class="math inline">\(c\eta\)</span>.</p>
+<p>For linear multipliers, adding <span class="math inline">\(C\)</span>
+changes the effective intensity. When <span class="math inline">\(1+\eta
+C&gt;0\)</span>, <span class="math display">\[1+\eta(f_i+C)=(1+\eta
+C)\left(1+\frac{\eta}{1+\eta C}f_i\right).\]</span> The first factor
+cancels upon normalization, leaving intensity <span
+class="math inline">\(\eta/(1+\eta C)\)</span>. Consequently, fixed
+points and signs may agree even though finite trajectories differ. This
+identity is useful when interpreting a table whose scores have been
+shifted to make them positive.</p>
+<h2 id="step-size-is-part-of-the-model">Step size is part of the
+model</h2>
+<p>The exponential coexistence rule can cross its equilibrium. At <span
+class="math inline">\(x=1/4\)</span> and <span
+class="math inline">\(\eta=2\)</span>, its next value is <span
+class="math inline">\(e^4/(e^4+3)\approx0.9479\)</span>, beyond <span
+class="math inline">\(3/4\)</span>. A sign diagram alone does not
+exclude this crossing. Repeated large steps can alternate across an
+equilibrium. Numerical experiments should report both the update rule
+and the chosen intensity, because they jointly determine the
+recurrence.</p>
+<figure><img src="../assets/fig-payoff.svg" alt="Coexistence scores and two finite trajectories at intensity 2. The linear rule approaches the equilibrium from one side; the exponential rule crosses it." loading="lazy"><figcaption>Coexistence scores and two finite trajectories at intensity 2. The linear rule approaches the equilibrium from one side; the exponential rule crosses it.</figcaption></figure>
+<h2 id="a-general-no-crossing-test">A general no-crossing test</h2>
+<p>The coexistence proof illustrates a reusable finite method. Suppose
+an update can be written <span class="math inline">\(x^+=x+G(x)\)</span>
+and <span class="math inline">\(q\)</span> is a proposed interior fixed
+point. If algebra produces <span
+class="math display">\[x^+-q=(x-q)R(x),\qquad 0&lt;R(x)&lt;1,\]</span>
+then the new error has the old sign and smaller magnitude. A trajectory
+cannot cross <span class="math inline">\(q\)</span>. The resulting
+monotone bounded sequence converges, and checking fixed points
+identifies the limit. The decisive work is the factorization and the
+bound on <span class="math inline">\(R\)</span>.</p>
+<p>If instead <span class="math inline">\(-1&lt;R(x)&lt;0\)</span>, the
+error reverses sign while shrinking in magnitude. This describes an
+alternating approach whenever the estimate holds throughout a region
+preserved by the update. If <span class="math inline">\(R\)</span>
+depends on the state, evaluating it at one point proves only a one-step
+statement there. A uniform bound over the relevant region is needed for
+a conclusion about the whole run.</p>
+<div class="example" title="A recurrence that alternates exactly">
+<p><strong>Example. A recurrence that alternates exactly</strong></p>
+<p>The affine rule <span class="math inline">\(x^+=3/4-x/2\)</span> maps
+<span class="math inline">\([0,1]\)</span> into <span
+class="math inline">\([1/4,3/4]\)</span>. Its fixed point is <span
+class="math inline">\(q=1/2\)</span>, and <span
+class="math inline">\(x^+-q=-(x-q)/2\)</span>. Starting at <span
+class="math inline">\(x_0=0.2\)</span> gives <span
+class="math inline">\(0.65\)</span>, <span
+class="math inline">\(0.425\)</span>, and <span
+class="math inline">\(0.5375\)</span>. The error is exactly <span
+class="math inline">\((-1/2)^t(x_0-q)\)</span>. This simple recurrence
+separates the ideas of crossing an equilibrium and failing to converge:
+crossing can accompany steady error reduction.</p>
+</div>
+<h2 id="boundary-behavior-from-encounter-scores">Boundary behavior from
+encounter scores</h2>
+<p>When A is rare, <span class="math inline">\(x\)</span> is close to
+zero, so its score is close to <span class="math inline">\(b\)</span>
+and B’s score is close to <span class="math inline">\(d\)</span>. The
+comparison <span class="math inline">\(b-d\)</span> determines whether a
+small positive A proportion rises in the next step. When B is rare,
+<span class="math inline">\(x\)</span> is close to one, so the relevant
+comparison is <span class="math inline">\(a-c\)</span>. These are the
+endpoint values of the score difference. They are obtained from the
+encounter interpretation before any trajectory is calculated.</p>
+<p>If <span class="math inline">\(b&gt;d\)</span> and <span
+class="math inline">\(a&lt;c\)</span>, each type has an advantage when
+rare. The score difference changes from positive to negative, producing
+an interior equality. If <span class="math inline">\(b&lt;d\)</span> and
+<span class="math inline">\(a&gt;c\)</span>, each type is disadvantaged
+when rare, and the interior equality is a threshold. The other sign
+combinations can give one type a consistent advantage. These
+observations organize the algebra of a two-strategy table.</p>
+<div class="example" title="Checking an advantage at low frequency">
+<p><strong>Example. Checking an advantage at low frequency</strong></p>
+<p>For the coexistence table, a rare A meets mostly B and scores close
+to <span class="math inline">\(4\)</span>, while common B scores close
+to <span class="math inline">\(1\)</span>. A therefore increases when
+introduced at a small positive proportion. Near the A vertex, rare B
+scores close to <span class="math inline">\(3\)</span> while common A
+scores close to <span class="math inline">\(2\)</span>, so B increases.
+Both endpoint comparisons agree with the interior equality at <span
+class="math inline">\(3/4\)</span>. Starting exactly at an endpoint
+still leaves it fixed because the multiplier rule does not introduce
+absent types.</p>
+</div>
+<h2 id="from-a-score-table-to-a-reproducible-experiment">From a score
+table to a reproducible experiment</h2>
+<p>A numerical report should specify the encounter convention, the
+table, the score-to-multiplier conversion, the intensity, the initial
+state, and the number of steps. Each item affects the calculation. A
+plot labeled only with a table omits part of the recurrence.</p>
+<p>For a two-type experiment, record the score difference and the
+updated proportion at several states. Check that the observed direction
+agrees with the sign identity. Then ask a separate question about
+crossing: is the new state still on the same side of an interior fixed
+point? Finally, compare any proposed long-run description with an exact
+error estimate when one is available. This sequence of calculations
+links model assumptions, algebra, and numerical observations without
+requiring a formula for every trajectory.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Explain the meaning of each entry of <span
+class="math inline">\(\left(\begin{smallmatrix}5&amp;-1\\2&amp;3\end{smallmatrix}\right)\)</span>
+under the row-focal convention.</li>
+<li>Find the two average scores and their difference for the table in
+Exercise 1.</li>
+<li>For that table, find a sufficient range of positive <span
+class="math inline">\(\eta\)</span> for linear multipliers to remain
+positive for every composition.</li>
+<li>Calculate one linear update for the coexistence table at <span
+class="math inline">\(x=1/2\)</span>, <span
+class="math inline">\(\eta=1\)</span>.</li>
+<li>Calculate one exponential update for the same state and
+intensity.</li>
+<li>Find and classify the fixed points for <span
+class="math inline">\(M=\left(\begin{smallmatrix}3&amp;3\\1&amp;1\end{smallmatrix}\right)\)</span>
+using the sign of the score difference.</li>
+<li>Give a score table for which every composition is fixed. Explain the
+condition on its rows.</li>
+<li>Verify each step in the proof of monotone coexistence, including the
+expression for <span class="math inline">\(\bar f\)</span>.</li>
+<li>For exponential coexistence, start at <span
+class="math inline">\(x=1/4\)</span> and compute four updates with <span
+class="math inline">\(\eta=2\)</span>. Record which side of <span
+class="math inline">\(3/4\)</span> each value occupies.</li>
+<li>Add <span class="math inline">\(5\)</span> to every entry of the
+coexistence table. Compare the linear updates at <span
+class="math inline">\(x=1/4\)</span>, <span
+class="math inline">\(\eta=1\)</span> before and after the change.</li>
+<li>Prove the stated invariance of the exponential rule under adding a
+common score. Does the common score need to be independent of the
+current state?</li>
+<li>Design two tables with the same interior fixed point but opposite
+signs of <span class="math inline">\(\Delta\)</span> on either side of
+it. Explain the different population behavior.</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>2.</strong> The scores are <span
+class="math inline">\(f_A=6x-1\)</span> and <span
+class="math inline">\(f_B=3-x\)</span>, so <span
+class="math inline">\(\Delta=7x-4\)</span>. The interior equality occurs
+at <span class="math inline">\(4/7\)</span>.</p>
+<p><strong>3.</strong> Every score is at least <span
+class="math inline">\(-1\)</span>. Thus <span
+class="math inline">\(0&lt;\eta&lt;1\)</span> is sufficient and ensures
+positivity even at <span class="math inline">\(x=0\)</span>.</p>
+<p><strong>4.</strong> The scores are <span
+class="math inline">\((3,2)\)</span> and the multipliers <span
+class="math inline">\((4,3)\)</span>. Therefore <span
+class="math inline">\(x^+=4/7\)</span>.</p>
+<p><strong>5.</strong> Cancelling the common factor <span
+class="math inline">\(e^2\)</span> gives <span
+class="math inline">\(x^+=e/(e+1)\approx0.7311\)</span>.</p>
+<p><strong>10.</strong> The original answer is <span
+class="math inline">\(3/8\)</span>. After the shift the multipliers are
+<span class="math inline">\((19/2,15/2)\)</span>, giving <span
+class="math inline">\(x^+=19/64\)</span>. Equivalently, the shifted rule
+has original-table intensity <span
+class="math inline">\(1/6\)</span>.</p>
+<p><strong>11.</strong> Every numerator and the denominator acquire the
+factor <span class="math inline">\(e^{\eta C}\)</span>. Cancellation
+works at each state, so the same conclusion holds for a common
+state-dependent score <span class="math inline">\(C(x)\)</span>.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week01.html">← Week 1</a><a href="../readings/week03.html">Week 3 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

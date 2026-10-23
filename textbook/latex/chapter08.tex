@@ -1,0 +1,299 @@
+\documentclass[11pt,oneside,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[paperwidth=7.5in,paperheight=10in,inner=.85in,outer=.85in,top=.85in,bottom=.85in,headheight=15pt,headsep=20pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor,graphicx,booktabs,array,longtable}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{arrows.meta,calc,patterns,decorations.markings}
+\pgfplotsset{compat=1.18}
+\definecolor{ink}{HTML}{17334B}
+\definecolor{teal}{HTML}{137C83}
+\definecolor{copper}{HTML}{AE5932}
+\definecolor{soft}{HTML}{EEF3F5}
+\pgfplotsset{every axis/.append style={axis line style={black!65},tick style={black!60},tick label style={font=\small},label style={font=\small},legend style={font=\small,draw=none,fill=white},grid style={black!10},major grid style={black!10},line width=.6pt},every axis plot/.append style={line width=1.15pt}}
+\usepackage{enumitem,needspace,etoolbox}
+\setlist[enumerate]{topsep=5pt,itemsep=5pt,parsep=0pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt,parsep=0pt}
+\usepackage{titlesec,fancyhdr}
+\titleformat{\chapter}[display]{\normalfont\color{ink}}{\large\sffamily\MakeUppercase{Chapter \thechapter}}{12pt}{\huge\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}[\vspace{12pt}\titlerule]
+\titlespacing*{\chapter}{0pt}{-10pt}{24pt}
+\titleformat{\section}{\large\bfseries\color{ink}}{\thesection}{.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{18pt plus 3pt minus 2pt}{7pt}
+\titlespacing*{\subsection}{0pt}{12pt plus 2pt minus 2pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{float,placeins}
+\floatplacement{figure}{htbp}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.8}
+\usepackage{makeidx}
+\makeindex
+\usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}[chapter]
+\BeforeBeginEnvironment{example}{\par\addvspace{4pt}\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{example}{\end{minipage}\par\addvspace{4pt}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newenvironment{solution}{\par\smallskip\noindent\textit{Solution.}\ }{\par\medskip}
+\newenvironment{exercises}{\begin{enumerate}[label=\thechapter.\arabic*,ref=\thechapter.\arabic*,leftmargin=2.8em,itemsep=6pt]}{\end{enumerate}}
+\newenvironment{answers}{\begin{description}[leftmargin=2.9em,labelwidth=2.5em,labelsep=.4em,itemsep=8pt,font=\normalfont\bfseries]}{\end{description}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\KL}[2]{D\!\left(#1\,\middle\|\,#2\right)}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\arcosh}{\operatorname{arcosh}}
+\newcommand{\sech}{\operatorname{sech}}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\p}{\mathbf{p}}
+\newcommand{\q}{\mathbf{q}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
+\newcommand{\ones}{\mathbf{1}}
+\newcommand{\simp}{\Delta^{n-1}}
+\newcommand{\simpi}{\Delta^{n-1}_{\!\circ}}
+\numberwithin{equation}{chapter}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\linespread{1.07}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{2}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
+
+\begin{document}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 8\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\setcounter{chapter}{7}
+
+\chapter{Geodesic steps and shortest graph paths}
+A distance tells us how far apart two distributions are. A path specifies how to move between them. There are several reasonable path constructions: ordinary mixtures, equal steps along a spherical arc, and token transfers on a finite graph. Each answers a different question about allowed intermediate states.
+
+\hypertarget{ch08-mixing-and-spherical-interpolation}{%
+\section{Mixing and spherical interpolation}\label{ch08-mixing-and-spherical-interpolation}}
+
+An ordinary mixture between \(p\) and \(r\) is \[m(t)=(1-t)p+tr,\qquad 0\leq t\leq1.\] Every coordinate is nonnegative and the sum remains one. If we restrict \(t\) to \(0,1/M,\ldots,1\), this is a finite list of distributions with equal coordinate increments.
+
+For equal increments of spherical distance, work with square-root vectors \(s=2\sqrt p\) and \(u=2\sqrt r\). Let \(\alpha=\arccos B(p,r)\). If \(p\ne r\), define \[s(t)=\frac{\sin((1-t)\alpha)}{\sin\alpha}s+
+\frac{\sin(t\alpha)}{\sin\alpha}u,\qquad
+g_i(t)=\frac{s_i(t)^2}{4}.\] For identical endpoints, set \(g(t)=p\). The trigonometric formula is \textbf{spherical interpolation}. Its coefficients are nonnegative on the stated interval, so every coordinate of \(s(t)\) is nonnegative.
+
+To verify that the vector has length two, choose orthogonal unit vectors \(e_1=s/2\) and \(e_2=(u/2-\cos\alpha\,e_1)/\sin\alpha\). Substitution and the sine subtraction identity give \[s(t)=2\bigl(\cos(t\alpha)e_1+\sin(t\alpha)e_2\bigr).\] The squared length is therefore \(4(\cos^2(t\alpha)+\sin^2(t\alpha))=4\). The recovered entries \(g_i(t)\) add to one. This derivation also shows that the angle between \(s(t_1)\) and \(s(t_2)\) is \(|t_2-t_1|\alpha\).
+
+\hypertarget{ch08-equal-finite-steps-along-a-shortest-arc}{%
+\section{Equal finite steps along a shortest arc}\label{ch08-equal-finite-steps-along-a-shortest-arc}}
+
+Choose a positive integer \(M\) and form \(g(0),g(1/M),\ldots,g(1)\). Consecutive states have distance \(2\alpha/M\). Their total path length is \(M(2\alpha/M)=2\alpha=d(p,r)\). Such a shortest spherical path is called a \textbf{geodesic}. Here it is represented by a finite list of equally spaced states, each calculated from a closed formula.
+
+The midpoint simplifies to \[g_i(1/2)=\frac{(\sqrt{p_i}+\sqrt{r_i})^2}{2(1+B(p,r))}.\] This follows either from the sine half-angle formula or by normalizing the vector \(\sqrt p+\sqrt r\). The midpoint generally differs from the coordinate average \((p+r)/2\).
+
+\begin{example}[Two notions of halfway]
+
+Take \(p=(1,0)\) and \(r=(1/4,3/4)\). Their overlap is \(1/2\). The spherical midpoint is \((3/4,1/4)\), whereas their coordinate midpoint is \((5/8,3/8)\). The first divides the spherical distance into two equal parts. The second divides each probability change into two equal parts.
+
+\end{example}
+
+\begin{example}[Three labels can trace different routes]
+
+Let \(p=(0.8,0.1,0.1)\) and \(r=(0.1,0.7,0.2)\). Their ordinary midpoint is \((0.45,0.4,0.15)\). The square-root midpoint is approximately \((0.4339,0.3935,0.1726)\). In a triangle picture, the mixture follows a straight segment, while the spherical interpolation generally follows a curved route after mapping back to probabilities.
+
+\end{example}
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\draw[copper,line width=1pt,dashed] plot coordinates {(0.9,0.519615) (4.8,1.03923)};\draw[teal,line width=1pt,] plot coordinates {(0.9,0.519615) (0.979372,0.540691) (1.06171,0.561733) (1.14689,0.582706) (1.23476,0.603576) (1.32519,0.624309) (1.41801,0.64487) (1.51308,0.665225) (1.61025,0.685342) (1.70935,0.705187) (1.81022,0.724727) (1.9127,0.743931) (2.01661,0.762767) (2.12178,0.781204) (2.22805,0.799211) (2.33524,0.816759) (2.44316,0.833819) (2.55166,0.850363) (2.66053,0.866365) (2.76962,0.881796) (2.87873,0.896633) (2.98769,0.910851) (3.09632,0.924427) (3.20444,0.937337) (3.31188,0.949561) (3.41844,0.96108) (3.52397,0.971873) (3.62829,0.981923) (3.73123,0.991214) (3.83261,0.99973) (3.93227,1.00746) (4.03005,1.01438) (4.12578,1.0205) (4.21931,1.02579) (4.31049,1.03025) (4.39916,1.03387) (4.48518,1.03664) (4.56841,1.03857) (4.64871,1.03965) (4.72595,1.03987) (4.8,1.03923)};
+\node[anchor=west,align=left,text=teal] at (6.6,3.8){Spherical interpolation};
+\node[anchor=west,align=left,text=copper] at (6.6,3.1){Ordinary mixture};
+\node[anchor=west,align=left] at (6.6,1.9){$p=(0.8,0.1,0.1)$\\$r=(0.1,0.7,0.2)$};
+\end{tikzpicture}}
+\caption{A spherical geodesic mapped back to the probability triangle, compared with the ordinary mixture segment between the same endpoints.}\end{figure}
+
+\hypertarget{ch08-restricting-movement-to-token-transfers}{%
+\section{Restricting movement to token transfers}\label{ch08-restricting-movement-to-token-transfers}}
+
+Suppose every intermediate distribution must arise from \(N\) tokens. The allowed states are the lattice vertices \((a/N,b/N,c/N)\). Connect two vertices by an edge if one token can be moved from one category to another. The resulting object is a \textbf{graph}: a collection of vertices with specified connections.
+
+Assign each edge the spherical distance between its endpoints. A graph path is a finite sequence of connected vertices; its length is the sum of its edge weights. Finding the shortest graph path is now a finite optimization problem. It may require a detour because the exact spherical geodesic need not pass through lattice vertices.
+
+The triangle inequality gives a lower bound: \[\text{length of any graph path from }p\text{ to }r\ \geq\ d(p,r).\] Equality is possible when its vertices happen to lie in order on a common shortest arc. Otherwise a positive gap remains. Increasing \(N\) adds more possible states, but comparing different lattices requires care: a denominator-\(N\) vertex need not belong to the denominator-\((N+1)\) lattice. We will measure the gap for chosen lattices without assuming a general convergence theorem.
+
+\begin{example}[A boundary path of three token moves]
+
+For \(N=3\), move from counts \((3,0,0)\) to \((0,3,0)\) by transferring one token at each step. All intermediate distributions lie on the binary edge. Their angle coordinates increase in order from \(0\) to \(\pi/2\), so their spherical edge lengths add to \(\pi\), equal to the endpoint distance. The three edge lengths are not equal, because equal token transfers do not create equal arc increments.
+
+\end{example}
+
+\hypertarget{ch08-dijkstras-shortest-path-algorithm}{%
+\section{Dijkstra's shortest-path algorithm}\label{ch08-dijkstras-shortest-path-algorithm}}
+
+For graphs with nonnegative edge weights, Dijkstra's algorithm finds the shortest distance from a starting vertex to every reachable vertex. Give the start tentative distance zero and all other vertices tentative distance infinity. Mark every vertex unvisited.
+
+At each round, select an unvisited vertex with smallest tentative distance. For each neighbor, compare its current tentative distance with the distance to the selected vertex plus the connecting edge weight. Replace the tentative distance if this proposed route is shorter, and record the selected vertex as its predecessor. Then mark the selected vertex visited. Stop when the destination is visited, or when no reachable unvisited vertex remains.
+
+Why can a visited distance be finalized? Any route that first passes through an unvisited vertex has already accumulated at least the smallest remaining tentative distance. Additional nonnegative edges cannot make it smaller. Thus a future route cannot improve the vertex just selected. Following predecessor links backward reconstructs a shortest route.
+
+\begin{example}[A small weighted graph]
+
+Suppose edges \(AB\), \(AC\), \(CB\), \(BD\), and \(CD\) have weights \(4\), \(1\), \(2\), \(1\), and \(6\). From \(A\), first finalize \(C\) at distance \(1\). This improves \(B\) from \(4\) to \(3\) and gives \(D\) distance \(7\). Finalizing \(B\) then improves \(D\) to \(4\). The shortest route is \(A,C,B,D\) with total weight \(4\).
+
+\end{example}
+
+\hypertarget{ch08-choosing-a-path-for-an-application}{%
+\section{Choosing a path for an application}\label{ch08-choosing-a-path-for-an-application}}
+
+A mixture may represent pooling two sources in changing proportions. A spherical path may represent equal statistical changes between tables. A graph path may represent a sequence of feasible changes in an indivisible allocation. Before calculating a shortest path, specify which states and transitions are allowed and what an edge costs. The geometry and the combinatorial constraints together determine the answer.
+
+\hypertarget{ch08-counting-moves-before-assigning-geometric-costs}{%
+\section{Counting moves before assigning geometric costs}\label{ch08-counting-moves-before-assigning-geometric-costs}}
+
+For two count vectors \(a\) and \(b\) with the same total, define their total surplus \[S=\sum_{i:a_i>b_i}(a_i-b_i)=\frac12\sum_i|a_i-b_i|.\] The surplus equals the total deficit because the counts have the same sum. One token transfer can remove at most one surplus token. Therefore at least \(S\) transfers are required to turn \(a\) into \(b\). This number is attainable: repeatedly move a token from a surplus category to a deficit category until every count agrees.
+
+This proves the minimum number of transfers when every edge costs one. It does not automatically solve the geometrically weighted problem, since different transfers can have different spherical lengths. The cost function determines which optimization problem is being solved.
+
+\begin{example}[Minimum number of moves]
+
+To transform \((5,1,0)\) into \((1,2,3)\), category A has four surplus tokens. Categories B and C need one and three, respectively. At least four moves are necessary and four suffice, for example \((5,1,0)\) to \((4,2,0)\) to \((3,2,1)\) to \((2,2,2)\) to \((1,2,3)\). Each intermediate vector sums to six. A shortest spherical-weighted route must be found using the actual edge weights.
+
+\end{example}
+
+\hypertarget{ch08-midpoints-from-a-normalization-calculation}{%
+\section{Midpoints from a normalization calculation}\label{ch08-midpoints-from-a-normalization-calculation}}
+
+The square-root midpoint can be found without inverse trigonometric functions. Begin with \(v_i=\sqrt{p_i}+\sqrt{r_i}\). Its squared length is \(2+2B\). Normalize \(v\) to unit length and square the entries: \[g_i=\left(\frac{v_i}{\sqrt{2+2B}}\right)^2.\] This is exactly the midpoint formula. The construction treats both endpoints equally and keeps every entry nonnegative. It also shows that if a label is absent at both endpoints, it remains absent at the midpoint and along the whole spherical interpolation.
+
+For a midpoint between two three-label tables, the same arithmetic that computes overlap therefore supplies all its coordinates. The trigonometric formula is needed to choose general equal arc fractions, but halfway has a simpler form.
+
+\hypertarget{ch08-measuring-a-path-from-a-finite-list}{%
+\section{Measuring a path from a finite list}\label{ch08-measuring-a-path-from-a-finite-list}}
+
+Given states \(p^{(0)},\ldots,p^{(M)}\), define its polygonal spherical length as \(\sum_{j=0}^{M-1}d(p^{(j)},p^{(j+1)})\). This definition uses a finite sum. Refining a list by inserting a new state cannot lower that sum, because the triangle inequality gives \(d(a,b)\leq d(a,c)+d(c,b)\). If the inserted state lies in order on the same shortest arc, equality holds.
+
+\begin{example}[A detour through a pure state]
+
+Let \(p=(1,0,0)\) and \(r=(0,1,0)\). The direct distance is \(\pi\). A route through the third pure state has two legs, each of length \(\pi\), for a total of \(2\pi\). A route through \((1/2,1/2,0)\) has two legs of length \(\pi/2\) and is shortest. The intermediate state and the permitted path both matter.
+
+\end{example}
+
+When a graph algorithm reports a route, verify its adjacency and independently sum the reported edge costs. When comparing with a direct geodesic, check that the endpoints are identical in both calculations. These straightforward checks distinguish a feasible route, a measured route length, and a proof that no shorter allowed route exists.
+
+\hypertarget{ch08-exercises}{%
+\section{Exercises}\label{ch08-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Verify that every ordinary mixture is a probability vector.
+
+\item 
+
+Derive the orthogonal-vector form of spherical interpolation using the sine subtraction identity.
+
+\item 
+
+Show that the midpoint formula's entries add to one.
+
+\item 
+
+Find the spherical midpoint between \((1,0,0)\) and \((0,1,0)\).
+
+\item 
+
+For the binary endpoints in the first example, find the three interior states that divide the spherical arc into four equal pieces. Expressions using squared sines are acceptable.
+
+\item 
+
+Compute and compare the ordinary and spherical midpoints between \((1/2,1/2,0)\) and \((1/2,0,1/2)\).
+
+\item 
+
+Prove that the sum of the distances along any finite list of states is at least the distance between its endpoints.
+
+\item 
+
+List the neighbors of counts \((1,1,1)\) on the denominator-three token graph.
+
+\item 
+
+Run Dijkstra's algorithm on the weighted graph in the last example, recording tentative distances after each finalized vertex.
+
+\item 
+
+Why does Dijkstra's argument require nonnegative edge weights? Give a small graph in which a negative edge would undermine the stated reasoning.
+
+\item 
+
+Construct a graph path along a binary edge for \(N=4\). Verify numerically that the edge lengths telescope to the endpoint spherical distance.
+
+\item 
+
+For one pair of lattice endpoints, compare the shortest token path with the direct spherical distance. Explain why the difference is a useful measure of the constraint imposed by token moves.
+
+\end{exercises}
+
+\hypertarget{ch08-selected-solutions}{%
+\section{Selected solutions}\label{ch08-selected-solutions}}
+
+\textbf{3.} The sum of the numerators is \(\sum_i p_i+\sum_i r_i+2\sum_i\sqrt{p_ir_i}=2(1+B)\), exactly the denominator.
+
+\textbf{4.} The midpoint is \((1/2,1/2,0)\).
+
+\textbf{5.} Starting at the first-category probability \(1\), the angle measured from the second axis falls from \(\pi/2\) to \(\pi/6\). The interior first probabilities are \(\sin^2(5\pi/12)\), \(\sin^2(\pi/3)\), and \(\sin^2(\pi/4)\), namely \((2+\sqrt3)/4\), \(3/4\), and \(1/2\).
+
+\textbf{6.} The ordinary midpoint is \((1/2,1/4,1/4)\). Since \(B=1/2\), the spherical midpoint is \((2/3,1/6,1/6)\).
+
+\textbf{7.} Apply the triangle inequality repeatedly, inserting the intermediate states one at a time.
+
+\textbf{8.} The six neighbors are the permutations of \((2,1,0)\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For \(p=(1,0)\) and \(r=(1/4,3/4)\), find the ordinary and spherical midpoints. Verify that the latter has equal spherical distances to the two endpoints.
+\item
+  Construct five equally spaced states along a spherical path between two three-label tables. Calculate all four consecutive distances and show that their sum equals the endpoint distance, up to rounding.
+\item
+  In the demonstration, choose denominator \(6\) and two different lattice vertices. Record the endpoints, the direct distance, the shortest graph length, and every count triple along the route. Verify that each transition moves one token.
+\item
+  Reproduce Dijkstra's algorithm on the five-edge graph in the reading. Record the order of finalized vertices and the predecessor table. Explain the role of nonnegative edge weights in finalizing a distance.
+\item
+  Choose endpoints that lie on both denominator-\(4\) and denominator-\(8\) lattices. Compare their shortest graph lengths with direct distance. Describe the measured result without assuming that every change in denominator creates a nested lattice.
+\end{enumerate}
+
+\FloatBarrier
+
+\end{document}

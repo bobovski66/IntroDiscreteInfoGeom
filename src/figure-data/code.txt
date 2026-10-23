@@ -1,0 +1,1 @@
+A binary prefix tree with code lengths 1, 2, and 2, matched to probabilities (1/2,1/4,1/4).

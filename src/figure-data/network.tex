@@ -1,0 +1,11 @@
+\begin{tikzpicture}[every node/.style={font=\small},>=Stealth]
+\node[anchor=west] at (0,4.5){Input label};\node[anchor=west] at (2,4.5){$q_i$};\node[anchor=west] at (3.1,4.5){$p_i$};
+\node[anchor=west] at (7,4.5){Recorded group};
+\foreach \i/\y/\q/\p in {1/3.5/.4/.1,2/2.5/.1/.4,3/1.5/.4/.1,4/.5/.1/.4}{
+\node at (.5,\y){\i};\node at (2.3,\y){\q};\node at (3.4,\y){\p};}
+\draw[->,teal,thick] (4,3.5)--(7,3);\draw[->,teal,thick] (4,2.5)--(7,3);
+\draw[->,copper,thick] (4,1.5)--(7,1);\draw[->,copper,thick] (4,.5)--(7,1);
+\node[anchor=west,align=left] at (7.2,3){Group $\{1,2\}$\\Both models: $1/2$};
+\node[anchor=west,align=left] at (7.2,1){Group $\{3,4\}$\\Both models: $1/2$};
+\node[anchor=west] at (0,-.5){$D(q\Vert p)=0.6\ln4\quad\longrightarrow\quad D(Kq\Vert Kp)=0$};
+\end{tikzpicture}

@@ -1,0 +1,295 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 7: Square roots and statistical distance · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="7"><p class="eyebrow">Week 7 · Reading</p><h1>Square roots and statistical distance</h1><nav class="week-nav" aria-label="Week 7 resources"><a aria-current=page href="../readings/week07.html">Reading</a><a  href="../demos/week07.html">Demonstration</a><a  href="../labs/week07.html">Lab</a><a  href="../quizzes/week07.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter07.pdf">Chapter 7 PDF</a> · <a href="../textbook/latex/chapter07.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Verify the radius-two square-root construction.</li><li>Calculate and compare three finite discrepancies.</li><li>Interpret binary probabilities through angle coordinates.</li></ul></aside><article class="reading-text"><p>The probability triangle is an excellent map of compositions, but its
+ordinary Euclidean distances treat all coordinate changes in the same
+way. Statistical comparison also depends on where the probability mass
+sits. Taking square roots reveals another geometry, one in which a
+probability table becomes a point on a sphere.</p>
+<p>This chapter uses lengths, dot products, and angles. Angles will be
+measured in radians: a full turn is <span
+class="math inline">\(2\pi\)</span>, a right angle is <span
+class="math inline">\(\pi/2\)</span>, and an arc of angle <span
+class="math inline">\(\alpha\)</span> on a circle of radius <span
+class="math inline">\(R\)</span> has length <span
+class="math inline">\(R\alpha\)</span>.</p>
+<h2 id="square-roots-place-probabilities-on-a-sphere">Square roots place
+probabilities on a sphere</h2>
+<p>Map a probability vector <span class="math inline">\(p\)</span> to
+the vector <span
+class="math display">\[s(p)=(2\sqrt{p_1},\ldots,2\sqrt{p_k}).\]</span>
+Its squared length is <span
+class="math inline">\(\sum_i(2\sqrt{p_i})^2=4\sum_i p_i=4\)</span>. Thus
+<span class="math inline">\(s(p)\)</span> lies on a sphere of radius
+<span class="math inline">\(2\)</span>. Every coordinate is nonnegative,
+so only the nonnegative portion of the sphere is used. Conversely, a
+nonnegative vector <span class="math inline">\(s\)</span> of length
+<span class="math inline">\(2\)</span> gives probabilities <span
+class="math inline">\(p_i=s_i^2/4\)</span>.</p>
+<p>For two categories, the image is a quarter circle. For three, it is
+an octant of an ordinary sphere. The same formula works for more
+categories, although a direct spatial picture is then unavailable. Dot
+products and lengths still make sense as finite sums.</p>
+<div class="example" title="Pure and uniform distributions">
+<p><strong>Example. Pure and uniform distributions</strong></p>
+<p>The pure three-category state <span
+class="math inline">\((1,0,0)\)</span> maps to <span
+class="math inline">\((2,0,0)\)</span>. The uniform state maps to <span
+class="math inline">\((2/\sqrt3,2/\sqrt3,2/\sqrt3)\)</span>. Two
+different pure states lie at right angles as viewed from the center of
+the sphere. They are maximally separated within its nonnegative
+portion.</p>
+</div>
+<h2 id="overlap-determines-the-angle">Overlap determines the angle</h2>
+<p>The <strong>Bhattacharyya coefficient</strong>, or square-root
+overlap, is <span
+class="math display">\[B(p,r)=\sum_i\sqrt{p_ir_i}.\]</span> The dot
+product of the two sphere vectors is <span
+class="math inline">\(s(p)\cdot s(r)=4B(p,r)\)</span>. Since both
+lengths are <span class="math inline">\(2\)</span>, the cosine of their
+angle <span class="math inline">\(\alpha\)</span> is <span
+class="math inline">\(B(p,r)\)</span>. The Cauchy–Schwarz inequality
+ensures <span class="math inline">\(B\leq1\)</span>: <span
+class="math display">\[\left(\sum_i\sqrt{p_ir_i}\right)^2\leq\left(\sum_ip_i\right)\left(\sum_ir_i\right)=1.\]</span>
+Also <span class="math inline">\(B\geq0\)</span>. The angle therefore
+lies in <span class="math inline">\([0,\pi/2]\)</span>.</p>
+<p>We define the <strong>categorical Fisher–Rao distance</strong> by the
+length of the shorter spherical arc: <span
+class="math display">\[d(p,r)=2\arccos B(p,r).\]</span> This
+normalization uses the sphere of radius <span
+class="math inline">\(2\)</span>. Equality of the tables gives distance
+zero; disjoint supports give distance <span
+class="math inline">\(\pi\)</span>. The construction is a standard
+finite probability geometry. Its arc formula can be used without
+developing differential geometry.</p>
+<div class="example" title="A distance calculated exactly">
+<p><strong>Example. A distance calculated exactly</strong></p>
+<p>Let <span class="math inline">\(p=(1,0)\)</span> and <span
+class="math inline">\(r=(1/4,3/4)\)</span>. Their overlap is <span
+class="math inline">\(1/2\)</span>, so their angle is <span
+class="math inline">\(\pi/3\)</span> and their distance is <span
+class="math inline">\(2\pi/3\)</span>. The coordinate difference of the
+first probabilities is <span class="math inline">\(3/4\)</span>; it
+measures a different feature from the spherical distance.</p>
+</div>
+<h2 id="chords-arcs-and-hellinger-distance">Chords, arcs, and Hellinger
+distance</h2>
+<p>The straight chord joining the sphere vectors has squared length
+<span
+class="math display">\[\|s(p)-s(r)\|^2=8\bigl(1-B(p,r)\bigr).\]</span>
+To verify this, expand the square and use the squared lengths <span
+class="math inline">\(4\)</span> and the dot product <span
+class="math inline">\(4B\)</span>. The <strong>Hellinger
+distance</strong> with the convention used here is <span
+class="math display">\[h(p,r)=\sqrt{1-B(p,r)}
+=\frac1{\sqrt2}\left(\sum_i(\sqrt{p_i}-\sqrt{r_i})^2\right)^{1/2}.\]</span>
+Thus the chord length is <span
+class="math inline">\(2\sqrt2\,h\)</span>. The arc and chord are
+different, but both increase as overlap decreases. Hellinger distance,
+spherical distance, and relative entropy should always be identified by
+their formulas, since their numerical scales and boundary behavior
+differ.</p>
+<div class="example" title="Behavior at zero probabilities">
+<p><strong>Example. Behavior at zero probabilities</strong></p>
+<p>For <span class="math inline">\(p=(1,0)\)</span> and <span
+class="math inline">\(r=(0,1)\)</span>, the overlap is zero, the
+Hellinger distance is one, and the spherical distance is <span
+class="math inline">\(\pi\)</span>. Both directed relative entropies are
+infinite. The square-root construction includes the boundary of the
+probability simplex at finite distance.</p>
+</div>
+<h2 id="a-complete-coordinate-for-binary-probabilities">A complete
+coordinate for binary probabilities</h2>
+<p>For a binary distribution <span
+class="math inline">\((x,1-x)\)</span>, put <span
+class="math display">\[\phi=\arcsin\sqrt{x},\qquad
+0\leq\phi\leq\pi/2.\]</span> Then <span
+class="math inline">\(x=\sin^2\phi\)</span> and <span
+class="math inline">\(s=(2\sin\phi,2\cos\phi)\)</span>. The angle <span
+class="math inline">\(\phi\)</span> specifies a point on the quarter
+circle. Since the radius is <span class="math inline">\(2\)</span>, the
+arc coordinate measured from <span class="math inline">\(x=0\)</span> is
+<span class="math inline">\(2\phi\)</span>. Two binary distributions
+therefore have distance <span
+class="math display">\[d\bigl((x,1-x),(y,1-y)\bigr)=2\left|\arcsin\sqrt{x}-\arcsin\sqrt{y}\right|.\]</span>
+This gives a useful distinction between equal changes in probability and
+equal changes in statistical distance.</p>
+<div class="example"
+title="Equal probability increments at different locations">
+<p><strong>Example. Equal probability increments at different
+locations</strong></p>
+<p>The distance from <span class="math inline">\(x=0\)</span> to <span
+class="math inline">\(x=1/4\)</span> is <span
+class="math inline">\(\pi/3\)</span>. The distance from <span
+class="math inline">\(x=1/4\)</span> to <span
+class="math inline">\(x=1/2\)</span> is <span
+class="math inline">\(\pi/6\)</span>. Both changes add <span
+class="math inline">\(1/4\)</span> to the probability, yet the first
+covers twice the spherical arc. Near a boundary, introducing probability
+into a previously absent category can be a substantial geometric
+change.</p>
+</div>
+<figure><img src="../assets/fig-sphere.svg" alt="Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths." loading="lazy"><figcaption>Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths.</figcaption></figure>
+<h2 id="why-the-arc-formula-is-a-distance">Why the arc formula is a
+distance</h2>
+<p>The shorter great-circle arc joins any two points on a sphere unless
+they are antipodal. Our nonnegative points are never antipodal.
+Elementary spherical geometry identifies this arc as a shortest
+spherical route. Concatenating a route from <span
+class="math inline">\(p\)</span> to <span
+class="math inline">\(q\)</span> with one from <span
+class="math inline">\(q\)</span> to <span
+class="math inline">\(r\)</span> gives a route from <span
+class="math inline">\(p\)</span> to <span
+class="math inline">\(r\)</span>, whose length cannot be smaller than
+the shortest route. Hence <span class="math display">\[d(p,r)\leq
+d(p,q)+d(q,r).\]</span> This is the triangle inequality. Symmetry
+follows from symmetry of overlap, and zero distance forces equal
+square-root coordinates, hence equal probabilities. These properties
+make <span class="math inline">\(d\)</span> a distance. In Chapter 8 we
+will construct intermediate points on the shortest arc using only
+trigonometry.</p>
+<p>When calculations are performed on a computer, tiny rounding errors
+can push an overlap slightly above one. Before applying inverse cosine,
+clamp the computed overlap to <span
+class="math inline">\([0,1]\)</span>. Exact mathematics already
+guarantees this interval; the adjustment handles floating-point
+arithmetic rather than changing the definition.</p>
+<h2 id="a-sum-of-squares-proof-of-the-overlap-bound">A sum-of-squares
+proof of the overlap bound</h2>
+<p>The inequality used to bound overlap can be established directly. For
+any two lists <span class="math inline">\(a_i,b_i\)</span>, expansion
+gives the identity <span class="math display">\[\left(\sum_i
+a_i^2\right)\left(\sum_i b_i^2\right)-\left(\sum_i a_ib_i\right)^2
+=\sum_{i&lt;j}(a_ib_j-a_jb_i)^2.\]</span> Every term on the right is
+nonnegative. This proves Cauchy–Schwarz by finite algebra. Set <span
+class="math inline">\(a_i=\sqrt{p_i}\)</span> and <span
+class="math inline">\(b_i=\sqrt{r_i}\)</span> to obtain <span
+class="math inline">\(1-B(p,r)^2\geq0\)</span>. Equality requires <span
+class="math inline">\(\sqrt{p_ir_j}=\sqrt{p_jr_i}\)</span> for every
+pair. For probability tables, these conditions force the same normalized
+proportions and hence <span class="math inline">\(p=r\)</span>.</p>
+<p>This identity also makes the geometry concrete. A dot product cannot
+exceed the product of the lengths because the difference of their
+squares is a sum of nonnegative squares. The familiar angle formula is
+therefore compatible with the algebra of finite lists.</p>
+<h2 id="the-same-overlap-in-independent-repeated-observations">The same
+overlap in independent repeated observations</h2>
+<p>Suppose one model assigns table <span
+class="math inline">\(p\)</span> to each of <span
+class="math inline">\(N\)</span> independent observations and another
+assigns table <span class="math inline">\(r\)</span>. Their
+distributions on ordered samples have square-root overlap <span
+class="math display">\[\sum_{i_1,\ldots,i_N}\sqrt{p_{i_1}r_{i_1}\cdots
+p_{i_N}r_{i_N}}
+=\left(\sum_i\sqrt{p_ir_i}\right)^N=B(p,r)^N.\]</span> The equality
+follows by expanding a product of <span class="math inline">\(N\)</span>
+identical finite sums. If <span class="math inline">\(p\ne r\)</span>,
+then <span class="math inline">\(B&lt;1\)</span>, so this overlap
+decreases with sample size. The corresponding spherical distance between
+the full sample distributions is <span
+class="math inline">\(2\arccos(B^N)\)</span>. More observations can make
+two distinct sampling models more distinguishable.</p>
+<div class="example"
+title="Overlap after several independent observations">
+<p><strong>Example. Overlap after several independent
+observations</strong></p>
+<p>Take <span class="math inline">\(p=(0.9,0.1)\)</span> and <span
+class="math inline">\(r=(0.1,0.9)\)</span>. A single observation has
+overlap <span class="math inline">\(0.6\)</span>. Two independent
+observations have overlap <span class="math inline">\(0.36\)</span>, and
+five have overlap <span class="math inline">\(0.07776\)</span>. The
+distributions being compared now live on <span
+class="math inline">\(2^N\)</span> ordered samples. We can calculate
+their overlap without listing those samples, because the
+independent-product structure factors the sum.</p>
+</div>
+<h2 id="a-numerical-table-near-a-boundary">A numerical table near a
+boundary</h2>
+<p>For binary <span class="math inline">\(x\)</span>, its arc coordinate
+is <span class="math inline">\(2\arcsin\sqrt{x}\)</span>. At <span
+class="math inline">\(x=0\)</span>, <span
+class="math inline">\(0.01\)</span>, <span
+class="math inline">\(0.04\)</span>, and <span
+class="math inline">\(0.09\)</span>, these coordinates are approximately
+<span class="math inline">\(0\)</span>, <span
+class="math inline">\(0.2003\)</span>, <span
+class="math inline">\(0.4027\)</span>, and <span
+class="math inline">\(0.6094\)</span>. The corresponding square roots
+are <span class="math inline">\(0\)</span>, <span
+class="math inline">\(0.1\)</span>, <span
+class="math inline">\(0.2\)</span>, and <span
+class="math inline">\(0.3\)</span>. The table helps explain why
+square-root coordinates spread out small probabilities.</p>
+<div class="example" title="Two small perturbations">
+<p><strong>Example. Two small perturbations</strong></p>
+<p>Changing <span class="math inline">\(x\)</span> from <span
+class="math inline">\(0.01\)</span> to <span
+class="math inline">\(0.02\)</span> gives spherical distance
+approximately <span class="math inline">\(0.0834\)</span>. Changing it
+from <span class="math inline">\(0.49\)</span> to <span
+class="math inline">\(0.50\)</span> gives distance approximately <span
+class="math inline">\(0.0200\)</span>. The first pair has the same
+absolute probability difference as the second but a larger square-root
+separation. Both comparisons are finite and use the exact angle
+formula.</p>
+</div>
+<p>For a statistical application, the labels and the observation
+procedure must be fixed before comparing tables. Adding an unused
+zero-probability label to both tables changes none of the overlap,
+Hellinger, or spherical formulas. Merging existing labels is different
+and can change the values. This distinction prepares the channel
+calculations in Chapter 10.</p>
+<h2 id="exercises">Exercises</h2>
+<div class="exercises">
+<ol type="1">
+<li>Map <span class="math inline">\((1/4,1/4,1/2)\)</span> to the
+radius-two sphere and verify its squared length.</li>
+<li>Recover the distribution represented by <span
+class="math inline">\(s=(1,1,\sqrt2)\)</span>.</li>
+<li>Compute the overlap between <span
+class="math inline">\((1/2,1/2,0)\)</span> and <span
+class="math inline">\((1/2,0,1/2)\)</span>.</li>
+<li>Find the spherical distance and Hellinger distance for the pair in
+Exercise 3.</li>
+<li>Prove the chord-length formula by expanding a squared norm.</li>
+<li>Show that <span class="math inline">\(B(p,r)=0\)</span> exactly when
+<span class="math inline">\(p\)</span> and <span
+class="math inline">\(r\)</span> have disjoint supports.</li>
+<li>Show that <span class="math inline">\(B(p,r)=1\)</span> exactly when
+<span class="math inline">\(p=r\)</span>, using the equality condition
+in Cauchy–Schwarz.</li>
+<li>Find the binary arc coordinates of <span
+class="math inline">\(x=0,1/4,1/2,3/4,1\)</span>.</li>
+<li>Compare the distances from <span class="math inline">\(0.01\)</span>
+to <span class="math inline">\(0.02\)</span> and from <span
+class="math inline">\(0.49\)</span> to <span
+class="math inline">\(0.50\)</span> for binary probabilities.</li>
+<li>Give two distributions whose relative entropy is infinite but whose
+spherical distance is strictly smaller than <span
+class="math inline">\(\pi\)</span>.</li>
+<li>Explain the difference between the angle <span
+class="math inline">\(\alpha\)</span>, the radius-two arc length <span
+class="math inline">\(2\alpha\)</span>, and the chord length <span
+class="math inline">\(4\sin(\alpha/2)\)</span>.</li>
+<li>Write an algorithm that computes overlap and spherical distance for
+any two finite probability tables. Include validation of the inputs and
+handling of rounding near one.</li>
+</ol>
+</div>
+<details class="solutions"><summary>Selected exercise solutions</summary>
+<p><strong>1.</strong> The image is <span
+class="math inline">\((1,1,\sqrt2)\)</span>, whose squared length is
+<span class="math inline">\(1+1+2=4\)</span>.</p>
+<p><strong>3.</strong> Only the first label contributes, so <span
+class="math inline">\(B=1/2\)</span>.</p>
+<p><strong>4.</strong> The spherical distance is <span
+class="math inline">\(2\pi/3\)</span> and the Hellinger distance is
+<span class="math inline">\(1/\sqrt2\)</span>.</p>
+<p><strong>6.</strong> Each summand is nonnegative. Their sum is zero
+exactly when every product <span class="math inline">\(p_ir_i\)</span>
+is zero, meaning no label has positive probability in both tables.</p>
+<p><strong>8.</strong> The arc coordinates are <span
+class="math inline">\(0,\pi/3,\pi/2,2\pi/3,\pi\)</span>.</p>
+<p><strong>10.</strong> For <span class="math inline">\(p=(1,0)\)</span>
+and <span class="math inline">\(r=(1/2,1/2)\)</span>, <span
+class="math inline">\(D(r\|p)=\infty\)</span>, while their spherical
+distance is <span class="math inline">\(\pi/2\)</span>.</p>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week06.html">← Week 6</a><a href="../readings/week08.html">Week 8 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

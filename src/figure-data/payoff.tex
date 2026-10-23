@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+\begin{axis}[width=6.7cm,height=5.4cm,xlabel={$A$ proportion $x$},ylabel={Score},xmin=0,xmax=1,ymin=0,ymax=4.5,legend pos=south east]
+\addplot[teal,domain=0:1]{4-2*x};\addlegendentry{$f_A$}
+\addplot[copper,domain=0:1]{1+2*x};\addlegendentry{$f_B$}
+\draw[dashed] (axis cs:.75,0)--(axis cs:.75,4.3);
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.7cm,height=5.4cm,xlabel={Step $t$},ylabel={$A$ proportion},xmin=0,xmax=12,ymin=0,ymax=1,legend pos=south east]
+\addplot[teal,mark=*] coordinates {(0,0.25) (1,0.4) (2,0.517483) (3,0.594476) (4,0.643506) (5,0.675429) (6,0.696853) (7,0.711616) (8,0.722007) (9,0.729437) (10,0.734814) (11,0.738741) (12,0.741628)};\addlegendentry{Linear}
+\addplot[copper,mark=square*] coordinates {(0,0.25) (1,0.947915) (2,0.78886) (3,0.732469) (4,0.759042) (5,0.745565) (6,0.752236) (7,0.748887) (8,0.750558) (9,0.749721) (10,0.750139) (11,0.74993) (12,0.750035)};\addlegendentry{Exponential}
+\addplot[ink,dashed,domain=0:12]{.75};
+\end{axis}\end{tikzpicture}

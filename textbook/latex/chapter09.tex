@@ -1,0 +1,294 @@
+\documentclass[11pt,oneside,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[paperwidth=7.5in,paperheight=10in,inner=.85in,outer=.85in,top=.85in,bottom=.85in,headheight=15pt,headsep=20pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor,graphicx,booktabs,array,longtable}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{arrows.meta,calc,patterns,decorations.markings}
+\pgfplotsset{compat=1.18}
+\definecolor{ink}{HTML}{17334B}
+\definecolor{teal}{HTML}{137C83}
+\definecolor{copper}{HTML}{AE5932}
+\definecolor{soft}{HTML}{EEF3F5}
+\pgfplotsset{every axis/.append style={axis line style={black!65},tick style={black!60},tick label style={font=\small},label style={font=\small},legend style={font=\small,draw=none,fill=white},grid style={black!10},major grid style={black!10},line width=.6pt},every axis plot/.append style={line width=1.15pt}}
+\usepackage{enumitem,needspace,etoolbox}
+\setlist[enumerate]{topsep=5pt,itemsep=5pt,parsep=0pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt,parsep=0pt}
+\usepackage{titlesec,fancyhdr}
+\titleformat{\chapter}[display]{\normalfont\color{ink}}{\large\sffamily\MakeUppercase{Chapter \thechapter}}{12pt}{\huge\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}[\vspace{12pt}\titlerule]
+\titlespacing*{\chapter}{0pt}{-10pt}{24pt}
+\titleformat{\section}{\large\bfseries\color{ink}}{\thesection}{.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{18pt plus 3pt minus 2pt}{7pt}
+\titlespacing*{\subsection}{0pt}{12pt plus 2pt minus 2pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{float,placeins}
+\floatplacement{figure}{htbp}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.8}
+\usepackage{makeidx}
+\makeindex
+\usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}[chapter]
+\BeforeBeginEnvironment{example}{\par\addvspace{4pt}\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{example}{\end{minipage}\par\addvspace{4pt}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newenvironment{solution}{\par\smallskip\noindent\textit{Solution.}\ }{\par\medskip}
+\newenvironment{exercises}{\begin{enumerate}[label=\thechapter.\arabic*,ref=\thechapter.\arabic*,leftmargin=2.8em,itemsep=6pt]}{\end{enumerate}}
+\newenvironment{answers}{\begin{description}[leftmargin=2.9em,labelwidth=2.5em,labelsep=.4em,itemsep=8pt,font=\normalfont\bfseries]}{\end{description}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\KL}[2]{D\!\left(#1\,\middle\|\,#2\right)}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\arcosh}{\operatorname{arcosh}}
+\newcommand{\sech}{\operatorname{sech}}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\p}{\mathbf{p}}
+\newcommand{\q}{\mathbf{q}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
+\newcommand{\ones}{\mathbf{1}}
+\newcommand{\simp}{\Delta^{n-1}}
+\newcommand{\simpi}{\Delta^{n-1}_{\!\circ}}
+\numberwithin{equation}{chapter}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\linespread{1.07}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{2}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
+
+\begin{document}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 9\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\setcounter{chapter}{8}
+
+\chapter{Exponential updates and KL-penalized learning}
+A learning rule redistributes attention among possible decisions. At each round, a decision receives a score, and the next probability table places more weight on decisions with higher scores. Exponential normalization provides such a rule. Its interpretation as a finite optimization problem follows from an exact relative-entropy identity.
+
+\hypertarget{ch09-multiplicative-weights}{%
+\section{Multiplicative weights}\label{ch09-multiplicative-weights}}
+
+Let \(p_i>0\) be current probabilities and let \(s_i\) be scores assigned to the possible decisions. With intensity \(\eta>0\), define \[r_i=\frac{p_i e^{\eta s_i}}{Z},\qquad Z=\sum_jp_je^{\eta s_j}.\] This is the same algebraic rule used for exponential selection. In learning, \(p\) may describe attention, investment fractions in an abstract allocation problem, or probabilities of choosing experts. Scores may change from round to round. The rule is commonly called \textbf{multiplicative weights} or an \textbf{exponential update}.
+
+The score units and the intensity enter only through the product \(\eta s_i\). A common score shift has no effect. For numerical computation, replace each score by \(s_i-s_{\max}\) before exponentiating. The common factor cancels and the largest exponent becomes zero, reducing the risk of overflow.
+
+\begin{example}[Updating three choices]
+
+Let \(p=(1/2,1/3,1/6)\), \(s=(0,1,2)\), and \(\eta=\ln2\). The unnormalized weights are \((1/2,2/3,2/3)\) and \(Z=11/6\). The new table is \(r=(3/11,4/11,4/11)\). The third choice had the largest score but not the largest starting weight. Both enter the update.
+
+\end{example}
+
+\hypertarget{ch09-an-exact-optimization-identity}{%
+\section{An exact optimization identity}\label{ch09-an-exact-optimization-identity}}
+
+Suppose we seek a new table \(q\) that balances a high average score against changing the current table too much. One objective is \[J(q)=\eta\sum_iq_is_i-D(q\|p).\] The first term rewards the average score under \(q\). The second penalizes departure from \(p\). Larger \(\eta\) gives the score term more importance relative to the penalty.
+
+From the update formula, \(\ln r_i=\ln p_i+\eta s_i-\ln Z\). Substitute this into \(D(q\|r)\): \[D(q\|r)=D(q\|p)-\eta\sum_iq_is_i+\ln Z.\] Rearranging gives \[J(q)=\ln Z-D(q\|r).\] Gibbs' inequality now proves that \(J\) is uniquely maximized at \(q=r\), with value \(\ln Z\). This is a complete solution of the finite optimization problem. It does not require searching every candidate table or taking a derivative.
+
+\begin{proposition}[The exponential update solves a KL-penalized problem]
+
+For a positive current table \(p\), finite scores, and positive intensity, the normalized exponential table is the unique maximizer of \(\eta q\cdot s-D(q\|p)\) over all probability vectors \(q\).
+
+\end{proposition}
+
+If some current probabilities vanish, a finite penalty permits only tables supported on those existing labels. The same proof works on that support. To allow a previously absent choice to reappear, one can first mix \(p\) with a positive reference table and then apply the update. That is an additional modeling operation.
+
+\begin{example}[Comparing a candidate with the optimizer]
+
+Take \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\). Then \(r=(1/4,3/4)\) and \(Z=2\). The objective at \(r\) is \(\ln2\). At the unchanged table \(p\), it is \((1/2)\ln3\). Their difference is \(D(p\|r)=\ln2-(1/2)\ln3\approx0.1438\), exactly as the identity predicts.
+
+\end{example}
+
+\hypertarget{ch09-fixed-scores-improve-their-own-average}{%
+\section{Fixed scores improve their own average}\label{ch09-fixed-scores-improve-their-own-average}}
+
+Let the scores be fixed numbers \(c_i\) and apply an exponential update. The average score changes from \(\sum_i p_ic_i\) to \(\sum_i r_ic_i\). Subtracting gives \[\sum_i r_ic_i-\sum_i p_ic_i
+=\frac{\sum_i p_ic_ie^{\eta c_i}-(\sum_i p_ic_i)(\sum_jp_je^{\eta c_j})}{Z}.\] The numerator can be rearranged symmetrically: \[\frac12\sum_{i,j}p_ip_j(c_i-c_j)(e^{\eta c_i}-e^{\eta c_j}).\] Every term is nonnegative because the exponential is increasing. Therefore the fixed-score average never decreases. Equality holds precisely when all scores on the current support are equal.
+
+This proof compares the same score table before and after the update. If the scores are recomputed from the state, the next table may be evaluated by different numbers, so this conclusion does not automatically apply to the recomputed average. The cyclic examples make that dependence concrete.
+
+Repeated fixed-score updates have the explicit form \[p_{i,t}=\frac{p_{i,0}e^{t\eta c_i}}{\sum_jp_{j,0}e^{t\eta c_j}}.\] If one available choice has the uniquely largest score, its probability approaches one. If several available choices tie for largest score, their mutual ratios stay at their initial values while lower-scoring choices fade.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\begin{axis}[width=12.5cm,height=5.6cm,ybar,bar width=14pt,xlabel={Choice},ylabel={Probability},xmin=.5,xmax=3.5,ymin=0,ymax=.65,xtick={1,2,3},legend pos=north east]
+\addplot[ink,fill=ink!40] coordinates {(1,0.5) (2,0.333333) (3,0.166667)};\addlegendentry{Current table}
+\addplot[teal,fill=teal!60] coordinates {(1,0.272727) (2,0.363636) (3,0.363636)};\addlegendentry{Exponential update}
+\end{axis}\end{tikzpicture}}
+\caption{An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11).}\end{figure}
+
+\hypertarget{ch09-finite-rounds-and-accumulated-scores}{%
+\section{Finite rounds and accumulated scores}\label{ch09-finite-rounds-and-accumulated-scores}}
+
+Suppose round \(t\) assigns scores \(s_{i,t}\). Repeating the multiplicative rule gives \[p_{i,T}=\frac{p_{i,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{i,t}\bigr)}{
+\sum_jp_{j,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{j,t}\bigr)}.\] All intervening normalizing constants cancel. If the score sequence is specified in advance, only the accumulated scores determine the final distribution. Intermediate distributions still depend on their order. When scores respond to decisions made during the run, changing the order can also change the scores themselves.
+
+\begin{example}[Two rounds of evidence]
+
+Start with equal probabilities on three hypotheses. Two observations have likelihood tables proportional to \((2,1,1)\) and \((1,3,1)\). Multiplication gives posterior weights \((2,3,1)\), hence probabilities \((1/3,1/2,1/6)\). Taking scores to be logarithms of the likelihoods and setting \(\eta=1\) makes each Bayesian reweighting an exponential update.
+
+\end{example}
+
+\hypertarget{ch09-moving-deliberately-toward-higher-entropy}{%
+\section{Moving deliberately toward higher entropy}\label{ch09-moving-deliberately-toward-higher-entropy}}
+
+Let \(u\) be uniform and choose \(0<\lambda\leq1\). The mixture rule \(p^+=(1-\lambda)p+\lambda u\) raises entropy. Indeed, concavity gives \[H(p^+)\geq(1-\lambda)H(p)+\lambda H(u)\geq H(p).\] The second inequality uses the maximality of uniform entropy. Relative entropy to uniform contracts at the same time because \(D(p\|u)=\ln k-H(p)\) and the mixture admits direct bounds. This is a finite entropy-seeking rule with a transparent interpretation: each round replaces a fixed fraction of the current table with a uniform allocation.
+
+The geometric course connection is that the penalty \(D(q\|p)\) measures change using probability tables themselves, while the scores choose a preferred direction. The exact optimizer supplies a useful finite update. Its relationship with infinitesimal gradient methods belongs to a later course; the finite identity already explains the present rule completely.
+
+\hypertarget{ch09-quantifying-what-an-update-has-gained}{%
+\section{Quantifying what an update has gained}\label{ch09-quantifying-what-an-update-has-gained}}
+
+The exact optimization identity gives more than the optimizer. Compare its objective with that of keeping the current table \(p\). Since \(D(p\|p)=0\), the old objective is \(J(p)=\eta p\cdot s\). The gain is \[J(r)-J(p)=\ln Z-\eta p\cdot s=D(p\|r).\] Thus the improvement is itself a directed relative entropy. Comparing the new objective expression \(J(r)=\eta r\cdot s-D(r\|p)\) with the old one gives the further identity \[\eta(r-p)\cdot s=D(r\|p)+D(p\|r).\] Both terms on the right are nonnegative. For a single update, the average of the scores used in that update must improve, unless it stays unchanged. The two directions of KL appear together because the calculation compares the tables in both roles.
+
+\begin{example}[Both directed costs in a binary step]
+
+For \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\), the update is \(r=(1/4,3/4)\). Its average score rises by \(1/4\). Multiplying by \(\ln3\) gives approximately \(0.2747\). The two divergences are approximately \(0.1308\) and \(0.1438\), and their sum is the same value. The identity checks the update and clarifies the contribution of each directed discrepancy.
+
+\end{example}
+
+\hypertarget{ch09-how-concentrated-can-an-update-become}{%
+\section{How concentrated can an update become?}\label{ch09-how-concentrated-can-an-update-become}}
+
+Let \(s_{\min}\) and \(s_{\max}\) be the smallest and largest scores on the support of \(p\). Since \(Z\) is a weighted average of their exponentials, \[e^{\eta s_{\min}}\leq Z\leq e^{\eta s_{\max}}.\] For any two available labels, \(r_i/r_j=(p_i/p_j)e^{\eta(s_i-s_j)}\). This ratio provides a direct way to understand intensity: increasing \(\eta\) magnifies score differences while preserving the contribution of the starting ratios.
+
+For a uniquely highest fixed score at label \(m\), divide the fixed-score solution's numerator and denominator by \(e^{t\eta c_m}\). Every other contribution contains \(e^{-t\eta(c_m-c_j)}\), which approaches zero. The leading probability therefore approaches one. If several labels tie, divide by their common leading factor instead. Their initial weights remain in the denominator and determine the final ratios within the tied set.
+
+\hypertarget{ch09-updating-from-likelihoods}{%
+\section{Updating from likelihoods}\label{ch09-updating-from-likelihoods}}
+
+Suppose a hypothesis label \(i\) has prior probability \(p_i\), and an observation \(y\) has conditional likelihood \(L_i=P(y\mid i)\). The joint probability of hypothesis and observation is \(p_iL_i\). Adding over hypotheses gives \(P(y)=\sum_i p_iL_i\). Conditional probability then gives \[P(i\mid y)=\frac{p_iL_i}{\sum_jp_jL_j}.\] This is Bayes' rule for a finite hypothesis set. If all likelihoods are positive, set \(s_i=\ln L_i\) and \(\eta=1\) to obtain the exponential update exactly.
+
+\begin{example}[Posterior odds from one observation]
+
+Two hypotheses have prior probabilities \(1/3\) and \(2/3\). A positive test result has likelihoods \(3/4\) and \(1/4\) under the hypotheses. The unnormalized posterior weights are \(1/4\) and \(1/6\), with total \(5/12\). The posterior is \((3/5,2/5)\). Prior odds \(1/2\) have been multiplied by likelihood ratio \(3\), producing posterior odds \(3/2\).
+
+\end{example}
+
+For several observations, multiplication of likelihoods is justified when they are conditionally independent given the hypothesis. The condition concerns independence within each hypothesis model. Without it, a joint likelihood or sequential conditional likelihoods must replace the simple product.
+
+\hypertarget{ch09-exercises}{%
+\section{Exercises}\label{ch09-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Compute the exponential update of \(p=(1/4,1/4,1/2)\) with scores \((2,1,0)\) and \(\eta=\ln2\).
+
+\item 
+
+Verify directly that adding a common constant to all scores leaves the update unchanged.
+
+\item 
+
+Derive the identity \(J(q)=\ln Z-D(q\|r)\), stating where the condition \(\sum_iq_i=1\) is used.
+
+\item 
+
+For \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\), evaluate the objective at \(q=(0,1)\) and compare it with its maximum.
+
+\item 
+
+Derive the symmetric double-sum formula for the fixed-score improvement.
+
+\item 
+
+Starting with equal weights on three choices, fixed scores \((0,1,1)\), and \(\eta=\ln2\), find the probabilities after four rounds.
+
+\item 
+
+Repeat Exercise 6 with initial weights \((1/2,1/3,1/6)\). Explain the ratio of the two tied leaders.
+
+\item 
+
+Give a two-round score sequence whose final distribution agrees when its rounds are reversed, but whose intermediate distribution changes.
+
+\item 
+
+Explain why a zero current probability stays zero under multiplicative weights. Describe a mixture operation that permits it to become positive.
+
+\item 
+
+Show that mixing with uniform strictly raises entropy whenever \(p\) is not uniform and \(0<\lambda<1\).
+
+\item 
+
+A program reports overflow when exponentiating scores \((1000,1001,999)\). Explain how subtracting the largest score resolves this without changing the answer.
+
+\item 
+
+Choose a small finite set of candidate tables and verify the optimization identity numerically for each. Explain why this check illustrates the theorem but does not replace its proof.
+
+\end{exercises}
+
+\hypertarget{ch09-selected-solutions}{%
+\section{Selected solutions}\label{ch09-selected-solutions}}
+
+\textbf{1.} The unnormalized entries are \((1,1/2,1/2)\), giving \((1/2,1/4,1/4)\).
+
+\textbf{3.} The term \(\ln Z\) is multiplied by \(\sum_iq_i\), which equals one. All other terms combine by the logarithm identities.
+
+\textbf{4.} At \(q=(0,1)\), \(J=\ln3-\ln2=\ln(3/2)\). The maximum is \(\ln2\), larger by \(\ln(4/3)=D(q\|r)\).
+
+\textbf{6.} The weights are proportional to \((1,16,16)\), giving \((1/33,16/33,16/33)\).
+
+\textbf{7.} The unnormalized weights are \((1/2,16/3,8/3)\), so the probabilities are \((1/17,32/51,16/51)\). The leaders retain their initial \(2:1\) ratio.
+
+\textbf{11.} Use exponents \((-1,0,-2)\) instead. Both numerator and denominator have been divided by \(e^{1001}\), which cancels exactly.
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use current table \((1/2,1/3,1/6)\) and scores \((0,1,2)\). Calculate the exponential update at intensity \(\ln2\). Verify its normalizing constant and its log-odds increments.
+\item
+  In the demonstration, compare intensities \(0.1\), \(0.5\), \(1\), and \(2\). For each, record the new table, average score, \(D(r\|p)\), and objective. Explain the balance between reward and departure from the initial table.
+\item
+  Choose three candidate tables, including the current table and a pure table. Check \(J(q)=\ln Z-D(q\|r)\) for each. Use nonnegativity to explain why the computed optimizer beats every candidate, not just those tested.
+\item
+  For fixed scores \((0,1,1)\), compare four rounds from equal initial weights and from \((1/2,1/3,1/6)\). Explain the retained ratio of the tied leaders and prove the direction of the average-score change using the double-sum identity.
+\item
+  Choose two rounds of external scores and reverse their order. Compare intermediate and final tables. Then explain why this rearrangement argument need not hold when scores are computed from the current state.
+\end{enumerate}
+
+\FloatBarrier
+
+\end{document}

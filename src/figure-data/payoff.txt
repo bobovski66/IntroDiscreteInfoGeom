@@ -1,0 +1,1 @@
+Coexistence scores and two finite trajectories at intensity 2. The linear rule approaches the equilibrium from one side; the exponential rule crosses it.

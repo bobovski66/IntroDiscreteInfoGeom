@@ -1,0 +1,1 @@
+The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).

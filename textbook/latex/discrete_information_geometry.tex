@@ -1,0 +1,2089 @@
+\documentclass[11pt,oneside,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[paperwidth=7.5in,paperheight=10in,inner=.85in,outer=.85in,top=.85in,bottom=.85in,headheight=15pt,headsep=20pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor,graphicx,booktabs,array,longtable}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{arrows.meta,calc,patterns,decorations.markings}
+\pgfplotsset{compat=1.18}
+\definecolor{ink}{HTML}{17334B}
+\definecolor{teal}{HTML}{137C83}
+\definecolor{copper}{HTML}{AE5932}
+\definecolor{soft}{HTML}{EEF3F5}
+\pgfplotsset{every axis/.append style={axis line style={black!65},tick style={black!60},tick label style={font=\small},label style={font=\small},legend style={font=\small,draw=none,fill=white},grid style={black!10},major grid style={black!10},line width=.6pt},every axis plot/.append style={line width=1.15pt}}
+\usepackage{enumitem,needspace,etoolbox}
+\setlist[enumerate]{topsep=5pt,itemsep=5pt,parsep=0pt}
+\setlist[itemize]{topsep=4pt,itemsep=3pt,parsep=0pt}
+\usepackage{titlesec,fancyhdr}
+\titleformat{\chapter}[display]{\normalfont\color{ink}}{\large\sffamily\MakeUppercase{Chapter \thechapter}}{12pt}{\huge\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}[\vspace{12pt}\titlerule]
+\titlespacing*{\chapter}{0pt}{-10pt}{24pt}
+\titleformat{\section}{\large\bfseries\color{ink}}{\thesection}{.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{18pt plus 3pt minus 2pt}{7pt}
+\titlespacing*{\subsection}{0pt}{12pt plus 2pt minus 2pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\quad #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{float,placeins}
+\floatplacement{figure}{htbp}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\renewcommand{\topfraction}{.9}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.8}
+\usepackage{makeidx}
+\makeindex
+\usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\urlstyle{same}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}{Example}[chapter]
+\BeforeBeginEnvironment{example}{\par\addvspace{4pt}\noindent\begin{minipage}{\linewidth}}
+\AfterEndEnvironment{example}{\end{minipage}\par\addvspace{4pt}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newenvironment{solution}{\par\smallskip\noindent\textit{Solution.}\ }{\par\medskip}
+\newenvironment{exercises}{\begin{enumerate}[label=\thechapter.\arabic*,ref=\thechapter.\arabic*,leftmargin=2.8em,itemsep=6pt]}{\end{enumerate}}
+\newenvironment{answers}{\begin{description}[leftmargin=2.9em,labelwidth=2.5em,labelsep=.4em,itemsep=8pt,font=\normalfont\bfseries]}{\end{description}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\KL}[2]{D\!\left(#1\,\middle\|\,#2\right)}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\arcosh}{\operatorname{arcosh}}
+\newcommand{\sech}{\operatorname{sech}}
+\newcommand{\softmax}{\operatorname{softmax}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\p}{\mathbf{p}}
+\newcommand{\q}{\mathbf{q}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
+\newcommand{\ones}{\mathbf{1}}
+\newcommand{\simp}{\Delta^{n-1}}
+\newcommand{\simpi}{\Delta^{n-1}_{\!\circ}}
+\numberwithin{equation}{chapter}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\linespread{1.07}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{2}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
+
+\begin{document}
+\frontmatter
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\chapter*{Preface}\addcontentsline{toc}{chapter}{Preface}
+This book develops information geometry through finite probability tables, repeated updates, and combinatorial structures. Its prerequisites are algebra, fractions, powers, and an interest in mathematical models. Logarithms, matrix notation, probability, and the needed trigonometry are introduced where they are used.
+
+The central objects are distributions on finitely many labels. A list of population counts becomes a distribution by division by its total. A growth rule becomes a difference equation after normalization. Counting ordered samples leads to multinomial coefficients; logarithmic surprise leads to entropy and relative entropy. Taking square roots places distributions on a sphere, where angles provide statistical distances. Graphs impose finite constraints on possible movements, and stochastic matrices model noisy observations and information networks.
+
+Every recurrence has a stated meaning for one step. Its conclusions are established for that finite rule. In particular, properties of a continuous-time model need not survive repeated finite updates. Exact identities, inequalities, and small examples allow us to examine this issue directly.
+
+The ten chapters are arranged for ten weeks of study. Each chapter contains worked examples, exercises, selected solutions, and a laboratory investigation. The accompanying course site supplies interactive demonstrations and short quizzes. A suggested weekly rhythm is to read the first half of a chapter, work through examples, explore the demonstration, and then complete the remaining reading and laboratory. Four to six hours of preparation and independent work per week is a reasonable starting estimate; discussion time can be adapted to the class.
+
+Calculations use natural logarithms unless bits are specified. A distribution is a column of nonnegative entries adding to one. A positive distribution has no zero entries. For relative entropy, terms with zero first argument contribute zero, while a positive first entry over a zero reference entry gives infinity. Square-root distances remain finite at the boundary. These conventions are explained at their first use and used consistently thereafter.
+
+This course is a companion to \emph{Introduction to Information Geometry}, available at \url{https://bobovski66.github.io/IntroInfoGeom/}. It follows a related progression from population models to information and geometry. Its finite proofs and combinatorial investigations provide a separate entry into the subject.
+
+\tableofcontents
+\mainmatter
+
+\chapter{Sequences, growth, and proportions}
+A population, a collection of observations, and a set of possible messages can all be described by lists of nonnegative numbers. Dividing each entry by the total produces proportions. The proportions retain the composition of the collection even when its size changes. This simple operation connects growth models with probability.
+
+Our time variable takes the values \(t=0,1,2,\ldots\). One step might represent a generation, a round of a game, or the arrival of another batch of data. A rule that determines the next state from the present state is a \textbf{difference equation}. We will study such rules by calculating successive states, solving some rules exactly, and comparing quantities before and after a step.
+
+\hypertarget{ch01-sequences-and-repeated-multiplication}{%
+\section{Sequences and repeated multiplication}\label{ch01-sequences-and-repeated-multiplication}}
+
+A sequence is an ordered list \(a_0,a_1,a_2,\ldots\). The recurrence \(a_{t+1}=r a_t\), together with an initial value \(a_0\), determines every term. Substitution gives \(a_1=ra_0\), \(a_2=r^2a_0\), and, after \(t\) steps, \[a_t=a_0r^t.\] Here \(r\) is the multiplier per step. A multiplier of \(1.2\) means a \(20\%\) increase in one step; a multiplier of \(0.8\) means a \(20\%\) decrease. The percentage change and the multiplier are different numbers.
+
+Suppose two types, \(A\) and \(B\), have positive counts \(N_{A,t}\) and \(N_{B,t}\). With constant multipliers \(w_A,w_B>0\), their counts satisfy \[N_{A,t+1}=w_A N_{A,t},\qquad N_{B,t+1}=w_B N_{B,t}.\] Counts may be interpreted as expected counts or amounts when a multiplier produces a noninteger result. A model of literal indivisible individuals would require an additional sampling or rounding rule. We will state explicitly when such a rule is present.
+
+\begin{example}[The same population at two scales]
+
+Begin with \(20\) individuals of type \(A\) and \(80\) of type \(B\). Let \(w_A=2\) and \(w_B=1\). The count pairs are \((20,80)\), \((40,80)\), \((80,80)\), and \((160,80)\). Their \(A\) proportions are \(1/5\), \(1/3\), \(1/2\), and \(2/3\). Beginning instead at \((200,800)\) produces exactly the same proportions. Multiplying every count by a common positive number leaves composition unchanged.
+
+\end{example}
+
+\hypertarget{ch01-normalization-gives-an-exact-update}{%
+\section{Normalization gives an exact update}\label{ch01-normalization-gives-an-exact-update}}
+
+Write \(x_t=N_{A,t}/(N_{A,t}+N_{B,t})\). The other proportion is \(1-x_t\). Dividing the new \(A\) count by the new total gives \[x_{t+1}=\frac{x_t w_A}{x_t w_A+(1-x_t)w_B}.\] The denominator is the average multiplier in the current population. It accounts for the growth of the total. We often write \(x^+\) for the next value of \(x\) and \(Z=xw_A+(1-x)w_B\) for this average. Then \[x^+-x=\frac{x(1-x)(w_A-w_B)}{Z}.\] To verify the formula, put \(xw_A/Z-x\) over the denominator \(Z\) and factor the numerator. This identity gives a complete sign test: an interior proportion increases when \(w_A>w_B\), decreases when \(w_A<w_B\), and remains fixed when the multipliers agree.
+
+The endpoints also have a direct meaning. If \(x=0\), there are no \(A\) individuals to multiply, so \(x^+=0\). If \(x=1\), the next state is again \(1\). An absent type remains absent under this particular rule. Introducing a type by migration or mutation requires another term in the model.
+
+\begin{example}[Both counts can grow while one proportion falls]
+
+Take equal initial counts and multipliers \(w_A=1.1\), \(w_B=1.3\). Both types increase in number. Nevertheless, \(x^+=1.1/(1.1+1.3)=11/24\), which is smaller than \(1/2\). The proportion compares one type with the total; its change depends on relative multiplication.
+
+\end{example}
+
+\hypertarget{ch01-odds-turn-normalization-into-multiplication}{%
+\section{Odds turn normalization into multiplication}\label{ch01-odds-turn-normalization-into-multiplication}}
+
+For \(0<x<1\), the \textbf{odds} of \(A\) relative to \(B\) are \(O=x/(1-x)\). Odds of \(3\) mean three \(A\) individuals per \(B\) individual, so the corresponding proportion is \(3/4\). Solving the definition for \(x\) gives \(x=O/(1+O)\).
+
+The normalized rule has a particularly simple form in odds: \[O_{t+1}=\frac{x_{t+1}}{1-x_{t+1}}=\frac{w_A}{w_B}O_t.\] Let \(r=w_A/w_B\). Repeated multiplication now yields an explicit solution: \[O_t=O_0r^t,\qquad
+x_t=\frac{x_0r^t}{1-x_0+x_0r^t}.\] The expression is valid for every nonnegative integer \(t\) and for the endpoint initial states as well. It solves the normalized recurrence without computing intermediate states.
+
+\begin{example}[Reaching a target proportion]
+
+Let \(x_0=1/5\) and \(r=2\). Then \(O_t=2^t/4\). The condition \(x_t\geq 0.9\) is equivalent to \(O_t\geq9\), hence to \(2^t\geq36\). Since \(2^5=32\) and \(2^6=64\), the first qualifying step is \(t=6\). Checking integer powers is often the clearest way to answer a discrete timing question.
+
+\end{example}
+
+If \(r>1\) and both types are initially present, the odds become arbitrarily large and \(x_t\) approaches \(1\). If \(r<1\), the odds approach zero and \(x_t\) approaches zero. Approaching an endpoint does not mean reaching it at a finite step: all finite powers of a positive number are positive, so both types remain present in exact arithmetic.
+
+\hypertarget{ch01-probability-vectors-and-weighted-averages}{%
+\section{Probability vectors and weighted averages}\label{ch01-probability-vectors-and-weighted-averages}}
+
+For \(k\) types, let \(p_i\) denote the proportion of type \(i\). A \textbf{probability vector} satisfies \(p_i\geq0\) and \(\sum_{i=1}^k p_i=1\). The symbol \(\sum\) means addition over the indicated indices. Thus \(\sum_{i=1}^3p_i=p_1+p_2+p_3\).
+
+With positive multipliers \(w_i\), the general update is \[p_i^+=\frac{p_iw_i}{Z},\qquad Z=\sum_{j=1}^k p_jw_j.\] All new entries are nonnegative, and adding them gives \(Z/Z=1\). This verifies that the rule remains inside the set of probability vectors. The quantity \(Z\) is a \textbf{weighted average} of the multipliers: a common type contributes more to the average than a rare type.
+
+\begin{example}[Three types in one step]
+
+Let \(p=(1/2,1/3,1/6)\) and \(w=(1,2,3)\). The unnormalized entries are \((1/2,2/3,1/2)\) and their sum is \(5/3\). Dividing by that sum gives \(p^+=(3/10,2/5,3/10)\). The entries add to one, providing a quick arithmetic check.
+
+\end{example}
+
+Multiplying every \(w_i\) by the same positive constant leaves the normalized result unchanged, because that constant cancels between numerator and denominator. This freedom is useful when comparing models and when computing with very large or small weights.
+
+\hypertarget{ch01-what-a-finite-model-specifies}{%
+\section{What a finite model specifies}\label{ch01-what-a-finite-model-specifies}}
+
+A recurrence needs an initial state and a rule for each step. Its interpretation also needs a meaning for one step. Changing a step from one generation to ten generations can change the appropriate multiplier. For constant multipliers, ten consecutive steps multiply the odds by \(r^{10}\). A state-dependent multiplier requires reevaluation after every step and usually cannot be replaced by its tenth power at the initial state.
+
+Throughout the course, a \textbf{fixed point} is a state that one update leaves unchanged. A \textbf{trajectory} is the sequence of states generated by repeated updates. A quantity is \textbf{invariant} if it has exactly the same value at every step. These definitions refer to the stated recurrence. They will let us ask precise questions even when a closed formula for the trajectory is unavailable.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{
+\begin{tikzpicture}
+\begin{axis}[width=6.7cm,height=5.3cm,xlabel={Step $t$},ylabel={Count},xmin=0,xmax=6,ymin=0,legend pos=north west]
+\addplot[teal,mark=*] coordinates {(0,20) (1,40) (2,80) (3,160) (4,320) (5,640) (6,1280)};\addlegendentry{$A$}
+\addplot[copper,mark=square*] coordinates {(0,80) (1,80) (2,80) (3,80) (4,80) (5,80) (6,80)};\addlegendentry{$B$}
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.7cm,height=5.3cm,xlabel={Step $t$},ylabel={$A$ proportion},xmin=0,xmax=6,ymin=0,ymax=1]
+\addplot[teal,mark=*] coordinates {(0,0.2) (1,0.333333) (2,0.5) (3,0.666667) (4,0.8) (5,0.888889) (6,0.941176)};
+\end{axis}\end{tikzpicture}}
+\caption{Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.}\end{figure}
+
+\hypertarget{ch01-reversing-an-update-and-checking-a-formula}{%
+\section{Reversing an update and checking a formula}\label{ch01-reversing-an-update-and-checking-a-formula}}
+
+An explicit formula is more than a shortcut. It lets us answer an inverse question: which initial composition would produce a given final composition? For a constant relative multiplier \(r>0\), the odds relation \(O_t=r^tO_0\) gives \(O_0=O_t/r^t\). Convert the observed final proportion to odds, divide by the accumulated multiplier, and convert back to a proportion. These operations reverse the update when both types are present.
+
+\begin{example}[Reconstructing an initial composition]
+
+After four steps with relative multiplier \(3/2\), the A proportion is \(3/5\). Its final odds are \(3/2\). Dividing by \((3/2)^4=81/16\) gives initial odds \(8/27\). The initial A proportion was therefore \((8/27)/(1+8/27)=8/35\). Substituting \(x_0=8/35\) into the explicit formula recovers \(3/5\) at step four.
+
+\end{example}
+
+Sometimes the multiplier is unknown instead. If both \(O_0\) and \(O_t\) are known, then \(r^t=O_t/O_0\). For example, doubling the odds in three steps requires \(r=2^{1/3}\) per step. This is a relative multiplier. Many absolute pairs \((w_A,w_B)\) have this ratio, so compositions alone do not determine absolute population growth.
+
+The exact solution can be verified by \textbf{mathematical induction}. First check the initial step \(t=0\), where the formula returns \(x_0\). Then assume the formula holds at a particular step \(t\). Substituting into the recurrence and canceling its common denominator gives the same formula with \(t+1\) in place of \(t\). These two statements establish the formula for every nonnegative integer step. Induction is particularly well suited to recurrences because the proof follows the way the sequence is constructed.
+
+\hypertarget{ch01-replenishment-gives-an-affine-recurrence}{%
+\section{Replenishment gives an affine recurrence}\label{ch01-replenishment-gives-an-affine-recurrence}}
+
+Repeated multiplication is one useful mechanism; partial replacement is another. Suppose a fixed-size collection replaces a fraction \(\lambda\) of its members each round with an external source whose A proportion is \(q\). The next composition is \[x^+=(1-\lambda)x+\lambda q,\qquad 0<\lambda\leq1.\] This is an \textbf{affine recurrence}, consisting of a multiple of \(x\) plus a constant. Its fixed point is \(q\). Subtracting that fixed point gives a pure multiplication rule for the error: \[x^+-q=(1-\lambda)(x-q).\] Thus \(x_t=q+(1-\lambda)^t(x_0-q)\). This technique, shifting coordinates to a fixed point, will recur in later chapters.
+
+\begin{example}[Replacing one quarter of a collection]
+
+Let \(x_0=0.8\), let the external source have proportion \(q=0.2\), and replace one quarter each round. Then \(x_t=0.2+0.6(3/4)^t\). The first two new values are \(0.65\) and \(0.5375\). Every step removes one quarter of the remaining difference from the source composition. It does not remove one quarter of the current A proportion.
+
+\end{example}
+
+The multiplying-growth model and the replacement model can be distinguished by their formulas. Positive multiplication preserves absence. Replacement introduces A from the source whenever \(q>0\) and \(\lambda>0\), even if A is initially absent. Choosing a recurrence therefore includes choosing the mechanisms that can change a population.
+
+\hypertarget{ch01-a-calculation-routine}{%
+\section{A calculation routine}\label{ch01-a-calculation-routine}}
+
+To compute an update reliably, make a short table with columns for the old proportion, multiplier, and product. Add the products to obtain \(Z\), then divide every product by \(Z\). Check the new sum before rounding the displayed values. Store more digits than are printed, since feeding rounded output back into the next step changes the recurrence. Finally, compare a simple diagnostic, such as the two-type odds ratio, with its expected update. An independent identity often detects an indexing error that a unit-sum check alone would miss.
+
+\hypertarget{ch01-exercises}{%
+\section{Exercises}\label{ch01-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Starting from \(a_0=12\), list the first five terms of \(a_{t+1}=(3/2)a_t\), including \(a_0\).
+
+\item 
+
+A quantity decreases by \(15\%\) each step. Write its multiplier and its value after eight steps in terms of its initial value.
+
+\item 
+
+Normalize the count triples \((6,9,15)\) and \((14,21,35)\). Explain why the results agree.
+
+\item 
+
+Starting with counts \((30,70)\) and multipliers \((3,2)\), find the counts and proportions after two steps.
+
+\item 
+
+Derive the formula for \(x^+-x\) by putting the two fractions over a common denominator.
+
+\item 
+
+Convert proportions \(1/4\), \(2/3\), and \(0.9\) to odds. Convert odds \(1/5\), \(1\), and \(7\) to proportions.
+
+\item 
+
+Let \(x_0=1/10\) and \(w_A/w_B=3\). Find the first integer step at which \(x_t\geq1/2\).
+
+\item 
+
+Prove that the general normalized update preserves the sum of the entries and preserves all zero entries.
+
+\item 
+
+Compute one update for \(p=(1/4,1/4,1/2)\) and \(w=(4,2,1)\). Repeat with \(w=(20,10,5)\).
+
+\item 
+
+Show that, for constant multipliers, \(p_{i,t}=p_{i,0}w_i^t/\sum_jp_{j,0}w_j^t\).
+
+\item 
+
+A program rounds each new proportion to two decimal places. Explain how this can remove a type that the exact recurrence would preserve. Give numerical values.
+
+\item 
+
+Two populations have the same initial composition but different total sizes. State assumptions under which their compositions remain identical, and describe one modification of the model that can break this conclusion.
+
+\end{exercises}
+
+\hypertarget{ch01-selected-solutions}{%
+\section{Selected solutions}\label{ch01-selected-solutions}}
+
+\textbf{1.} The terms are \(12,18,27,81/2,243/4\). Each is obtained by multiplying its predecessor by \(3/2\).
+
+\textbf{3.} Both triples normalize to \((1/5,3/10,1/2)\). The second count triple is \(7/3\) times the first, and this factor cancels upon normalization.
+
+\textbf{4.} The new counts are \((90,140)\) and then \((270,280)\). The \(A\) proportions are \(9/23\) and \(27/55\).
+
+\textbf{7.} Initial odds are \(1/9\). At step \(t\) they are \(3^t/9\). Reaching \(1/2\) means reaching odds at least one, which first occurs at \(t=2\).
+
+\textbf{9.} The unnormalized weights are \((1,1/2,1/2)\), so the answer is \((1/2,1/4,1/4)\) in both calculations.
+
+\textbf{10.} The formula holds at \(t=0\). If it holds at \(t\), multiplying each numerator by \(w_i\) and normalizing cancels the previous common denominator, giving the formula with \(t+1\). This is a proof by induction.
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Start with counts \((20,80)\) and multipliers \((2,1)\). Make a table for steps zero through six, recording both counts, the total, the A proportion, and the odds. Explain why the odds column is simpler than the proportion column.
+\item
+  In the demonstration, set the initial A proportion to \(0.20\) and the relative multiplier to \(2\). Compare the first six computed proportions with your table. Use the exact formula to determine the first step at which A has proportion at least \(0.95\).
+\item
+  Choose multipliers for which both types grow in count while A falls in proportion. Calculate three steps and explain the role of the total. Compare your result with a second initial population ten times as large.
+\item
+  Use \(p=(1/2,1/3,1/6)\) and multipliers \((1,2,3)\). Compute two normalized updates. Show that multiplying every multiplier by seven changes neither updated table.
+\item
+  Write a short algorithm for normalized growth. State how it checks nonnegative proportions, unit total, and positive multipliers. Explain why rounding to whole percentages at each step can alter the support of a trajectory.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Payoff tables and finite selection}
+An interaction changes the opportunities available to a type. A strategy may do well when it is rare and poorly when it becomes common. To describe this feedback, we assign scores to encounters and average them using the present composition. The resulting multipliers depend on the state, so the growth rule becomes a nonlinear difference equation.
+
+\hypertarget{ch02-a-matrix-is-a-table-of-encounter-scores}{%
+\section{A matrix is a table of encounter scores}\label{ch02-a-matrix-is-a-table-of-encounter-scores}}
+
+Consider two strategies, \(A\) and \(B\), with score table \[M=\begin{pmatrix}a&b\\c&d\end{pmatrix}.\] The row specifies the focal strategy and the column specifies its opponent. Thus \(b\) is the score of an \(A\) individual meeting a \(B\) individual. We assume opponents are encountered with frequencies \(x\) and \(1-x\). The average scores are \[f_A(x)=ax+b(1-x),\qquad f_B(x)=cx+d(1-x).\] The assumption about encounters is part of the model. Assortment by type, spatial clustering, or a rule excluding encounters with oneself can produce different averages.
+
+The score difference is a straight-line expression: \[\Delta(x)=f_A(x)-f_B(x)=(b-d)+(a-b-c+d)x.\] Its sign records which strategy has the higher score at each composition. A zero of \(\Delta\) is a candidate interior fixed point for the update rules below.
+
+\begin{example}[A coexistence score table]
+
+For \(M=\left(\begin{smallmatrix}2&4\\3&1\end{smallmatrix}\right)\), the scores are \(f_A=4-2x\) and \(f_B=1+2x\). Their difference is \(3-4x\), which vanishes at \(q=3/4\). Below \(q\), strategy \(A\) has the higher score; above \(q\), strategy \(B\) has the higher score. At \(q\), both scores are \(5/2\).
+
+\end{example}
+
+\hypertarget{ch02-turning-scores-into-positive-multipliers}{%
+\section{Turning scores into positive multipliers}\label{ch02-turning-scores-into-positive-multipliers}}
+
+Scores and multipliers play different roles. A score may be negative, while a population multiplier must be positive. One possible conversion is the \textbf{linear multiplier rule} \[w_i=1+\eta f_i,\] where \(\eta>0\) controls the strength of the update. This rule requires \(1+\eta f_i>0\) for every score that can occur. If all encounter scores are at least \(m<0\), choosing \(\eta<-1/m\) is sufficient. Equality would permit zero multipliers and falls outside the positive rule used here.
+
+Another conversion is the \textbf{exponential multiplier rule} \[w_i=e^{\eta f_i}.\] The number \(e\) is approximately \(2.71828\). The exponential is positive for every real input, and it satisfies \(e^{u+v}=e^ue^v\). For computation, a calculator's exponential function is enough. Its algebraic properties are what we need in this course.
+
+Normalizing linear multipliers gives \[x^+=\frac{x(1+\eta f_A)}{1+\eta\bar f},\qquad
+\bar f=xf_A+(1-x)f_B,\] and consequently \[x^+-x=\frac{\eta x(1-x)\Delta(x)}{1+\eta\bar f}.\] Normalizing exponential multipliers gives \[x^+=\frac{xe^{\eta f_A}}{xe^{\eta f_A}+(1-x)e^{\eta f_B}}.\] For either conversion, the change has the sign of \(\Delta\) in the interior. The amount of change depends on the conversion and on \(\eta\).
+
+\begin{example}[One score table, two finite rules]
+
+Use the coexistence table, \(x=1/4\), and \(\eta=1\). Then \((f_A,f_B)=(7/2,3/2)\). Linear multipliers are \((9/2,5/2)\), giving \(x^+=3/8\). Exponential multipliers give \(x^+=e^2/(e^2+3)\approx0.7112\). Both steps increase the \(A\) proportion. Their sizes differ substantially.
+
+\end{example}
+
+\hypertarget{ch02-sign-diagrams-and-fixed-points}{%
+\section{Sign diagrams and fixed points}\label{ch02-sign-diagrams-and-fixed-points}}
+
+For positive multipliers, the pure states \(0\) and \(1\) are fixed. An interior state is fixed precisely when the two scores agree. When \(a-b-c+d\ne0\), the candidate is \[q=\frac{d-b}{a-b-c+d}.\] It is an interior fixed point only if \(0<q<1\). If the score difference is zero everywhere, every state is fixed. If the difference is a nonzero constant, there is no interior fixed point.
+
+A \textbf{sign diagram} divides the interval at the zeros of \(\Delta\) and records the direction of each single step. It provides useful information about motion. To prove convergence, we also need to control whether steps cross the proposed limit.
+
+\begin{proposition}[Monotone coexistence for the linear rule]
+
+For the coexistence table and any \(\eta>0\), the linear rule sends every interior initial state toward \(q=3/4\) without crossing it, and the resulting sequence converges to \(q\).
+
+\end{proposition}
+
+To prove this, first compute \(\bar f=1+5x-4x^2\). Since \(\Delta=-4(x-q)\), \[x^+-q=(x-q)\left(1-\frac{4\eta x(1-x)}{1+\eta\bar f}\right).\] The factor in parentheses is strictly between zero and one for \(0<x<1\). Positivity follows because subtracting \(4\eta x(1-x)\) from the denominator leaves \(1+\eta(1+x)>0\). The upper bound follows because the subtracted fraction is positive. Thus the error keeps its sign and decreases in magnitude.
+
+A sequence starting below \(q\) is increasing and bounded above by \(q\); a sequence starting above \(q\) is decreasing and bounded below by \(q\). Such a sequence has a limit. Substituting its limit into this rational update is valid because the denominator stays positive. The limit must be a fixed point, and the interval between the initial state and \(q\) contains no other fixed point. Therefore the limit is \(q\).
+
+\begin{example}[A coordination threshold]
+
+For \(M=\left(\begin{smallmatrix}4&1\\2&3\end{smallmatrix}\right)\), we have \(\Delta=4x-2\). If \(x<1/2\), every step lowers \(x\); if \(x>1/2\), every step raises it. Both rules therefore move away from the threshold. The bounded sequences converge to \(0\) and \(1\), respectively. Starting exactly at \(1/2\) leaves the state fixed.
+
+\end{example}
+
+\hypertarget{ch02-what-changes-when-a-score-table-changes}{%
+\section{What changes when a score table changes?}\label{ch02-what-changes-when-a-score-table-changes}}
+
+Exponential normalization is unchanged if a common number \(C\) is added to all current scores: each weight gains the same factor \(e^{\eta C}\), which cancels. Multiplying all scores by \(c>0\) is equivalent to replacing \(\eta\) by \(c\eta\).
+
+For linear multipliers, adding \(C\) changes the effective intensity. When \(1+\eta C>0\), \[1+\eta(f_i+C)=(1+\eta C)\left(1+\frac{\eta}{1+\eta C}f_i\right).\] The first factor cancels upon normalization, leaving intensity \(\eta/(1+\eta C)\). Consequently, fixed points and signs may agree even though finite trajectories differ. This identity is useful when interpreting a table whose scores have been shifted to make them positive.
+
+\hypertarget{ch02-step-size-is-part-of-the-model}{%
+\section{Step size is part of the model}\label{ch02-step-size-is-part-of-the-model}}
+
+The exponential coexistence rule can cross its equilibrium. At \(x=1/4\) and \(\eta=2\), its next value is \(e^4/(e^4+3)\approx0.9479\), beyond \(3/4\). A sign diagram alone does not exclude this crossing. Repeated large steps can alternate across an equilibrium. Numerical experiments should report both the update rule and the chosen intensity, because they jointly determine the recurrence.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}
+\begin{axis}[width=6.7cm,height=5.4cm,xlabel={$A$ proportion $x$},ylabel={Score},xmin=0,xmax=1,ymin=0,ymax=4.5,legend pos=south east]
+\addplot[teal,domain=0:1]{4-2*x};\addlegendentry{$f_A$}
+\addplot[copper,domain=0:1]{1+2*x};\addlegendentry{$f_B$}
+\draw[dashed] (axis cs:.75,0)--(axis cs:.75,4.3);
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.7cm,height=5.4cm,xlabel={Step $t$},ylabel={$A$ proportion},xmin=0,xmax=12,ymin=0,ymax=1,legend pos=south east]
+\addplot[teal,mark=*] coordinates {(0,0.25) (1,0.4) (2,0.517483) (3,0.594476) (4,0.643506) (5,0.675429) (6,0.696853) (7,0.711616) (8,0.722007) (9,0.729437) (10,0.734814) (11,0.738741) (12,0.741628)};\addlegendentry{Linear}
+\addplot[copper,mark=square*] coordinates {(0,0.25) (1,0.947915) (2,0.78886) (3,0.732469) (4,0.759042) (5,0.745565) (6,0.752236) (7,0.748887) (8,0.750558) (9,0.749721) (10,0.750139) (11,0.74993) (12,0.750035)};\addlegendentry{Exponential}
+\addplot[ink,dashed,domain=0:12]{.75};
+\end{axis}\end{tikzpicture}}
+\caption{Coexistence scores and two finite trajectories at intensity 2. The linear rule approaches the equilibrium from one side; the exponential rule crosses it.}\end{figure}
+
+\hypertarget{ch02-a-general-no-crossing-test}{%
+\section{A general no-crossing test}\label{ch02-a-general-no-crossing-test}}
+
+The coexistence proof illustrates a reusable finite method. Suppose an update can be written \(x^+=x+G(x)\) and \(q\) is a proposed interior fixed point. If algebra produces \[x^+-q=(x-q)R(x),\qquad 0<R(x)<1,\] then the new error has the old sign and smaller magnitude. A trajectory cannot cross \(q\). The resulting monotone bounded sequence converges, and checking fixed points identifies the limit. The decisive work is the factorization and the bound on \(R\).
+
+If instead \(-1<R(x)<0\), the error reverses sign while shrinking in magnitude. This describes an alternating approach whenever the estimate holds throughout a region preserved by the update. If \(R\) depends on the state, evaluating it at one point proves only a one-step statement there. A uniform bound over the relevant region is needed for a conclusion about the whole run.
+
+\begin{example}[A recurrence that alternates exactly]
+
+The affine rule \(x^+=3/4-x/2\) maps \([0,1]\) into \([1/4,3/4]\). Its fixed point is \(q=1/2\), and \(x^+-q=-(x-q)/2\). Starting at \(x_0=0.2\) gives \(0.65\), \(0.425\), and \(0.5375\). The error is exactly \((-1/2)^t(x_0-q)\). This simple recurrence separates the ideas of crossing an equilibrium and failing to converge: crossing can accompany steady error reduction.
+
+\end{example}
+
+\hypertarget{ch02-boundary-behavior-from-encounter-scores}{%
+\section{Boundary behavior from encounter scores}\label{ch02-boundary-behavior-from-encounter-scores}}
+
+When A is rare, \(x\) is close to zero, so its score is close to \(b\) and B's score is close to \(d\). The comparison \(b-d\) determines whether a small positive A proportion rises in the next step. When B is rare, \(x\) is close to one, so the relevant comparison is \(a-c\). These are the endpoint values of the score difference. They are obtained from the encounter interpretation before any trajectory is calculated.
+
+If \(b>d\) and \(a<c\), each type has an advantage when rare. The score difference changes from positive to negative, producing an interior equality. If \(b<d\) and \(a>c\), each type is disadvantaged when rare, and the interior equality is a threshold. The other sign combinations can give one type a consistent advantage. These observations organize the algebra of a two-strategy table.
+
+\begin{example}[Checking an advantage at low frequency]
+
+For the coexistence table, a rare A meets mostly B and scores close to \(4\), while common B scores close to \(1\). A therefore increases when introduced at a small positive proportion. Near the A vertex, rare B scores close to \(3\) while common A scores close to \(2\), so B increases. Both endpoint comparisons agree with the interior equality at \(3/4\). Starting exactly at an endpoint still leaves it fixed because the multiplier rule does not introduce absent types.
+
+\end{example}
+
+\hypertarget{ch02-from-a-score-table-to-a-reproducible-experiment}{%
+\section{From a score table to a reproducible experiment}\label{ch02-from-a-score-table-to-a-reproducible-experiment}}
+
+A numerical report should specify the encounter convention, the table, the score-to-multiplier conversion, the intensity, the initial state, and the number of steps. Each item affects the calculation. A plot labeled only with a table omits part of the recurrence.
+
+For a two-type experiment, record the score difference and the updated proportion at several states. Check that the observed direction agrees with the sign identity. Then ask a separate question about crossing: is the new state still on the same side of an interior fixed point? Finally, compare any proposed long-run description with an exact error estimate when one is available. This sequence of calculations links model assumptions, algebra, and numerical observations without requiring a formula for every trajectory.
+
+\hypertarget{ch02-exercises}{%
+\section{Exercises}\label{ch02-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Explain the meaning of each entry of \(\left(\begin{smallmatrix}5&-1\\2&3\end{smallmatrix}\right)\) under the row-focal convention.
+
+\item 
+
+Find the two average scores and their difference for the table in Exercise 1.
+
+\item 
+
+For that table, find a sufficient range of positive \(\eta\) for linear multipliers to remain positive for every composition.
+
+\item 
+
+Calculate one linear update for the coexistence table at \(x=1/2\), \(\eta=1\).
+
+\item 
+
+Calculate one exponential update for the same state and intensity.
+
+\item 
+
+Find and classify the fixed points for \(M=\left(\begin{smallmatrix}3&3\\1&1\end{smallmatrix}\right)\) using the sign of the score difference.
+
+\item 
+
+Give a score table for which every composition is fixed. Explain the condition on its rows.
+
+\item 
+
+Verify each step in the proof of monotone coexistence, including the expression for \(\bar f\).
+
+\item 
+
+For exponential coexistence, start at \(x=1/4\) and compute four updates with \(\eta=2\). Record which side of \(3/4\) each value occupies.
+
+\item 
+
+Add \(5\) to every entry of the coexistence table. Compare the linear updates at \(x=1/4\), \(\eta=1\) before and after the change.
+
+\item 
+
+Prove the stated invariance of the exponential rule under adding a common score. Does the common score need to be independent of the current state?
+
+\item 
+
+Design two tables with the same interior fixed point but opposite signs of \(\Delta\) on either side of it. Explain the different population behavior.
+
+\end{exercises}
+
+\hypertarget{ch02-selected-solutions}{%
+\section{Selected solutions}\label{ch02-selected-solutions}}
+
+\textbf{2.} The scores are \(f_A=6x-1\) and \(f_B=3-x\), so \(\Delta=7x-4\). The interior equality occurs at \(4/7\).
+
+\textbf{3.} Every score is at least \(-1\). Thus \(0<\eta<1\) is sufficient and ensures positivity even at \(x=0\).
+
+\textbf{4.} The scores are \((3,2)\) and the multipliers \((4,3)\). Therefore \(x^+=4/7\).
+
+\textbf{5.} Cancelling the common factor \(e^2\) gives \(x^+=e/(e+1)\approx0.7311\).
+
+\textbf{10.} The original answer is \(3/8\). After the shift the multipliers are \((19/2,15/2)\), giving \(x^+=19/64\). Equivalently, the shifted rule has original-table intensity \(1/6\).
+
+\textbf{11.} Every numerator and the denominator acquire the factor \(e^{\eta C}\). Cancellation works at each state, so the same conclusion holds for a common state-dependent score \(C(x)\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For the coexistence table \(\left(\begin{smallmatrix}2&4\\3&1\end{smallmatrix}\right)\), derive both average scores, their difference, and the mean score. Find all fixed points of the linear and exponential rules.
+\item
+  At initial proportion \(0.25\), compare five steps of the linear and exponential rules with intensity \(1\). Record values in a table. Explain why agreement on the direction of the first step does not imply agreement on the trajectory.
+\item
+  For exponential coexistence, compare intensities \(0.2\), \(1\), and \(2\). Record the first step that crosses \(0.75\), if one occurs in the first twenty steps. State your findings as observations over a specified run.
+\item
+  Use the coordination table \(\left(\begin{smallmatrix}4&1\\2&3\end{smallmatrix}\right)\) and initial proportions \(0.45\) and \(0.55\). Predict the long-run direction using the score difference, then check twenty steps.
+\item
+  Add a common score of five to the coexistence table. Derive why the exponential update is unchanged and why the linear update at intensity \(1\) becomes the original linear update at intensity \(1/6\). Verify at one state.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Three strategies and probability triangles}
+Three types allow motion in two independent directions. A triangle provides a complete picture of their proportions, including mixtures on its edges and pure states at its vertices. Integer population counts supply a natural lattice inside the triangle. These two representations connect geometry with combinatorics.
+
+\hypertarget{ch03-reading-a-probability-triangle}{%
+\section{Reading a probability triangle}\label{ch03-reading-a-probability-triangle}}
+
+Write \(p=(p_A,p_B,p_C)\) with nonnegative entries adding to one. Place the pure states at \(A=(0,0)\), \(B=(1,0)\), and \(C=(1/2,\sqrt3/2)\). Represent \(p\) by the weighted point \[X=p_AA+p_BB+p_CC=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\] These are \textbf{barycentric coordinates}: the coefficients tell us how much of each vertex contributes. The midpoint of edge \(AB\) is \((1/2,1/2,0)\) in probability coordinates. The center is \((1/3,1/3,1/3)\). A point on edge \(AB\) has \(p_C=0\).
+
+To recover probabilities from a plotted point \((u,v)\), solve the two coordinate equations: \[p_C=\frac{2v}{\sqrt3},\qquad p_B=u-\frac{v}{\sqrt3},\qquad p_A=1-u-\frac{v}{\sqrt3}.\] The point is inside the triangle precisely when these three values are nonnegative.
+
+\begin{example}[Locating a state]
+
+The distribution \((1/2,1/3,1/6)\) is plotted at \((5/12,\sqrt3/12)\). Its height is one sixth of the triangle's altitude, reflecting its \(C\) proportion. Its position is closer to vertex \(A\) than to either of the other vertices, consistent with \(A\) being the most common type.
+
+\end{example}
+
+\hypertarget{ch03-tokens-produce-a-triangular-lattice}{%
+\section{Tokens produce a triangular lattice}\label{ch03-tokens-produce-a-triangular-lattice}}
+
+Suppose the total count is a fixed integer \(N\). A count triple \((a,b,c)\) with \(a+b+c=N\) gives the probability vector \((a/N,b/N,c/N)\). The possible states form a lattice. Moving one token from \(A\) to \(B\) changes the counts by \((-1,1,0)\) and the probabilities by \((-1/N,1/N,0)\).
+
+There are \[\frac{(N+1)(N+2)}2=\binom{N+2}{2}\] possible triples. One proof fixes \(c\): for \(c=0,1,\ldots,N\), there are \(N-c+1\) choices for \(a\), with \(b\) then determined. Adding gives \((N+1)+N+\cdots+1\). A second proof encodes the triple as \(N\) stars separated into three groups by two bars; choosing the two bar positions among \(N+2\) positions determines the triple.
+
+\begin{example}[A lattice of fifteen states]
+
+With \(N=4\), the lattice has \(\binom62=15\) states. The count triple \((2,1,1)\) is adjacent to six states obtained by moving a token between two distinct types. At \((4,0,0)\), only two moves are possible because an empty type cannot donate a token.
+
+\end{example}
+
+A normalized growth update generally does not land on this lattice. It defines a deterministic map on all probability vectors. Sampling \(N\) new individuals from the updated proportions produces a random lattice state instead. These are two distinct models with different sources of variation.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\fill[teal] (3,5.19615) circle (2pt);\fill[teal] (3.75,3.89711) circle (2pt);\fill[teal] (4.5,2.59808) circle (2pt);\fill[teal] (5.25,1.29904) circle (2pt);\fill[teal] (6,0) circle (2pt);\fill[teal] (2.25,3.89711) circle (2pt);\fill[teal] (3,2.59808) circle (2pt);\fill[teal] (3.75,1.29904) circle (2pt);\fill[teal] (4.5,0) circle (2pt);\fill[teal] (1.5,2.59808) circle (2pt);\fill[teal] (2.25,1.29904) circle (2pt);\fill[teal] (3,0) circle (2pt);\fill[teal] (0.75,1.29904) circle (2pt);\fill[teal] (1.5,0) circle (2pt);\fill[teal] (0,0) circle (2pt);\node[anchor=west,align=left] at (6.8,3.7){$N=4$: fifteen states\\One token changes two counts.};\draw[copper,thick] (2.25,1.29904) circle (5pt);\node[below=6pt] at (2.25,1.29904){$(2,1,1)$};\draw[copper,->] (2.25,1.29904)--(3.75,1.29904);\draw[copper,->] (2.25,1.29904)--(3,2.59808);\draw[copper,->] (2.25,1.29904)--(0.75,1.29904);\draw[copper,->] (2.25,1.29904)--(1.5,2.59808);\draw[copper,->] (2.25,1.29904)--(1.5,0);\draw[copper,->] (2.25,1.29904)--(3,0);\end{tikzpicture}}
+\caption{The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).}\end{figure}
+
+\hypertarget{ch03-cyclic-interactions}{%
+\section{Cyclic interactions}\label{ch03-cyclic-interactions}}
+
+For three strategies, a score table is a \(3\) by \(3\) matrix. The average score of type \(i\) is \(f_i=\sum_jM_{ij}p_j\). Consider \[M_s=\begin{pmatrix}0&1&-s\\-s&0&1\\1&-s&0\end{pmatrix},\qquad s>0.\] Type \(A\) gains against \(B\), type \(B\) gains against \(C\), and type \(C\) gains against \(A\). Each suffers a loss of magnitude \(s\) against the remaining opponent. At the center, all three scores equal \((1-s)/3\), so the center is fixed for both normalized multiplier rules.
+
+For exponential multipliers, a step is \[p_i^+=\frac{p_i e^{\eta f_i}}{Z},\qquad Z=\sum_jp_j e^{\eta f_j}.\] The current scores must be recomputed before the next step. Using the same scores repeatedly instead would describe fixed external advantages, rather than this interaction game.
+
+\begin{example}[Computing a cyclic step]
+
+Let \(s=1\) and \(p=(1/2,1/3,1/6)\). The scores are \((1/6,-1/3,1/6)\). With \(\eta=1\), cancelling the common factor \(e^{1/6}\) leaves unnormalized entries \((1/2,e^{-1/2}/3,1/6)\). After normalization the result is approximately \((0.5755,0.2327,0.1918)\). The two equally scoring types retain their ratio \(3:1\) during this step.
+
+\end{example}
+
+\hypertarget{ch03-a-finite-inequality-detects-outward-drift}{%
+\section{A finite inequality detects outward drift}\label{ch03-a-finite-inequality-detects-outward-drift}}
+
+The \textbf{weighted arithmetic-geometric mean inequality} states that, for positive \(a_i\) and nonnegative weights \(p_i\) adding to one, \[\sum_i p_i a_i\ \geq\ \prod_i a_i^{p_i}.\] For rational weights, it follows from the ordinary arithmetic-geometric mean inequality by repeating each entry the appropriate number of times. The real-weight version follows by approximation. Equality holds when all entries carrying positive weight are equal. We will use this finite inequality several times.
+
+For the balanced cyclic table \(s=1\), direct cancellation gives \[\sum_i f_i=0,\qquad \sum_i p_if_i=0.\] Let \(P(p)=p_Ap_Bp_C\). Under exponential normalization, \[P(p^+)=\frac{P(p)e^{\eta(f_A+f_B+f_C)}}{Z^3}=\frac{P(p)}{Z^3}.\] Applying weighted arithmetic-geometric mean to \(a_i=e^{\eta f_i}\) gives \(Z\geq e^{\eta\sum_i p_if_i}=1\). For an interior state other than the center, the scores are not all equal, so \(Z>1\) and \(P\) strictly decreases.
+
+The product is largest at the center: the ordinary arithmetic-geometric mean inequality gives \(p_Ap_Bp_C\leq(1/3)^3\). Decreasing product therefore records movement through product contours toward the boundary. It does not imply that every individual coordinate moves monotonically, nor does it by itself identify a limit point. A trajectory may continue circulating while this diagnostic decreases.
+
+\begin{proposition}[The balanced finite rule does not conserve the product]
+
+For every positive intensity, an exponential update of the balanced cyclic game strictly decreases \(p_Ap_Bp_C\) at every interior state other than the center.
+
+\end{proposition}
+
+There is a similar conclusion for linear multipliers whenever they are positive. Since the weighted mean score is zero, their normalizing denominator is \(1\). Their unweighted sum is \(3\), so their product is at most \(1\). Multiplying the three updated coordinates shows \(P(p^+)\leq P(p)\), again strictly away from the center. These exact calculations explain why changing the size of a finite step can affect a cyclic picture.
+
+\hypertarget{ch03-comparing-a-different-recurrence}{%
+\section{Comparing a different recurrence}\label{ch03-comparing-a-different-recurrence}}
+
+The permutation rule \[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\] also moves states cyclically. It satisfies \(T^3(p)=p\) and preserves the coordinate product exactly. Its trajectories contain at most three states. This recurrence is useful as a simple example of exact periodicity and as a check on a plotting program. It is a different update from score-based selection, with a different algebraic structure.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\draw[teal,line width=1pt,] plot coordinates {(2.5,0.866025) (2.30211,0.914991) (2.13433,0.989415) (2.00434,1.09113) (1.91704,1.22169) (1.87454,1.3817) (1.87635,1.57002) (1.91959,1.78302) (1.99934,2.014) (2.10912,2.25316) (2.2416,2.48824) (2.38957,2.70569) (2.54686,2.89222) (2.70911,3.03607) (2.87405,3.12795) (3.04129,3.16149) (3.21161,3.13339) (3.38597,3.04357) (3.56442,2.8955) (3.74508,2.69646) (3.92355,2.45754) (4.09295,2.19293) (4.24443,1.91836) (4.3683,1.64902) (4.45503,1.39764) (4.4961,1.17313) (4.48445,0.98029) (4.41464,0.820371) (4.28327,0.692054) (4.08965,0.592573) (3.83693,0.518653) (3.53324,0.467199) (3.19222,0.435747) (2.83231,0.422736) (2.4746,0.427675) (2.13975,0.451239) (1.84514,0.495337) (1.60317,0.563116) (1.42101,0.65886) (1.30151,0.787681) (1.24443,0.954869) (1.2474,1.16479) (1.30623,1.41932) (1.41474,1.71605) (1.56431,2.04684) (1.744,2.39749) (1.94142,2.74913) (2.14444,3.08112) (2.34321,3.37439) (2.5317,3.61395) (2.70818,3.78973) (2.87485,3.89591) (3.03679,3.92947) (3.20062,3.88899) (3.37309,3.7742) (3.55961,3.58665) (3.76275,3.33128) (3.98096,3.01809) (4.20804,2.66311) (4.4337,2.28732) (4.64535,1.91367) (4.83045,1.56301) (4.97842,1.25062) (5.08144,0.984702) (5.13404,0.766899) (5.13197,0.594087) (5.07111,0.460494) (4.94694,0.359436) (4.75496,0.28447) (4.49214,0.229994) (4.15941,0.191484) (3.76431,0.165501) (3.32271,0.149618) (2.85811,0.142316) (2.39816,0.142908) (1.96937,0.151513) (1.59225,0.169073) (1.27893,0.197432) (1.03359,0.239463) (0.85476,0.299217) (0.738192,0.382049) (0.679138,0.494619) (0.673725,0.644618) (0.719298,0.839994) (0.813842,1.08747) (0.954673,1.39033) (1.13681,1.74578) (1.35164,2.14306) (1.58679,2.56335) (1.82756,2.98255) (2.05966,3.37612) (2.27206,3.72397) (2.4587,4.01334) (2.61864,4.23892) (2.75509,4.40077) (2.87403,4.50162) (2.98296,4.54436) (3.0901,4.53041) (3.20382,4.45901) (3.33225,4.3274) (3.48251,4.13207) (3.65971,3.87086) (3.86549,3.5458) (4.09666,3.16584) (4.34467,2.74806) (4.5966,2.31618) (4.83773,1.89618) (5.05474,1.51085) (5.23811,1.17555) (5.38285,0.896891) (5.48765,0.673976) (5.55317,0.501037) (5.58036,0.370035) (5.56908,0.272596) (5.51723,0.201121) (5.42044,0.149249) (5.27216,0.111934) (5.0646,0.0853168) (4.79047,0.0665215) (4.44576,0.053457) (4.0331,0.044639) (3.56458,0.0390514) (3.06221,0.0360444) (2.555,0.0352672) (2.07288,0.0366313) (1.64035,0.0403013) (1.27234,0.0467149) (0.973804,0.0566307) (0.74195,0.0712098) (0.569614,0.0921336) (0.448243,0.121762) (0.369969,0.163332) (0.328758,0.221175) (0.320881,0.300924) (0.344943,0.409613) (0.401587,0.555512) (0.492862,0.74747) (0.621167,0.993495) (0.78772,1.29846) (0.990736,1.6612) (1.22388,2.07208) (1.47591,2.51243) (1.73205,2.95717) (1.9771,3.38005) (2.19865,3.75943) (2.38931,4.08194) (2.54698,4.34304) (2.67379,4.54499) (2.7745,4.6939) (2.855,4.79702) (2.92146,4.86085) (2.97988,4.89007) (3.03604,4.88695) (3.09566,4.85123) (3.16458,4.78006) (3.24888,4.66828) (3.35478,4.50906) (3.48814,4.29509) (3.65339,4.02072) (3.85203,3.68474) (4.08103,3.29339)};
+\begin{axis}[at={(7cm,0.2cm)},anchor=south west,width=6.2cm,height=5.2cm,xlabel={Step $t$},ylabel={$p_Ap_Bp_C$},xmin=0,xmax=160,ymin=0]
+\addplot[teal] coordinates {(0,0.0277778) (1,0.0275013) (2,0.0272369) (3,0.0269819) (4,0.0267289) (5,0.026468) (6,0.0261894) (7,0.0258869) (8,0.0255602) (9,0.025215) (10,0.0248622) (11,0.0245144) (12,0.024182) (13,0.02387) (14,0.0235766) (15,0.0232934) (16,0.0230078) (17,0.0227064) (18,0.0223788) (19,0.0220213) (20,0.0216382) (21,0.021241) (22,0.0208458) (23,0.0204676) (24,0.0201169) (25,0.019796) (26,0.0194993) (27,0.0192144) (28,0.0189254) (29,0.0186171) (30,0.0182787) (31,0.0179075) (32,0.01751) (33,0.0171006) (34,0.0166977) (35,0.0163182) (36,0.0159732) (37,0.0156654) (38,0.0153888) (39,0.0151309) (40,0.0148755) (41,0.014606) (42,0.0143097) (43,0.0139805) (44,0.0136212) (45,0.0132435) (46,0.0128648) (47,0.0125037) (48,0.0121745) (49,0.0118844) (50,0.0116325) (51,0.0114107) (52,0.0112064) (53,0.0110044) (54,0.0107901) (55,0.0105519) (56,0.0102839) (57,0.00998763) (58,0.00967252) (59,0.00935355) (60,0.00904742) (61,0.00876811) (62,0.00852376) (63,0.00831568) (64,0.00813921) (65,0.00798544) (66,0.00784306) (67,0.00770007) (68,0.00754534) (69,0.00737022) (70,0.00717027) (71,0.00694668) (72,0.00670663) (73,0.00646191) (74,0.00622596) (75,0.00601042) (76,0.00582259) (77,0.00566453) (78,0.00553376) (79,0.00542456) (80,0.00532941) (81,0.00524001) (82,0.00514812) (83,0.00504626) (84,0.0049286) (85,0.00479199) (86,0.00463703) (87,0.00446848) (88,0.00429461) (89,0.00412528) (90,0.00396945) (91,0.00383319) (92,0.00371888) (93,0.00362559) (94,0.00355002) (95,0.00348759) (96,0.00343313) (97,0.0033814) (98,0.00332729) (99,0.00326618) (100,0.00319423) (101,0.00310906) (102,0.00301042) (103,0.00290072) (104,0.00278492) (105,0.00266959) (106,0.00256129) (107,0.00246505) (108,0.00238349) (109,0.00231688) (110,0.0022637) (111,0.00222139) (112,0.00218692) (113,0.00215719) (114,0.00212915) (115,0.00209989) (116,0.00206665) (117,0.00202701) (118,0.00197908) (119,0.00192197) (120,0.00185626) (121,0.00178419) (122,0.00170947) (123,0.00163651) (124,0.00156934) (125,0.00151076) (126,0.00146195) (127,0.0014227) (128,0.00139184) (129,0.00136771) (130,0.0013485) (131,0.00133244) (132,0.00131786) (133,0.00130316) (134,0.00128681) (135,0.00126735) (136,0.00124346) (137,0.0012141) (138,0.00117883) (139,0.00113805) (140,0.0010932) (141,0.00104661) (142,0.00100108) (143,0.000959129) (144,0.000922544) (145,0.0008921) (146,0.000867697) (147,0.000848643) (148,0.000833956) (149,0.000822582) (150,0.000813507) (151,0.000805804) (152,0.00079862) (153,0.000791151) (154,0.000782608) (155,0.000772206) (156,0.000759189) (157,0.000742912) (158,0.000722983) (159,0.000699445) (160,0.000672936)};
+\end{axis}\end{tikzpicture}}
+\caption{Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.}\end{figure}
+
+\hypertarget{ch03-reading-distances-and-contours-in-a-triangle}{%
+\section{Reading distances and contours in a triangle}\label{ch03-reading-distances-and-contours-in-a-triangle}}
+
+Barycentric coordinates have another useful interpretation. The perpendicular distance from a point to side \(AB\), divided by the triangle's full altitude, is \(p_C\). To verify this, note that the side is horizontal and that the point's height is \((\sqrt3/2)p_C\). By symmetry, the same statement holds for the other two coordinates and their opposite sides. Lines of constant \(p_C\) are therefore parallel to side \(AB\).
+
+\begin{example}[Recovering a composition from height ratios]
+
+Suppose a point lies at one fifth of the full altitude from side \(AB\) and at one half of the full altitude from side \(BC\). The first measurement gives \(p_C=1/5\), and the second gives \(p_A=1/2\). The remaining coordinate is \(p_B=3/10\). The three normalized distances add to one because they are barycentric coordinates.
+
+\end{example}
+
+A contour of a function is a set of states with the same function value. For the coordinate product, a contour is described by \(p_Ap_Bp_C=c\). The product is zero on the boundary and at most \(1/27\) in the interior. Product contours surround the center, but a one-step decrease in product does not specify a unique direction along a contour or a unique next coordinate. A scalar diagnostic compresses a two-dimensional state into one number, so it necessarily discards some detail.
+
+\hypertarget{ch03-counting-the-interior-and-the-boundary}{%
+\section{Counting the interior and the boundary}\label{ch03-counting-the-interior-and-the-boundary}}
+
+The stars-and-bars argument extends to \(k\) types. Nonnegative integer counts summing to \(N\) are encoded by \(N\) stars and \(k-1\) bars, so their number is \(\binom{N+k-1}{k-1}\). Empty groups correspond to zero counts. If every count must be positive, first give one token to each type. The remaining \(N-k\) tokens can be distributed freely, giving \(\binom{N-1}{k-1}\) states when \(N\geq k\).
+
+For three types, the number of boundary states is the total minus the strictly positive count. For \(N\geq3\), this is \[\binom{N+2}{2}-\binom{N-1}{2}=3N.\] One can also count \(N+1\) points on each of three edges and subtract three to correct the double counting of vertices. The two answers agree. Comparing two counting arguments is a useful way to verify a combinatorial formula.
+
+\begin{example}[A larger lattice]
+
+At \(N=8\), there are \(\binom{10}{2}=45\) total states and \(\binom72=21\) strictly positive states. The remaining \(24\) are on the boundary. A uniform distribution over these 45 lattice vertices would be a probability model on compositions. It is different from independently sampling eight individuals from a uniform three-type population: the latter assigns each count vector a multinomial weight.
+
+\end{example}
+
+\hypertarget{ch03-sampling-can-change-support}{%
+\section{Sampling can change support}\label{ch03-sampling-can-change-support}}
+
+At a positive state, deterministic positive multiplication keeps every type present. A sample of \(N\) individuals can omit a type by chance. On an edge of the triangle, a sampling model without mutation cannot restore the missing type, because its sampling probability is zero. A finite sampled population may therefore reach an edge and subsequently evolve on that edge, even when a deterministic trajectory remains in the interior for every finite step.
+
+This observation explains why a deterministic trajectory and a simulated finite population should be labeled separately. Both can be useful descriptions. The deterministic rule isolates state-dependent reweighting; the sampled model also includes fluctuations associated with finitely many individuals. Chapter 4 provides exact probabilities for those fluctuations.
+
+\hypertarget{ch03-exercises}{%
+\section{Exercises}\label{ch03-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Plot \((1,0,0)\), \((0,1/2,1/2)\), and \((1/4,1/4,1/2)\) using barycentric coordinates.
+
+\item 
+
+Recover the probabilities of the point \((u,v)=(1/2,\sqrt3/6)\).
+
+\item 
+
+List all count triples with \(N=2\). Verify the formula for their number.
+
+\item 
+
+How many lattice states are there for \(N=10\)? How many have all three counts positive?
+
+\item 
+
+List the neighbors of \((2,1,1)\) under one-token moves.
+
+\item 
+
+Compute the scores of the balanced cyclic table at \((1/5,1/2,3/10)\).
+
+\item 
+
+Verify algebraically that \(\sum_i p_if_i=0\) for the balanced table.
+
+\item 
+
+Derive the product update formula for exponential multipliers for any three scores, without assuming balance.
+
+\item 
+
+Explain why the product test says nothing new on an edge of the triangle. Determine whether the update can leave that edge.
+
+\item 
+
+Show that the center is the unique interior state where all balanced cyclic scores agree.
+
+\item 
+
+For the permutation rule, determine all fixed states and all possible periods.
+
+\item 
+
+Compare deterministic normalization with sampling a fixed number of individuals after normalization. Which can lose a type in a single step when every initial proportion is positive?
+
+\end{exercises}
+
+\hypertarget{ch03-selected-solutions}{%
+\section{Selected solutions}\label{ch03-selected-solutions}}
+
+\textbf{2.} The recovered probabilities are \((1/3,1/3,1/3)\), the center.
+
+\textbf{4.} There are \(\binom{12}{2}=66\) states. Subtract one token from each positive count; the remaining three nonnegative counts sum to \(7\), giving \(\binom92=36\) strictly positive states.
+
+\textbf{5.} The neighbors are \((1,2,1)\), \((1,1,2)\), \((3,0,1)\), \((2,0,2)\), \((3,1,0)\), and \((2,2,0)\).
+
+\textbf{6.} The scores are \((1/5,1/10,-3/10)\).
+
+\textbf{8.} Multiplying the three update equations gives \(P(p^+)=P(p)e^{\eta\sum_i f_i}/Z^3\). Balance is needed only to simplify the exponential factor to one.
+
+\textbf{11.} A fixed state has three equal coordinates and is therefore the center. Every other state has period three, since applying the permutation three times is the identity and a period dividing three is either one or three.
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Plot the states \((1,0,0)\), \((1/2,1/2,0)\), \((1/3,1/3,1/3)\), and \((1/2,1/3,1/6)\). Calculate their Cartesian coordinates and label the absent types on each edge.
+\item
+  Draw the denominator-four token lattice. Count its states in two ways and list all neighbors of \((2,1,1)\). Distinguish a one-token move from a general normalized growth step.
+\item
+  For the balanced cyclic table, derive the three scores at \((1/2,1/3,1/6)\). Verify that their sum and their probability-weighted mean are both zero. Calculate one exponential step with intensity \(1\).
+\item
+  Run exponential cyclic updates at intensities \(0.1\), \(0.5\), and \(1\) for fifty steps from the same state. Record the initial and final coordinate products and inspect the triangle traces. Use the exact product identity to explain the direction of change.
+\item
+  Compare with the permutation rule. List its first four states and prove its period and product preservation. Explain why the permutation calculation does not establish product preservation for score-based selection.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Counting outcomes and sampling distributions}
+Probability describes both a population's composition and the uncertainty of an observation. If a population has proportions \(p_A,p_B,p_C\) and one individual is chosen uniformly, these proportions are the probabilities of the observed type. Repeating the observation produces a sample. Its composition fluctuates, even when the underlying population stays fixed.
+
+Counting tells us which sample compositions are possible and how many ordered samples produce each one. It supplies exact formulas for uncertainty at a finite sample size.
+
+\hypertarget{ch04-outcomes-events-and-trees}{%
+\section{Outcomes, events, and trees}\label{ch04-outcomes-events-and-trees}}
+
+An \textbf{outcome} is a single possible result. An \textbf{event} is a collection of outcomes. For a finite probability model, the probability of an event is the sum of the probabilities of its outcomes. The total probability of all outcomes is one.
+
+Two observations are \textbf{independent} when the probability of a specified pair is the product of the individual probabilities. More generally, the probability of an ordered independent sample \((i_1,\ldots,i_N)\) is \(p_{i_1}\cdots p_{i_N}\). A tree represents this multiplication: each level is another observation, and the probability of a leaf is the product of the branch probabilities along its path.
+
+\begin{example}[Sampling with and without replacement]
+
+A box contains two red tokens and one blue token. Two draws with replacement give \(P(RB)=(2/3)(1/3)=2/9\). Without replacement, the second draw depends on the first, and \(P(RB)=(2/3)(1/2)=1/3\). The independent-sampling formulas below apply to the first procedure. A finite-population procedure without replacement requires its own probabilities.
+
+\end{example}
+
+\hypertarget{ch04-binomial-counting}{%
+\section{Binomial counting}\label{ch04-binomial-counting}}
+
+Suppose each observation is a success with probability \(p\) and a failure with probability \(1-p\). An ordered sample with \(k\) successes has probability \(p^k(1-p)^{N-k}\). The successes can occupy \(\binom Nk\) different sets of positions, where \[\binom Nk=\frac{N!}{k!(N-k)!},\qquad N!=1\cdot2\cdots N,\quad 0!=1.\] Therefore the success count \(K\) has the \textbf{binomial distribution} \[P(K=k)=\binom Nk p^k(1-p)^{N-k},\qquad k=0,\ldots,N.\] The binomial coefficient counts positions, while the powers account for their probabilities. Keeping these two roles separate helps prevent common mistakes.
+
+\begin{example}[Exactly three successes]
+
+With \(N=5\) and \(p=2/3\), the probability of exactly three successes is \[\binom53(2/3)^3(1/3)^2=80/243.\] The probability of one particular ordered sample, such as \(SSFSF\), is only \(8/243\). There are ten orders with the same count.
+
+\end{example}
+
+Adding the binomial probabilities gives one. This follows either because the counts partition all possible samples or by expanding \((p+(1-p))^N\) and grouping terms by the number of factors \(p\).
+
+\hypertarget{ch04-multinomial-counts-and-empirical-distributions}{%
+\section{Multinomial counts and empirical distributions}\label{ch04-multinomial-counts-and-empirical-distributions}}
+
+For \(k\) categories, let \(n_i\) be the observed count of category \(i\), so \(\sum_i n_i=N\). The number of ordered samples with these counts is \[\Omega(n_1,\ldots,n_k)=\frac{N!}{n_1!\cdots n_k!}.\] One derivation chooses the positions of category one, then category two among the remaining positions, and continues. The resulting binomial coefficients telescope to the displayed ratio.
+
+The probability of this count vector is \[P(n_1,\ldots,n_k)=\Omega(n_1,\ldots,n_k)\prod_i p_i^{n_i}.\] The \textbf{empirical distribution} is \(\widehat p_i=n_i/N\). It belongs to the token lattice of Chapter 3. Several ordered samples can have the same empirical distribution, and \(\Omega\) measures this multiplicity. If \(n_i=0\), the factor \(p_i^{n_i}\) is taken as one, including when \(p_i=0\); no observation of that category is being required.
+
+\begin{example}[A count vector on the triangle]
+
+For \(N=4\) and counts \((2,1,1)\), the multiplicity is \(4!/(2!1!1!)=12\). Under \(p=(1/2,1/3,1/6)\), each compatible ordered sample has probability \((1/2)^2(1/3)(1/6)=1/72\). The count vector therefore has probability \(12/72=1/6\).
+
+\end{example}
+
+\hypertarget{ch04-expectation-and-spread-from-finite-sums}{%
+\section{Expectation and spread from finite sums}\label{ch04-expectation-and-spread-from-finite-sums}}
+
+A \textbf{random variable} assigns a numerical value to each outcome. If it takes values \(x_i\) with probabilities \(p_i\), its \textbf{expectation} is \[\mathbb E[X]=\sum_i p_ix_i.\] This weighted average describes the center of its distribution. Its \textbf{variance} is the average squared distance from that center: \[\operatorname{Var}(X)=\sum_i p_i(x_i-\mathbb E[X])^2
+=\mathbb E[X^2]-(\mathbb E[X])^2.\] The last equality follows by expanding the square and using \(\sum_i p_i=1\). Variance is nonnegative. Its square root, the \textbf{standard deviation}, has the same units as the original readings.
+
+\begin{example}[A finite measurement table]
+
+Suppose a device reads \(0,1,3\) with probabilities \(1/2,1/3,1/6\). Its mean is \(0+1/3+3/6=5/6\). Its second moment is \(0+1/3+9/6=11/6\), so its variance is \(11/6-25/36=41/36\). The mean need not be one of the possible readings.
+
+\end{example}
+
+For two random variables, finite-sum expansion gives \(\mathbb E[X+Y]=\mathbb E[X]+\mathbb E[Y]\), whether or not they are independent. For independent variables, multiplication of probabilities also gives \(\mathbb E[XY]=\mathbb E[X]\mathbb E[Y]\). Expanding the square then shows that independent variances add.
+
+Apply these facts to indicator variables \(I_t\), equal to one on a success and zero on a failure. They satisfy \(\mathbb E[I_t]=p\) and \(\operatorname{Var}(I_t)=p(1-p)\). Since \(K=I_1+\cdots+I_N\) for independent trials, \[\mathbb E[K]=Np,\qquad \operatorname{Var}(K)=Np(1-p).\] Dividing by \(N\) gives the empirical proportion's mean and variance: \[\mathbb E[\widehat p]=p,\qquad
+\operatorname{Var}(\widehat p)=\frac{p(1-p)}{N}.\] Thus a fourfold increase in sample size halves the standard deviation. A particular sample may still fluctuate more than an earlier smaller sample; the formula concerns the distribution over repeated samples.
+
+\hypertarget{ch04-rare-categories-and-missing-observations}{%
+\section{Rare categories and missing observations}\label{ch04-rare-categories-and-missing-observations}}
+
+If a category has probability \(p>0\), the chance of missing it in all \(N\) independent observations is \((1-p)^N\). A zero empirical count therefore does not establish that the underlying probability is zero. This matters when empirical probabilities will later appear inside logarithms or ratios.
+
+\begin{example}[How often is a rare type missed?]
+
+A type with probability \(1/20\) is absent from a sample of size \(20\) with probability \((19/20)^{20}\approx0.3585\). Even though its expected count is one, observing no copies is quite common. At size \(100\), the probability of missing it is approximately \(0.00592\).
+
+\end{example}
+
+The deterministic update of a composition and the random sampling of a composition can be combined in a two-stage model. First compute \(p^+\) using a growth rule. Then draw a multinomial sample of size \(N\) with probabilities \(p^+\). The conditional average of the sampled composition is \(p^+\), but the realized composition is a random lattice point. This provides a precise way to model finite-population variation.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\begin{axis}[width=12.5cm,height=5.8cm,xlabel={Success count $k$},ylabel={Probability or frequency},xmin=-.5,xmax=10.5,ymin=0,ymax=.35,xtick={0,1,...,10},legend pos=north east,ybar,bar width=5pt]
+\addplot[teal,fill=teal!55] coordinates {(0,0.0282475) (1,0.121061) (2,0.233474) (3,0.266828) (4,0.200121) (5,0.102919) (6,0.0367569) (7,0.00900169) (8,0.0014467) (9,0.000137781) (10,5.9049e-06)};\addlegendentry{Exact binomial}
+\addplot[copper,fill=copper!55] coordinates {(0,0.03) (1,0.145) (2,0.22) (3,0.255) (4,0.18) (5,0.12) (6,0.04) (7,0.01) (8,0) (9,0) (10,0)};\addlegendentry{200 samples}
+\end{axis}\end{tikzpicture}}
+\caption{Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.}\end{figure}
+
+\hypertarget{ch04-conditional-probability-and-dependent-draws}{%
+\section{Conditional probability and dependent draws}\label{ch04-conditional-probability-and-dependent-draws}}
+
+If an event \(B\) has positive probability, the \textbf{conditional probability} of \(A\) given \(B\) is \(P(A\mid B)=P(A\cap B)/P(B)\). Here \(A\cap B\) means that both events occur. Rearranging gives the multiplication rule \(P(A\cap B)=P(B)P(A\mid B)\). Independence is the special case in which conditioning on one event does not change the probability of the other.
+
+An outcome tree can therefore represent dependent observations as well. Its branch probabilities must be conditioned on the path already followed. The product along a path still gives the leaf probability. What changes is the branch labeling.
+
+\begin{example}[Two red tokens without replacement]
+
+A box has three red and two blue tokens. The probability of two red draws without replacement is \((3/5)(2/4)=3/10\). With replacement it is \((3/5)^2=9/25\). In the first procedure, observing a red token changes the available composition. The second red branch must use the updated box, rather than the initial probability.
+
+\end{example}
+
+\hypertarget{ch04-why-multinomial-probabilities-add-to-one}{%
+\section{Why multinomial probabilities add to one}\label{ch04-why-multinomial-probabilities-add-to-one}}
+
+There are \(k^N\) ordered length-\(N\) samples from \(k\) labels. Each receives its product probability. Summing over all possible labels at the first position, then the second, and continuing gives \[\sum_{i_1,\ldots,i_N}p_{i_1}\cdots p_{i_N}=(p_1+\cdots+p_k)^N=1.\] Grouping these ordered samples by their count vectors replaces each collection of equal products with its multiplicity times one product. The resulting sum is exactly the sum of the multinomial probabilities. This establishes normalization and explains the multinomial expansion as a grouping of outcomes.
+
+At \(N=2\) with three labels, there are nine ordered samples but only six count vectors. The vectors \((2,0,0)\), \((0,2,0)\), and \((0,0,2)\) each have multiplicity one. The three other vectors each have multiplicity two. Counting a vector once without this factor would omit ordered outcomes.
+
+\hypertarget{ch04-a-finite-bound-on-sampling-error}{%
+\section{A finite bound on sampling error}\label{ch04-a-finite-bound-on-sampling-error}}
+
+Variance can control the probability of a large error using a simple comparison of sums. For a random variable \(X\) with mean \(\mu\), every outcome satisfying \(|X-\mu|\geq a\) contributes at least \(a^2\) to the squared deviation. Therefore \[\operatorname{Var}(X)=\mathbb E[(X-\mu)^2]\geq a^2P(|X-\mu|\geq a),\] and hence \(P(|X-\mu|\geq a)\leq\operatorname{Var}(X)/a^2\). This is \textbf{Chebyshev's inequality}. The argument works for a finite distribution by comparing the indicated terms in its expectation sum.
+
+For an empirical binary proportion, it gives \[P(|\widehat p-p|\geq\varepsilon)\leq\frac{p(1-p)}{N\varepsilon^2}\leq\frac{1}{4N\varepsilon^2}.\] The last inequality follows from \(p(1-p)=1/4-(p-1/2)^2\leq1/4\). This bound is often conservative, but it is valid for every \(p\) under independent sampling.
+
+\begin{example}[Choosing a sample size from a bound]
+
+To make the probability of an empirical error of at least \(0.1\) no greater than \(0.05\), uniformly over binary probabilities, it is sufficient that \(1/(4N(0.1)^2)\leq0.05\). Solving gives \(N\geq500\). A sharper calculation for a specified \(p\) can use the exact binomial probabilities. The bound provides a guaranteed size without that longer calculation.
+
+\end{example}
+
+A probability bound concerns repetitions of the stated sampling procedure. It does not certify that an already observed empirical table lies within the tolerance. The model, its independence assumption, and its sample size remain part of the conclusion.
+
+\hypertarget{ch04-exercises}{%
+\section{Exercises}\label{ch04-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Draw the two-level probability tree for independent binary observations with \(p=1/3\).
+
+\item 
+
+Find the probability of exactly two successes in four independent trials with success probability \(1/3\).
+
+\item 
+
+List the six ordered binary samples of length four with two successes.
+
+\item 
+
+Derive the multinomial coefficient for three categories by choosing positions in two stages.
+
+\item 
+
+Find the multiplicity and probability of counts \((1,2,1)\) under \(p=(1/2,1/3,1/6)\).
+
+\item 
+
+For readings \(1,2,5\) with probabilities \(1/4,1/2,1/4\), compute the mean and variance.
+
+\item 
+
+Prove the identity \(\operatorname{Var}(X)=\mathbb E[X^2]-(\mathbb E[X])^2\) by expansion.
+
+\item 
+
+For a binomial sample with \(N=100\), \(p=0.2\), find the mean and standard deviation of the count and of the empirical proportion.
+
+\item 
+
+A category has probability \(0.1\). Find the first integer sample size for which its probability of being missed is below \(0.05\). A calculator may be used.
+
+\item 
+
+Explain why observing zero copies of a category is compatible with a positive underlying probability. Give a numerical example.
+
+\item 
+
+For two independent samples of size \(N\), find the variance of the difference of their empirical success proportions.
+
+\item 
+
+Describe a simulation of a population with normalized selection followed by multinomial sampling. Identify which stage is deterministic and which stage is random.
+
+\end{exercises}
+
+\hypertarget{ch04-selected-solutions}{%
+\section{Selected solutions}\label{ch04-selected-solutions}}
+
+\textbf{2.} The probability is \(\binom42(1/3)^2(2/3)^2=8/27\).
+
+\textbf{5.} The multiplicity is \(12\). The probability is \(12(1/2)(1/3)^2(1/6)=1/9\).
+
+\textbf{6.} The mean is \(5/2\) and the second moment is \(17/2\), giving variance \(9/4\).
+
+\textbf{8.} The count has mean \(20\) and standard deviation \(4\). The empirical proportion has mean \(0.2\) and standard deviation \(0.04\).
+
+\textbf{9.} Since \(0.9^{28}\approx0.05233\) and \(0.9^{29}\approx0.04710\), the first qualifying size is \(29\).
+
+\textbf{11.} Independence makes the variance of the difference equal to the sum of the variances, namely \(2p(1-p)/N\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Draw the complete outcome tree for three independent binary observations with success probability \(1/3\). Group the eight leaves by success count and recover the four binomial probabilities.
+\item
+  In the demonstration, choose sample size \(10\) and success probability \(0.3\). Compute the exact probability of counts zero, three, and ten. Run 200 simulated samples and compare empirical histogram frequencies with the exact probabilities.
+\item
+  For sample size \(40\) and success probability \(0.3\), calculate the mean and standard deviation of the empirical proportion. Compare this with size \(10\). Explain the factor by which the spread changes.
+\item
+  For counts \((2,1,1)\) under \(p=(1/2,1/3,1/6)\), calculate the probability of one specified ordered sample and of the entire count vector. Explain where the multinomial coefficient enters.
+\item
+  A category has probability \(0.02\). Calculate its chance of being missed in samples of sizes \(20\), \(50\), and \(100\). Discuss the inference one can draw from a zero count, and distinguish sampling variation from deterministic growth.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Entropy, code trees, and multiplicity}
+A message that was very likely conveys less surprise than a message that was very unlikely. Logarithms turn this idea into an additive numerical measure. The same measure appears in binary code lengths and in the number of ordered samples with a specified composition. These connections give entropy a finite combinatorial interpretation.
+
+\hypertarget{ch05-logarithms-measure-multiplicative-scales}{%
+\section{Logarithms measure multiplicative scales}\label{ch05-logarithms-measure-multiplicative-scales}}
+
+For \(a>0\), \(\log_2a\) is the exponent to which \(2\) must be raised to obtain \(a\). Thus \(\log_2 8=3\) and \(\log_2(1/4)=-2\). The natural logarithm \(\ln a\) uses base \(e\). The conversion formula is \(\log_2a=\ln a/\ln2\).
+
+The identities \[\ln(ab)=\ln a+\ln b,\qquad \ln(a^r)=r\ln a\] allow us to express repeated multiplication as addition. The logarithm is increasing, so it preserves inequalities between positive numbers. No method for differentiating logarithms is needed for these uses.
+
+The \textbf{surprisal} of an outcome of probability \(p>0\) is \(-\log_2p\) bits. An event of probability \(1/2\) has one bit of surprisal; an event of probability \(1/8\) has three bits. For independent outcomes with probabilities \(p\) and \(q\), their combined surprisal is the sum because \(-\log_2(pq)=-\log_2p-\log_2q\).
+
+\hypertarget{ch05-entropy-is-average-surprisal}{%
+\section{Entropy is average surprisal}\label{ch05-entropy-is-average-surprisal}}
+
+For a finite distribution \(p\), its \textbf{Shannon entropy in bits} is \[H_2(p)=-\sum_i p_i\log_2p_i.\] Using natural logarithms gives entropy in \textbf{nats}: \[H(p)=-\sum_i p_i\ln p_i=H_2(p)\ln2.\] A zero-probability outcome is assigned contribution zero to the entropy sum. This convention reflects that the outcome is never observed; it avoids evaluating its individual infinite surprisal inside an average.
+
+\begin{example}[Three distributions on the same labels]
+
+The distribution \((1,0,0,0)\) has entropy zero bits. The distribution \((1/2,1/4,1/4,0)\) has entropy \(1/2+1/2+1/2=3/2\) bits. The uniform distribution on four labels has entropy \(2\) bits. The label set alone does not determine uncertainty; the probabilities matter.
+
+\end{example}
+
+Entropy is always nonnegative, since \(-\ln p_i\geq0\) for \(0<p_i\leq1\). It is at most \(\ln k\) for a distribution on \(k\) labels. For a positive distribution, weighted arithmetic-geometric mean gives \[\prod_i(1/p_i)^{p_i}\leq\sum_i p_i(1/p_i)=k.\] Taking logarithms proves \(H(p)\leq\ln k\). If some entries vanish, apply the same argument on the support, the set of labels with positive probability. Equality at the \(\ln k\) bound requires all \(k\) probabilities to equal \(1/k\).
+
+\hypertarget{ch05-binary-trees-turn-messages-into-bit-strings}{%
+\section{Binary trees turn messages into bit strings}\label{ch05-binary-trees-turn-messages-into-bit-strings}}
+
+A \textbf{prefix code} assigns each label a bit string such that no string is the beginning of another. A binary tree represents the code: a left branch contributes \(0\), a right branch contributes \(1\), and a label occupies a leaf. Decoding proceeds along branches until it reaches a leaf, after which it starts again at the root.
+
+\begin{example}[A code matched to three probabilities]
+
+For probabilities \((1/2,1/4,1/4)\), assign \(A\mapsto0\), \(B\mapsto10\), \(C\mapsto11\). The codeword lengths are \((1,2,2)\), so their expected length is \((1/2)1+(1/4)2+(1/4)2=3/2\) bits. This equals the entropy because each codeword has length \(-\log_2p_i\).
+
+\end{example}
+
+If three labels are equally probable, the same code has expected length \(5/3\) bits, while the entropy is \(\log_2 3\approx1.5850\) bits. Individual code lengths must be whole numbers, which can prevent a single-symbol code from attaining the entropy exactly. Coding blocks of several symbols permits finer averages.
+
+For a prefix tree with longest code length \(L\), a leaf at depth \(\ell_i\) occupies \(2^{L-\ell_i}\) positions in a complete depth-\(L\) tree. Different leaves occupy disjoint positions. Consequently, \[\sum_i2^{-\ell_i}\leq1.\] This is the \textbf{Kraft inequality}. It is a counting restriction on possible code lengths. Chapter 6 will use relative entropy to show that every such code has expected length at least \(H_2(p)\).
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}[level distance=1.5cm,sibling distance=4cm,every node/.style={font=\small},edge from parent/.style={draw,ink,thick},label distance=2pt]
+\node[circle,draw=ink,inner sep=3pt]{}
+child{node[align=center]{$A:0$\\$p_A=1/2$} edge from parent node[above left]{$0$}}
+child{node[circle,draw=ink,inner sep=3pt]{}
+child[sibling distance=3cm]{node[align=center]{$B:10$\\$p_B=1/4$} edge from parent node[above left]{$0$}}
+child[sibling distance=3cm]{node[align=center]{$C:11$\\$p_C=1/4$} edge from parent node[above right]{$1$}}
+edge from parent node[above right]{$1$}};
+\node[align=left,anchor=west] at (5,-1.5){Expected length: $3/2$ bits\\Entropy: $3/2$ bits\\Kraft sum: $1$};
+\end{tikzpicture}}
+\caption{A binary prefix tree with code lengths 1, 2, and 2, matched to probabilities (1/2,1/4,1/4).}\end{figure}
+
+\hypertarget{ch05-multiplicity-and-entropy}{%
+\section{Multiplicity and entropy}\label{ch05-multiplicity-and-entropy}}
+
+Let counts \(n_i\) sum to \(N\), and set \(q_i=n_i/N\). The multiplicity \(\Omega=N!/\prod_i n_i!\) counts ordered samples with empirical distribution \(q\). Under the distribution \(q\) itself, every such ordered sample has probability \[\prod_iq_i^{n_i}=\exp\left(N\sum_iq_i\ln q_i\right)=e^{-NH(q)}.\] Therefore the probability of the entire collection of samples with this composition is \[\Omega e^{-NH(q)}\leq1.\] Taking logarithms gives the exact finite bound \[\frac{\ln\Omega}{N}\leq H(q).\] The left side is a logarithmic count per observation. It is generally smaller than the entropy at finite \(N\). This inequality requires only counting and the fact that an event cannot have probability greater than one.
+
+\begin{example}[A balanced sample of size four]
+
+For binary counts \((2,2)\), we have \(\Omega=6\). The logarithmic count per observation is \(\log_2 6/4\approx0.6462\) bits, while \(H_2(1/2,1/2)=1\) bit. The probability of exactly two successes under a fair binary model is \(6/16=3/8\). It is not the whole sample space, which explains the gap in the finite bound.
+
+\end{example}
+
+Many different count vectors are possible, so a single composition need not account for most samples. Entropy captures the exponential scale associated with a composition, while the exact multinomial coefficient records its finite multiplicity. We can compare the two numerically without assuming they are equal.
+
+\hypertarget{ch05-logarithms-also-simplify-dynamics}{%
+\section{Logarithms also simplify dynamics}\label{ch05-logarithms-also-simplify-dynamics}}
+
+For exponential selection, the ratio of two positive coordinates satisfies \[\frac{p_i^+}{p_j^+}=\frac{p_i}{p_j}e^{\eta(f_i-f_j)}.\] Taking natural logarithms yields the exact \textbf{log-odds increment} \[\ln\frac{p_i^+}{p_j^+}-\ln\frac{p_i}{p_j}=\eta(f_i-f_j).\] This is an additive difference equation. If scores are constant, repeated addition solves it. More directly, \[p_{i,t}=\frac{p_{i,0}e^{t\eta f_i}}{\sum_jp_{j,0}e^{t\eta f_j}}.\] When scores depend on the current state, the log-odds increment still holds for each step, but the score differences must be summed along the trajectory.
+
+\begin{example}[Accumulating evidence in odds]
+
+Suppose two hypotheses have initial odds \(1:4\). A sequence of observations has likelihood ratios \(2\), \(3\), and \(1/2\) in favor of the first hypothesis. Multiplying gives final odds \(3:4\), so its final probability is \(3/7\). Equivalently, the log-odds change by \(\ln2+\ln3-\ln2=\ln3\). Likelihood ratios are multiplicative weights, a connection we will revisit in learning updates.
+
+\end{example}
+
+\hypertarget{ch05-entropy-of-a-pair-of-observations}{%
+\section{Entropy of a pair of observations}\label{ch05-entropy-of-a-pair-of-observations}}
+
+Let \(X\) and \(Y\) have joint probabilities \(p_{ij}=P(X=i,Y=j)\). Their joint entropy is \(H(X,Y)=-\sum_{i,j}p_{ij}\ln p_{ij}\). The marginal probability of \(X=i\) is \(p_i=\sum_jp_{ij}\). When \(p_i>0\), write \(r_{j\mid i}=p_{ij}/p_i\) for the conditional table of \(Y\) given that value of \(X\).
+
+Using \(p_{ij}=p_i r_{j\mid i}\) and splitting the logarithm gives the \textbf{chain rule} \[H(X,Y)=H(X)+\sum_i p_iH(Y\mid X=i).\] The second term averages the entropy of the conditional tables. Values of \(i\) with probability zero contribute zero. The formula states that describing a pair can be organized as describing the first label and then describing the second label given the first.
+
+If the observations are independent, every conditional table equals the marginal table of \(Y\), so \(H(X,Y)=H(X)+H(Y)\). Applying this repeatedly gives entropy \(NH(p)\) for an independent length-\(N\) sample from \(p\). This is the average surprisal of an ordered sample; it is different from the logarithm of the number of samples in one count class.
+
+\begin{example}[Dependence changes joint uncertainty]
+
+Let \(X\) be a fair binary label. If \(Y=X\), the two possible pairs are \((0,0)\) and \((1,1)\), each with probability \(1/2\). Joint entropy is one bit: knowing the first label determines the second. If \(Y\) is instead an independent fair label, all four pairs have probability \(1/4\), giving two bits of joint entropy. The marginal tables are the same in the two cases, while their dependence differs.
+
+\end{example}
+
+\hypertarget{ch05-coding-blocks-improves-fractional-averages}{%
+\section{Coding blocks improves fractional averages}\label{ch05-coding-blocks-improves-fractional-averages}}
+
+Return to three equally likely labels. A single-label prefix code with lengths \((1,2,2)\) averages \(5/3\) bits per label. For a block of two labels there are nine equally likely ordered pairs. A binary tree can assign seven of these pairs length three and the remaining two length four. Its Kraft sum is \(7/8+2/16=1\), and such a tree can be formed by splitting one leaf of a complete depth-three tree into two children.
+
+The expected length per pair is \((7\cdot3+2\cdot4)/9=29/9\) bits, or \(29/18\approx1.6111\) bits per original label. This is closer to \(\log_23\approx1.5850\) than \(5/3\approx1.6667\). The calculation exhibits how whole-number lengths for blocks allow smaller fractional averages per symbol.
+
+\begin{example}[An explicit two-label code]
+
+List the nine ordered pairs as \(AA,AB,AC,BA,BB,BC,CA,CB,CC\). Assign the first seven the words \(000,001,010,011,100,101,110\), and assign the last two \(1110,1111\). No word prefixes another. Each pair is equally likely, so the expected length is \(29/9\) bits per pair, as calculated above.
+
+\end{example}
+
+\hypertarget{ch05-interpreting-a-change-of-labels}{%
+\section{Interpreting a change of labels}\label{ch05-interpreting-a-change-of-labels}}
+
+Entropy depends on probabilities and is unchanged by merely renaming or permuting labels. Splitting or merging categories is a different operation. Splitting a label into two distinguishable sublabels can increase entropy because there is more to specify. Merging labels can remove that distinction. For example, merging the two probability-\(1/4\) labels in \((1/2,1/4,1/4)\) gives \((1/2,1/2)\) and reduces entropy from \(3/2\) bits to one bit. Later, a stochastic channel will provide a general language for such recording operations.
+
+\hypertarget{ch05-exercises}{%
+\section{Exercises}\label{ch05-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Evaluate \(\log_2(1/16)\), \(\ln(e^3)\), and \(\log_2 32\).
+
+\item 
+
+Find the surprisal in bits of outcomes with probabilities \(1/2\), \(1/4\), and \(1/32\).
+
+\item 
+
+Compute the entropy in bits of \((1/2,1/8,1/8,1/4)\).
+
+\item 
+
+Explain why a certain outcome contributes zero entropy and why an impossible outcome is assigned zero contribution to the average.
+
+\item 
+
+Construct a prefix code with lengths \((1,2,3,3)\). Find its expected length under the probabilities in Exercise 3, assigning the shortest code to the most probable label.
+
+\item 
+
+Can code lengths \((1,1,2)\) belong to a prefix code? Use the Kraft inequality.
+
+\item 
+
+For uniform probabilities on three labels, compute the expected length of the code \(0,10,11\) and compare it with entropy.
+
+\item 
+
+For binary counts \((3,3)\), compute the multiplicity, its base-two logarithm per observation, and the entropy of the empirical distribution.
+
+\item 
+
+Derive the finite multiplicity bound, carefully explaining why all ordered samples with the same counts have equal probability under \(q\).
+
+\item 
+
+For fixed scores \((0,1,2)\), equal initial proportions, and \(\eta=\ln2\), find the proportions at step three.
+
+\item 
+
+Show that adding a common value to every fixed score leaves all log-odds increments unchanged.
+
+\item 
+
+Give two distributions on four labels with different entropy but the same support. Explain their different average surprisals.
+
+\end{exercises}
+
+\hypertarget{ch05-selected-solutions}{%
+\section{Selected solutions}\label{ch05-selected-solutions}}
+
+\textbf{1.} The values are \(-4\), \(3\), and \(5\).
+
+\textbf{3.} The entropy is \(1/2+3/8+3/8+1/2=7/4\) bits.
+
+\textbf{5.} One code is \(0,10,110,111\), assigned in decreasing probability order. The expected length is \((1/2)1+(1/4)2+(1/8)3+(1/8)3=7/4\) bits.
+
+\textbf{6.} No.~The Kraft sum is \(1/2+1/2+1/4=5/4>1\).
+
+\textbf{8.} The multiplicity is \(\binom63=20\), so the logarithmic count per observation is \(\log_2 20/6\approx0.7203\) bits. The entropy is one bit.
+
+\textbf{10.} The unnormalized weights are \((1,8,64)\), giving \((1/73,8/73,64/73)\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Calculate the surprisals and entropy of \((1/2,1/4,1/4)\) in both bits and nats. Show explicitly how division by \(\ln2\) converts between the units.
+\item
+  Draw the prefix tree for codewords \(0,10,11\). Explain why a concatenation of these words can be decoded unambiguously. Compare its expected length under \((1/2,1/4,1/4)\) and under uniform probabilities.
+\item
+  In the demonstration, move probability mass toward a vertex, toward an edge midpoint, and toward the center. Record entropy and expected code length. Keep the code fixed and explain why its expected length need not equal entropy.
+\item
+  For binary counts \((2,2)\), \((4,4)\), and \((8,8)\), compute the multiplicities and their base-two logarithms per observation. Compare them with one bit. Derive the exact finite upper bound rather than assuming equality.
+\item
+  For fixed scores \((0,1,2)\) and intensity \(\ln2\), start with equal probabilities and compute three updates through accumulated scores. Verify that every log-odds increment equals intensity times score difference.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Relative entropy and finite contraction}
+Two probability tables can describe competing models of the same observations. Relative entropy measures a discrepancy between those tables, with a definite role for each argument. Its most useful properties follow from finite inequalities. We will also construct a recurrence for which relative entropy decreases at a provable rate.
+
+\hypertarget{ch06-cross-entropy-and-relative-entropy}{%
+\section{Cross-entropy and relative entropy}\label{ch06-cross-entropy-and-relative-entropy}}
+
+Suppose observations follow distribution \(q\), while a proposed model assigns probabilities \(p\). The average surprisal under the proposed model is the \textbf{cross-entropy} \[H(q,p)=-\sum_iq_i\ln p_i.\] Subtracting the actual entropy of \(q\) defines the \textbf{Kullback--Leibler divergence}, or \textbf{relative entropy}: \[D(q\|p)=\sum_iq_i\ln\frac{q_i}{p_i}=H(q,p)-H(q).\] All logarithms in this chapter are natural, so the units are nats. To express the same quantity in bits, divide by \(\ln2\). Terms with \(q_i=0\) contribute zero. If \(q_i>0\) and \(p_i=0\) for any label, the divergence is infinite: the proposed model makes an actually possible observation impossible.
+
+\begin{example}[The argument order matters]
+
+For \(q=(1/2,1/2)\) and \(p=(3/4,1/4)\), \[D(q\|p)=\tfrac12\ln(2/3)+\tfrac12\ln2=\tfrac12\ln(4/3)\approx0.1438.\] Reversing the arguments gives \((3/4)\ln(3/2)+(1/4)\ln(1/2)\approx0.1308\). The values differ. Relative entropy is a directed discrepancy rather than a distance satisfying symmetry.
+
+\end{example}
+
+\hypertarget{ch06-nonnegativity-from-an-arithmetic-geometric-inequality}{%
+\section{Nonnegativity from an arithmetic-geometric inequality}\label{ch06-nonnegativity-from-an-arithmetic-geometric-inequality}}
+
+First assume every \(q_i\) is positive and all corresponding \(p_i\) are positive. Weighted arithmetic-geometric mean gives \[\prod_i\left(\frac{p_i}{q_i}\right)^{q_i}\leq\sum_iq_i\frac{p_i}{q_i}=1.\] Taking logarithms and reversing the sign proves \(D(q\|p)\geq0\). If some \(q_i\) vanish, apply the inequality on the support of \(q\); the sum on the right is then at most one. The same conclusion holds. Equality requires \(p=q\), including agreement on the zero entries.
+
+This is \textbf{Gibbs' inequality}. It implies that, averaged under \(q\), no proposed probability table has a smaller logarithmic surprise than \(q\) itself. The conclusion is about a specified average; it does not say that every single observation favors the same model.
+
+\begin{example}[Uniform reference and entropy]
+
+Let \(u_i=1/k\). Expanding the definition gives \[D(p\|u)=\sum_i p_i\ln p_i+\ln k=\ln k-H(p).\] Gibbs' inequality therefore gives \(H(p)\leq\ln k\), and equality occurs exactly at the uniform distribution. Relative entropy expresses the gap from maximum entropy.
+
+\end{example}
+
+\hypertarget{ch06-finite-data-give-an-exact-likelihood-comparison}{%
+\section{Finite data give an exact likelihood comparison}\label{ch06-finite-data-give-an-exact-likelihood-comparison}}
+
+Suppose an ordered sample has counts \(n_i\) and empirical distribution \(\widehat q_i=n_i/N\). Under independent observations, its likelihood under model \(p\) is \(L(p)=\prod_i p_i^{n_i}\). Taking logarithms, \[\ln L(p)=N\sum_i\widehat q_i\ln p_i.\] Consequently, \[\ln L(\widehat q)-\ln L(p)=N D(\widehat q\|p).\] The same identity holds for the likelihood of the count vector, since its multinomial coefficient cancels in the ratio. It proves that the empirical table maximizes the likelihood over all distributions, using only Gibbs' inequality. A table with zero entries can maximize likelihood for the observed sample while assigning zero probability to a category that could appear in a later sample.
+
+\begin{example}[Comparing a sample with a proposed model]
+
+For ten binary observations with counts \((8,2)\), compare the empirical table \((0.8,0.2)\) with the fair model \((0.5,0.5)\). The divergence is \(0.8\ln1.6+0.2\ln0.4\approx0.1927\). The log-likelihood advantage is ten times this, approximately \(1.9274\), and the likelihood ratio is approximately \(6.872\).
+
+\end{example}
+
+\hypertarget{ch06-a-recurrence-with-guaranteed-contraction}{%
+\section{A recurrence with guaranteed contraction}\label{ch06-a-recurrence-with-guaranteed-contraction}}
+
+Fix a target distribution \(q\) and choose \(0<\lambda\leq1\). Define the \textbf{mixture update} \[p^+=(1-\lambda)p+\lambda q.\] Each coordinate is an ordinary weighted average. The difference from the target satisfies \(p^+-q=(1-\lambda)(p-q)\). Repeating this identity yields \[p_t=(1-\lambda)^t p_0+\bigl[1-(1-\lambda)^t\bigr]q.\] Thus the target is approached geometrically when \(0<\lambda<1\) and is reached in one step when \(\lambda=1\).
+
+Relative entropy satisfies a matching one-step bound: \[D(q\|p^+)\leq(1-\lambda)D(q\|p).\] For \(0<\lambda<1\) and positive entries, arithmetic-geometric mean gives, coordinate by coordinate, \[p_i^+=(1-\lambda)p_i+\lambda q_i\geq p_i^{1-\lambda}q_i^\lambda.\] Taking logarithms, multiplying by \(q_i\), and adding proves the bound. Zero terms can be handled by the stated conventions, or by approaching them with positive tables. The case \(\lambda=1\) is immediate. Iteration gives \(D(q\|p_t)\leq(1-\lambda)^tD(q\|p_0)\) whenever the initial divergence is finite.
+
+\begin{example}[Checking the bound numerically]
+
+Take \(q=(1/2,1/2)\), \(p=(0.9,0.1)\), and \(\lambda=1/2\). Then \(p^+=(0.7,0.3)\). The old divergence is approximately \(0.5108\) and the new divergence approximately \(0.08718\). The bound permits at most \(0.2554\), so it holds with room to spare. A bound need not be an equality to be useful.
+
+\end{example}
+
+The recurrence was chosen to have this property. A state-dependent payoff update is a different rule and requires its own analysis. A plotted decrease over a short run provides evidence for that run; an algebraic bound establishes the claim for every state covered by its assumptions.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\begin{axis}[width=12.5cm,height=5.8cm,xlabel={Step $t$},ylabel={Relative entropy (nats)},xmin=0,xmax=12,ymin=0,legend pos=north east]
+\addplot[teal,mark=*] coordinates {(0,0.510826) (1,0.223144) (2,0.113137) (3,0.0604663) (4,0.0331085) (5,0.0183531) (6,0.0102406) (7,0.0057345) (8,0.00321756) (9,0.00180733) (10,0.00101582) (11,0.000571144) (12,0.000321188)};\addlegendentry{$D(q\Vert p_t)$}
+\addplot[copper,dashed,mark=square*] coordinates {(0,0.510826) (1,0.383119) (2,0.287339) (3,0.215505) (4,0.161628) (5,0.121221) (6,0.090916) (7,0.068187) (8,0.0511402) (9,0.0383552) (10,0.0287664) (11,0.0215748) (12,0.0161811)};\addlegendentry{$(1-\lambda)^tD(q\Vert p_0)$}
+\end{axis}\end{tikzpicture}}
+\caption{Mixture contraction toward binary target (0.5,0.5) from (0.9,0.1), with mixture fraction 0.25. The proven bound lies above the actual divergence.}\end{figure}
+
+\hypertarget{ch06-mixing-and-the-value-of-entropy}{%
+\section{Mixing and the value of entropy}\label{ch06-mixing-and-the-value-of-entropy}}
+
+Let \(m=(1-\lambda)p+\lambda r\). Expanding the definitions gives the identity \[H(m)-(1-\lambda)H(p)-\lambda H(r)
+=(1-\lambda)D(p\|m)+\lambda D(r\|m).\] The right side is nonnegative, so entropy is \textbf{concave}: the entropy of a mixture is at least the mixture of the entropies. For \(0<\lambda<1\), equality holds precisely when \(p=r\). The identity explains how much uncertainty is gained when two different probability tables are pooled without retaining their source label.
+
+As another application of Gibbs' inequality, let a prefix code have lengths \(\ell_i\) and Kraft sum \(C=\sum_i2^{-\ell_i}\leq1\). Put \(r_i=2^{-\ell_i}/C\). Then \[D(p\|r)=-H(p)+(\ln2)\sum_i p_i\ell_i+\ln C\geq0.\] Hence the expected code length satisfies \(\sum_i p_i\ell_i\geq H_2(p)-\log_2C\geq H_2(p)\). The lower bound comes from a probability inequality combined with a counting restriction on trees.
+
+\hypertarget{ch06-likelihood-ratios-accumulate-by-addition}{%
+\section{Likelihood ratios accumulate by addition}\label{ch06-likelihood-ratios-accumulate-by-addition}}
+
+Suppose two models \(q\) and \(p\) assign positive probabilities to the same labels. For an ordered sample \((i_1,\ldots,i_N)\), the likelihood ratio is \(\prod_{t=1}^Nq_{i_t}/p_{i_t}\). Its logarithm is the sum of the individual log-likelihood ratios. If the sample really follows \(q\) independently, the expected value of each summand is \(D(q\|p)\). Linearity of expectation gives expected total log-likelihood ratio \(ND(q\|p)\).
+
+This expectation does not require every observed sample to favor \(q\). A particular run may contain unusual outcomes that favor \(p\). The divergence concerns average evidence under the specified sampling model. Reversing the model that generates the data changes the averaging weights and changes the relevant directed divergence.
+
+\begin{example}[Evidence can point either way in a single trial]
+
+Let \(q=(3/4,1/4)\) and \(p=(1/2,1/2)\). Observing the first label contributes \(\ln(3/2)>0\) to the log-likelihood ratio in favor of \(q\). Observing the second contributes \(\ln(1/2)<0\). Averaging with probabilities \(3/4\) and \(1/4\) gives \(D(q\|p)\approx0.1308>0\). The expected evidence favors the generating model even though one possible observation favors the other.
+
+\end{example}
+
+\hypertarget{ch06-a-finite-method-for-avoiding-zero-estimates}{%
+\section{A finite method for avoiding zero estimates}\label{ch06-a-finite-method-for-avoiding-zero-estimates}}
+
+Given counts \(n_i\), one may add a positive number \(\alpha\) to every count and normalize: \[\widetilde p_i=\frac{n_i+\alpha}{N+k\alpha}.\] This \textbf{additive smoothing} produces a positive table, including for labels not observed in the sample. If \(N>0\), it can be written as a mixture of the empirical table and uniform: \[\widetilde p=\frac{N}{N+k\alpha}\widehat p+\frac{k\alpha}{N+k\alpha}u.\] The added counts have an explicit weight. For a fixed \(\alpha\), that weight decreases as more observations arrive. Smoothing is a choice of estimator; the empirical likelihood-maximizing property by itself does not force it.
+
+\begin{example}[A sample with an unobserved category]
+
+For counts \((4,1,0)\) and \(\alpha=1\), the smoothed table is \((5/8,2/8,1/8)\). It is the mixture \((5/8)(4/5,1/5,0)+(3/8)(1/3,1/3,1/3)\). Every category now receives a positive probability. A later observation of the third label has finite surprisal under this table, whereas it would have infinite surprisal under the unsmoothed empirical table.
+
+\end{example}
+
+\hypertarget{ch06-a-symmetric-discrepancy-built-from-two-directed-ones}{%
+\section{A symmetric discrepancy built from two directed ones}\label{ch06-a-symmetric-discrepancy-built-from-two-directed-ones}}
+
+Although relative entropy is directed, a symmetric finite comparison can be formed by introducing the midpoint \(m=(p+r)/2\): \[\operatorname{JS}(p,r)=\frac12D(p\|m)+\frac12D(r\|m).\] This is the \textbf{Jensen--Shannon divergence}. By the entropy-mixture identity, it also equals \(H(m)-(H(p)+H(r))/2\). It is symmetric and nonnegative. It is finite even for disjoint supports, because the midpoint is positive wherever either input is positive.
+
+Furthermore, \(m_i\geq p_i/2\) gives \(\ln(p_i/m_i)\leq\ln2\) on the support of \(p\), so \(D(p\|m)\leq\ln2\). The same argument holds for \(r\), and consequently \(\operatorname{JS}(p,r)\leq\ln2\). For two disjoint pure states the value is exactly \(\ln2\). This provides another example of deriving a useful finite bound by comparing coordinates directly.
+
+\hypertarget{ch06-exercises}{%
+\section{Exercises}\label{ch06-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Compute \(D(q\|p)\) for \(q=(1,0)\) and \(p=(1/4,3/4)\). What happens if the first entry of \(p\) is zero?
+
+\item 
+
+Calculate both directed divergences between \((0.6,0.4)\) and \((0.3,0.7)\).
+
+\item 
+
+Prove that \(D(q\|p)=0\) implies \(p=q\), including the case where \(q\) has zero entries.
+
+\item 
+
+Verify \(D(p\|u)=\ln k-H(p)\) for a uniform reference on \(k\) labels.
+
+\item 
+
+For counts \((3,1)\), find the likelihood ratio of the empirical model to the fair model directly and through relative entropy.
+
+\item 
+
+Starting from \(p_0=(1,0,0)\) with target \(q=(1/3,1/3,1/3)\) and \(\lambda=1/4\), find \(p_1\) and \(p_2\).
+
+\item 
+
+Prove the explicit formula for the mixture recurrence by induction.
+
+\item 
+
+Starting with finite \(D(q\|p_0)\), find a sufficient integer number of mixture steps to reduce its bound by a factor of \(16\) when \(\lambda=1/2\).
+
+\item 
+
+Derive the entropy concavity identity by expanding all four terms.
+
+\item 
+
+Take \(p=(1,0)\) and \(r=(0,1)\). Compare their entropies with the entropy of their equally weighted mixture.
+
+\item 
+
+Use the prefix-code argument to bound the expected length of a code with lengths \((2,2,2)\) under uniform probabilities on three labels.
+
+\item 
+
+Propose a numerical experiment that tests divergence contraction. State which direction of the divergence you will compute and why the initial support matters.
+
+\end{exercises}
+
+\hypertarget{ch06-selected-solutions}{%
+\section{Selected solutions}\label{ch06-selected-solutions}}
+
+\textbf{1.} The divergence is \(\ln4\). If \(p_1=0\), it is infinite.
+
+\textbf{5.} The direct likelihood ratio is \([(3/4)^3(1/4)]/(1/2)^4=27/16\). Taking logarithms also gives \[4D\bigl((3/4,1/4)\|(1/2,1/2)\bigr)=\ln(27/16).\]
+
+\textbf{6.} The first two states are \((5/6,1/12,1/12)\) and \((17/24,7/48,7/48)\).
+
+\textbf{8.} Four steps suffice for the bound, since \((1/2)^4=1/16\). The actual divergence may decrease faster.
+
+\textbf{10.} The two unmixed entropies are zero. The equal mixture has entropy \(\ln2\) nats.
+
+\textbf{11.} The Kraft sum is \(3/4\). The stronger bound is \(\log_23-\log_2(3/4)=2\) bits. The actual expected length is exactly two bits.
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For \(q=(1/2,1/2)\) and \(p=(3/4,1/4)\), compute both directed relative entropies. Explain the meaning of each argument and why the results need not agree.
+\item
+  An independent binary sample has counts \((8,2)\). Compare the empirical and fair-model likelihoods directly and through \(10D(\widehat q\|p)\). Report both a log-likelihood ratio and a likelihood ratio.
+\item
+  In the demonstration, choose target A proportion \(0.5\), initial A proportion \(0.9\), and mixture fraction \(0.5\). Record five steps of the table, the actual \(D(q\|p_t)\), and the bound \((1-\lambda)^tD(q\|p_0)\).
+\item
+  Prove the coordinatewise arithmetic-geometric inequality used in the contraction argument. Explain what happens if the initial table has a zero where the target is positive and why the first mixture step repairs that support mismatch.
+\item
+  Choose two three-label tables and a mixture fraction. Verify the entropy concavity identity numerically, including both divergence terms. Explain what the identity says about hiding the source label when tables are pooled.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Square roots and statistical distance}
+The probability triangle is an excellent map of compositions, but its ordinary Euclidean distances treat all coordinate changes in the same way. Statistical comparison also depends on where the probability mass sits. Taking square roots reveals another geometry, one in which a probability table becomes a point on a sphere.
+
+This chapter uses lengths, dot products, and angles. Angles will be measured in radians: a full turn is \(2\pi\), a right angle is \(\pi/2\), and an arc of angle \(\alpha\) on a circle of radius \(R\) has length \(R\alpha\).
+
+\hypertarget{ch07-square-roots-place-probabilities-on-a-sphere}{%
+\section{Square roots place probabilities on a sphere}\label{ch07-square-roots-place-probabilities-on-a-sphere}}
+
+Map a probability vector \(p\) to the vector \[s(p)=(2\sqrt{p_1},\ldots,2\sqrt{p_k}).\] Its squared length is \(\sum_i(2\sqrt{p_i})^2=4\sum_i p_i=4\). Thus \(s(p)\) lies on a sphere of radius \(2\). Every coordinate is nonnegative, so only the nonnegative portion of the sphere is used. Conversely, a nonnegative vector \(s\) of length \(2\) gives probabilities \(p_i=s_i^2/4\).
+
+For two categories, the image is a quarter circle. For three, it is an octant of an ordinary sphere. The same formula works for more categories, although a direct spatial picture is then unavailable. Dot products and lengths still make sense as finite sums.
+
+\begin{example}[Pure and uniform distributions]
+
+The pure three-category state \((1,0,0)\) maps to \((2,0,0)\). The uniform state maps to \((2/\sqrt3,2/\sqrt3,2/\sqrt3)\). Two different pure states lie at right angles as viewed from the center of the sphere. They are maximally separated within its nonnegative portion.
+
+\end{example}
+
+\hypertarget{ch07-overlap-determines-the-angle}{%
+\section{Overlap determines the angle}\label{ch07-overlap-determines-the-angle}}
+
+The \textbf{Bhattacharyya coefficient}, or square-root overlap, is \[B(p,r)=\sum_i\sqrt{p_ir_i}.\] The dot product of the two sphere vectors is \(s(p)\cdot s(r)=4B(p,r)\). Since both lengths are \(2\), the cosine of their angle \(\alpha\) is \(B(p,r)\). The Cauchy--Schwarz inequality ensures \(B\leq1\): \[\left(\sum_i\sqrt{p_ir_i}\right)^2\leq\left(\sum_ip_i\right)\left(\sum_ir_i\right)=1.\] Also \(B\geq0\). The angle therefore lies in \([0,\pi/2]\).
+
+We define the \textbf{categorical Fisher--Rao distance} by the length of the shorter spherical arc: \[d(p,r)=2\arccos B(p,r).\] This normalization uses the sphere of radius \(2\). Equality of the tables gives distance zero; disjoint supports give distance \(\pi\). The construction is a standard finite probability geometry. Its arc formula can be used without developing differential geometry.
+
+\begin{example}[A distance calculated exactly]
+
+Let \(p=(1,0)\) and \(r=(1/4,3/4)\). Their overlap is \(1/2\), so their angle is \(\pi/3\) and their distance is \(2\pi/3\). The coordinate difference of the first probabilities is \(3/4\); it measures a different feature from the spherical distance.
+
+\end{example}
+
+\hypertarget{ch07-chords-arcs-and-hellinger-distance}{%
+\section{Chords, arcs, and Hellinger distance}\label{ch07-chords-arcs-and-hellinger-distance}}
+
+The straight chord joining the sphere vectors has squared length \[\|s(p)-s(r)\|^2=8\bigl(1-B(p,r)\bigr).\] To verify this, expand the square and use the squared lengths \(4\) and the dot product \(4B\). The \textbf{Hellinger distance} with the convention used here is \[h(p,r)=\sqrt{1-B(p,r)}
+=\frac1{\sqrt2}\left(\sum_i(\sqrt{p_i}-\sqrt{r_i})^2\right)^{1/2}.\] Thus the chord length is \(2\sqrt2\,h\). The arc and chord are different, but both increase as overlap decreases. Hellinger distance, spherical distance, and relative entropy should always be identified by their formulas, since their numerical scales and boundary behavior differ.
+
+\begin{example}[Behavior at zero probabilities]
+
+For \(p=(1,0)\) and \(r=(0,1)\), the overlap is zero, the Hellinger distance is one, and the spherical distance is \(\pi\). Both directed relative entropies are infinite. The square-root construction includes the boundary of the probability simplex at finite distance.
+
+\end{example}
+
+\hypertarget{ch07-a-complete-coordinate-for-binary-probabilities}{%
+\section{A complete coordinate for binary probabilities}\label{ch07-a-complete-coordinate-for-binary-probabilities}}
+
+For a binary distribution \((x,1-x)\), put \[\phi=\arcsin\sqrt{x},\qquad 0\leq\phi\leq\pi/2.\] Then \(x=\sin^2\phi\) and \(s=(2\sin\phi,2\cos\phi)\). The angle \(\phi\) specifies a point on the quarter circle. Since the radius is \(2\), the arc coordinate measured from \(x=0\) is \(2\phi\). Two binary distributions therefore have distance \[d\bigl((x,1-x),(y,1-y)\bigr)=2\left|\arcsin\sqrt{x}-\arcsin\sqrt{y}\right|.\] This gives a useful distinction between equal changes in probability and equal changes in statistical distance.
+
+\begin{example}[Equal probability increments at different locations]
+
+The distance from \(x=0\) to \(x=1/4\) is \(\pi/3\). The distance from \(x=1/4\) to \(x=1/2\) is \(\pi/6\). Both changes add \(1/4\) to the probability, yet the first covers twice the spherical arc. Near a boundary, introducing probability into a previously absent category can be a substantial geometric change.
+
+\end{example}
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}
+\draw[->,ink] (0,0)--(4.7,0) node[right]{$2\sqrt{x}$};\draw[->,ink] (0,0)--(0,4.7) node[above]{$2\sqrt{1-x}$};
+\draw[teal,line width=1.5pt] (4,0) arc[start angle=0,end angle=90,radius=4];
+\draw[ink!40] (0,0)--(2,3.464);\draw[ink!40] (0,0)--(2.828,2.828);
+\fill[copper] (2,3.464) circle(2.5pt) node[above right]{$x=1/4$};
+\fill[teal] (2.828,2.828) circle(2.5pt) node[above right]{$x=1/2$};
+\node[below] at (4,0){$x=1$};\node[left] at (0,4){$x=0$};
+\node[align=left] at (2,-1){Radius $2$\\Arc coordinate $2\arcsin\sqrt{x}$};
+\begin{axis}[at={(6.7cm,0)},anchor=south west,width=6.1cm,height=5.8cm,xlabel={Probability $x$},ylabel={Arc coordinate},xmin=0,xmax=1,ymin=0,ymax=3.2,ytick={0,1.570796,3.141593},yticklabels={$0$,$\pi/2$,$\pi$}]
+\addplot[teal,domain=0:1,samples=101]{2*asin(sqrt(x))*pi/180};
+\end{axis}\end{tikzpicture}}
+\caption{Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths.}\end{figure}
+
+\hypertarget{ch07-why-the-arc-formula-is-a-distance}{%
+\section{Why the arc formula is a distance}\label{ch07-why-the-arc-formula-is-a-distance}}
+
+The shorter great-circle arc joins any two points on a sphere unless they are antipodal. Our nonnegative points are never antipodal. Elementary spherical geometry identifies this arc as a shortest spherical route. Concatenating a route from \(p\) to \(q\) with one from \(q\) to \(r\) gives a route from \(p\) to \(r\), whose length cannot be smaller than the shortest route. Hence \[d(p,r)\leq d(p,q)+d(q,r).\] This is the triangle inequality. Symmetry follows from symmetry of overlap, and zero distance forces equal square-root coordinates, hence equal probabilities. These properties make \(d\) a distance. In Chapter 8 we will construct intermediate points on the shortest arc using only trigonometry.
+
+When calculations are performed on a computer, tiny rounding errors can push an overlap slightly above one. Before applying inverse cosine, clamp the computed overlap to \([0,1]\). Exact mathematics already guarantees this interval; the adjustment handles floating-point arithmetic rather than changing the definition.
+
+\hypertarget{ch07-a-sum-of-squares-proof-of-the-overlap-bound}{%
+\section{A sum-of-squares proof of the overlap bound}\label{ch07-a-sum-of-squares-proof-of-the-overlap-bound}}
+
+The inequality used to bound overlap can be established directly. For any two lists \(a_i,b_i\), expansion gives the identity \[\left(\sum_i a_i^2\right)\left(\sum_i b_i^2\right)-\left(\sum_i a_ib_i\right)^2
+=\sum_{i<j}(a_ib_j-a_jb_i)^2.\] Every term on the right is nonnegative. This proves Cauchy--Schwarz by finite algebra. Set \(a_i=\sqrt{p_i}\) and \(b_i=\sqrt{r_i}\) to obtain \(1-B(p,r)^2\geq0\). Equality requires \(\sqrt{p_ir_j}=\sqrt{p_jr_i}\) for every pair. For probability tables, these conditions force the same normalized proportions and hence \(p=r\).
+
+This identity also makes the geometry concrete. A dot product cannot exceed the product of the lengths because the difference of their squares is a sum of nonnegative squares. The familiar angle formula is therefore compatible with the algebra of finite lists.
+
+\hypertarget{ch07-the-same-overlap-in-independent-repeated-observations}{%
+\section{The same overlap in independent repeated observations}\label{ch07-the-same-overlap-in-independent-repeated-observations}}
+
+Suppose one model assigns table \(p\) to each of \(N\) independent observations and another assigns table \(r\). Their distributions on ordered samples have square-root overlap \[\sum_{i_1,\ldots,i_N}\sqrt{p_{i_1}r_{i_1}\cdots p_{i_N}r_{i_N}}
+=\left(\sum_i\sqrt{p_ir_i}\right)^N=B(p,r)^N.\] The equality follows by expanding a product of \(N\) identical finite sums. If \(p\ne r\), then \(B<1\), so this overlap decreases with sample size. The corresponding spherical distance between the full sample distributions is \(2\arccos(B^N)\). More observations can make two distinct sampling models more distinguishable.
+
+\begin{example}[Overlap after several independent observations]
+
+Take \(p=(0.9,0.1)\) and \(r=(0.1,0.9)\). A single observation has overlap \(0.6\). Two independent observations have overlap \(0.36\), and five have overlap \(0.07776\). The distributions being compared now live on \(2^N\) ordered samples. We can calculate their overlap without listing those samples, because the independent-product structure factors the sum.
+
+\end{example}
+
+\hypertarget{ch07-a-numerical-table-near-a-boundary}{%
+\section{A numerical table near a boundary}\label{ch07-a-numerical-table-near-a-boundary}}
+
+For binary \(x\), its arc coordinate is \(2\arcsin\sqrt{x}\). At \(x=0\), \(0.01\), \(0.04\), and \(0.09\), these coordinates are approximately \(0\), \(0.2003\), \(0.4027\), and \(0.6094\). The corresponding square roots are \(0\), \(0.1\), \(0.2\), and \(0.3\). The table helps explain why square-root coordinates spread out small probabilities.
+
+\begin{example}[Two small perturbations]
+
+Changing \(x\) from \(0.01\) to \(0.02\) gives spherical distance approximately \(0.0834\). Changing it from \(0.49\) to \(0.50\) gives distance approximately \(0.0200\). The first pair has the same absolute probability difference as the second but a larger square-root separation. Both comparisons are finite and use the exact angle formula.
+
+\end{example}
+
+For a statistical application, the labels and the observation procedure must be fixed before comparing tables. Adding an unused zero-probability label to both tables changes none of the overlap, Hellinger, or spherical formulas. Merging existing labels is different and can change the values. This distinction prepares the channel calculations in Chapter 10.
+
+\hypertarget{ch07-exercises}{%
+\section{Exercises}\label{ch07-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Map \((1/4,1/4,1/2)\) to the radius-two sphere and verify its squared length.
+
+\item 
+
+Recover the distribution represented by \(s=(1,1,\sqrt2)\).
+
+\item 
+
+Compute the overlap between \((1/2,1/2,0)\) and \((1/2,0,1/2)\).
+
+\item 
+
+Find the spherical distance and Hellinger distance for the pair in Exercise 3.
+
+\item 
+
+Prove the chord-length formula by expanding a squared norm.
+
+\item 
+
+Show that \(B(p,r)=0\) exactly when \(p\) and \(r\) have disjoint supports.
+
+\item 
+
+Show that \(B(p,r)=1\) exactly when \(p=r\), using the equality condition in Cauchy--Schwarz.
+
+\item 
+
+Find the binary arc coordinates of \(x=0,1/4,1/2,3/4,1\).
+
+\item 
+
+Compare the distances from \(0.01\) to \(0.02\) and from \(0.49\) to \(0.50\) for binary probabilities.
+
+\item 
+
+Give two distributions whose relative entropy is infinite but whose spherical distance is strictly smaller than \(\pi\).
+
+\item 
+
+Explain the difference between the angle \(\alpha\), the radius-two arc length \(2\alpha\), and the chord length \(4\sin(\alpha/2)\).
+
+\item 
+
+Write an algorithm that computes overlap and spherical distance for any two finite probability tables. Include validation of the inputs and handling of rounding near one.
+
+\end{exercises}
+
+\hypertarget{ch07-selected-solutions}{%
+\section{Selected solutions}\label{ch07-selected-solutions}}
+
+\textbf{1.} The image is \((1,1,\sqrt2)\), whose squared length is \(1+1+2=4\).
+
+\textbf{3.} Only the first label contributes, so \(B=1/2\).
+
+\textbf{4.} The spherical distance is \(2\pi/3\) and the Hellinger distance is \(1/\sqrt2\).
+
+\textbf{6.} Each summand is nonnegative. Their sum is zero exactly when every product \(p_ir_i\) is zero, meaning no label has positive probability in both tables.
+
+\textbf{8.} The arc coordinates are \(0,\pi/3,\pi/2,2\pi/3,\pi\).
+
+\textbf{10.} For \(p=(1,0)\) and \(r=(1/2,1/2)\), \(D(r\|p)=\infty\), while their spherical distance is \(\pi/2\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Map \((1/4,1/4,1/2)\) and \((1/2,1/4,1/4)\) to square-root vectors. Calculate their squared lengths, dot product, overlap, and spherical distance.
+\item
+  In the demonstration, compare binary first probabilities \(0.01\) and \(0.02\), then \(0.49\) and \(0.50\). Each pair differs by \(0.01\). Compare the spherical distances and interpret the difference using the quarter-circle picture.
+\item
+  For first probabilities \(0\), \(1/4\), \(1/2\), \(3/4\), and \(1\), calculate the angle and radius-two arc coordinate. Label both quantities so that the angle is not confused with arc length.
+\item
+  Choose a pair with a support mismatch. Calculate its finite spherical and Hellinger distances and identify which directed relative entropy is infinite. Explain how the boundary is represented in each construction.
+\item
+  Write a distance-computation procedure for two probability lists. Include a unit-sum check and a numerical clamp of overlap to \([0,1]\). Test symmetry, zero self-distance, and one triangle inequality on a three-table example.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Geodesic steps and shortest graph paths}
+A distance tells us how far apart two distributions are. A path specifies how to move between them. There are several reasonable path constructions: ordinary mixtures, equal steps along a spherical arc, and token transfers on a finite graph. Each answers a different question about allowed intermediate states.
+
+\hypertarget{ch08-mixing-and-spherical-interpolation}{%
+\section{Mixing and spherical interpolation}\label{ch08-mixing-and-spherical-interpolation}}
+
+An ordinary mixture between \(p\) and \(r\) is \[m(t)=(1-t)p+tr,\qquad 0\leq t\leq1.\] Every coordinate is nonnegative and the sum remains one. If we restrict \(t\) to \(0,1/M,\ldots,1\), this is a finite list of distributions with equal coordinate increments.
+
+For equal increments of spherical distance, work with square-root vectors \(s=2\sqrt p\) and \(u=2\sqrt r\). Let \(\alpha=\arccos B(p,r)\). If \(p\ne r\), define \[s(t)=\frac{\sin((1-t)\alpha)}{\sin\alpha}s+
+\frac{\sin(t\alpha)}{\sin\alpha}u,\qquad
+g_i(t)=\frac{s_i(t)^2}{4}.\] For identical endpoints, set \(g(t)=p\). The trigonometric formula is \textbf{spherical interpolation}. Its coefficients are nonnegative on the stated interval, so every coordinate of \(s(t)\) is nonnegative.
+
+To verify that the vector has length two, choose orthogonal unit vectors \(e_1=s/2\) and \(e_2=(u/2-\cos\alpha\,e_1)/\sin\alpha\). Substitution and the sine subtraction identity give \[s(t)=2\bigl(\cos(t\alpha)e_1+\sin(t\alpha)e_2\bigr).\] The squared length is therefore \(4(\cos^2(t\alpha)+\sin^2(t\alpha))=4\). The recovered entries \(g_i(t)\) add to one. This derivation also shows that the angle between \(s(t_1)\) and \(s(t_2)\) is \(|t_2-t_1|\alpha\).
+
+\hypertarget{ch08-equal-finite-steps-along-a-shortest-arc}{%
+\section{Equal finite steps along a shortest arc}\label{ch08-equal-finite-steps-along-a-shortest-arc}}
+
+Choose a positive integer \(M\) and form \(g(0),g(1/M),\ldots,g(1)\). Consecutive states have distance \(2\alpha/M\). Their total path length is \(M(2\alpha/M)=2\alpha=d(p,r)\). Such a shortest spherical path is called a \textbf{geodesic}. Here it is represented by a finite list of equally spaced states, each calculated from a closed formula.
+
+The midpoint simplifies to \[g_i(1/2)=\frac{(\sqrt{p_i}+\sqrt{r_i})^2}{2(1+B(p,r))}.\] This follows either from the sine half-angle formula or by normalizing the vector \(\sqrt p+\sqrt r\). The midpoint generally differs from the coordinate average \((p+r)/2\).
+
+\begin{example}[Two notions of halfway]
+
+Take \(p=(1,0)\) and \(r=(1/4,3/4)\). Their overlap is \(1/2\). The spherical midpoint is \((3/4,1/4)\), whereas their coordinate midpoint is \((5/8,3/8)\). The first divides the spherical distance into two equal parts. The second divides each probability change into two equal parts.
+
+\end{example}
+
+\begin{example}[Three labels can trace different routes]
+
+Let \(p=(0.8,0.1,0.1)\) and \(r=(0.1,0.7,0.2)\). Their ordinary midpoint is \((0.45,0.4,0.15)\). The square-root midpoint is approximately \((0.4339,0.3935,0.1726)\). In a triangle picture, the mixture follows a straight segment, while the spherical interpolation generally follows a curved route after mapping back to probabilities.
+
+\end{example}
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\draw[copper,line width=1pt,dashed] plot coordinates {(0.9,0.519615) (4.8,1.03923)};\draw[teal,line width=1pt,] plot coordinates {(0.9,0.519615) (0.979372,0.540691) (1.06171,0.561733) (1.14689,0.582706) (1.23476,0.603576) (1.32519,0.624309) (1.41801,0.64487) (1.51308,0.665225) (1.61025,0.685342) (1.70935,0.705187) (1.81022,0.724727) (1.9127,0.743931) (2.01661,0.762767) (2.12178,0.781204) (2.22805,0.799211) (2.33524,0.816759) (2.44316,0.833819) (2.55166,0.850363) (2.66053,0.866365) (2.76962,0.881796) (2.87873,0.896633) (2.98769,0.910851) (3.09632,0.924427) (3.20444,0.937337) (3.31188,0.949561) (3.41844,0.96108) (3.52397,0.971873) (3.62829,0.981923) (3.73123,0.991214) (3.83261,0.99973) (3.93227,1.00746) (4.03005,1.01438) (4.12578,1.0205) (4.21931,1.02579) (4.31049,1.03025) (4.39916,1.03387) (4.48518,1.03664) (4.56841,1.03857) (4.64871,1.03965) (4.72595,1.03987) (4.8,1.03923)};
+\node[anchor=west,align=left,text=teal] at (6.6,3.8){Spherical interpolation};
+\node[anchor=west,align=left,text=copper] at (6.6,3.1){Ordinary mixture};
+\node[anchor=west,align=left] at (6.6,1.9){$p=(0.8,0.1,0.1)$\\$r=(0.1,0.7,0.2)$};
+\end{tikzpicture}}
+\caption{A spherical geodesic mapped back to the probability triangle, compared with the ordinary mixture segment between the same endpoints.}\end{figure}
+
+\hypertarget{ch08-restricting-movement-to-token-transfers}{%
+\section{Restricting movement to token transfers}\label{ch08-restricting-movement-to-token-transfers}}
+
+Suppose every intermediate distribution must arise from \(N\) tokens. The allowed states are the lattice vertices \((a/N,b/N,c/N)\). Connect two vertices by an edge if one token can be moved from one category to another. The resulting object is a \textbf{graph}: a collection of vertices with specified connections.
+
+Assign each edge the spherical distance between its endpoints. A graph path is a finite sequence of connected vertices; its length is the sum of its edge weights. Finding the shortest graph path is now a finite optimization problem. It may require a detour because the exact spherical geodesic need not pass through lattice vertices.
+
+The triangle inequality gives a lower bound: \[\text{length of any graph path from }p\text{ to }r\ \geq\ d(p,r).\] Equality is possible when its vertices happen to lie in order on a common shortest arc. Otherwise a positive gap remains. Increasing \(N\) adds more possible states, but comparing different lattices requires care: a denominator-\(N\) vertex need not belong to the denominator-\((N+1)\) lattice. We will measure the gap for chosen lattices without assuming a general convergence theorem.
+
+\begin{example}[A boundary path of three token moves]
+
+For \(N=3\), move from counts \((3,0,0)\) to \((0,3,0)\) by transferring one token at each step. All intermediate distributions lie on the binary edge. Their angle coordinates increase in order from \(0\) to \(\pi/2\), so their spherical edge lengths add to \(\pi\), equal to the endpoint distance. The three edge lengths are not equal, because equal token transfers do not create equal arc increments.
+
+\end{example}
+
+\hypertarget{ch08-dijkstras-shortest-path-algorithm}{%
+\section{Dijkstra's shortest-path algorithm}\label{ch08-dijkstras-shortest-path-algorithm}}
+
+For graphs with nonnegative edge weights, Dijkstra's algorithm finds the shortest distance from a starting vertex to every reachable vertex. Give the start tentative distance zero and all other vertices tentative distance infinity. Mark every vertex unvisited.
+
+At each round, select an unvisited vertex with smallest tentative distance. For each neighbor, compare its current tentative distance with the distance to the selected vertex plus the connecting edge weight. Replace the tentative distance if this proposed route is shorter, and record the selected vertex as its predecessor. Then mark the selected vertex visited. Stop when the destination is visited, or when no reachable unvisited vertex remains.
+
+Why can a visited distance be finalized? Any route that first passes through an unvisited vertex has already accumulated at least the smallest remaining tentative distance. Additional nonnegative edges cannot make it smaller. Thus a future route cannot improve the vertex just selected. Following predecessor links backward reconstructs a shortest route.
+
+\begin{example}[A small weighted graph]
+
+Suppose edges \(AB\), \(AC\), \(CB\), \(BD\), and \(CD\) have weights \(4\), \(1\), \(2\), \(1\), and \(6\). From \(A\), first finalize \(C\) at distance \(1\). This improves \(B\) from \(4\) to \(3\) and gives \(D\) distance \(7\). Finalizing \(B\) then improves \(D\) to \(4\). The shortest route is \(A,C,B,D\) with total weight \(4\).
+
+\end{example}
+
+\hypertarget{ch08-choosing-a-path-for-an-application}{%
+\section{Choosing a path for an application}\label{ch08-choosing-a-path-for-an-application}}
+
+A mixture may represent pooling two sources in changing proportions. A spherical path may represent equal statistical changes between tables. A graph path may represent a sequence of feasible changes in an indivisible allocation. Before calculating a shortest path, specify which states and transitions are allowed and what an edge costs. The geometry and the combinatorial constraints together determine the answer.
+
+\hypertarget{ch08-counting-moves-before-assigning-geometric-costs}{%
+\section{Counting moves before assigning geometric costs}\label{ch08-counting-moves-before-assigning-geometric-costs}}
+
+For two count vectors \(a\) and \(b\) with the same total, define their total surplus \[S=\sum_{i:a_i>b_i}(a_i-b_i)=\frac12\sum_i|a_i-b_i|.\] The surplus equals the total deficit because the counts have the same sum. One token transfer can remove at most one surplus token. Therefore at least \(S\) transfers are required to turn \(a\) into \(b\). This number is attainable: repeatedly move a token from a surplus category to a deficit category until every count agrees.
+
+This proves the minimum number of transfers when every edge costs one. It does not automatically solve the geometrically weighted problem, since different transfers can have different spherical lengths. The cost function determines which optimization problem is being solved.
+
+\begin{example}[Minimum number of moves]
+
+To transform \((5,1,0)\) into \((1,2,3)\), category A has four surplus tokens. Categories B and C need one and three, respectively. At least four moves are necessary and four suffice, for example \((5,1,0)\) to \((4,2,0)\) to \((3,2,1)\) to \((2,2,2)\) to \((1,2,3)\). Each intermediate vector sums to six. A shortest spherical-weighted route must be found using the actual edge weights.
+
+\end{example}
+
+\hypertarget{ch08-midpoints-from-a-normalization-calculation}{%
+\section{Midpoints from a normalization calculation}\label{ch08-midpoints-from-a-normalization-calculation}}
+
+The square-root midpoint can be found without inverse trigonometric functions. Begin with \(v_i=\sqrt{p_i}+\sqrt{r_i}\). Its squared length is \(2+2B\). Normalize \(v\) to unit length and square the entries: \[g_i=\left(\frac{v_i}{\sqrt{2+2B}}\right)^2.\] This is exactly the midpoint formula. The construction treats both endpoints equally and keeps every entry nonnegative. It also shows that if a label is absent at both endpoints, it remains absent at the midpoint and along the whole spherical interpolation.
+
+For a midpoint between two three-label tables, the same arithmetic that computes overlap therefore supplies all its coordinates. The trigonometric formula is needed to choose general equal arc fractions, but halfway has a simpler form.
+
+\hypertarget{ch08-measuring-a-path-from-a-finite-list}{%
+\section{Measuring a path from a finite list}\label{ch08-measuring-a-path-from-a-finite-list}}
+
+Given states \(p^{(0)},\ldots,p^{(M)}\), define its polygonal spherical length as \(\sum_{j=0}^{M-1}d(p^{(j)},p^{(j+1)})\). This definition uses a finite sum. Refining a list by inserting a new state cannot lower that sum, because the triangle inequality gives \(d(a,b)\leq d(a,c)+d(c,b)\). If the inserted state lies in order on the same shortest arc, equality holds.
+
+\begin{example}[A detour through a pure state]
+
+Let \(p=(1,0,0)\) and \(r=(0,1,0)\). The direct distance is \(\pi\). A route through the third pure state has two legs, each of length \(\pi\), for a total of \(2\pi\). A route through \((1/2,1/2,0)\) has two legs of length \(\pi/2\) and is shortest. The intermediate state and the permitted path both matter.
+
+\end{example}
+
+When a graph algorithm reports a route, verify its adjacency and independently sum the reported edge costs. When comparing with a direct geodesic, check that the endpoints are identical in both calculations. These straightforward checks distinguish a feasible route, a measured route length, and a proof that no shorter allowed route exists.
+
+\hypertarget{ch08-exercises}{%
+\section{Exercises}\label{ch08-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Verify that every ordinary mixture is a probability vector.
+
+\item 
+
+Derive the orthogonal-vector form of spherical interpolation using the sine subtraction identity.
+
+\item 
+
+Show that the midpoint formula's entries add to one.
+
+\item 
+
+Find the spherical midpoint between \((1,0,0)\) and \((0,1,0)\).
+
+\item 
+
+For the binary endpoints in the first example, find the three interior states that divide the spherical arc into four equal pieces. Expressions using squared sines are acceptable.
+
+\item 
+
+Compute and compare the ordinary and spherical midpoints between \((1/2,1/2,0)\) and \((1/2,0,1/2)\).
+
+\item 
+
+Prove that the sum of the distances along any finite list of states is at least the distance between its endpoints.
+
+\item 
+
+List the neighbors of counts \((1,1,1)\) on the denominator-three token graph.
+
+\item 
+
+Run Dijkstra's algorithm on the weighted graph in the last example, recording tentative distances after each finalized vertex.
+
+\item 
+
+Why does Dijkstra's argument require nonnegative edge weights? Give a small graph in which a negative edge would undermine the stated reasoning.
+
+\item 
+
+Construct a graph path along a binary edge for \(N=4\). Verify numerically that the edge lengths telescope to the endpoint spherical distance.
+
+\item 
+
+For one pair of lattice endpoints, compare the shortest token path with the direct spherical distance. Explain why the difference is a useful measure of the constraint imposed by token moves.
+
+\end{exercises}
+
+\hypertarget{ch08-selected-solutions}{%
+\section{Selected solutions}\label{ch08-selected-solutions}}
+
+\textbf{3.} The sum of the numerators is \(\sum_i p_i+\sum_i r_i+2\sum_i\sqrt{p_ir_i}=2(1+B)\), exactly the denominator.
+
+\textbf{4.} The midpoint is \((1/2,1/2,0)\).
+
+\textbf{5.} Starting at the first-category probability \(1\), the angle measured from the second axis falls from \(\pi/2\) to \(\pi/6\). The interior first probabilities are \(\sin^2(5\pi/12)\), \(\sin^2(\pi/3)\), and \(\sin^2(\pi/4)\), namely \((2+\sqrt3)/4\), \(3/4\), and \(1/2\).
+
+\textbf{6.} The ordinary midpoint is \((1/2,1/4,1/4)\). Since \(B=1/2\), the spherical midpoint is \((2/3,1/6,1/6)\).
+
+\textbf{7.} Apply the triangle inequality repeatedly, inserting the intermediate states one at a time.
+
+\textbf{8.} The six neighbors are the permutations of \((2,1,0)\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For \(p=(1,0)\) and \(r=(1/4,3/4)\), find the ordinary and spherical midpoints. Verify that the latter has equal spherical distances to the two endpoints.
+\item
+  Construct five equally spaced states along a spherical path between two three-label tables. Calculate all four consecutive distances and show that their sum equals the endpoint distance, up to rounding.
+\item
+  In the demonstration, choose denominator \(6\) and two different lattice vertices. Record the endpoints, the direct distance, the shortest graph length, and every count triple along the route. Verify that each transition moves one token.
+\item
+  Reproduce Dijkstra's algorithm on the five-edge graph in the reading. Record the order of finalized vertices and the predecessor table. Explain the role of nonnegative edge weights in finalizing a distance.
+\item
+  Choose endpoints that lie on both denominator-\(4\) and denominator-\(8\) lattices. Compare their shortest graph lengths with direct distance. Describe the measured result without assuming that every change in denominator creates a nested lattice.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Exponential updates and KL-penalized learning}
+A learning rule redistributes attention among possible decisions. At each round, a decision receives a score, and the next probability table places more weight on decisions with higher scores. Exponential normalization provides such a rule. Its interpretation as a finite optimization problem follows from an exact relative-entropy identity.
+
+\hypertarget{ch09-multiplicative-weights}{%
+\section{Multiplicative weights}\label{ch09-multiplicative-weights}}
+
+Let \(p_i>0\) be current probabilities and let \(s_i\) be scores assigned to the possible decisions. With intensity \(\eta>0\), define \[r_i=\frac{p_i e^{\eta s_i}}{Z},\qquad Z=\sum_jp_je^{\eta s_j}.\] This is the same algebraic rule used for exponential selection. In learning, \(p\) may describe attention, investment fractions in an abstract allocation problem, or probabilities of choosing experts. Scores may change from round to round. The rule is commonly called \textbf{multiplicative weights} or an \textbf{exponential update}.
+
+The score units and the intensity enter only through the product \(\eta s_i\). A common score shift has no effect. For numerical computation, replace each score by \(s_i-s_{\max}\) before exponentiating. The common factor cancels and the largest exponent becomes zero, reducing the risk of overflow.
+
+\begin{example}[Updating three choices]
+
+Let \(p=(1/2,1/3,1/6)\), \(s=(0,1,2)\), and \(\eta=\ln2\). The unnormalized weights are \((1/2,2/3,2/3)\) and \(Z=11/6\). The new table is \(r=(3/11,4/11,4/11)\). The third choice had the largest score but not the largest starting weight. Both enter the update.
+
+\end{example}
+
+\hypertarget{ch09-an-exact-optimization-identity}{%
+\section{An exact optimization identity}\label{ch09-an-exact-optimization-identity}}
+
+Suppose we seek a new table \(q\) that balances a high average score against changing the current table too much. One objective is \[J(q)=\eta\sum_iq_is_i-D(q\|p).\] The first term rewards the average score under \(q\). The second penalizes departure from \(p\). Larger \(\eta\) gives the score term more importance relative to the penalty.
+
+From the update formula, \(\ln r_i=\ln p_i+\eta s_i-\ln Z\). Substitute this into \(D(q\|r)\): \[D(q\|r)=D(q\|p)-\eta\sum_iq_is_i+\ln Z.\] Rearranging gives \[J(q)=\ln Z-D(q\|r).\] Gibbs' inequality now proves that \(J\) is uniquely maximized at \(q=r\), with value \(\ln Z\). This is a complete solution of the finite optimization problem. It does not require searching every candidate table or taking a derivative.
+
+\begin{proposition}[The exponential update solves a KL-penalized problem]
+
+For a positive current table \(p\), finite scores, and positive intensity, the normalized exponential table is the unique maximizer of \(\eta q\cdot s-D(q\|p)\) over all probability vectors \(q\).
+
+\end{proposition}
+
+If some current probabilities vanish, a finite penalty permits only tables supported on those existing labels. The same proof works on that support. To allow a previously absent choice to reappear, one can first mix \(p\) with a positive reference table and then apply the update. That is an additional modeling operation.
+
+\begin{example}[Comparing a candidate with the optimizer]
+
+Take \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\). Then \(r=(1/4,3/4)\) and \(Z=2\). The objective at \(r\) is \(\ln2\). At the unchanged table \(p\), it is \((1/2)\ln3\). Their difference is \(D(p\|r)=\ln2-(1/2)\ln3\approx0.1438\), exactly as the identity predicts.
+
+\end{example}
+
+\hypertarget{ch09-fixed-scores-improve-their-own-average}{%
+\section{Fixed scores improve their own average}\label{ch09-fixed-scores-improve-their-own-average}}
+
+Let the scores be fixed numbers \(c_i\) and apply an exponential update. The average score changes from \(\sum_i p_ic_i\) to \(\sum_i r_ic_i\). Subtracting gives \[\sum_i r_ic_i-\sum_i p_ic_i
+=\frac{\sum_i p_ic_ie^{\eta c_i}-(\sum_i p_ic_i)(\sum_jp_je^{\eta c_j})}{Z}.\] The numerator can be rearranged symmetrically: \[\frac12\sum_{i,j}p_ip_j(c_i-c_j)(e^{\eta c_i}-e^{\eta c_j}).\] Every term is nonnegative because the exponential is increasing. Therefore the fixed-score average never decreases. Equality holds precisely when all scores on the current support are equal.
+
+This proof compares the same score table before and after the update. If the scores are recomputed from the state, the next table may be evaluated by different numbers, so this conclusion does not automatically apply to the recomputed average. The cyclic examples make that dependence concrete.
+
+Repeated fixed-score updates have the explicit form \[p_{i,t}=\frac{p_{i,0}e^{t\eta c_i}}{\sum_jp_{j,0}e^{t\eta c_j}}.\] If one available choice has the uniquely largest score, its probability approaches one. If several available choices tie for largest score, their mutual ratios stay at their initial values while lower-scoring choices fade.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}\begin{axis}[width=12.5cm,height=5.6cm,ybar,bar width=14pt,xlabel={Choice},ylabel={Probability},xmin=.5,xmax=3.5,ymin=0,ymax=.65,xtick={1,2,3},legend pos=north east]
+\addplot[ink,fill=ink!40] coordinates {(1,0.5) (2,0.333333) (3,0.166667)};\addlegendentry{Current table}
+\addplot[teal,fill=teal!60] coordinates {(1,0.272727) (2,0.363636) (3,0.363636)};\addlegendentry{Exponential update}
+\end{axis}\end{tikzpicture}}
+\caption{An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11).}\end{figure}
+
+\hypertarget{ch09-finite-rounds-and-accumulated-scores}{%
+\section{Finite rounds and accumulated scores}\label{ch09-finite-rounds-and-accumulated-scores}}
+
+Suppose round \(t\) assigns scores \(s_{i,t}\). Repeating the multiplicative rule gives \[p_{i,T}=\frac{p_{i,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{i,t}\bigr)}{
+\sum_jp_{j,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{j,t}\bigr)}.\] All intervening normalizing constants cancel. If the score sequence is specified in advance, only the accumulated scores determine the final distribution. Intermediate distributions still depend on their order. When scores respond to decisions made during the run, changing the order can also change the scores themselves.
+
+\begin{example}[Two rounds of evidence]
+
+Start with equal probabilities on three hypotheses. Two observations have likelihood tables proportional to \((2,1,1)\) and \((1,3,1)\). Multiplication gives posterior weights \((2,3,1)\), hence probabilities \((1/3,1/2,1/6)\). Taking scores to be logarithms of the likelihoods and setting \(\eta=1\) makes each Bayesian reweighting an exponential update.
+
+\end{example}
+
+\hypertarget{ch09-moving-deliberately-toward-higher-entropy}{%
+\section{Moving deliberately toward higher entropy}\label{ch09-moving-deliberately-toward-higher-entropy}}
+
+Let \(u\) be uniform and choose \(0<\lambda\leq1\). The mixture rule \(p^+=(1-\lambda)p+\lambda u\) raises entropy. Indeed, concavity gives \[H(p^+)\geq(1-\lambda)H(p)+\lambda H(u)\geq H(p).\] The second inequality uses the maximality of uniform entropy. Relative entropy to uniform contracts at the same time because \(D(p\|u)=\ln k-H(p)\) and the mixture admits direct bounds. This is a finite entropy-seeking rule with a transparent interpretation: each round replaces a fixed fraction of the current table with a uniform allocation.
+
+The geometric course connection is that the penalty \(D(q\|p)\) measures change using probability tables themselves, while the scores choose a preferred direction. The exact optimizer supplies a useful finite update. Its relationship with infinitesimal gradient methods belongs to a later course; the finite identity already explains the present rule completely.
+
+\hypertarget{ch09-quantifying-what-an-update-has-gained}{%
+\section{Quantifying what an update has gained}\label{ch09-quantifying-what-an-update-has-gained}}
+
+The exact optimization identity gives more than the optimizer. Compare its objective with that of keeping the current table \(p\). Since \(D(p\|p)=0\), the old objective is \(J(p)=\eta p\cdot s\). The gain is \[J(r)-J(p)=\ln Z-\eta p\cdot s=D(p\|r).\] Thus the improvement is itself a directed relative entropy. Comparing the new objective expression \(J(r)=\eta r\cdot s-D(r\|p)\) with the old one gives the further identity \[\eta(r-p)\cdot s=D(r\|p)+D(p\|r).\] Both terms on the right are nonnegative. For a single update, the average of the scores used in that update must improve, unless it stays unchanged. The two directions of KL appear together because the calculation compares the tables in both roles.
+
+\begin{example}[Both directed costs in a binary step]
+
+For \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\), the update is \(r=(1/4,3/4)\). Its average score rises by \(1/4\). Multiplying by \(\ln3\) gives approximately \(0.2747\). The two divergences are approximately \(0.1308\) and \(0.1438\), and their sum is the same value. The identity checks the update and clarifies the contribution of each directed discrepancy.
+
+\end{example}
+
+\hypertarget{ch09-how-concentrated-can-an-update-become}{%
+\section{How concentrated can an update become?}\label{ch09-how-concentrated-can-an-update-become}}
+
+Let \(s_{\min}\) and \(s_{\max}\) be the smallest and largest scores on the support of \(p\). Since \(Z\) is a weighted average of their exponentials, \[e^{\eta s_{\min}}\leq Z\leq e^{\eta s_{\max}}.\] For any two available labels, \(r_i/r_j=(p_i/p_j)e^{\eta(s_i-s_j)}\). This ratio provides a direct way to understand intensity: increasing \(\eta\) magnifies score differences while preserving the contribution of the starting ratios.
+
+For a uniquely highest fixed score at label \(m\), divide the fixed-score solution's numerator and denominator by \(e^{t\eta c_m}\). Every other contribution contains \(e^{-t\eta(c_m-c_j)}\), which approaches zero. The leading probability therefore approaches one. If several labels tie, divide by their common leading factor instead. Their initial weights remain in the denominator and determine the final ratios within the tied set.
+
+\hypertarget{ch09-updating-from-likelihoods}{%
+\section{Updating from likelihoods}\label{ch09-updating-from-likelihoods}}
+
+Suppose a hypothesis label \(i\) has prior probability \(p_i\), and an observation \(y\) has conditional likelihood \(L_i=P(y\mid i)\). The joint probability of hypothesis and observation is \(p_iL_i\). Adding over hypotheses gives \(P(y)=\sum_i p_iL_i\). Conditional probability then gives \[P(i\mid y)=\frac{p_iL_i}{\sum_jp_jL_j}.\] This is Bayes' rule for a finite hypothesis set. If all likelihoods are positive, set \(s_i=\ln L_i\) and \(\eta=1\) to obtain the exponential update exactly.
+
+\begin{example}[Posterior odds from one observation]
+
+Two hypotheses have prior probabilities \(1/3\) and \(2/3\). A positive test result has likelihoods \(3/4\) and \(1/4\) under the hypotheses. The unnormalized posterior weights are \(1/4\) and \(1/6\), with total \(5/12\). The posterior is \((3/5,2/5)\). Prior odds \(1/2\) have been multiplied by likelihood ratio \(3\), producing posterior odds \(3/2\).
+
+\end{example}
+
+For several observations, multiplication of likelihoods is justified when they are conditionally independent given the hypothesis. The condition concerns independence within each hypothesis model. Without it, a joint likelihood or sequential conditional likelihoods must replace the simple product.
+
+\hypertarget{ch09-exercises}{%
+\section{Exercises}\label{ch09-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Compute the exponential update of \(p=(1/4,1/4,1/2)\) with scores \((2,1,0)\) and \(\eta=\ln2\).
+
+\item 
+
+Verify directly that adding a common constant to all scores leaves the update unchanged.
+
+\item 
+
+Derive the identity \(J(q)=\ln Z-D(q\|r)\), stating where the condition \(\sum_iq_i=1\) is used.
+
+\item 
+
+For \(p=(1/2,1/2)\), scores \((0,1)\), and \(\eta=\ln3\), evaluate the objective at \(q=(0,1)\) and compare it with its maximum.
+
+\item 
+
+Derive the symmetric double-sum formula for the fixed-score improvement.
+
+\item 
+
+Starting with equal weights on three choices, fixed scores \((0,1,1)\), and \(\eta=\ln2\), find the probabilities after four rounds.
+
+\item 
+
+Repeat Exercise 6 with initial weights \((1/2,1/3,1/6)\). Explain the ratio of the two tied leaders.
+
+\item 
+
+Give a two-round score sequence whose final distribution agrees when its rounds are reversed, but whose intermediate distribution changes.
+
+\item 
+
+Explain why a zero current probability stays zero under multiplicative weights. Describe a mixture operation that permits it to become positive.
+
+\item 
+
+Show that mixing with uniform strictly raises entropy whenever \(p\) is not uniform and \(0<\lambda<1\).
+
+\item 
+
+A program reports overflow when exponentiating scores \((1000,1001,999)\). Explain how subtracting the largest score resolves this without changing the answer.
+
+\item 
+
+Choose a small finite set of candidate tables and verify the optimization identity numerically for each. Explain why this check illustrates the theorem but does not replace its proof.
+
+\end{exercises}
+
+\hypertarget{ch09-selected-solutions}{%
+\section{Selected solutions}\label{ch09-selected-solutions}}
+
+\textbf{1.} The unnormalized entries are \((1,1/2,1/2)\), giving \((1/2,1/4,1/4)\).
+
+\textbf{3.} The term \(\ln Z\) is multiplied by \(\sum_iq_i\), which equals one. All other terms combine by the logarithm identities.
+
+\textbf{4.} At \(q=(0,1)\), \(J=\ln3-\ln2=\ln(3/2)\). The maximum is \(\ln2\), larger by \(\ln(4/3)=D(q\|r)\).
+
+\textbf{6.} The weights are proportional to \((1,16,16)\), giving \((1/33,16/33,16/33)\).
+
+\textbf{7.} The unnormalized weights are \((1/2,16/3,8/3)\), so the probabilities are \((1/17,32/51,16/51)\). The leaders retain their initial \(2:1\) ratio.
+
+\textbf{11.} Use exponents \((-1,0,-2)\) instead. Both numerator and denominator have been divided by \(e^{1001}\), which cancels exactly.
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use current table \((1/2,1/3,1/6)\) and scores \((0,1,2)\). Calculate the exponential update at intensity \(\ln2\). Verify its normalizing constant and its log-odds increments.
+\item
+  In the demonstration, compare intensities \(0.1\), \(0.5\), \(1\), and \(2\). For each, record the new table, average score, \(D(r\|p)\), and objective. Explain the balance between reward and departure from the initial table.
+\item
+  Choose three candidate tables, including the current table and a pure table. Check \(J(q)=\ln Z-D(q\|r)\) for each. Use nonnegativity to explain why the computed optimizer beats every candidate, not just those tested.
+\item
+  For fixed scores \((0,1,1)\), compare four rounds from equal initial weights and from \((1/2,1/3,1/6)\). Explain the retained ratio of the tied leaders and prove the direction of the average-score change using the double-sum identity.
+\item
+  Choose two rounds of external scores and reverse their order. Compare intermediate and final tables. Then explain why this rearrangement argument need not hold when scores are computed from the current state.
+\end{enumerate}
+
+\FloatBarrier
+
+\chapter{Information networks and coarse-graining}
+An observation can be recorded at several resolutions. A detailed label may be replaced by a broader group, passed through a noisy channel, or transported among nodes of a network. These operations transform probability tables by finite weighted sums. They connect graph dynamics with a basic principle of information geometry: applying the same observation rule to two models cannot make them more distinguishable by the discrepancies studied here.
+
+\hypertarget{ch10-a-stochastic-matrix-describes-one-step}{%
+\section{A stochastic matrix describes one step}\label{ch10-a-stochastic-matrix-describes-one-step}}
+
+Let \(K_{ji}\) be the probability of arriving at output label \(j\) from input label \(i\). Our convention places the input in the column. Thus \[K_{ji}\geq0,\qquad \sum_jK_{ji}=1\quad\hbox{for each }i.\] Such a table is \textbf{column-stochastic}. If input probabilities are \(p_i\), the output probabilities are \[p_j^+=\sum_iK_{ji}p_i,\qquad p^+=Kp.\] The product symbol \(Kp\) abbreviates these weighted sums. Adding over \(j\) gives \(\sum_jp_j^+=\sum_ip_i\sum_jK_{ji}=1\). This is a linear difference equation on probability vectors.
+
+Repeated application gives \(p_t=K^tp_0\). A probability vector \(\pi\) is \textbf{stationary} if \(K\pi=\pi\). Stationarity is a fixed-point condition. It does not by itself imply that every trajectory converges to \(\pi\).
+
+\begin{example}[A lazy walk on a three-node path]
+
+Consider \[K=\begin{pmatrix}3/4&1/4&0\\1/4&1/2&1/4\\0&1/4&3/4\end{pmatrix}.\] Each column describes remaining at a node or moving to a neighbor. Starting at \(p_0=(1,0,0)\) gives \(p_1=(3/4,1/4,0)\) and \(p_2=(5/8,5/16,1/16)\). The uniform table is stationary because the rows, as well as the columns, sum to one. This particular walk approaches uniform, as can be checked from its repeated finite updates.
+
+\end{example}
+
+A matrix whose rows and columns both sum to one is \textbf{doubly stochastic}. The cyclic permutation matrix is also doubly stochastic, but every noncentral three-category state repeats with period three. To establish convergence in a general network, additional conditions are required. Our contraction inequalities below concern one-step comparisons and do not require a claim of convergence.
+
+\hypertarget{ch10-coarse-graining-is-a-deterministic-channel}{%
+\section{Coarse-graining is a deterministic channel}\label{ch10-coarse-graining-is-a-deterministic-channel}}
+
+Partition the input labels into groups. The output reports only the group containing the input. Set \(K_{ji}=1\) if label \(i\) belongs to group \(j\), and zero otherwise. Each column contains exactly one entry equal to one. The output probabilities are sums over the groups.
+
+\begin{example}[A distinction erased by grouping]
+
+Let \(q=(0.4,0.1,0.4,0.1)\) and \(p=(0.1,0.4,0.1,0.4)\). Group labels \(1,2\) together and labels \(3,4\) together. Both output distributions are \((1/2,1/2)\). Before grouping, \(D(q\|p)=0.6\ln4\approx0.8318\). After grouping, it is zero. The within-group differences cannot be recovered from the recorded group alone.
+
+\end{example}
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}[every node/.style={font=\small},>=Stealth]
+\node[anchor=west] at (0,4.5){Input label};\node[anchor=west] at (2,4.5){$q_i$};\node[anchor=west] at (3.1,4.5){$p_i$};
+\node[anchor=west] at (7,4.5){Recorded group};
+\foreach \i/\y/\q/\p in {1/3.5/.4/.1,2/2.5/.1/.4,3/1.5/.4/.1,4/.5/.1/.4}{
+\node at (.5,\y){\i};\node at (2.3,\y){\q};\node at (3.4,\y){\p};}
+\draw[->,teal,thick] (4,3.5)--(7,3);\draw[->,teal,thick] (4,2.5)--(7,3);
+\draw[->,copper,thick] (4,1.5)--(7,1);\draw[->,copper,thick] (4,.5)--(7,1);
+\node[anchor=west,align=left] at (7.2,3){Group $\{1,2\}$\\Both models: $1/2$};
+\node[anchor=west,align=left] at (7.2,1){Group $\{3,4\}$\\Both models: $1/2$};
+\node[anchor=west] at (0,-.5){$D(q\Vert p)=0.6\ln4\quad\longrightarrow\quad D(Kq\Vert Kp)=0$};
+\end{tikzpicture}}
+\caption{Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.}\end{figure}
+
+\hypertarget{ch10-the-log-sum-inequality}{%
+\section{The log-sum inequality}\label{ch10-the-log-sum-inequality}}
+
+Let \(a_i,b_i\) be nonnegative numbers with positive totals \(A=\sum_i a_i\) and \(B=\sum_i b_i\), and suppose \(b_i>0\) wherever \(a_i>0\). Applying Gibbs' inequality to \(a_i/A\) and \(b_i/B\) gives \[\sum_i a_i\ln\frac{a_i}{b_i}\geq A\ln\frac AB.\] To see this directly, multiply \(D(a/A\|b/B)\geq0\) by \(A\) and expand the logarithm. This is the \textbf{log-sum inequality}. It compares the divergence contributions before and after a set of entries is merged.
+
+Apply it separately to each output label \(j\), using \(a_i=K_{ji}q_i\) and \(b_i=K_{ji}p_i\). The output totals are \((Kq)_j\) and \((Kp)_j\). Summing over outputs gives \[D(Kq\|Kp)\leq\sum_{j,i}K_{ji}q_i\ln\frac{q_i}{p_i}
+=D(q\|p),\] because each column of \(K\) sums to one. Terms with \(K_{ji}=0\) contribute zero. The usual support conventions cover zero totals and infinite divergences.
+
+\begin{proposition}[Data processing for relative entropy]
+
+For a column-stochastic matrix applied to both distributions, \(D(Kq\|Kp)\leq D(q\|p)\).
+
+\end{proposition}
+
+The same channel must be used for both tables. Applying different recording rules can create differences caused by those rules themselves. For deterministic grouping with positive probabilities, equality holds exactly when \(q_i/p_i\) is constant within each group: no distinction relevant to that ratio is lost within a group.
+
+\hypertarget{ch10-square-root-overlap-also-contracts-distance}{%
+\section{Square-root overlap also contracts distance}\label{ch10-square-root-overlap-also-contracts-distance}}
+
+For each output label, Cauchy--Schwarz gives \[\sqrt{\left(\sum_iK_{ji}q_i\right)\left(\sum_iK_{ji}p_i\right)}
+\geq\sum_iK_{ji}\sqrt{q_ip_i}.\] Adding over \(j\) and using column sums yields \[B(Kq,Kp)\geq B(q,p).\] Since inverse cosine decreases as its argument increases, the spherical distance satisfies \[d(Kq,Kp)\leq d(q,p).\] Hellinger distance also cannot increase, because its square is \(1-B\). Thus two different constructions, a logarithmic discrepancy and a square-root distance, both obey an information-loss principle under the same finite observation rule.
+
+\begin{example}[A noisy binary observation]
+
+Suppose a binary label is flipped with probability \(1/4\), so \(K=\left(\begin{smallmatrix}3/4&1/4\\1/4&3/4\end{smallmatrix}\right)\). The tables \((0.9,0.1)\) and \((0.1,0.9)\) become \((0.7,0.3)\) and \((0.3,0.7)\). Their overlap increases from \(0.6\) to \(2\sqrt{0.21}\approx0.9165\). Their spherical distance decreases from approximately \(1.8546\) to \(0.8230\).
+
+\end{example}
+
+\hypertarget{ch10-when-does-entropy-increase-on-a-network}{%
+\section{When does entropy increase on a network?}\label{ch10-when-does-entropy-increase-on-a-network}}
+
+A stochastic channel can lower entropy. A channel that sends every input to one output converts every distribution into a certain outcome with entropy zero. The data-processing inequality compares two models through the same channel; entropy measures the uncertainty of one table. The questions are related but distinct.
+
+For a doubly stochastic matrix, uniform \(u\) is stationary. Data processing then gives \[D(Kp\|u)=D(Kp\|Ku)\leq D(p\|u).\] Using \(D(p\|u)=\ln k-H(p)\) shows \(H(Kp)\geq H(p)\). This is an exact entropy-increase statement with a specific assumption on the channel. Equality can occur at a nonuniform table, as a permutation simply rearranges its probabilities.
+
+\hypertarget{ch10-a-finite-statistical-family}{%
+\section{A finite statistical family}\label{ch10-a-finite-statistical-family}}
+
+A collection of probability tables indexed by one or more parameters is a \textbf{statistical family}. On fixed labels \(x_i\), for example, the weights \[p_i(m,a)=\frac{e^{-a(x_i-m)^2}}{\sum_je^{-a(x_j-m)^2}},\qquad a>0,\] form a finite bell-shaped family. Changing \(m\) shifts the emphasis across the labels, and changing \(a\) changes its concentration. These are normalized weights on a fixed finite set. Their entropy, relative entropy, and spherical distance can all be computed by the formulas already developed. Grouping labels produces a coarser family and contracts pairwise discrepancies by the same theorems.
+
+This offers a capstone investigation: choose two parameter values, calculate their tables, apply a recording channel, and quantify the distinctions retained. The finite sums, token graphs, and exact updates developed throughout the course provide the tools for carrying out the investigation and explaining its assumptions.
+
+\hypertarget{ch10-solving-the-three-node-walk-exactly}{%
+\section{Solving the three-node walk exactly}\label{ch10-solving-the-three-node-walk-exactly}}
+
+The particular walk introduced earlier can be solved by tracking two contrasts. Write \[a_t=p_{1,t}-p_{3,t},\qquad b_t=p_{1,t}-2p_{2,t}+p_{3,t}.\] Substituting the three update equations and collecting coefficients gives \[a_{t+1}=\frac34a_t,\qquad b_{t+1}=\frac14b_t.\] Both are geometric sequences. Combining these contrasts with \(p_{1,t}+p_{2,t}+p_{3,t}=1\) recovers the probabilities: \[p_{1,t}=\frac13+\frac{b_t}{6}+\frac{a_t}{2},\quad
+p_{2,t}=\frac13-\frac{b_t}{3},\quad
+p_{3,t}=\frac13+\frac{b_t}{6}-\frac{a_t}{2}.\] Because \((3/4)^t\) and \((1/4)^t\) approach zero, every initial table for this walk approaches uniform. This proves the claim for the stated matrix by two scalar recurrences, without needing a general matrix convergence theorem.
+
+\begin{example}[An exact three-step distribution]
+
+From \((1,0,0)\), both initial contrasts are one. At step three, \(a_3=27/64\) and \(b_3=1/64\). The recovered table is \((35/64,21/64,8/64)\). Direct multiplication of the step-two table \((5/8,5/16,1/16)\) by the walk matrix gives the same answer.
+
+\end{example}
+
+\hypertarget{ch10-where-the-lost-divergence-goes-under-grouping}{%
+\section{Where the lost divergence goes under grouping}\label{ch10-where-the-lost-divergence-goes-under-grouping}}
+
+For deterministic groups \(G_j\), define output masses \(Q_j=\sum_{i\in G_j}q_i\) and \(P_j=\sum_{i\in G_j}p_i\). Assume positive input tables. Within group \(j\), form conditional tables \(q_i/Q_j\) and \(p_i/P_j\). Splitting the logarithm gives \[D(q\|p)=D(Q\|P)+\sum_j Q_j D\left(q(\cdot\mid G_j)\middle\|p(\cdot\mid G_j)\right).\] The first term is the discrepancy retained in the group labels. The second is the average discrepancy among labels inside a group. Every lost contribution is nonnegative. Equality under grouping occurs exactly when the two within-group conditional tables agree, equivalent to a constant ratio \(q_i/p_i\) in each group.
+
+\begin{example}[Retained and lost distinctions]
+
+For the four-label tables \((0.4,0.1,0.4,0.1)\) and \((0.1,0.4,0.1,0.4)\), adjacent-pair grouping gives the same output masses. All the divergence is in the conditional tables \((0.8,0.2)\) and \((0.2,0.8)\) within each pair. Grouping labels \(1,3\) together instead gives outputs \((0.8,0.2)\) and \((0.2,0.8)\), while each within-group conditional table is uniform. This second grouping preserves the full divergence.
+
+\end{example}
+
+\hypertarget{ch10-composing-observation-rules}{%
+\section{Composing observation rules}\label{ch10-composing-observation-rules}}
+
+If channel \(K\) is followed by channel \(L\), the combined rule is the matrix product \(LK\). Its entries are \((LK)_{hi}=\sum_jL_{hj}K_{ji}\). Each term represents passing through intermediate output \(j\). Nonnegativity is immediate, and adding over \(h\) gives one for every input column. Thus the composition is again a stochastic channel.
+
+Applying data processing twice gives \[D(LKq\|LKp)\leq D(Kq\|Kp)\leq D(q\|p).\] The spherical distances obey the same succession of inequalities. This gives a mathematical description of a recording pipeline: sampling labels, adding noise, grouping outputs, and recording an even coarser category can be analyzed one finite operation at a time. A stage may preserve a particular pair's discrepancy, but a later common stage cannot restore a distinction already erased from those output tables.
+
+\hypertarget{ch10-exercises}{%
+\section{Exercises}\label{ch10-exercises}}
+
+\begin{exercises}
+
+\item 
+
+Verify the column sums of the three-node walk matrix and compute one update of \((1/2,1/4,1/4)\).
+
+\item 
+
+Show algebraically that a column-stochastic matrix maps probability vectors to probability vectors.
+
+\item 
+
+Find the stationary table of the binary flip channel in the example.
+
+\item 
+
+Write the matrix for the cyclic permutation \((p_A,p_B,p_C)\mapsto(p_C,p_A,p_B)\) and verify its period.
+
+\item 
+
+For \(q=(0.4,0.1,0.4,0.1)\) and \(p=(0.1,0.4,0.1,0.4)\), compute their overlap before and after the stated grouping.
+
+\item 
+
+Derive the log-sum inequality from Gibbs' inequality.
+
+\item 
+
+Give a grouping for which two distinct positive tables retain their relative entropy exactly. Explain the ratio condition within groups.
+
+\item 
+
+Verify the relative-entropy contraction numerically for the binary flip example.
+
+\item 
+
+Prove that a doubly stochastic matrix preserves the uniform distribution.
+
+\item 
+
+Give a stochastic channel that strictly lowers the entropy of the uniform distribution. Explain why this does not violate data processing.
+
+\item 
+
+On labels \(-2,-1,0,1,2\), calculate the finite bell-shaped table with \(m=0\) and \(a=\ln2\). Compare its entropy with uniform entropy.
+
+\item 
+
+Design a capstone comparing two probability models before and after grouping. Include a data table, both directed relative entropies, spherical distance, a channel specification, and an interpretation of any lost distinction.
+
+\end{exercises}
+
+\hypertarget{ch10-selected-solutions}{%
+\section{Selected solutions}\label{ch10-selected-solutions}}
+
+\textbf{1.} The new table is \((7/16,5/16,1/4)\).
+
+\textbf{3.} Solving \(x=(3/4)x+(1/4)(1-x)\) gives \(x=1/2\), so the stationary table is uniform.
+
+\textbf{5.} The input overlap is \(4\sqrt{0.04}=0.8\). The equal outputs have overlap one.
+
+\textbf{7.} Group labels \(1,2\) together and \(3,4\) together. Take \(p=(0.1,0.2,0.3,0.4)\) and \(q=(0.2,0.4,6/35,8/35)\). Both sum to one, and the within-group ratios are \(2\) and \(4/7\). Log-sum has equality in each group, so the divergence is preserved.
+
+\textbf{9.} For \(u_i=1/k\), the output entry is \((Ku)_j=(1/k)\sum_iK_{ji}=1/k\) by the row-sum condition.
+
+\textbf{11.} The unnormalized weights are \((1/16,1/2,1,1/2,1/16)\) with total \(17/8\). The table is \((1/34,4/17,8/17,4/17,1/34)\). It is nonuniform and has entropy strictly less than \(\ln5\).
+\labheading\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For the three-node walk in the reading, verify the row and column sums and compute three updates from \((1,0,0)\). Check that uniform is stationary. Compare this with a cyclic permutation, which preserves uniform but has periodic trajectories.
+\item
+  In the demonstration, begin with its two four-label tables and apply within-pair noise at levels \(0\), \(0.25\), and \(0.5\). Record both directed relative entropies, overlap, and spherical distance. Explain why the same channel must be applied to both tables.
+\item
+  Compare the two offered groupings of the four labels. Find a grouping that erases the distinction between the default models and a grouping that retains it. Explain the result through the ratios inside each group.
+\item
+  Derive the log-sum inequality from Gibbs' inequality, then use it to prove the relative-entropy data-processing bound. Separately prove overlap increases using Cauchy--Schwarz.
+\item
+  Prepare a capstone report using two positive finite models of your choice. Specify a recording channel, show input and output tables, compute all discrepancies, and interpret the information retained. Include one example showing why entropy alone need not increase under a general channel.
+\end{enumerate}
+
+\FloatBarrier
+
+\backmatter
+
+\chapter*{Further reading}\addcontentsline{toc}{chapter}{Further reading}
+The following sources provide broader context and more advanced developments. Their prerequisites vary; the present chapters supply the definitions needed for the accompanying course.
+\begin{description}[style=nextline,leftmargin=0pt]
+\item[Arora, S., Hazan, E., and Kale, S. (2012).] The multiplicative weights update method: a meta-algorithm and applications. \emph{Theory of Computing} 8, 121--164. \url{https://theoryofcomputing.org/articles/v008a006/}. An extensive account of finite learning updates and their applications.
+\item[Levin, D. A., and Peres, Y. (2017).] \emph{Markov Chains and Mixing Times}, second edition, with contributions by E. L. Wilmer. American Mathematical Society. Author resources: \url{https://pages.uoregon.edu/dlevin/MARKOV/}. Develops finite Markov chains, stationarity, and convergence.
+\item[Nielsen, F. (2020).] An elementary introduction to information geometry. \emph{Entropy} 22(10), 1100. \url{https://doi.org/10.3390/e22101100}. A survey connecting statistical divergences with geometric structures.
+\item[Shannon, C. E. (1948).] A mathematical theory of communication. \emph{Bell System Technical Journal} 27, 379--423 and 623--656. The foundational paper on entropy and communication.
+\end{description}
+
+\end{document}

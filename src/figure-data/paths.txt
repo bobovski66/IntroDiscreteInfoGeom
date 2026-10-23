@@ -1,0 +1,1 @@
+A spherical geodesic mapped back to the probability triangle, compared with the ordinary mixture segment between the same endpoints.

@@ -1,0 +1,9 @@
+\begin{tikzpicture}[level distance=1.5cm,sibling distance=4cm,every node/.style={font=\small},edge from parent/.style={draw,ink,thick},label distance=2pt]
+\node[circle,draw=ink,inner sep=3pt]{}
+child{node[align=center]{$A:0$\\$p_A=1/2$} edge from parent node[above left]{$0$}}
+child{node[circle,draw=ink,inner sep=3pt]{}
+child[sibling distance=3cm]{node[align=center]{$B:10$\\$p_B=1/4$} edge from parent node[above left]{$0$}}
+child[sibling distance=3cm]{node[align=center]{$C:11$\\$p_C=1/4$} edge from parent node[above right]{$1$}}
+edge from parent node[above right]{$1$}};
+\node[align=left,anchor=west] at (5,-1.5){Expected length: $3/2$ bits\\Entropy: $3/2$ bits\\Kraft sum: $1$};
+\end{tikzpicture}
