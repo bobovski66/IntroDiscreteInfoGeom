@@ -197,3 +197,8 @@ Q('For deterministic grouping with positive entries, KL equality holds when:', [
 ]
 for n,w in enumerate(WEEKS,1):
     w['week']=n
+
+# The calculus-first edition uses the revised weekly learning goals and assessments.
+from calculus_curriculum import CURRICULUM
+for n,w in enumerate(WEEKS,1):
+    w.update(CURRICULUM[n])
