@@ -1,6 +1,6 @@
 """Editorial metadata, laboratory investigations, and quiz feedback."""
 TITLE = 'Discrete Information Geometry'
-SUBTITLE = 'Probability, Counting, and Finite Dynamics'
+SUBTITLE = 'Finite Differences, Probability, and Information Flows'
 def Q(prompt, choices, answer, explanation):
     return dict(prompt=prompt, choices=choices, answer=answer, explanation=explanation)
 WEEKS = [
