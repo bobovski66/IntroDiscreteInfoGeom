@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,37 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 6\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 6\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{5}
 
-\chapter{Relative entropy and finite contraction}
+\chapter{Relative entropy and discrete Lyapunov theory}
+\section{Relative entropy compares distributions}\label{ch06-relative-entropy-compares-distributions}
+
+For positive probability tables \(p\) and \(q\), define the relative entropy \[D(p\|q)=\sum_i p_i\log\frac{p_i}{q_i}.\] It is generally asymmetric: changing the order of \(p\) and \(q\) changes the number. Nevertheless, it is always nonnegative and equals zero exactly when the two tables agree. We can use it as a potential measuring the discrepancy from a reference state.
+
+Suppose \(p_n\) changes in discrete time while \(q\) remains fixed. Define \[V_n=D(p_n\|q),\qquad \Delta V_n=V_{n+1}-V_n.\] This is an ordinary first difference of a sequence, even though each term comes from a function on a probability simplex. If \(\Delta V_n\leq0\), we call \(V\) a \textbf{discrete Lyapunov function} for the chosen update: its value never increases along an orbit.
+
+\section{A mixing rule with a known fixed point}\label{ch06-a-mixing-rule-with-a-known-fixed-point}
+
+Fix a positive reference distribution \(q\) and a mixing strength \(0\leq\lambda\leq1\). Define \[p_{n+1}=(1-\lambda)p_n+\lambda q.\] The error \(p_n-q\) is multiplied by \(1-\lambda\) every step: \[p_n-q=(1-\lambda)^n(p_0-q).\] For \(0<\lambda\leq1\), the distribution approaches \(q\). This is the vector form of the stable scalar difference equation from Week 2.
+
+The convexity of relative entropy in its first argument gives \[D((1-\lambda)p+\lambda q\|q)\leq(1-\lambda)D(p\|q).\] Consequently \[\boxed{\Delta V_n\leq-\lambda V_n.}\] This is a quantitative stability statement: a whole step reduces KL discrepancy by at least the stated fraction. The derivation uses a finite inequality, not an infinitesimal derivative.
+
+\section{A concrete calculation}\label{ch06-a-concrete-calculation}
+
+Take \(p_0=(3/4,1/4)\), \(q=(1/2,1/2)\) and \(\lambda=1/2\). Then \[p_1=(5/8,3/8),\qquad p_2=(9/16,7/16).\] Calculate \(D(p_0\|q)\), \(D(p_1\|q)\), and \(D(p_2\|q)\) on a calculator. Each is positive and smaller than its predecessor. Plotting those numbers against \(n\) displays a \emph{Lyapunov sequence}.
+
+\section{Discrete integration of dissipation}\label{ch06-discrete-integration-of-dissipation}
+
+Apply the discrete fundamental theorem to the Lyapunov sequence: \[\sum_{n=0}^{T-1}\big(V_n-V_{n+1}\big)=V_0-V_T.\] The left side is the total discrepancy dissipated across \(T\) steps. If \(V_n\) converges to zero, the infinite sum of the one-step losses equals \(V_0\).
+
+The sections that follow develop Gibbs' inequality and finite contraction results. We can now interpret these inequalities dynamically, as bounds on the discrete derivative of an information potential.
+
+\section{Further investigations: Relative entropy and discrete Lyapunov theory}\label{ch06-further-investigations-relative-entropy-and-discrete-lyapunov-theory}
+
 Two probability tables can describe competing models of the same observations. Relative entropy measures a discrepancy between those tables, with a definite role for each argument. Its most useful properties follow from finite inequalities. We will also construct a recurrence for which relative entropy decreases at a provable rate.
 
-\hypertarget{ch06-cross-entropy-and-relative-entropy}{%
-\section{Cross-entropy and relative entropy}\label{ch06-cross-entropy-and-relative-entropy}}
+\section{Cross-entropy and relative entropy}\label{ch06-cross-entropy-and-relative-entropy}
 
 Suppose observations follow distribution \(q\), while a proposed model assigns probabilities \(p\). The average surprisal under the proposed model is the \textbf{cross-entropy} \[H(q,p)=-\sum_iq_i\ln p_i.\] Subtracting the actual entropy of \(q\) defines the \textbf{Kullback--Leibler divergence}, or \textbf{relative entropy}: \[D(q\|p)=\sum_iq_i\ln\frac{q_i}{p_i}=H(q,p)-H(q).\] All logarithms in this chapter are natural, so the units are nats. To express the same quantity in bits, divide by \(\ln2\). Terms with \(q_i=0\) contribute zero. If \(q_i>0\) and \(p_i=0\) for any label, the divergence is infinite: the proposed model makes an actually possible observation impossible.
 
@@ -115,8 +138,7 @@ For \(q=(1/2,1/2)\) and \(p=(3/4,1/4)\), \[D(q\|p)=\tfrac12\ln(2/3)+\tfrac12\ln2
 
 \end{example}
 
-\hypertarget{ch06-nonnegativity-from-an-arithmetic-geometric-inequality}{%
-\section{Nonnegativity from an arithmetic-geometric inequality}\label{ch06-nonnegativity-from-an-arithmetic-geometric-inequality}}
+\section{Nonnegativity from an arithmetic-geometric inequality}\label{ch06-nonnegativity-from-an-arithmetic-geometric-inequality}
 
 First assume every \(q_i\) is positive and all corresponding \(p_i\) are positive. Weighted arithmetic-geometric mean gives \[\prod_i\left(\frac{p_i}{q_i}\right)^{q_i}\leq\sum_iq_i\frac{p_i}{q_i}=1.\] Taking logarithms and reversing the sign proves \(D(q\|p)\geq0\). If some \(q_i\) vanish, apply the inequality on the support of \(q\); the sum on the right is then at most one. The same conclusion holds. Equality requires \(p=q\), including agreement on the zero entries.
 
@@ -128,8 +150,7 @@ Let \(u_i=1/k\). Expanding the definition gives \[D(p\|u)=\sum_i p_i\ln p_i+\ln 
 
 \end{example}
 
-\hypertarget{ch06-finite-data-give-an-exact-likelihood-comparison}{%
-\section{Finite data give an exact likelihood comparison}\label{ch06-finite-data-give-an-exact-likelihood-comparison}}
+\section{Finite data give an exact likelihood comparison}\label{ch06-finite-data-give-an-exact-likelihood-comparison}
 
 Suppose an ordered sample has counts \(n_i\) and empirical distribution \(\widehat q_i=n_i/N\). Under independent observations, its likelihood under model \(p\) is \(L(p)=\prod_i p_i^{n_i}\). Taking logarithms, \[\ln L(p)=N\sum_i\widehat q_i\ln p_i.\] Consequently, \[\ln L(\widehat q)-\ln L(p)=N D(\widehat q\|p).\] The same identity holds for the likelihood of the count vector, since its multinomial coefficient cancels in the ratio. It proves that the empirical table maximizes the likelihood over all distributions, using only Gibbs' inequality. A table with zero entries can maximize likelihood for the observed sample while assigning zero probability to a category that could appear in a later sample.
 
@@ -139,8 +160,7 @@ For ten binary observations with counts \((8,2)\), compare the empirical table \
 
 \end{example}
 
-\hypertarget{ch06-a-recurrence-with-guaranteed-contraction}{%
-\section{A recurrence with guaranteed contraction}\label{ch06-a-recurrence-with-guaranteed-contraction}}
+\section{A recurrence with guaranteed contraction}\label{ch06-a-recurrence-with-guaranteed-contraction}
 
 Fix a target distribution \(q\) and choose \(0<\lambda\leq1\). Define the \textbf{mixture update} \[p^+=(1-\lambda)p+\lambda q.\] Each coordinate is an ordinary weighted average. The difference from the target satisfies \(p^+-q=(1-\lambda)(p-q)\). Repeating this identity yields \[p_t=(1-\lambda)^t p_0+\bigl[1-(1-\lambda)^t\bigr]q.\] Thus the target is approached geometrically when \(0<\lambda<1\) and is reached in one step when \(\lambda=1\).
 
@@ -161,16 +181,14 @@ The recurrence was chosen to have this property. A state-dependent payoff update
 \end{axis}\end{tikzpicture}}
 \caption{Mixture contraction toward binary target (0.5,0.5) from (0.9,0.1), with mixture fraction 0.25. The proven bound lies above the actual divergence.}\end{figure}
 
-\hypertarget{ch06-mixing-and-the-value-of-entropy}{%
-\section{Mixing and the value of entropy}\label{ch06-mixing-and-the-value-of-entropy}}
+\section{Mixing and the value of entropy}\label{ch06-mixing-and-the-value-of-entropy}
 
 Let \(m=(1-\lambda)p+\lambda r\). Expanding the definitions gives the identity \[H(m)-(1-\lambda)H(p)-\lambda H(r)
 =(1-\lambda)D(p\|m)+\lambda D(r\|m).\] The right side is nonnegative, so entropy is \textbf{concave}: the entropy of a mixture is at least the mixture of the entropies. For \(0<\lambda<1\), equality holds precisely when \(p=r\). The identity explains how much uncertainty is gained when two different probability tables are pooled without retaining their source label.
 
 As another application of Gibbs' inequality, let a prefix code have lengths \(\ell_i\) and Kraft sum \(C=\sum_i2^{-\ell_i}\leq1\). Put \(r_i=2^{-\ell_i}/C\). Then \[D(p\|r)=-H(p)+(\ln2)\sum_i p_i\ell_i+\ln C\geq0.\] Hence the expected code length satisfies \(\sum_i p_i\ell_i\geq H_2(p)-\log_2C\geq H_2(p)\). The lower bound comes from a probability inequality combined with a counting restriction on trees.
 
-\hypertarget{ch06-likelihood-ratios-accumulate-by-addition}{%
-\section{Likelihood ratios accumulate by addition}\label{ch06-likelihood-ratios-accumulate-by-addition}}
+\section{Likelihood ratios accumulate by addition}\label{ch06-likelihood-ratios-accumulate-by-addition}
 
 Suppose two models \(q\) and \(p\) assign positive probabilities to the same labels. For an ordered sample \((i_1,\ldots,i_N)\), the likelihood ratio is \(\prod_{t=1}^Nq_{i_t}/p_{i_t}\). Its logarithm is the sum of the individual log-likelihood ratios. If the sample really follows \(q\) independently, the expected value of each summand is \(D(q\|p)\). Linearity of expectation gives expected total log-likelihood ratio \(ND(q\|p)\).
 
@@ -182,8 +200,7 @@ Let \(q=(3/4,1/4)\) and \(p=(1/2,1/2)\). Observing the first label contributes \
 
 \end{example}
 
-\hypertarget{ch06-a-finite-method-for-avoiding-zero-estimates}{%
-\section{A finite method for avoiding zero estimates}\label{ch06-a-finite-method-for-avoiding-zero-estimates}}
+\section{A finite method for avoiding zero estimates}\label{ch06-a-finite-method-for-avoiding-zero-estimates}
 
 Given counts \(n_i\), one may add a positive number \(\alpha\) to every count and normalize: \[\widetilde p_i=\frac{n_i+\alpha}{N+k\alpha}.\] This \textbf{additive smoothing} produces a positive table, including for labels not observed in the sample. If \(N>0\), it can be written as a mixture of the empirical table and uniform: \[\widetilde p=\frac{N}{N+k\alpha}\widehat p+\frac{k\alpha}{N+k\alpha}u.\] The added counts have an explicit weight. For a fixed \(\alpha\), that weight decreases as more observations arrive. Smoothing is a choice of estimator; the empirical likelihood-maximizing property by itself does not force it.
 
@@ -193,15 +210,13 @@ For counts \((4,1,0)\) and \(\alpha=1\), the smoothed table is \((5/8,2/8,1/8)\)
 
 \end{example}
 
-\hypertarget{ch06-a-symmetric-discrepancy-built-from-two-directed-ones}{%
-\section{A symmetric discrepancy built from two directed ones}\label{ch06-a-symmetric-discrepancy-built-from-two-directed-ones}}
+\section{A symmetric discrepancy built from two directed ones}\label{ch06-a-symmetric-discrepancy-built-from-two-directed-ones}
 
 Although relative entropy is directed, a symmetric finite comparison can be formed by introducing the midpoint \(m=(p+r)/2\): \[\operatorname{JS}(p,r)=\frac12D(p\|m)+\frac12D(r\|m).\] This is the \textbf{Jensen--Shannon divergence}. By the entropy-mixture identity, it also equals \(H(m)-(H(p)+H(r))/2\). It is symmetric and nonnegative. It is finite even for disjoint supports, because the midpoint is positive wherever either input is positive.
 
 Furthermore, \(m_i\geq p_i/2\) gives \(\ln(p_i/m_i)\leq\ln2\) on the support of \(p\), so \(D(p\|m)\leq\ln2\). The same argument holds for \(r\), and consequently \(\operatorname{JS}(p,r)\leq\ln2\). For two disjoint pure states the value is exactly \(\ln2\). This provides another example of deriving a useful finite bound by comparing coordinates directly.
 
-\hypertarget{ch06-exercises}{%
-\section{Exercises}\label{ch06-exercises}}
+\section{Exercises}\label{ch06-exercises}
 
 \begin{exercises}
 
@@ -255,8 +270,7 @@ Propose a numerical experiment that tests divergence contraction. State which di
 
 \end{exercises}
 
-\hypertarget{ch06-selected-solutions}{%
-\section{Selected solutions}\label{ch06-selected-solutions}}
+\section{Selected solutions}\label{ch06-selected-solutions}
 
 \textbf{1.} The divergence is \(\ln4\). If \(p_1=0\), it is infinite.
 
@@ -273,15 +287,15 @@ Propose a numerical experiment that tests divergence contraction. State which di
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  For \(q=(1/2,1/2)\) and \(p=(3/4,1/4)\), compute both directed relative entropies. Explain the meaning of each argument and why the results need not agree.
+  Let \(p=(3/4,1/4)\) and \(q=(1/2,1/2)\). (a) Compute \(D(p\|q)\) exactly as a logarithmic expression. (b) Compute \(D(q\|p)\). (c) Explain why the two differ.
 \item
-  An independent binary sample has counts \((8,2)\). Compare the empirical and fair-model likelihoods directly and through \(10D(\widehat q\|p)\). Report both a log-likelihood ratio and a likelihood ratio.
+  Use the mixture update \(p_{n+1}=\tfrac12p_n+\tfrac12q\), with \(p_0=(3/4,1/4)\). (a) Calculate \(p_1,p_2,p_3\). (b) Check each is a probability vector. (c) Calculate the errors \(p_n-q\).
 \item
-  In the demonstration, choose target A proportion \(0.5\), initial A proportion \(0.9\), and mixture fraction \(0.5\). Record five steps of the table, the actual \(D(q\|p_t)\), and the bound \((1-\lambda)^tD(q\|p_0)\).
+  Using the sequence from Investigation 2, (a) calculate \(V_n=D(p_n\|q)\) for \(n=0,1,2,3\), (b) compute \(\Delta V_0,\Delta V_1,\Delta V_2\), and (c) test \(V_{n+1}\leq\tfrac12 V_n\) numerically.
 \item
-  Prove the coordinatewise arithmetic-geometric inequality used in the contraction argument. Explain what happens if the initial table has a zero where the target is positive and why the first mixture step repairs that support mismatch.
+  Prove by induction that \(p_n-q=(1-\lambda)^n(p_0-q)\) for a general mixture parameter \(\lambda\). (a) Verify at \(n=0\). (b) Show the step from \(n\) to \(n+1\). (c) Explain why the formula establishes convergence for \(0<\lambda\leq1\).
 \item
-  Choose two three-label tables and a mixture fraction. Verify the entropy concavity identity numerically, including both divergence terms. Explain what the identity says about hiding the source label when tables are pooled.
+  Treat \(V_n\) as a sequence of potential values. (a) Write its first three dissipation terms \(V_n-V_{n+1}\). (b) Sum them. (c) Explain why the cancellation identity measures total information discrepancy lost over three updates.
 \end{enumerate}
 
 \FloatBarrier

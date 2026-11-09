@@ -1,14 +1,73 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 6: Relative entropy and finite contraction · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="6"><p class="eyebrow">Week 6 · Reading</p><h1>Relative entropy and discrete Lyapunov theory</h1><nav class="week-nav" aria-label="Week 6 resources"><a aria-current=page href="../readings/week06.html">Reading</a><a  href="../demos/week06.html">Demonstration</a><a  href="../labs/week06.html">Lab</a><a  href="../quizzes/week06.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter06.pdf">Chapter 6 PDF</a> · <a href="../textbook/latex/chapter06.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Evaluate directed KL divergence between finite models.</li><li>Construct and interpret a discrete Lyapunov sequence.</li><li>Prove and use a finite contraction bound for mixing.</li></ul></aside><article class="reading-text"><!-- DISCRETE CALCULUS CORE: Week 6 --><section class="calculus-core"><p class="lede">Use the change of KL divergence from one time step to the next to establish stability.</p><h2>Relative entropy compares distributions</h2>
-<p>For positive probability tables \(p\) and \(q\), define the relative entropy $\(D(p\|q)=\sum_i p_i\log\frac{p_i}{q_i}.\)\( It is generally asymmetric: changing the order of \)p\( and \)q$ changes the number. Nevertheless, it is always nonnegative and equals zero exactly when the two tables agree. We can use it as a potential measuring the discrepancy from a reference state.</p>
-<p>Suppose \(p_n\) changes in discrete time while \(q\) remains fixed. Define $\(V_n=D(p_n\|q),\qquad \Delta V_n=V_{n+1}-V_n.\)\( This is an ordinary first difference of a sequence, even though each term comes from a function on a probability simplex. If \)\Delta V_n\leq0\(, we call \)V$ a <strong>discrete Lyapunov function</strong> for the chosen update: its value never increases along an orbit.</p>
-<h2>A mixing rule with a known fixed point</h2>
-<p>Fix a positive reference distribution \(q\) and a mixing strength \(0\leq\lambda\leq1\). Define $\(p_{n+1}=(1-\lambda)p_n+\lambda q.\)\( The error \)p_n-q\( is multiplied by \)1-\lambda\( every step: \)\(p_n-q=(1-\lambda)^n(p_0-q).\)\( For \)0&lt;\lambda\leq1\(, the distribution approaches \)q$. This is the vector form of the stable scalar difference equation from Week 2.</p>
-<p>The convexity of relative entropy in its first argument gives $\(D((1-\lambda)p+\lambda q\|q)\leq(1-\lambda)D(p\|q).\)\( Consequently \)\(\boxed{\Delta V_n\leq-\lambda V_n.}\)$ This is a quantitative stability statement: a whole step reduces KL discrepancy by at least the stated fraction. The derivation uses a finite inequality, not an infinitesimal derivative.</p>
-<h2>A concrete calculation</h2>
-<p>Take \(p_0=(3/4,1/4)\), \(q=(1/2,1/2)\) and \(\lambda=1/2\). Then $\(p_1=(5/8,3/8),\qquad p_2=(9/16,7/16).\)\( Calculate \)D(p_0\|q)\(, \)D(p_1\|q)\(, and \)D(p_2\|q)\( on a calculator. Each is positive and smaller than its predecessor. Plotting those numbers against \)n$ displays a <em>Lyapunov sequence</em>.</p>
-<h2>Discrete integration of dissipation</h2>
-<p>Apply the discrete fundamental theorem to the Lyapunov sequence: $\(\sum_{n=0}^{T-1}\big(V_n-V_{n+1}\big)=V_0-V_T.\)\( The left side is the total discrepancy dissipated across \)T\( steps. If \)V_n\( converges to zero, the infinite sum of the one-step losses equals \)V_0$.</p>
-<p>The sections that follow develop Gibbs' inequality and finite contraction results. We can now interpret these inequalities dynamically, as bounds on the discrete derivative of an information potential.</p></section><h2>Further investigations and applications</h2><p>Two probability tables can describe competing models of the same
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 6: Relative entropy and discrete Lyapunov theory · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="6"><p class="eyebrow">Week 6 · Reading</p><h1>Relative entropy and discrete Lyapunov theory</h1><nav class="week-nav" aria-label="Week 6 resources"><a aria-current=page href="../readings/week06.html">Reading</a><a  href="../demos/week06.html">Demonstration</a><a  href="../labs/week06.html">Lab</a><a  href="../quizzes/week06.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter06.pdf">Chapter 6 PDF</a> · <a href="../textbook/latex/chapter06.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Evaluate directed KL divergence between finite models.</li><li>Construct and interpret a discrete Lyapunov sequence.</li><li>Prove and use a finite contraction bound for mixing.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 6 -->
+<h2 id="relative-entropy-compares-distributions">Relative entropy
+compares distributions</h2>
+<p>For positive probability tables <span
+class="math inline">\(p\)</span> and <span
+class="math inline">\(q\)</span>, define the relative entropy <span
+class="math display">\[D(p\|q)=\sum_i p_i\log\frac{p_i}{q_i}.\]</span>
+It is generally asymmetric: changing the order of <span
+class="math inline">\(p\)</span> and <span
+class="math inline">\(q\)</span> changes the number. Nevertheless, it is
+always nonnegative and equals zero exactly when the two tables agree. We
+can use it as a potential measuring the discrepancy from a reference
+state.</p>
+<p>Suppose <span class="math inline">\(p_n\)</span> changes in discrete
+time while <span class="math inline">\(q\)</span> remains fixed. Define
+<span class="math display">\[V_n=D(p_n\|q),\qquad \Delta
+V_n=V_{n+1}-V_n.\]</span> This is an ordinary first difference of a
+sequence, even though each term comes from a function on a probability
+simplex. If <span class="math inline">\(\Delta V_n\leq0\)</span>, we
+call <span class="math inline">\(V\)</span> a <strong>discrete Lyapunov
+function</strong> for the chosen update: its value never increases along
+an orbit.</p>
+<h2 id="a-mixing-rule-with-a-known-fixed-point">A mixing rule with a
+known fixed point</h2>
+<p>Fix a positive reference distribution <span
+class="math inline">\(q\)</span> and a mixing strength <span
+class="math inline">\(0\leq\lambda\leq1\)</span>. Define <span
+class="math display">\[p_{n+1}=(1-\lambda)p_n+\lambda q.\]</span> The
+error <span class="math inline">\(p_n-q\)</span> is multiplied by <span
+class="math inline">\(1-\lambda\)</span> every step: <span
+class="math display">\[p_n-q=(1-\lambda)^n(p_0-q).\]</span> For <span
+class="math inline">\(0&lt;\lambda\leq1\)</span>, the distribution
+approaches <span class="math inline">\(q\)</span>. This is the vector
+form of the stable scalar difference equation from Week 2.</p>
+<p>The convexity of relative entropy in its first argument gives <span
+class="math display">\[D((1-\lambda)p+\lambda
+q\|q)\leq(1-\lambda)D(p\|q).\]</span> Consequently <span
+class="math display">\[\boxed{\Delta V_n\leq-\lambda V_n.}\]</span> This
+is a quantitative stability statement: a whole step reduces KL
+discrepancy by at least the stated fraction. The derivation uses a
+finite inequality, not an infinitesimal derivative.</p>
+<h2 id="a-concrete-calculation">A concrete calculation</h2>
+<p>Take <span class="math inline">\(p_0=(3/4,1/4)\)</span>, <span
+class="math inline">\(q=(1/2,1/2)\)</span> and <span
+class="math inline">\(\lambda=1/2\)</span>. Then <span
+class="math display">\[p_1=(5/8,3/8),\qquad p_2=(9/16,7/16).\]</span>
+Calculate <span class="math inline">\(D(p_0\|q)\)</span>, <span
+class="math inline">\(D(p_1\|q)\)</span>, and <span
+class="math inline">\(D(p_2\|q)\)</span> on a calculator. Each is
+positive and smaller than its predecessor. Plotting those numbers
+against <span class="math inline">\(n\)</span> displays a <em>Lyapunov
+sequence</em>.</p>
+<h2 id="discrete-integration-of-dissipation">Discrete integration of
+dissipation</h2>
+<p>Apply the discrete fundamental theorem to the Lyapunov sequence:
+<span
+class="math display">\[\sum_{n=0}^{T-1}\big(V_n-V_{n+1}\big)=V_0-V_T.\]</span>
+The left side is the total discrepancy dissipated across <span
+class="math inline">\(T\)</span> steps. If <span
+class="math inline">\(V_n\)</span> converges to zero, the infinite sum
+of the one-step losses equals <span
+class="math inline">\(V_0\)</span>.</p>
+<p>The sections that follow develop Gibbs’ inequality and finite
+contraction results. We can now interpret these inequalities
+dynamically, as bounds on the discrete derivative of an information
+potential.</p>
+<h2
+id="further-investigations-relative-entropy-and-discrete-lyapunov-theory">Further
+investigations: Relative entropy and discrete Lyapunov theory</h2>
+<p>Two probability tables can describe competing models of the same
 observations. Relative entropy measures a discrepancy between those
 tables, with a definite role for each argument. Its most useful
 properties follow from finite inequalities. We will also construct a
@@ -307,4 +366,4 @@ mixture has entropy <span class="math inline">\(\ln2\)</span> nats.</p>
 class="math inline">\(3/4\)</span>. The stronger bound is <span
 class="math inline">\(\log_23-\log_2(3/4)=2\)</span> bits. The actual
 expected length is exactly two bits.</p>
-</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week05.html">← Week 5</a><a href="../readings/week07.html">Week 7 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week05.html">← Week 5</a><a href="../readings/week07.html">Week 7 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

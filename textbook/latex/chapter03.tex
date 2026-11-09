@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,39 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 3\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 3\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{2}
 
-\chapter{Three strategies and probability triangles}
+\chapter{Discrete gradients on the probability simplex}
+\section{A probability triangle becomes a lattice}\label{ch03-a-probability-triangle-becomes-a-lattice}
+
+With three categories, a probability vector is \(p=(p_A,p_B,p_C)\) with nonnegative coordinates adding to one. Fix a total of \(N\) tokens. Each allowed state has the form \[p=\left(\frac aN,\frac bN,\frac cN\right),\qquad a+b+c=N.\] A single transfer between categories moves us to a neighboring lattice point. There are \((N+1)(N+2)/2\) possible states. For \(N=4\), the fifteen points form a small triangular grid.
+
+For instance, from the count state \((2,1,1)\), moving one token from \(C\) to \(A\) gives \((3,1,0)\). The probability displacement is \((1/4,0,-1/4)\). A state near the boundary has fewer allowed moves because an empty category cannot donate a token.
+
+\section{Directional differences of an information function}\label{ch03-directional-differences-of-an-information-function}
+
+A scalar field assigns a number to each probability state. Entropy is one example: \[H(p)=-\sum_i p_i\log p_i,\qquad 0\log0:=0.\] Let \(T_{A\leftarrow C}p=p+(e_A-e_C)/N\), when \(p_C\geq1/N\). Define its directional difference by \[D_{A\leftarrow C}H(p)=H(T_{A\leftarrow C}p)-H(p).\] This is the change in entropy caused by transferring exactly one token. A positive value means that move makes the distribution more uncertain.
+
+For \(N=4\), begin at counts \((2,1,1)\). The move to \((3,1,0)\) reduces entropy, whereas the move to \((1,2,1)\) leaves entropy unchanged because it permutes the counts. These are calculations about neighboring points, so no limit is required.
+
+\section{A discrete gradient is a collection of directional changes}\label{ch03-a-discrete-gradient-is-a-collection-of-directional-changes}
+
+Two independent token-transfer directions span the triangular lattice away from its boundary. If \(u=e_A-e_C\) and \(v=e_B-e_C\), we may record \[\nabla_d H(p)=\big(D_uH(p),D_vH(p)\big).\] This is a pair of changes with respect to a specified lattice basis; it is not automatically the Euclidean gradient vector in ambient \(\mathbb R^3\). It tells us which allowed coordinate step raises or lowers the function.
+
+A \textbf{discrete gradient-ascent rule} evaluates allowed neighboring states and moves to one with the greatest positive increase in \(H\). If no neighbor has a positive increase, the rule stops. Ties need a stated choice rule. This is a perfectly concrete difference equation on a finite state space.
+
+\section{Vector fields, circulation, and flux}\label{ch03-vector-fields-circulation-and-flux}
+
+On an oriented edge \(p\to q\), a gradient edge value is \(H(q)-H(p)\). Adding these values along a path cancels intermediate terms: \[\sum_{\text{path }p\to q} \big(H(\text{head})-H(\text{tail})\big)=H(q)-H(p).\] Every closed-path sum is zero. A general edge field need not have this property: its circulation around a small triangular face can be nonzero.
+
+A flux field assigns an amount transported along each oriented edge. The \textbf{discrete divergence} at a vertex is total outgoing flux minus total incoming flux. Summing divergence over vertices cancels internal edges and leaves only boundary flow. We will use this exact cancellation to describe probability transport in Week 4.
+
+\section{Further investigations: Discrete gradients on the probability simplex}\label{ch03-further-investigations-discrete-gradients-on-the-probability-simplex}
+
 Three types allow motion in two independent directions. A triangle provides a complete picture of their proportions, including mixtures on its edges and pure states at its vertices. Integer population counts supply a natural lattice inside the triangle. These two representations connect geometry with combinatorics.
 
-\hypertarget{ch03-reading-a-probability-triangle}{%
-\section{Reading a probability triangle}\label{ch03-reading-a-probability-triangle}}
+\section{Reading a probability triangle}\label{ch03-reading-a-probability-triangle}
 
 Write \(p=(p_A,p_B,p_C)\) with nonnegative entries adding to one. Place the pure states at \(A=(0,0)\), \(B=(1,0)\), and \(C=(1/2,\sqrt3/2)\). Represent \(p\) by the weighted point \[X=p_AA+p_BB+p_CC=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\] These are \textbf{barycentric coordinates}: the coefficients tell us how much of each vertex contributes. The midpoint of edge \(AB\) is \((1/2,1/2,0)\) in probability coordinates. The center is \((1/3,1/3,1/3)\). A point on edge \(AB\) has \(p_C=0\).
 
@@ -117,8 +142,7 @@ The distribution \((1/2,1/3,1/6)\) is plotted at \((5/12,\sqrt3/12)\). Its heigh
 
 \end{example}
 
-\hypertarget{ch03-tokens-produce-a-triangular-lattice}{%
-\section{Tokens produce a triangular lattice}\label{ch03-tokens-produce-a-triangular-lattice}}
+\section{Tokens produce a triangular lattice}\label{ch03-tokens-produce-a-triangular-lattice}
 
 Suppose the total count is a fixed integer \(N\). A count triple \((a,b,c)\) with \(a+b+c=N\) gives the probability vector \((a/N,b/N,c/N)\). The possible states form a lattice. Moving one token from \(A\) to \(B\) changes the counts by \((-1,1,0)\) and the probabilities by \((-1/N,1/N,0)\).
 
@@ -136,8 +160,7 @@ A normalized growth update generally does not land on this lattice. It defines a
 \resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\fill[teal] (3,5.19615) circle (2pt);\fill[teal] (3.75,3.89711) circle (2pt);\fill[teal] (4.5,2.59808) circle (2pt);\fill[teal] (5.25,1.29904) circle (2pt);\fill[teal] (6,0) circle (2pt);\fill[teal] (2.25,3.89711) circle (2pt);\fill[teal] (3,2.59808) circle (2pt);\fill[teal] (3.75,1.29904) circle (2pt);\fill[teal] (4.5,0) circle (2pt);\fill[teal] (1.5,2.59808) circle (2pt);\fill[teal] (2.25,1.29904) circle (2pt);\fill[teal] (3,0) circle (2pt);\fill[teal] (0.75,1.29904) circle (2pt);\fill[teal] (1.5,0) circle (2pt);\fill[teal] (0,0) circle (2pt);\node[anchor=west,align=left] at (6.8,3.7){$N=4$: fifteen states\\One token changes two counts.};\draw[copper,thick] (2.25,1.29904) circle (5pt);\node[below=6pt] at (2.25,1.29904){$(2,1,1)$};\draw[copper,->] (2.25,1.29904)--(3.75,1.29904);\draw[copper,->] (2.25,1.29904)--(3,2.59808);\draw[copper,->] (2.25,1.29904)--(0.75,1.29904);\draw[copper,->] (2.25,1.29904)--(1.5,2.59808);\draw[copper,->] (2.25,1.29904)--(1.5,0);\draw[copper,->] (2.25,1.29904)--(3,0);\end{tikzpicture}}
 \caption{The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).}\end{figure}
 
-\hypertarget{ch03-cyclic-interactions}{%
-\section{Cyclic interactions}\label{ch03-cyclic-interactions}}
+\section{Cyclic interactions}\label{ch03-cyclic-interactions}
 
 For three strategies, a score table is a \(3\) by \(3\) matrix. The average score of type \(i\) is \(f_i=\sum_jM_{ij}p_j\). Consider \[M_s=\begin{pmatrix}0&1&-s\\-s&0&1\\1&-s&0\end{pmatrix},\qquad s>0.\] Type \(A\) gains against \(B\), type \(B\) gains against \(C\), and type \(C\) gains against \(A\). Each suffers a loss of magnitude \(s\) against the remaining opponent. At the center, all three scores equal \((1-s)/3\), so the center is fixed for both normalized multiplier rules.
 
@@ -149,8 +172,7 @@ Let \(s=1\) and \(p=(1/2,1/3,1/6)\). The scores are \((1/6,-1/3,1/6)\). With \(\
 
 \end{example}
 
-\hypertarget{ch03-a-finite-inequality-detects-outward-drift}{%
-\section{A finite inequality detects outward drift}\label{ch03-a-finite-inequality-detects-outward-drift}}
+\section{A finite inequality detects outward drift}\label{ch03-a-finite-inequality-detects-outward-drift}
 
 The \textbf{weighted arithmetic-geometric mean inequality} states that, for positive \(a_i\) and nonnegative weights \(p_i\) adding to one, \[\sum_i p_i a_i\ \geq\ \prod_i a_i^{p_i}.\] For rational weights, it follows from the ordinary arithmetic-geometric mean inequality by repeating each entry the appropriate number of times. The real-weight version follows by approximation. Equality holds when all entries carrying positive weight are equal. We will use this finite inequality several times.
 
@@ -166,8 +188,7 @@ For every positive intensity, an exponential update of the balanced cyclic game 
 
 There is a similar conclusion for linear multipliers whenever they are positive. Since the weighted mean score is zero, their normalizing denominator is \(1\). Their unweighted sum is \(3\), so their product is at most \(1\). Multiplying the three updated coordinates shows \(P(p^+)\leq P(p)\), again strictly away from the center. These exact calculations explain why changing the size of a finite step can affect a cyclic picture.
 
-\hypertarget{ch03-comparing-a-different-recurrence}{%
-\section{Comparing a different recurrence}\label{ch03-comparing-a-different-recurrence}}
+\section{Comparing a different recurrence}\label{ch03-comparing-a-different-recurrence}
 
 The permutation rule \[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\] also moves states cyclically. It satisfies \(T^3(p)=p\) and preserves the coordinate product exactly. Its trajectories contain at most three states. This recurrence is useful as a simple example of exact periodicity and as a check on a plotting program. It is a different update from score-based selection, with a different algebraic structure.
 
@@ -178,8 +199,7 @@ The permutation rule \[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\] also moves states cyclical
 \end{axis}\end{tikzpicture}}
 \caption{Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.}\end{figure}
 
-\hypertarget{ch03-reading-distances-and-contours-in-a-triangle}{%
-\section{Reading distances and contours in a triangle}\label{ch03-reading-distances-and-contours-in-a-triangle}}
+\section{Reading distances and contours in a triangle}\label{ch03-reading-distances-and-contours-in-a-triangle}
 
 Barycentric coordinates have another useful interpretation. The perpendicular distance from a point to side \(AB\), divided by the triangle's full altitude, is \(p_C\). To verify this, note that the side is horizontal and that the point's height is \((\sqrt3/2)p_C\). By symmetry, the same statement holds for the other two coordinates and their opposite sides. Lines of constant \(p_C\) are therefore parallel to side \(AB\).
 
@@ -191,8 +211,7 @@ Suppose a point lies at one fifth of the full altitude from side \(AB\) and at o
 
 A contour of a function is a set of states with the same function value. For the coordinate product, a contour is described by \(p_Ap_Bp_C=c\). The product is zero on the boundary and at most \(1/27\) in the interior. Product contours surround the center, but a one-step decrease in product does not specify a unique direction along a contour or a unique next coordinate. A scalar diagnostic compresses a two-dimensional state into one number, so it necessarily discards some detail.
 
-\hypertarget{ch03-counting-the-interior-and-the-boundary}{%
-\section{Counting the interior and the boundary}\label{ch03-counting-the-interior-and-the-boundary}}
+\section{Counting the interior and the boundary}\label{ch03-counting-the-interior-and-the-boundary}
 
 The stars-and-bars argument extends to \(k\) types. Nonnegative integer counts summing to \(N\) are encoded by \(N\) stars and \(k-1\) bars, so their number is \(\binom{N+k-1}{k-1}\). Empty groups correspond to zero counts. If every count must be positive, first give one token to each type. The remaining \(N-k\) tokens can be distributed freely, giving \(\binom{N-1}{k-1}\) states when \(N\geq k\).
 
@@ -204,15 +223,13 @@ At \(N=8\), there are \(\binom{10}{2}=45\) total states and \(\binom72=21\) stri
 
 \end{example}
 
-\hypertarget{ch03-sampling-can-change-support}{%
-\section{Sampling can change support}\label{ch03-sampling-can-change-support}}
+\section{Sampling can change support}\label{ch03-sampling-can-change-support}
 
 At a positive state, deterministic positive multiplication keeps every type present. A sample of \(N\) individuals can omit a type by chance. On an edge of the triangle, a sampling model without mutation cannot restore the missing type, because its sampling probability is zero. A finite sampled population may therefore reach an edge and subsequently evolve on that edge, even when a deterministic trajectory remains in the interior for every finite step.
 
 This observation explains why a deterministic trajectory and a simulated finite population should be labeled separately. Both can be useful descriptions. The deterministic rule isolates state-dependent reweighting; the sampled model also includes fluctuations associated with finitely many individuals. Chapter 4 provides exact probabilities for those fluctuations.
 
-\hypertarget{ch03-exercises}{%
-\section{Exercises}\label{ch03-exercises}}
+\section{Exercises}\label{ch03-exercises}
 
 \begin{exercises}
 
@@ -266,8 +283,7 @@ Compare deterministic normalization with sampling a fixed number of individuals 
 
 \end{exercises}
 
-\hypertarget{ch03-selected-solutions}{%
-\section{Selected solutions}\label{ch03-selected-solutions}}
+\section{Selected solutions}\label{ch03-selected-solutions}
 
 \textbf{2.} The recovered probabilities are \((1/3,1/3,1/3)\), the center.
 
@@ -284,15 +300,15 @@ Compare deterministic normalization with sampling a fixed number of individuals 
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Plot the states \((1,0,0)\), \((1/2,1/2,0)\), \((1/3,1/3,1/3)\), and \((1/2,1/3,1/6)\). Calculate their Cartesian coordinates and label the absent types on each edge.
+  Take \(N=4\). (a) List all 15 count triples \((a,b,c)\) adding to four. (b) Draw their triangular arrangement or use the lattice demo. (c) Count neighbors of \((2,1,1)\) and \((4,0,0)\). (d) Explain why the boundary has fewer neighbors.
 \item
-  Draw the denominator-four token lattice. Count its states in two ways and list all neighbors of \((2,1,1)\). Distinguish a one-token move from a general normalized growth step.
+  Starting at \((2,1,1)\), move one token from C to A and one from A to B, in separate trials. (a) Record both new count triples. (b) Convert the triples to probabilities. (c) Calculate the entropy at each distribution, taking \(0\log0=0\). (d) Determine the signs of both directional differences.
 \item
-  For the balanced cyclic table, derive the three scores at \((1/2,1/3,1/6)\). Verify that their sum and their probability-weighted mean are both zero. Calculate one exponential step with intensity \(1\).
+  At an interior state \(p\), define \(u=e_A-e_C\) and \(v=e_B-e_C\). (a) Write \(p+u/N\) and \(p+v/N\). (b) Explain when each transfer is legal. (c) Evaluate the two differences of \(H\) at \(p=(1/4,1/4,1/2)\) with \(N=4\).
 \item
-  Run exponential cyclic updates at intensities \(0.1\), \(0.5\), and \(1\) for fifty steps from the same state. Record the initial and final coordinate products and inspect the triangle traces. Use the exact product identity to explain the direction of change.
+  Choose two different three-step routes on the token lattice with the same start and finish. (a) Label the entropy at each visited point. (b) Add the successive entropy differences along each route. (c) Explain why the route sums agree, even if the intermediate values differ.
 \item
-  Compare with the permutation rule. List its first four states and prove its period and product preservation. Explain why the permutation calculation does not establish product preservation for score-based selection.
+  Draw a triangle of three allowed states and assign a clockwise flow of one unit along each edge. (a) Compute divergence at each vertex. (b) Compute the circulation around the triangle. (c) Explain how zero divergence can coexist with nonzero circulation.
 \end{enumerate}
 
 \FloatBarrier

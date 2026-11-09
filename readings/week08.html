@@ -1,16 +1,78 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 8: Geodesic steps and shortest graph paths · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="8"><p class="eyebrow">Week 8 · Reading</p><h1>Path sums, circulation, and statistical geodesics</h1><nav class="week-nav" aria-label="Week 8 resources"><a aria-current=page href="../readings/week08.html">Reading</a><a  href="../demos/week08.html">Demonstration</a><a  href="../labs/week08.html">Lab</a><a  href="../quizzes/week08.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter08.pdf">Chapter 8 PDF</a> · <a href="../textbook/latex/chapter08.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Compute discrete line integrals along graph paths.</li><li>Use cycle sums to recognize gradient edge fields.</li><li>Find token-transfer and weighted shortest paths.</li></ul></aside><article class="reading-text"><!-- DISCRETE CALCULUS CORE: Week 8 --><section class="calculus-core"><p class="lede">Define line integrals and shortest routes directly on a weighted probability lattice.</p><h2>An integral along a discrete path</h2>
-<p>Let \(G\) be a graph whose vertices are probability states. Orient an edge \(u\to v\), and let \(A(u,v)\) be a value assigned to that directed step, with \(A(v,u)=-A(u,v)\). For a path \(\gamma=(v_0,v_1,\ldots,v_m)\) define its <strong>discrete line integral</strong> by $\(\boxed{\int_\gamma^d A=\sum_{k=0}^{m-1}A(v_k,v_{k+1}).}\)$ This is a finite sum, so it makes sense before any continuous integration theory.</p>
-<p>If a scalar field \(\phi\) is given at the vertices, define its gradient edge value by $\(A_\phi(u,v)=\phi(v)-\phi(u).\)\( For every path from \)u\( to \)v\(, \)\(\int_\gamma^d A_\phi=\phi(v)-\phi(u).\)$ Intermediate values cancel. This is the discrete fundamental theorem for line integrals. It also tells us that the circulation of a gradient around any closed route is zero.</p>
-<h2>Circulation detects dependence on the route</h2>
-<p>A general edge field is not necessarily a gradient. Take a triangle with oriented edges \(A\to B\), \(B\to C\), and \(C\to A\). If each edge has value \(1\) in that direction, the circulation is \(3\). If the field came from vertex values of one function, the three differences would sum to zero. Thus finite circulation detects a local obstruction to finding a scalar potential.</p>
-<p>On a connected graph, an antisymmetric edge field is a gradient exactly when its sum around every closed path is zero. It is enough to check a cycle basis. This fact is a useful discrete parallel to conservative vector fields.</p>
-<h2>Path length is different from a line integral</h2>
-<p>Now assign each unoriented edge a positive weight \(\ell(u,v)\), such as the Fisher–Rao distance between its endpoint distributions. The length of a path is $\(L(\gamma)=\sum_{k=0}^{m-1}\ell(v_k,v_{k+1}).\)\( Unlike a signed gradient integral, each contribution to length is nonnegative. A shortest path minimizes \)L(\gamma)$ among legal paths with fixed endpoints.</p>
-<p>For the unweighted \(N\)-token simplex, moving one token counts as one step. To transform count vector \(a\) into \(b\), the smallest possible number of transfers is $\(\boxed{d_{\rm token}(a,b)=\frac12\sum_i|a_i-b_i|.}\)$ Each transfer corrects one excess token and one deficit token. This supplies both a lower bound and a constructive route attaining it.</p>
-<h2>Compare graph and spherical geometry</h2>
-<p>The straight route in probability coordinates need not be a legal sequence of token transfers. And a shortest weighted lattice path need not equal the unrestricted Fisher–Rao geodesic on the sphere. The weighted graph enforces finite, local moves; the sphere allows every intermediate positive probability distribution.</p>
-<p>Choose \(N=6\), two lattice states, and two legal token-transfer routes between them. Calculate each route's unweighted transfer count and its statistical length. Then calculate the spherical distance between their endpoints. Triangle inequality guarantees that neither path is shorter than the exact spherical distance.</p>
-<p>This distinction between path-dependent accumulated length and endpoint distance will matter in information-driven motion.</p></section><h2>Further investigations and applications</h2><p>A distance tells us how far apart two distributions are. A path
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 8: Path sums, circulation, and statistical geodesics · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="8"><p class="eyebrow">Week 8 · Reading</p><h1>Path sums, circulation, and statistical geodesics</h1><nav class="week-nav" aria-label="Week 8 resources"><a aria-current=page href="../readings/week08.html">Reading</a><a  href="../demos/week08.html">Demonstration</a><a  href="../labs/week08.html">Lab</a><a  href="../quizzes/week08.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter08.pdf">Chapter 8 PDF</a> · <a href="../textbook/latex/chapter08.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Compute discrete line integrals along graph paths.</li><li>Use cycle sums to recognize gradient edge fields.</li><li>Find token-transfer and weighted shortest paths.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 8 -->
+<h2 id="an-integral-along-a-discrete-path">An integral along a discrete
+path</h2>
+<p>Let <span class="math inline">\(G\)</span> be a graph whose vertices
+are probability states. Orient an edge <span class="math inline">\(u\to
+v\)</span>, and let <span class="math inline">\(A(u,v)\)</span> be a
+value assigned to that directed step, with <span
+class="math inline">\(A(v,u)=-A(u,v)\)</span>. For a path <span
+class="math inline">\(\gamma=(v_0,v_1,\ldots,v_m)\)</span> define its
+<strong>discrete line integral</strong> by <span
+class="math display">\[\boxed{\int_\gamma^d
+A=\sum_{k=0}^{m-1}A(v_k,v_{k+1}).}\]</span> This is a finite sum, so it
+makes sense before any continuous integration theory.</p>
+<p>If a scalar field <span class="math inline">\(\phi\)</span> is given
+at the vertices, define its gradient edge value by <span
+class="math display">\[A_\phi(u,v)=\phi(v)-\phi(u).\]</span> For every
+path from <span class="math inline">\(u\)</span> to <span
+class="math inline">\(v\)</span>, <span
+class="math display">\[\int_\gamma^d A_\phi=\phi(v)-\phi(u).\]</span>
+Intermediate values cancel. This is the discrete fundamental theorem for
+line integrals. It also tells us that the circulation of a gradient
+around any closed route is zero.</p>
+<h2 id="circulation-detects-dependence-on-the-route">Circulation detects
+dependence on the route</h2>
+<p>A general edge field is not necessarily a gradient. Take a triangle
+with oriented edges <span class="math inline">\(A\to B\)</span>, <span
+class="math inline">\(B\to C\)</span>, and <span
+class="math inline">\(C\to A\)</span>. If each edge has value <span
+class="math inline">\(1\)</span> in that direction, the circulation is
+<span class="math inline">\(3\)</span>. If the field came from vertex
+values of one function, the three differences would sum to zero. Thus
+finite circulation detects a local obstruction to finding a scalar
+potential.</p>
+<p>On a connected graph, an antisymmetric edge field is a gradient
+exactly when its sum around every closed path is zero. It is enough to
+check a cycle basis. This fact is a useful discrete parallel to
+conservative vector fields.</p>
+<h2 id="path-length-is-different-from-a-line-integral">Path length is
+different from a line integral</h2>
+<p>Now assign each unoriented edge a positive weight <span
+class="math inline">\(\ell(u,v)\)</span>, such as the Fisher–Rao
+distance between its endpoint distributions. The length of a path is
+<span
+class="math display">\[L(\gamma)=\sum_{k=0}^{m-1}\ell(v_k,v_{k+1}).\]</span>
+Unlike a signed gradient integral, each contribution to length is
+nonnegative. A shortest path minimizes <span
+class="math inline">\(L(\gamma)\)</span> among legal paths with fixed
+endpoints.</p>
+<p>For the unweighted <span class="math inline">\(N\)</span>-token
+simplex, moving one token counts as one step. To transform count vector
+<span class="math inline">\(a\)</span> into <span
+class="math inline">\(b\)</span>, the smallest possible number of
+transfers is <span class="math display">\[\boxed{d_{\rm
+token}(a,b)=\frac12\sum_i|a_i-b_i|.}\]</span> Each transfer corrects one
+excess token and one deficit token. This supplies both a lower bound and
+a constructive route attaining it.</p>
+<h2 id="compare-graph-and-spherical-geometry">Compare graph and
+spherical geometry</h2>
+<p>The straight route in probability coordinates need not be a legal
+sequence of token transfers. And a shortest weighted lattice path need
+not equal the unrestricted Fisher–Rao geodesic on the sphere. The
+weighted graph enforces finite, local moves; the sphere allows every
+intermediate positive probability distribution.</p>
+<p>Choose <span class="math inline">\(N=6\)</span>, two lattice states,
+and two legal token-transfer routes between them. Calculate each route’s
+unweighted transfer count and its statistical length. Then calculate the
+spherical distance between their endpoints. Triangle inequality
+guarantees that neither path is shorter than the exact spherical
+distance.</p>
+<p>This distinction between path-dependent accumulated length and
+endpoint distance will matter in information-driven motion.</p>
+<h2
+id="further-investigations-path-sums-circulation-and-statistical-geodesics">Further
+investigations: Path sums, circulation, and statistical geodesics</h2>
+<p>A distance tells us how far apart two distributions are. A path
 specifies how to move between them. There are several reasonable path
 constructions: ordinary mixtures, equal steps along a spherical arc, and
 token transfers on a finite graph. Each answers a different question
@@ -308,4 +370,4 @@ class="math inline">\((2/3,1/6,1/6)\)</span>.</p>
 inserting the intermediate states one at a time.</p>
 <p><strong>8.</strong> The six neighbors are the permutations of <span
 class="math inline">\((2,1,0)\)</span>.</p>
-</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week07.html">← Week 7</a><a href="../readings/week09.html">Week 9 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week07.html">← Week 7</a><a href="../readings/week09.html">Week 9 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

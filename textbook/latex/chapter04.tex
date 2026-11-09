@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,16 +98,37 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 4\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 4\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{3}
 
-\chapter{Counting outcomes and sampling distributions}
+\chapter{Probability transport and conservation}
+\section{Probabilities move between states}\label{ch04-probabilities-move-between-states}
+
+Suppose a system has finitely many labeled locations. A column-stochastic matrix \(K\) assigns probabilities of arriving at location \(i\) from each starting location \(j\): \[K_{ij}\geq0,\qquad\sum_iK_{ij}=1.\] If \(p_n\) is the current probability vector, one step is \[\boxed{p_{n+1}=Kp_n,\qquad\Delta p_n=(K-I)p_n.}\] The second formula is a vector-valued difference equation. Because the columns of \(K\) sum to one, the sum of the coordinates of \(\Delta p_n\) is zero. Probability is redistributed rather than created.
+
+\section{A current on a graph}\label{ch04-a-current-on-a-graph}
+
+Picture locations as vertices and possible transitions as edges. Let \(J_{ij,n}=-J_{ji,n}\) be the \emph{net} probability current from \(i\) to \(j\) during step \(n\). Define outgoing divergence by \[\operatorname{div}J_n(i)=\sum_{j\sim i}J_{ij,n}.\] The discrete continuity equation is \[\boxed{\Delta p_n(i)=-\operatorname{div}J_n(i).}\] If we sum this equation over every vertex, each current appears twice with opposite signs. Therefore \(\sum_i p_{n+1}(i)=\sum_i p_n(i)\). This is an exact conservation law.
+
+\section{An example on three locations}\label{ch04-an-example-on-three-locations}
+
+Consider a path \(A\)--\(B\)--\(C\). At each step, move one quarter of the probability at each location to each adjacent location, leaving the rest where it was. The resulting matrix is \[K=\begin{pmatrix}3/4&1/4&0\\1/4&1/2&1/4\\0&1/4&3/4\end{pmatrix}.\] Starting with all the probability at \(A\) gives \(p_0=(1,0,0)\) and \(p_1=(3/4,1/4,0)\). Thus \(\Delta p_0=(-1/4,1/4,0)\): one quarter of the total mass crossed edge \(A\)--\(B\).
+
+A fixed point of the transport rule satisfies \(Kp=p\). Here the uniform distribution \((1/3,1/3,1/3)\) is fixed. Stationarity does not always imply that every trajectory converges: a deterministic cyclic permutation has periodic orbits.
+
+\section{Counts and sampled probabilities}\label{ch04-counts-and-sampled-probabilities}
+
+The probability vector above describes a distribution of mass. Another model could draw \(N\) independent samples from that distribution and retain only the observed integer counts. The probability of each possible count table is then determined by binomial or multinomial counting. The expected proportions follow the matrix update, but a particular sample generally fluctuates around them.
+
+This distinction explains the role of counting in discrete information geometry: probability transport determines the expected distribution, and combinatorics describes possible finite observations of it.
+
+\section{Further investigations: Probability transport and conservation}\label{ch04-further-investigations-probability-transport-and-conservation}
+
 Probability describes both a population's composition and the uncertainty of an observation. If a population has proportions \(p_A,p_B,p_C\) and one individual is chosen uniformly, these proportions are the probabilities of the observed type. Repeating the observation produces a sample. Its composition fluctuates, even when the underlying population stays fixed.
 
 Counting tells us which sample compositions are possible and how many ordered samples produce each one. It supplies exact formulas for uncertainty at a finite sample size.
 
-\hypertarget{ch04-outcomes-events-and-trees}{%
-\section{Outcomes, events, and trees}\label{ch04-outcomes-events-and-trees}}
+\section{Outcomes, events, and trees}\label{ch04-outcomes-events-and-trees}
 
 An \textbf{outcome} is a single possible result. An \textbf{event} is a collection of outcomes. For a finite probability model, the probability of an event is the sum of the probabilities of its outcomes. The total probability of all outcomes is one.
 
@@ -119,8 +140,7 @@ A box contains two red tokens and one blue token. Two draws with replacement giv
 
 \end{example}
 
-\hypertarget{ch04-binomial-counting}{%
-\section{Binomial counting}\label{ch04-binomial-counting}}
+\section{Binomial counting}\label{ch04-binomial-counting}
 
 Suppose each observation is a success with probability \(p\) and a failure with probability \(1-p\). An ordered sample with \(k\) successes has probability \(p^k(1-p)^{N-k}\). The successes can occupy \(\binom Nk\) different sets of positions, where \[\binom Nk=\frac{N!}{k!(N-k)!},\qquad N!=1\cdot2\cdots N,\quad 0!=1.\] Therefore the success count \(K\) has the \textbf{binomial distribution} \[P(K=k)=\binom Nk p^k(1-p)^{N-k},\qquad k=0,\ldots,N.\] The binomial coefficient counts positions, while the powers account for their probabilities. Keeping these two roles separate helps prevent common mistakes.
 
@@ -132,8 +152,7 @@ With \(N=5\) and \(p=2/3\), the probability of exactly three successes is \[\bin
 
 Adding the binomial probabilities gives one. This follows either because the counts partition all possible samples or by expanding \((p+(1-p))^N\) and grouping terms by the number of factors \(p\).
 
-\hypertarget{ch04-multinomial-counts-and-empirical-distributions}{%
-\section{Multinomial counts and empirical distributions}\label{ch04-multinomial-counts-and-empirical-distributions}}
+\section{Multinomial counts and empirical distributions}\label{ch04-multinomial-counts-and-empirical-distributions}
 
 For \(k\) categories, let \(n_i\) be the observed count of category \(i\), so \(\sum_i n_i=N\). The number of ordered samples with these counts is \[\Omega(n_1,\ldots,n_k)=\frac{N!}{n_1!\cdots n_k!}.\] One derivation chooses the positions of category one, then category two among the remaining positions, and continues. The resulting binomial coefficients telescope to the displayed ratio.
 
@@ -145,8 +164,7 @@ For \(N=4\) and counts \((2,1,1)\), the multiplicity is \(4!/(2!1!1!)=12\). Unde
 
 \end{example}
 
-\hypertarget{ch04-expectation-and-spread-from-finite-sums}{%
-\section{Expectation and spread from finite sums}\label{ch04-expectation-and-spread-from-finite-sums}}
+\section{Expectation and spread from finite sums}\label{ch04-expectation-and-spread-from-finite-sums}
 
 A \textbf{random variable} assigns a numerical value to each outcome. If it takes values \(x_i\) with probabilities \(p_i\), its \textbf{expectation} is \[\mathbb E[X]=\sum_i p_ix_i.\] This weighted average describes the center of its distribution. Its \textbf{variance} is the average squared distance from that center: \[\operatorname{Var}(X)=\sum_i p_i(x_i-\mathbb E[X])^2
 =\mathbb E[X^2]-(\mathbb E[X])^2.\] The last equality follows by expanding the square and using \(\sum_i p_i=1\). Variance is nonnegative. Its square root, the \textbf{standard deviation}, has the same units as the original readings.
@@ -162,8 +180,7 @@ For two random variables, finite-sum expansion gives \(\mathbb E[X+Y]=\mathbb E[
 Apply these facts to indicator variables \(I_t\), equal to one on a success and zero on a failure. They satisfy \(\mathbb E[I_t]=p\) and \(\operatorname{Var}(I_t)=p(1-p)\). Since \(K=I_1+\cdots+I_N\) for independent trials, \[\mathbb E[K]=Np,\qquad \operatorname{Var}(K)=Np(1-p).\] Dividing by \(N\) gives the empirical proportion's mean and variance: \[\mathbb E[\widehat p]=p,\qquad
 \operatorname{Var}(\widehat p)=\frac{p(1-p)}{N}.\] Thus a fourfold increase in sample size halves the standard deviation. A particular sample may still fluctuate more than an earlier smaller sample; the formula concerns the distribution over repeated samples.
 
-\hypertarget{ch04-rare-categories-and-missing-observations}{%
-\section{Rare categories and missing observations}\label{ch04-rare-categories-and-missing-observations}}
+\section{Rare categories and missing observations}\label{ch04-rare-categories-and-missing-observations}
 
 If a category has probability \(p>0\), the chance of missing it in all \(N\) independent observations is \((1-p)^N\). A zero empirical count therefore does not establish that the underlying probability is zero. This matters when empirical probabilities will later appear inside logarithms or ratios.
 
@@ -182,8 +199,7 @@ The deterministic update of a composition and the random sampling of a compositi
 \end{axis}\end{tikzpicture}}
 \caption{Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.}\end{figure}
 
-\hypertarget{ch04-conditional-probability-and-dependent-draws}{%
-\section{Conditional probability and dependent draws}\label{ch04-conditional-probability-and-dependent-draws}}
+\section{Conditional probability and dependent draws}\label{ch04-conditional-probability-and-dependent-draws}
 
 If an event \(B\) has positive probability, the \textbf{conditional probability} of \(A\) given \(B\) is \(P(A\mid B)=P(A\cap B)/P(B)\). Here \(A\cap B\) means that both events occur. Rearranging gives the multiplication rule \(P(A\cap B)=P(B)P(A\mid B)\). Independence is the special case in which conditioning on one event does not change the probability of the other.
 
@@ -195,15 +211,13 @@ A box has three red and two blue tokens. The probability of two red draws withou
 
 \end{example}
 
-\hypertarget{ch04-why-multinomial-probabilities-add-to-one}{%
-\section{Why multinomial probabilities add to one}\label{ch04-why-multinomial-probabilities-add-to-one}}
+\section{Why multinomial probabilities add to one}\label{ch04-why-multinomial-probabilities-add-to-one}
 
 There are \(k^N\) ordered length-\(N\) samples from \(k\) labels. Each receives its product probability. Summing over all possible labels at the first position, then the second, and continuing gives \[\sum_{i_1,\ldots,i_N}p_{i_1}\cdots p_{i_N}=(p_1+\cdots+p_k)^N=1.\] Grouping these ordered samples by their count vectors replaces each collection of equal products with its multiplicity times one product. The resulting sum is exactly the sum of the multinomial probabilities. This establishes normalization and explains the multinomial expansion as a grouping of outcomes.
 
 At \(N=2\) with three labels, there are nine ordered samples but only six count vectors. The vectors \((2,0,0)\), \((0,2,0)\), and \((0,0,2)\) each have multiplicity one. The three other vectors each have multiplicity two. Counting a vector once without this factor would omit ordered outcomes.
 
-\hypertarget{ch04-a-finite-bound-on-sampling-error}{%
-\section{A finite bound on sampling error}\label{ch04-a-finite-bound-on-sampling-error}}
+\section{A finite bound on sampling error}\label{ch04-a-finite-bound-on-sampling-error}
 
 Variance can control the probability of a large error using a simple comparison of sums. For a random variable \(X\) with mean \(\mu\), every outcome satisfying \(|X-\mu|\geq a\) contributes at least \(a^2\) to the squared deviation. Therefore \[\operatorname{Var}(X)=\mathbb E[(X-\mu)^2]\geq a^2P(|X-\mu|\geq a),\] and hence \(P(|X-\mu|\geq a)\leq\operatorname{Var}(X)/a^2\). This is \textbf{Chebyshev's inequality}. The argument works for a finite distribution by comparing the indicated terms in its expectation sum.
 
@@ -217,8 +231,7 @@ To make the probability of an empirical error of at least \(0.1\) no greater tha
 
 A probability bound concerns repetitions of the stated sampling procedure. It does not certify that an already observed empirical table lies within the tolerance. The model, its independence assumption, and its sample size remain part of the conclusion.
 
-\hypertarget{ch04-exercises}{%
-\section{Exercises}\label{ch04-exercises}}
+\section{Exercises}\label{ch04-exercises}
 
 \begin{exercises}
 
@@ -272,8 +285,7 @@ Describe a simulation of a population with normalized selection followed by mult
 
 \end{exercises}
 
-\hypertarget{ch04-selected-solutions}{%
-\section{Selected solutions}\label{ch04-selected-solutions}}
+\section{Selected solutions}\label{ch04-selected-solutions}
 
 \textbf{2.} The probability is \(\binom42(1/3)^2(2/3)^2=8/27\).
 
@@ -290,15 +302,15 @@ Describe a simulation of a population with normalized selection followed by mult
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Draw the complete outcome tree for three independent binary observations with success probability \(1/3\). Group the eight leaves by success count and recover the four binomial probabilities.
+  Use \(K=((3/4,1/4,0),(1/4,1/2,1/4),(0,1/4,3/4))\). (a) Check every column sum. (b) Starting with \(p_0=(1,0,0)\), calculate \(p_1\) and \(p_2\). (c) Write the two vector differences \(\Delta p_0,\Delta p_1\).
 \item
-  In the demonstration, choose sample size \(10\) and success probability \(0.3\). Compute the exact probability of counts zero, three, and ten. Run 200 simulated samples and compare empirical histogram frequencies with the exact probabilities.
+  On the path A--B--C, suppose one quarter of the mass at each vertex travels to each adjacent vertex. (a) Find net current on each edge for \(p_0=(1,0,0)\). (b) Compute divergence at each vertex. (c) Verify that minus divergence agrees with \(\Delta p_0\).
 \item
-  For sample size \(40\) and success probability \(0.3\), calculate the mean and standard deviation of the empirical proportion. Compare this with size \(10\). Explain the factor by which the spread changes.
+  Compare \(p=(1/2,1/3,1/6)\) with a direct count sample of 12 outcomes. (a) Give one integer count triple exactly matching those probabilities. (b) Give another feasible sample count triple. (c) Explain why two samples need not equal their expected counts.
 \item
-  For counts \((2,1,1)\) under \(p=(1/2,1/3,1/6)\), calculate the probability of one specified ordered sample and of the entire count vector. Explain where the multinomial coefficient enters.
+  Find a fixed point for the three-node matrix. (a) Verify the proposed vector sums to one. (b) Multiply by K to check stationarity. (c) Compare with the cyclic permutation of three labels, which can be stationary at uniform while other orbits rotate.
 \item
-  A category has probability \(0.02\). Calculate its chance of being missed in samples of sizes \(20\), \(50\), and \(100\). Discuss the inference one can draw from a zero count, and distinguish sampling variation from deterministic growth.
+  Design a two-vertex network with a transition probability \(a\) from A to B and \(b\) from B to A. (a) Construct the column-stochastic matrix. (b) Write \(\Delta p_A\) in terms of \(p_A,p_B\). (c) Find a stationary distribution when \(a+b>0\).
 \end{enumerate}
 
 \FloatBarrier

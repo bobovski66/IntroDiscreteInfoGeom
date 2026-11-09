@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,16 +98,39 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 1\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 1\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{0}
 
-\chapter{Sequences, growth, and proportions}
+\chapter{Sequences, differences, and discrete integration}
+\section{The discrete derivative}\label{ch01-the-discrete-derivative}
+
+A sequence is a function whose input is a whole-number time step. Write its values as \(a_0,a_1,a_2,\ldots\). We measure the change from one step to the next by the \textbf{forward difference} \[\Delta a_n=a_{n+1}-a_n.\] This is the discrete derivative. It records an exact change over one step, rather than a rate obtained from a limit. A positive difference means the quantity increases; a negative difference means it decreases. The size of the difference tells us how much.
+
+For example, let \(a_n=n^2\). Then \[\Delta a_n=(n+1)^2-n^2=2n+1.\] The first few values of \(a_n\) are \(0,1,4,9,16\) and their first differences are \(1,3,5,7\). Taking differences again gives \(2,2,2\). We write \(\Delta^2a_n=\Delta(\Delta a_n)\) and call it the \textbf{second difference}. Constant second differences are the discrete signature of quadratic sequences.
+
+\section{Summation is discrete integration}\label{ch01-summation-is-discrete-integration}
+
+Suppose we know only that \(\Delta a_n=2n+1\) and \(a_0=0\). We can reconstruct the sequence by adding its changes: \[a_n=a_0+\sum_{k=0}^{n-1}(2k+1)=n^2.\] More generally, any sequence satisfies the \textbf{discrete fundamental theorem of calculus}: \[\boxed{\sum_{k=m}^{n-1}\Delta a_k=a_n-a_m.}\] Every intermediate term cancels. This is why the identity is sometimes called \emph{telescoping}. An antidifference of a sequence \(b_n\) is a sequence \(A_n\) such that \(\Delta A_n=b_n\). Two antidifferences differ by a constant.
+
+To practice, suppose the number of messages received per day is \(b_n=3n+2\) for days \(n=0,1,\ldots\). The total received in the first four days is \(2+5+8+11=26\). The cumulative total \(S_n=\sum_{k=0}^{n-1}b_k\) satisfies \(\Delta S_n=b_n\) exactly.
+
+\section{From counts to proportions}\label{ch01-from-counts-to-proportions}
+
+Now let two types have counts \(A_n,B_n\) and multipliers \(w_A,w_B>0\). Their updates are \(A_{n+1}=w_AA_n\) and \(B_{n+1}=w_BB_n\). Define the proportion \[x_n=\frac{A_n}{A_n+B_n}.\] Normalizing the new counts gives the recurrence \[x_{n+1}=\frac{w_Ax_n}{w_Ax_n+w_B(1-x_n)}.\] Subtract the old proportion to obtain a genuine discrete derivative: \[\boxed{\Delta x_n=\frac{x_n(1-x_n)(w_A-w_B)}{w_Ax_n+w_B(1-x_n)}.}\] This formula distinguishes changes in total population from changes in its composition. It also proves that \(0\leq x_n\leq1\) is preserved when the multipliers are positive.
+
+Take \(x_0=1/4\), \(w_A=2\), and \(w_B=1\). The next proportion is \(2/5\), so \(\Delta x_0=2/5-1/4=3/20\). We know both where the state moved and exactly how far it moved along the probability interval.
+
+\section{Try it as calculus}\label{ch01-try-it-as-calculus}
+
+Use the population demonstration to record \(x_0,\ldots,x_5\) and the difference sequence \(\Delta x_0,\ldots,\Delta x_4\). Add the differences and verify that their sum is \(x_5-x_0\). Then change the relative multiplier and repeat. This is the first glimpse of information geometry: the points are probability distributions, and our calculus measures changes between them.
+
+\section{Further investigations: Sequences, differences, and discrete integration}\label{ch01-further-investigations-sequences-differences-and-discrete-integration}
+
 A population, a collection of observations, and a set of possible messages can all be described by lists of nonnegative numbers. Dividing each entry by the total produces proportions. The proportions retain the composition of the collection even when its size changes. This simple operation connects growth models with probability.
 
 Our time variable takes the values \(t=0,1,2,\ldots\). One step might represent a generation, a round of a game, or the arrival of another batch of data. A rule that determines the next state from the present state is a \textbf{difference equation}. We will study such rules by calculating successive states, solving some rules exactly, and comparing quantities before and after a step.
 
-\hypertarget{ch01-sequences-and-repeated-multiplication}{%
-\section{Sequences and repeated multiplication}\label{ch01-sequences-and-repeated-multiplication}}
+\section{Sequences and repeated multiplication}\label{ch01-sequences-and-repeated-multiplication}
 
 A sequence is an ordered list \(a_0,a_1,a_2,\ldots\). The recurrence \(a_{t+1}=r a_t\), together with an initial value \(a_0\), determines every term. Substitution gives \(a_1=ra_0\), \(a_2=r^2a_0\), and, after \(t\) steps, \[a_t=a_0r^t.\] Here \(r\) is the multiplier per step. A multiplier of \(1.2\) means a \(20\%\) increase in one step; a multiplier of \(0.8\) means a \(20\%\) decrease. The percentage change and the multiplier are different numbers.
 
@@ -119,8 +142,7 @@ Begin with \(20\) individuals of type \(A\) and \(80\) of type \(B\). Let \(w_A=
 
 \end{example}
 
-\hypertarget{ch01-normalization-gives-an-exact-update}{%
-\section{Normalization gives an exact update}\label{ch01-normalization-gives-an-exact-update}}
+\section{Normalization gives an exact update}\label{ch01-normalization-gives-an-exact-update}
 
 Write \(x_t=N_{A,t}/(N_{A,t}+N_{B,t})\). The other proportion is \(1-x_t\). Dividing the new \(A\) count by the new total gives \[x_{t+1}=\frac{x_t w_A}{x_t w_A+(1-x_t)w_B}.\] The denominator is the average multiplier in the current population. It accounts for the growth of the total. We often write \(x^+\) for the next value of \(x\) and \(Z=xw_A+(1-x)w_B\) for this average. Then \[x^+-x=\frac{x(1-x)(w_A-w_B)}{Z}.\] To verify the formula, put \(xw_A/Z-x\) over the denominator \(Z\) and factor the numerator. This identity gives a complete sign test: an interior proportion increases when \(w_A>w_B\), decreases when \(w_A<w_B\), and remains fixed when the multipliers agree.
 
@@ -132,8 +154,7 @@ Take equal initial counts and multipliers \(w_A=1.1\), \(w_B=1.3\). Both types i
 
 \end{example}
 
-\hypertarget{ch01-odds-turn-normalization-into-multiplication}{%
-\section{Odds turn normalization into multiplication}\label{ch01-odds-turn-normalization-into-multiplication}}
+\section{Odds turn normalization into multiplication}\label{ch01-odds-turn-normalization-into-multiplication}
 
 For \(0<x<1\), the \textbf{odds} of \(A\) relative to \(B\) are \(O=x/(1-x)\). Odds of \(3\) mean three \(A\) individuals per \(B\) individual, so the corresponding proportion is \(3/4\). Solving the definition for \(x\) gives \(x=O/(1+O)\).
 
@@ -148,8 +169,7 @@ Let \(x_0=1/5\) and \(r=2\). Then \(O_t=2^t/4\). The condition \(x_t\geq 0.9\) i
 
 If \(r>1\) and both types are initially present, the odds become arbitrarily large and \(x_t\) approaches \(1\). If \(r<1\), the odds approach zero and \(x_t\) approaches zero. Approaching an endpoint does not mean reaching it at a finite step: all finite powers of a positive number are positive, so both types remain present in exact arithmetic.
 
-\hypertarget{ch01-probability-vectors-and-weighted-averages}{%
-\section{Probability vectors and weighted averages}\label{ch01-probability-vectors-and-weighted-averages}}
+\section{Probability vectors and weighted averages}\label{ch01-probability-vectors-and-weighted-averages}
 
 For \(k\) types, let \(p_i\) denote the proportion of type \(i\). A \textbf{probability vector} satisfies \(p_i\geq0\) and \(\sum_{i=1}^k p_i=1\). The symbol \(\sum\) means addition over the indicated indices. Thus \(\sum_{i=1}^3p_i=p_1+p_2+p_3\).
 
@@ -163,8 +183,7 @@ Let \(p=(1/2,1/3,1/6)\) and \(w=(1,2,3)\). The unnormalized entries are \((1/2,2
 
 Multiplying every \(w_i\) by the same positive constant leaves the normalized result unchanged, because that constant cancels between numerator and denominator. This freedom is useful when comparing models and when computing with very large or small weights.
 
-\hypertarget{ch01-what-a-finite-model-specifies}{%
-\section{What a finite model specifies}\label{ch01-what-a-finite-model-specifies}}
+\section{What a finite model specifies}\label{ch01-what-a-finite-model-specifies}
 
 A recurrence needs an initial state and a rule for each step. Its interpretation also needs a meaning for one step. Changing a step from one generation to ten generations can change the appropriate multiplier. For constant multipliers, ten consecutive steps multiply the odds by \(r^{10}\). A state-dependent multiplier requires reevaluation after every step and usually cannot be replaced by its tenth power at the initial state.
 
@@ -182,8 +201,7 @@ Throughout the course, a \textbf{fixed point} is a state that one update leaves 
 \end{axis}\end{tikzpicture}}
 \caption{Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.}\end{figure}
 
-\hypertarget{ch01-reversing-an-update-and-checking-a-formula}{%
-\section{Reversing an update and checking a formula}\label{ch01-reversing-an-update-and-checking-a-formula}}
+\section{Reversing an update and checking a formula}\label{ch01-reversing-an-update-and-checking-a-formula}
 
 An explicit formula is more than a shortcut. It lets us answer an inverse question: which initial composition would produce a given final composition? For a constant relative multiplier \(r>0\), the odds relation \(O_t=r^tO_0\) gives \(O_0=O_t/r^t\). Convert the observed final proportion to odds, divide by the accumulated multiplier, and convert back to a proportion. These operations reverse the update when both types are present.
 
@@ -197,8 +215,7 @@ Sometimes the multiplier is unknown instead. If both \(O_0\) and \(O_t\) are kno
 
 The exact solution can be verified by \textbf{mathematical induction}. First check the initial step \(t=0\), where the formula returns \(x_0\). Then assume the formula holds at a particular step \(t\). Substituting into the recurrence and canceling its common denominator gives the same formula with \(t+1\) in place of \(t\). These two statements establish the formula for every nonnegative integer step. Induction is particularly well suited to recurrences because the proof follows the way the sequence is constructed.
 
-\hypertarget{ch01-replenishment-gives-an-affine-recurrence}{%
-\section{Replenishment gives an affine recurrence}\label{ch01-replenishment-gives-an-affine-recurrence}}
+\section{Replenishment gives an affine recurrence}\label{ch01-replenishment-gives-an-affine-recurrence}
 
 Repeated multiplication is one useful mechanism; partial replacement is another. Suppose a fixed-size collection replaces a fraction \(\lambda\) of its members each round with an external source whose A proportion is \(q\). The next composition is \[x^+=(1-\lambda)x+\lambda q,\qquad 0<\lambda\leq1.\] This is an \textbf{affine recurrence}, consisting of a multiple of \(x\) plus a constant. Its fixed point is \(q\). Subtracting that fixed point gives a pure multiplication rule for the error: \[x^+-q=(1-\lambda)(x-q).\] Thus \(x_t=q+(1-\lambda)^t(x_0-q)\). This technique, shifting coordinates to a fixed point, will recur in later chapters.
 
@@ -210,13 +227,11 @@ Let \(x_0=0.8\), let the external source have proportion \(q=0.2\), and replace 
 
 The multiplying-growth model and the replacement model can be distinguished by their formulas. Positive multiplication preserves absence. Replacement introduces A from the source whenever \(q>0\) and \(\lambda>0\), even if A is initially absent. Choosing a recurrence therefore includes choosing the mechanisms that can change a population.
 
-\hypertarget{ch01-a-calculation-routine}{%
-\section{A calculation routine}\label{ch01-a-calculation-routine}}
+\section{A calculation routine}\label{ch01-a-calculation-routine}
 
 To compute an update reliably, make a short table with columns for the old proportion, multiplier, and product. Add the products to obtain \(Z\), then divide every product by \(Z\). Check the new sum before rounding the displayed values. Store more digits than are printed, since feeding rounded output back into the next step changes the recurrence. Finally, compare a simple diagnostic, such as the two-type odds ratio, with its expected update. An independent identity often detects an indexing error that a unit-sum check alone would miss.
 
-\hypertarget{ch01-exercises}{%
-\section{Exercises}\label{ch01-exercises}}
+\section{Exercises}\label{ch01-exercises}
 
 \begin{exercises}
 
@@ -270,8 +285,7 @@ Two populations have the same initial composition but different total sizes. Sta
 
 \end{exercises}
 
-\hypertarget{ch01-selected-solutions}{%
-\section{Selected solutions}\label{ch01-selected-solutions}}
+\section{Selected solutions}\label{ch01-selected-solutions}
 
 \textbf{1.} The terms are \(12,18,27,81/2,243/4\). Each is obtained by multiplying its predecessor by \(3/2\).
 
@@ -288,15 +302,15 @@ Two populations have the same initial composition but different total sizes. Sta
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Start with counts \((20,80)\) and multipliers \((2,1)\). Make a table for steps zero through six, recording both counts, the total, the A proportion, and the odds. Explain why the odds column is simpler than the proportion column.
+  Start with the sequence \(a_n=n^2\) for \(n=0,1,2,3,4,5\). (a) Calculate the six values. (b) List every first difference \(\Delta a_n\). (c) Calculate the second differences. (d) Explain what constant second differences tell you.
 \item
-  In the demonstration, set the initial A proportion to \(0.20\) and the relative multiplier to \(2\). Compare the first six computed proportions with your table. Use the exact formula to determine the first step at which A has proportion at least \(0.95\).
+  Suppose the daily number of new messages is \(b_n=3n+2\), beginning at day \(n=0\). (a) Calculate \(b_0,b_1,b_2,b_3\). (b) Compute the running totals \(S_0,S_1,S_2,S_3,S_4\), where \(S_0=0\). (c) Verify \(\Delta S_2=b_2\).
 \item
-  Choose multipliers for which both types grow in count while A falls in proportion. Calculate three steps and explain the role of the total. Compare your result with a second initial population ten times as large.
+  Let \(A_0=20\), \(B_0=60\), \(w_A=2\), and \(w_B=1\). (a) Compute counts at steps 0, 1, and 2. (b) Calculate the A proportions \(x_0,x_1,x_2\). (c) Find \(\Delta x_0\) and \(\Delta x_1\). (d) Verify the telescoping identity \(\Delta x_0+\Delta x_1=x_2-x_0\).
 \item
-  Use \(p=(1/2,1/3,1/6)\) and multipliers \((1,2,3)\). Compute two normalized updates. Show that multiplying every multiplier by seven changes neither updated table.
+  In the original growth demonstration, start at proportion \(x_0=0.2\) with relative multiplier \(2\). (a) Record five consecutive proportions. (b) Subtract to construct their difference sequence. (c) Add those differences and compare with the net change. (d) Explain why the differences get smaller near the limiting state.
 \item
-  Write a short algorithm for normalized growth. State how it checks nonnegative proportions, unit total, and positive multipliers. Explain why rounding to whole percentages at each step can alter the support of a trajectory.
+  Choose one sequence of your own whose first differences are constant and another whose second differences are constant. (a) Write five terms of each. (b) Show the appropriate difference tables. (c) Explain how the original sequence can be recovered by summing changes.
 \end{enumerate}
 
 \FloatBarrier

@@ -1,16 +1,84 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 10: Information networks and coarse-graining · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="10"><p class="eyebrow">Week 10 · Reading</p><h1>Graph divergence, diffusion, and information flow</h1><nav class="week-nav" aria-label="Week 10 resources"><a aria-current=page href="../readings/week10.html">Reading</a><a  href="../demos/week10.html">Demonstration</a><a  href="../labs/week10.html">Lab</a><a  href="../quizzes/week10.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter10.pdf">Chapter 10 PDF</a> · <a href="../textbook/latex/chapter10.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Derive and compute the graph continuity equation.</li><li>Implement a stable discrete diffusion update.</li><li>Verify conservation, entropy change, and data processing in one example.</li></ul></aside><article class="reading-text"><!-- DISCRETE CALCULUS CORE: Week 10 --><section class="calculus-core"><p class="lede">Bring the course together with a discrete continuity equation, a graph Laplacian, and changing entropy.</p><h2>Information moves on a network</h2>
-<p>Let \(G=(V,E)\) be a finite undirected graph. A probability distribution places mass \(p_i(n)\geq0\) at each vertex, with total mass one. Give each undirected edge a single orientation for bookkeeping and denote the signed current from \(i\) to \(j\) by \(J_{ij}(n)=-J_{ji}(n)\).</p>
-<p>The <strong>discrete divergence</strong> at a vertex is net outward current, $\(\operatorname{div}J(i)=\sum_{j\sim i}J_{ij}.\)\( Then the conservation law is the discrete continuity equation \)\(\boxed{p_i(n+1)-p_i(n)=-\operatorname{div}J_n(i).}\)$ Add this equation over every vertex. Each edge current cancels with its opposite, so the total probability remains one. This is a finite analogue of the divergence theorem.</p>
-<h2>A graph gradient and Laplacian</h2>
-<p>For a scalar field \(f\) on the vertices, the gradient along an oriented edge \(i\to j\) is \(f_j-f_i\). A diffusion current flowing from higher to lower probability can be chosen as $\(J_{ij}=\tau(p_i-p_j),\qquad\tau&gt;0.\)\( Substitution yields \)\(\boxed{p_i(n+1)=p_i(n)+\tau\sum_{j\sim i}(p_j(n)-p_i(n)).}\)\( The sum is a <strong>graph Laplacian</strong> applied to \)p$. It measures how a vertex differs from its neighbors.</p>
-<p>To ensure nonnegative probabilities at every step, choose \(\tau\leq1/d_{\max}\), where \(d_{\max}\) is the largest vertex degree. Then the update matrix is stochastic. Because the graph is undirected, its rows also sum to one, so it is doubly stochastic.</p>
-<h2>Three vertices, one exact step</h2>
-<p>On the path \(A\)–\(B\)–\(C\), choose \(\tau=1/4\) and start at \(p_0=(1,0,0)\). The step gives $\(p_1=(3/4,1/4,0).\)\( The next gives \)\(p_2=(5/8,5/16,1/16).\)\( Compute \)\Delta p_0\( and \)\Delta p_1$. In each case the three coordinates sum to zero, because the changes are redistribution. Repeating the update brings the distribution toward the stationary uniform state.</p>
-<h2>Entropy and the direction of change</h2>
-<p>Because this symmetric diffusion is doubly stochastic, it does not decrease Shannon entropy: $\(H(p_{n+1})-H(p_n)\geq0.\)\( One way to prove this is to apply the contraction of relative entropy toward the uniform distribution \)u\(. Since \)D(p\|u)=\log|V|-H(p)\( and \)Ku=u\(, \)\(D(Kp\|u)\leq D(p\|u).\)\( Hence \)\Delta H_n\geq0$. The conclusion depends on the <strong>doubly stochastic</strong> assumption. An arbitrary stochastic channel may lower entropy.</p>
-<h2>The course's complete mathematical circle</h2>
-<p>We started with \(\Delta a_n=a_{n+1}-a_n\). Now the same operation measures probability changes, Lyapunov dissipation, and entropy production, while the graph gradient and divergence describe where probability travels. The fundamental theorem for finite differences and the cancellation of internal fluxes explain why discrete conservation laws work.</p>
-<p>For the final investigation, choose a small graph and initial probability vector, compute at least four iterations, verify mass conservation, graph fluxes, and changes in Shannon entropy, then compare the limiting behavior with your predictions. Use finite calculations to explain what the mathematics says about information moving across the network.</p></section><h2>Further investigations and applications</h2><p>An observation can be recorded at several resolutions. A detailed
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 10: Graph divergence, diffusion, and information flow · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="10"><p class="eyebrow">Week 10 · Reading</p><h1>Graph divergence, diffusion, and information flow</h1><nav class="week-nav" aria-label="Week 10 resources"><a aria-current=page href="../readings/week10.html">Reading</a><a  href="../demos/week10.html">Demonstration</a><a  href="../labs/week10.html">Lab</a><a  href="../quizzes/week10.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter10.pdf">Chapter 10 PDF</a> · <a href="../textbook/latex/chapter10.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Derive and compute the graph continuity equation.</li><li>Implement a stable discrete diffusion update.</li><li>Verify conservation, entropy change, and data processing in one example.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 10 -->
+<h2 id="information-moves-on-a-network">Information moves on a
+network</h2>
+<p>Let <span class="math inline">\(G=(V,E)\)</span> be a finite
+undirected graph. A probability distribution places mass <span
+class="math inline">\(p_i(n)\geq0\)</span> at each vertex, with total
+mass one. Give each undirected edge a single orientation for bookkeeping
+and denote the signed current from <span
+class="math inline">\(i\)</span> to <span
+class="math inline">\(j\)</span> by <span
+class="math inline">\(J_{ij}(n)=-J_{ji}(n)\)</span>.</p>
+<p>The <strong>discrete divergence</strong> at a vertex is net outward
+current, <span class="math display">\[\operatorname{div}J(i)=\sum_{j\sim
+i}J_{ij}.\]</span> Then the conservation law is the discrete continuity
+equation <span
+class="math display">\[\boxed{p_i(n+1)-p_i(n)=-\operatorname{div}J_n(i).}\]</span>
+Add this equation over every vertex. Each edge current cancels with its
+opposite, so the total probability remains one. This is a finite
+analogue of the divergence theorem.</p>
+<h2 id="a-graph-gradient-and-laplacian">A graph gradient and
+Laplacian</h2>
+<p>For a scalar field <span class="math inline">\(f\)</span> on the
+vertices, the gradient along an oriented edge <span
+class="math inline">\(i\to j\)</span> is <span
+class="math inline">\(f_j-f_i\)</span>. A diffusion current flowing from
+higher to lower probability can be chosen as <span
+class="math display">\[J_{ij}=\tau(p_i-p_j),\qquad\tau&gt;0.\]</span>
+Substitution yields <span
+class="math display">\[\boxed{p_i(n+1)=p_i(n)+\tau\sum_{j\sim
+i}(p_j(n)-p_i(n)).}\]</span> The sum is a <strong>graph
+Laplacian</strong> applied to <span class="math inline">\(p\)</span>. It
+measures how a vertex differs from its neighbors.</p>
+<p>To ensure nonnegative probabilities at every step, choose <span
+class="math inline">\(\tau\leq1/d_{\max}\)</span>, where <span
+class="math inline">\(d_{\max}\)</span> is the largest vertex degree.
+Then the update matrix is stochastic. Because the graph is undirected,
+its rows also sum to one, so it is doubly stochastic.</p>
+<h2 id="three-vertices-one-exact-step">Three vertices, one exact
+step</h2>
+<p>On the path <span class="math inline">\(A\)</span>–<span
+class="math inline">\(B\)</span>–<span class="math inline">\(C\)</span>,
+choose <span class="math inline">\(\tau=1/4\)</span> and start at <span
+class="math inline">\(p_0=(1,0,0)\)</span>. The step gives <span
+class="math display">\[p_1=(3/4,1/4,0).\]</span> The next gives <span
+class="math display">\[p_2=(5/8,5/16,1/16).\]</span> Compute <span
+class="math inline">\(\Delta p_0\)</span> and <span
+class="math inline">\(\Delta p_1\)</span>. In each case the three
+coordinates sum to zero, because the changes are redistribution.
+Repeating the update brings the distribution toward the stationary
+uniform state.</p>
+<h2 id="entropy-and-the-direction-of-change">Entropy and the direction
+of change</h2>
+<p>Because this symmetric diffusion is doubly stochastic, it does not
+decrease Shannon entropy: <span
+class="math display">\[H(p_{n+1})-H(p_n)\geq0.\]</span> One way to prove
+this is to apply the contraction of relative entropy toward the uniform
+distribution <span class="math inline">\(u\)</span>. Since <span
+class="math inline">\(D(p\|u)=\log|V|-H(p)\)</span> and <span
+class="math inline">\(Ku=u\)</span>, <span
+class="math display">\[D(Kp\|u)\leq D(p\|u).\]</span> Hence <span
+class="math inline">\(\Delta H_n\geq0\)</span>. The conclusion depends
+on the <strong>doubly stochastic</strong> assumption. An arbitrary
+stochastic channel may lower entropy.</p>
+<h2 id="the-courses-complete-mathematical-circle">The course’s complete
+mathematical circle</h2>
+<p>We started with <span class="math inline">\(\Delta
+a_n=a_{n+1}-a_n\)</span>. Now the same operation measures probability
+changes, Lyapunov dissipation, and entropy production, while the graph
+gradient and divergence describe where probability travels. The
+fundamental theorem for finite differences and the cancellation of
+internal fluxes explain why discrete conservation laws work.</p>
+<p>For the final investigation, choose a small graph and initial
+probability vector, compute at least four iterations, verify mass
+conservation, graph fluxes, and changes in Shannon entropy, then compare
+the limiting behavior with your predictions. Use finite calculations to
+explain what the mathematics says about information moving across the
+network.</p>
+<h2
+id="further-investigations-graph-divergence-diffusion-and-information-flow">Further
+investigations: Graph divergence, diffusion, and information flow</h2>
+<p>An observation can be recorded at several resolutions. A detailed
 label may be replaced by a broader group, passed through a noisy
 channel, or transported among nodes of a network. These operations
 transform probability tables by finite weighted sums. They connect graph
@@ -318,4 +386,4 @@ class="math inline">\(17/8\)</span>. The table is <span
 class="math inline">\((1/34,4/17,8/17,4/17,1/34)\)</span>. It is
 nonuniform and has entropy strictly less than <span
 class="math inline">\(\ln5\)</span>.</p>
-</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week09.html">← Week 9</a><a href="../guide.html#capstone">Capstone guidance →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Probability, Counting, and Finite Dynamics</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>
+</details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week09.html">← Week 9</a><a href="../guide.html#capstone">Capstone guidance →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

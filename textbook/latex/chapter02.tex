@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,33 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 2\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 2\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{1}
 
-\chapter{Payoff tables and finite selection}
+\chapter{Difference equations, feedback, and stability}
+\section{A difference equation tells us how a state changes}\label{ch02-a-difference-equation-tells-us-how-a-state-changes}
+
+A \textbf{difference equation} prescribes the next value of a sequence. For example, \[\Delta x_n=-k(x_n-c)\] says that each step corrects a fraction \(k\) of the gap between the current state and a target \(c\). Expanding the definition of \(\Delta\) gives \[x_{n+1}=c+(1-k)(x_n-c).\] Repeated substitution yields the exact solution \[\boxed{x_n=c+(1-k)^n(x_0-c).}\] We call \(c\) a \textbf{fixed point} because the update leaves it unchanged.
+
+\section{How finite steps change stability}\label{ch02-how-finite-steps-change-stability}
+
+The size of \(1-k\) determines whether the error shrinks. If \(0<k<1\), every step approaches the target without crossing it. If \(1<k<2\), successive corrections cross the target but get smaller. When \(k=2\), the same-sized error alternates forever. If \(k>2\), the error grows. The exact attracting condition is \[\boxed{|1-k|<1,\quad\text{equivalently }0<k<2.}\] For example, with \(c=1/2\), \(x_0=1/4\), and \(k=3/2\), the first three states are \(1/4,5/8,7/16\). The errors alternate signs and shrink by a factor of \(1/2\) each step. These values stay within the probability interval for this initial state; a general affine feedback rule need not preserve that interval for every initial condition.
+
+\section{Nonlinear difference equations on probabilities}\label{ch02-nonlinear-difference-equations-on-probabilities}
+
+More generally we write \(x_{n+1}=F(x_n)\) and \(\Delta x_n=F(x_n)-x_n\). A fixed point solves \(F(c)=c\). To investigate local stability, start with nearby values and compare the distances \(|x_n-c|\) after each step. If \(F\) has an ordinary derivative available, the familiar local criterion is \(|F'(c)|<1\); students can discover the same distinction numerically without using derivatives.
+
+For a two-type population with scores \(f_A(x),f_B(x)\), one possible positive update uses multipliers \(w_i(x)=e^{\eta f_i(x)}\): \[F(x)=\frac{xe^{\eta f_A(x)}}{xe^{\eta f_A(x)}+(1-x)e^{\eta f_B(x)}}.\] Its finite difference \(F(x)-x\) has the same sign as \(f_A(x)-f_B(x)\) for \(0<x<1\). Equal scores give a fixed point, but the size of the update still matters for stability.
+
+\section{A calculation worth repeating}\label{ch02-a-calculation-worth-repeating}
+
+Using the payoff table in the following section, start on either side of an interior equal-score state. Compute \(x_1\) and \(\Delta x_0\), then repeat for a smaller and larger update intensity \(\eta\). The comparison separates \textbf{direction} (the sign of change) from \textbf{step size} (how far the population actually moves). That distinction is central to discrete dynamics and control.
+
+\section{Further investigations: Difference equations, feedback, and stability}\label{ch02-further-investigations-difference-equations-feedback-and-stability}
+
 An interaction changes the opportunities available to a type. A strategy may do well when it is rare and poorly when it becomes common. To describe this feedback, we assign scores to encounters and average them using the present composition. The resulting multipliers depend on the state, so the growth rule becomes a nonlinear difference equation.
 
-\hypertarget{ch02-a-matrix-is-a-table-of-encounter-scores}{%
-\section{A matrix is a table of encounter scores}\label{ch02-a-matrix-is-a-table-of-encounter-scores}}
+\section{A matrix is a table of encounter scores}\label{ch02-a-matrix-is-a-table-of-encounter-scores}
 
 Consider two strategies, \(A\) and \(B\), with score table \[M=\begin{pmatrix}a&b\\c&d\end{pmatrix}.\] The row specifies the focal strategy and the column specifies its opponent. Thus \(b\) is the score of an \(A\) individual meeting a \(B\) individual. We assume opponents are encountered with frequencies \(x\) and \(1-x\). The average scores are \[f_A(x)=ax+b(1-x),\qquad f_B(x)=cx+d(1-x).\] The assumption about encounters is part of the model. Assortment by type, spatial clustering, or a rule excluding encounters with oneself can produce different averages.
 
@@ -117,8 +136,7 @@ For \(M=\left(\begin{smallmatrix}2&4\\3&1\end{smallmatrix}\right)\), the scores 
 
 \end{example}
 
-\hypertarget{ch02-turning-scores-into-positive-multipliers}{%
-\section{Turning scores into positive multipliers}\label{ch02-turning-scores-into-positive-multipliers}}
+\section{Turning scores into positive multipliers}\label{ch02-turning-scores-into-positive-multipliers}
 
 Scores and multipliers play different roles. A score may be negative, while a population multiplier must be positive. One possible conversion is the \textbf{linear multiplier rule} \[w_i=1+\eta f_i,\] where \(\eta>0\) controls the strength of the update. This rule requires \(1+\eta f_i>0\) for every score that can occur. If all encounter scores are at least \(m<0\), choosing \(\eta<-1/m\) is sufficient. Equality would permit zero multipliers and falls outside the positive rule used here.
 
@@ -133,8 +151,7 @@ Use the coexistence table, \(x=1/4\), and \(\eta=1\). Then \((f_A,f_B)=(7/2,3/2)
 
 \end{example}
 
-\hypertarget{ch02-sign-diagrams-and-fixed-points}{%
-\section{Sign diagrams and fixed points}\label{ch02-sign-diagrams-and-fixed-points}}
+\section{Sign diagrams and fixed points}\label{ch02-sign-diagrams-and-fixed-points}
 
 For positive multipliers, the pure states \(0\) and \(1\) are fixed. An interior state is fixed precisely when the two scores agree. When \(a-b-c+d\ne0\), the candidate is \[q=\frac{d-b}{a-b-c+d}.\] It is an interior fixed point only if \(0<q<1\). If the score difference is zero everywhere, every state is fixed. If the difference is a nonzero constant, there is no interior fixed point.
 
@@ -156,15 +173,13 @@ For \(M=\left(\begin{smallmatrix}4&1\\2&3\end{smallmatrix}\right)\), we have \(\
 
 \end{example}
 
-\hypertarget{ch02-what-changes-when-a-score-table-changes}{%
-\section{What changes when a score table changes?}\label{ch02-what-changes-when-a-score-table-changes}}
+\section{What changes when a score table changes?}\label{ch02-what-changes-when-a-score-table-changes}
 
 Exponential normalization is unchanged if a common number \(C\) is added to all current scores: each weight gains the same factor \(e^{\eta C}\), which cancels. Multiplying all scores by \(c>0\) is equivalent to replacing \(\eta\) by \(c\eta\).
 
 For linear multipliers, adding \(C\) changes the effective intensity. When \(1+\eta C>0\), \[1+\eta(f_i+C)=(1+\eta C)\left(1+\frac{\eta}{1+\eta C}f_i\right).\] The first factor cancels upon normalization, leaving intensity \(\eta/(1+\eta C)\). Consequently, fixed points and signs may agree even though finite trajectories differ. This identity is useful when interpreting a table whose scores have been shifted to make them positive.
 
-\hypertarget{ch02-step-size-is-part-of-the-model}{%
-\section{Step size is part of the model}\label{ch02-step-size-is-part-of-the-model}}
+\section{Step size is part of the model}\label{ch02-step-size-is-part-of-the-model}
 
 The exponential coexistence rule can cross its equilibrium. At \(x=1/4\) and \(\eta=2\), its next value is \(e^4/(e^4+3)\approx0.9479\), beyond \(3/4\). A sign diagram alone does not exclude this crossing. Repeated large steps can alternate across an equilibrium. Numerical experiments should report both the update rule and the chosen intensity, because they jointly determine the recurrence.
 
@@ -182,8 +197,7 @@ The exponential coexistence rule can cross its equilibrium. At \(x=1/4\) and \(\
 \end{axis}\end{tikzpicture}}
 \caption{Coexistence scores and two finite trajectories at intensity 2. The linear rule approaches the equilibrium from one side; the exponential rule crosses it.}\end{figure}
 
-\hypertarget{ch02-a-general-no-crossing-test}{%
-\section{A general no-crossing test}\label{ch02-a-general-no-crossing-test}}
+\section{A general no-crossing test}\label{ch02-a-general-no-crossing-test}
 
 The coexistence proof illustrates a reusable finite method. Suppose an update can be written \(x^+=x+G(x)\) and \(q\) is a proposed interior fixed point. If algebra produces \[x^+-q=(x-q)R(x),\qquad 0<R(x)<1,\] then the new error has the old sign and smaller magnitude. A trajectory cannot cross \(q\). The resulting monotone bounded sequence converges, and checking fixed points identifies the limit. The decisive work is the factorization and the bound on \(R\).
 
@@ -195,8 +209,7 @@ The affine rule \(x^+=3/4-x/2\) maps \([0,1]\) into \([1/4,3/4]\). Its fixed poi
 
 \end{example}
 
-\hypertarget{ch02-boundary-behavior-from-encounter-scores}{%
-\section{Boundary behavior from encounter scores}\label{ch02-boundary-behavior-from-encounter-scores}}
+\section{Boundary behavior from encounter scores}\label{ch02-boundary-behavior-from-encounter-scores}
 
 When A is rare, \(x\) is close to zero, so its score is close to \(b\) and B's score is close to \(d\). The comparison \(b-d\) determines whether a small positive A proportion rises in the next step. When B is rare, \(x\) is close to one, so the relevant comparison is \(a-c\). These are the endpoint values of the score difference. They are obtained from the encounter interpretation before any trajectory is calculated.
 
@@ -208,15 +221,13 @@ For the coexistence table, a rare A meets mostly B and scores close to \(4\), wh
 
 \end{example}
 
-\hypertarget{ch02-from-a-score-table-to-a-reproducible-experiment}{%
-\section{From a score table to a reproducible experiment}\label{ch02-from-a-score-table-to-a-reproducible-experiment}}
+\section{From a score table to a reproducible experiment}\label{ch02-from-a-score-table-to-a-reproducible-experiment}
 
 A numerical report should specify the encounter convention, the table, the score-to-multiplier conversion, the intensity, the initial state, and the number of steps. Each item affects the calculation. A plot labeled only with a table omits part of the recurrence.
 
 For a two-type experiment, record the score difference and the updated proportion at several states. Check that the observed direction agrees with the sign identity. Then ask a separate question about crossing: is the new state still on the same side of an interior fixed point? Finally, compare any proposed long-run description with an exact error estimate when one is available. This sequence of calculations links model assumptions, algebra, and numerical observations without requiring a formula for every trajectory.
 
-\hypertarget{ch02-exercises}{%
-\section{Exercises}\label{ch02-exercises}}
+\section{Exercises}\label{ch02-exercises}
 
 \begin{exercises}
 
@@ -270,8 +281,7 @@ Design two tables with the same interior fixed point but opposite signs of \(\De
 
 \end{exercises}
 
-\hypertarget{ch02-selected-solutions}{%
-\section{Selected solutions}\label{ch02-selected-solutions}}
+\section{Selected solutions}\label{ch02-selected-solutions}
 
 \textbf{2.} The scores are \(f_A=6x-1\) and \(f_B=3-x\), so \(\Delta=7x-4\). The interior equality occurs at \(4/7\).
 
@@ -288,15 +298,15 @@ Design two tables with the same interior fixed point but opposite signs of \(\De
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  For the coexistence table \(\left(\begin{smallmatrix}2&4\\3&1\end{smallmatrix}\right)\), derive both average scores, their difference, and the mean score. Find all fixed points of the linear and exponential rules.
+  Consider \(\Delta x_n=\tfrac12(10-x_n)\) with \(x_0=2\). (a) Rewrite as \(x_{n+1}=F(x_n)\). (b) Find the fixed point. (c) Calculate \(x_1,x_2,x_3\). (d) Find the errors relative to the fixed point and their ratio.
 \item
-  At initial proportion \(0.25\), compare five steps of the linear and exponential rules with intensity \(1\). Record values in a table. Explain why agreement on the direction of the first step does not imply agreement on the trajectory.
+  Study \(\Delta x_n=-k(x_n-1/2)\) from \(x_0=1/4\). (a) Compute three steps for \(k=1/2\). (b) Repeat for \(k=3/2\). (c) Describe which sequence crosses the target and why. (d) Check the prediction from \(|1-k|\).
 \item
-  For exponential coexistence, compare intensities \(0.2\), \(1\), and \(2\). Record the first step that crosses \(0.75\), if one occurs in the first twenty steps. State your findings as observations over a specified run.
+  Use the same equation with \(k=2\) and \(k=5/2\). (a) Compute four steps. (b) Explain how the signs and sizes of the errors change. (c) State why a large corrective step can destabilize a discrete system.
 \item
-  Use the coordination table \(\left(\begin{smallmatrix}4&1\\2&3\end{smallmatrix}\right)\) and initial proportions \(0.45\) and \(0.55\). Predict the long-run direction using the score difference, then check twenty steps.
+  With payoff matrix \(M=((2,4),(3,1))\), write \(f_A(x)\) and \(f_B(x)\) and solve \(f_A=f_B\). (a) Evaluate the sign of \(f_A-f_B\) at \(x=1/4\) and \(x=9/10\). (b) Use the original demo to compare finite updates with two intensities. (c) Explain why the sign test does not give the step size.
 \item
-  Add a common score of five to the coexistence table. Derive why the exponential update is unchanged and why the linear update at intensity \(1\) becomes the original linear update at intensity \(1/6\). Verify at one state.
+  Choose an update \(x_{n+1}=F(x_n)\) on \([0,1]\). (a) List four iterates for two nearby initial states. (b) Compute each first-difference sequence. (c) Give numerical evidence for attraction or repulsion and distinguish this from a proof.
 \end{enumerate}
 
 \FloatBarrier

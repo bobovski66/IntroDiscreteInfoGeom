@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,37 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 5\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 5\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{4}
 
-\chapter{Entropy, code trees, and multiplicity}
+\chapter{Entropy and its discrete derivatives}
+\section{Entropy is a function on probability states}\label{ch05-entropy-is-a-function-on-probability-states}
+
+For a probability vector \(p\), Shannon entropy in natural-log units is \[H(p)=-\sum_i p_i\log p_i.\] It measures average surprise. We can evaluate it at the states of a probability lattice and take differences along allowed token transfers. Because this is a finite set of states, the resulting calculus is entirely algebraic and numerical.
+
+Begin with two categories and \(N=4\) tokens. Let \[H_k=H\left(\frac k4,1-\frac k4\right),\qquad k=0,1,2,3,4.\] To four decimals the entropy sequence is \[0,\quad0.5623,\quad0.6931,\quad0.5623,\quad0.\] Its forward differences are \[0.5623,\quad0.1308,\quad-0.1308,\quad-0.5623.\] The signs show that entropy rises toward balanced proportions and falls afterward.
+
+\section{Second differences describe discrete concavity}\label{ch05-second-differences-describe-discrete-concavity}
+
+The second differences are \[\Delta^2H_k=H_{k+2}-2H_{k+1}+H_k.\] For the five-state entropy sequence, these three values are all negative. So the \emph{first differences decrease} as \(k\) increases. This is the discrete expression of concavity: each additional transfer in the same direction provides a smaller entropy gain, then eventually an entropy loss.
+
+More generally, the binary entropy function is concave on \([0,1]\), so sampling it at equally spaced points gives nonpositive second differences. The conclusion can be investigated from finite tables without assuming students know differential calculus.
+
+\section{An entropy-increasing difference equation}\label{ch05-an-entropy-increasing-difference-equation}
+
+A simple deterministic rule on these five states is: move one token toward a neighboring state with larger entropy, and remain in place if neither neighbor improves it. Starting at \(k=0\), the path is \[0\to1\to2\to2\to\cdots.\] Along the trajectory, \(\Delta H_n=H_{k_{n+1}}-H_{k_n}\geq0\). Entropy acts as a \textbf{monotone quantity} for this particular dynamics, because we constructed the update to make it increase.
+
+Do not assume entropy increases under every possible update. Multiplicative selection may lower entropy, and some information channels concentrate probability. Always state the recurrence before making a claim about entropy change.
+
+\section{Accumulated information change}\label{ch05-accumulated-information-change}
+
+The discrete fundamental theorem now reads \[\sum_{n=0}^{T-1}\Delta H_n=H(p_T)-H(p_0).\] This separates the small changes produced at each step from the total change across an experiment. The sections that follow develop code trees and counting formulas that give entropy a second interpretation: how many distinct messages or samples can share the same approximate composition.
+
+\section{Further investigations: Entropy and its discrete derivatives}\label{ch05-further-investigations-entropy-and-its-discrete-derivatives}
+
 A message that was very likely conveys less surprise than a message that was very unlikely. Logarithms turn this idea into an additive numerical measure. The same measure appears in binary code lengths and in the number of ordered samples with a specified composition. These connections give entropy a finite combinatorial interpretation.
 
-\hypertarget{ch05-logarithms-measure-multiplicative-scales}{%
-\section{Logarithms measure multiplicative scales}\label{ch05-logarithms-measure-multiplicative-scales}}
+\section{Logarithms measure multiplicative scales}\label{ch05-logarithms-measure-multiplicative-scales}
 
 For \(a>0\), \(\log_2a\) is the exponent to which \(2\) must be raised to obtain \(a\). Thus \(\log_2 8=3\) and \(\log_2(1/4)=-2\). The natural logarithm \(\ln a\) uses base \(e\). The conversion formula is \(\log_2a=\ln a/\ln2\).
 
@@ -113,8 +136,7 @@ The identities \[\ln(ab)=\ln a+\ln b,\qquad \ln(a^r)=r\ln a\] allow us to expres
 
 The \textbf{surprisal} of an outcome of probability \(p>0\) is \(-\log_2p\) bits. An event of probability \(1/2\) has one bit of surprisal; an event of probability \(1/8\) has three bits. For independent outcomes with probabilities \(p\) and \(q\), their combined surprisal is the sum because \(-\log_2(pq)=-\log_2p-\log_2q\).
 
-\hypertarget{ch05-entropy-is-average-surprisal}{%
-\section{Entropy is average surprisal}\label{ch05-entropy-is-average-surprisal}}
+\section{Entropy is average surprisal}\label{ch05-entropy-is-average-surprisal}
 
 For a finite distribution \(p\), its \textbf{Shannon entropy in bits} is \[H_2(p)=-\sum_i p_i\log_2p_i.\] Using natural logarithms gives entropy in \textbf{nats}: \[H(p)=-\sum_i p_i\ln p_i=H_2(p)\ln2.\] A zero-probability outcome is assigned contribution zero to the entropy sum. This convention reflects that the outcome is never observed; it avoids evaluating its individual infinite surprisal inside an average.
 
@@ -126,8 +148,7 @@ The distribution \((1,0,0,0)\) has entropy zero bits. The distribution \((1/2,1/
 
 Entropy is always nonnegative, since \(-\ln p_i\geq0\) for \(0<p_i\leq1\). It is at most \(\ln k\) for a distribution on \(k\) labels. For a positive distribution, weighted arithmetic-geometric mean gives \[\prod_i(1/p_i)^{p_i}\leq\sum_i p_i(1/p_i)=k.\] Taking logarithms proves \(H(p)\leq\ln k\). If some entries vanish, apply the same argument on the support, the set of labels with positive probability. Equality at the \(\ln k\) bound requires all \(k\) probabilities to equal \(1/k\).
 
-\hypertarget{ch05-binary-trees-turn-messages-into-bit-strings}{%
-\section{Binary trees turn messages into bit strings}\label{ch05-binary-trees-turn-messages-into-bit-strings}}
+\section{Binary trees turn messages into bit strings}\label{ch05-binary-trees-turn-messages-into-bit-strings}
 
 A \textbf{prefix code} assigns each label a bit string such that no string is the beginning of another. A binary tree represents the code: a left branch contributes \(0\), a right branch contributes \(1\), and a label occupies a leaf. Decoding proceeds along branches until it reaches a leaf, after which it starts again at the root.
 
@@ -153,8 +174,7 @@ edge from parent node[above right]{$1$}};
 \end{tikzpicture}}
 \caption{A binary prefix tree with code lengths 1, 2, and 2, matched to probabilities (1/2,1/4,1/4).}\end{figure}
 
-\hypertarget{ch05-multiplicity-and-entropy}{%
-\section{Multiplicity and entropy}\label{ch05-multiplicity-and-entropy}}
+\section{Multiplicity and entropy}\label{ch05-multiplicity-and-entropy}
 
 Let counts \(n_i\) sum to \(N\), and set \(q_i=n_i/N\). The multiplicity \(\Omega=N!/\prod_i n_i!\) counts ordered samples with empirical distribution \(q\). Under the distribution \(q\) itself, every such ordered sample has probability \[\prod_iq_i^{n_i}=\exp\left(N\sum_iq_i\ln q_i\right)=e^{-NH(q)}.\] Therefore the probability of the entire collection of samples with this composition is \[\Omega e^{-NH(q)}\leq1.\] Taking logarithms gives the exact finite bound \[\frac{\ln\Omega}{N}\leq H(q).\] The left side is a logarithmic count per observation. It is generally smaller than the entropy at finite \(N\). This inequality requires only counting and the fact that an event cannot have probability greater than one.
 
@@ -166,8 +186,7 @@ For binary counts \((2,2)\), we have \(\Omega=6\). The logarithmic count per obs
 
 Many different count vectors are possible, so a single composition need not account for most samples. Entropy captures the exponential scale associated with a composition, while the exact multinomial coefficient records its finite multiplicity. We can compare the two numerically without assuming they are equal.
 
-\hypertarget{ch05-logarithms-also-simplify-dynamics}{%
-\section{Logarithms also simplify dynamics}\label{ch05-logarithms-also-simplify-dynamics}}
+\section{Logarithms also simplify dynamics}\label{ch05-logarithms-also-simplify-dynamics}
 
 For exponential selection, the ratio of two positive coordinates satisfies \[\frac{p_i^+}{p_j^+}=\frac{p_i}{p_j}e^{\eta(f_i-f_j)}.\] Taking natural logarithms yields the exact \textbf{log-odds increment} \[\ln\frac{p_i^+}{p_j^+}-\ln\frac{p_i}{p_j}=\eta(f_i-f_j).\] This is an additive difference equation. If scores are constant, repeated addition solves it. More directly, \[p_{i,t}=\frac{p_{i,0}e^{t\eta f_i}}{\sum_jp_{j,0}e^{t\eta f_j}}.\] When scores depend on the current state, the log-odds increment still holds for each step, but the score differences must be summed along the trajectory.
 
@@ -177,8 +196,7 @@ Suppose two hypotheses have initial odds \(1:4\). A sequence of observations has
 
 \end{example}
 
-\hypertarget{ch05-entropy-of-a-pair-of-observations}{%
-\section{Entropy of a pair of observations}\label{ch05-entropy-of-a-pair-of-observations}}
+\section{Entropy of a pair of observations}\label{ch05-entropy-of-a-pair-of-observations}
 
 Let \(X\) and \(Y\) have joint probabilities \(p_{ij}=P(X=i,Y=j)\). Their joint entropy is \(H(X,Y)=-\sum_{i,j}p_{ij}\ln p_{ij}\). The marginal probability of \(X=i\) is \(p_i=\sum_jp_{ij}\). When \(p_i>0\), write \(r_{j\mid i}=p_{ij}/p_i\) for the conditional table of \(Y\) given that value of \(X\).
 
@@ -192,8 +210,7 @@ Let \(X\) be a fair binary label. If \(Y=X\), the two possible pairs are \((0,0)
 
 \end{example}
 
-\hypertarget{ch05-coding-blocks-improves-fractional-averages}{%
-\section{Coding blocks improves fractional averages}\label{ch05-coding-blocks-improves-fractional-averages}}
+\section{Coding blocks improves fractional averages}\label{ch05-coding-blocks-improves-fractional-averages}
 
 Return to three equally likely labels. A single-label prefix code with lengths \((1,2,2)\) averages \(5/3\) bits per label. For a block of two labels there are nine equally likely ordered pairs. A binary tree can assign seven of these pairs length three and the remaining two length four. Its Kraft sum is \(7/8+2/16=1\), and such a tree can be formed by splitting one leaf of a complete depth-three tree into two children.
 
@@ -205,13 +222,11 @@ List the nine ordered pairs as \(AA,AB,AC,BA,BB,BC,CA,CB,CC\). Assign the first 
 
 \end{example}
 
-\hypertarget{ch05-interpreting-a-change-of-labels}{%
-\section{Interpreting a change of labels}\label{ch05-interpreting-a-change-of-labels}}
+\section{Interpreting a change of labels}\label{ch05-interpreting-a-change-of-labels}
 
 Entropy depends on probabilities and is unchanged by merely renaming or permuting labels. Splitting or merging categories is a different operation. Splitting a label into two distinguishable sublabels can increase entropy because there is more to specify. Merging labels can remove that distinction. For example, merging the two probability-\(1/4\) labels in \((1/2,1/4,1/4)\) gives \((1/2,1/2)\) and reduces entropy from \(3/2\) bits to one bit. Later, a stochastic channel will provide a general language for such recording operations.
 
-\hypertarget{ch05-exercises}{%
-\section{Exercises}\label{ch05-exercises}}
+\section{Exercises}\label{ch05-exercises}
 
 \begin{exercises}
 
@@ -265,8 +280,7 @@ Give two distributions on four labels with different entropy but the same suppor
 
 \end{exercises}
 
-\hypertarget{ch05-selected-solutions}{%
-\section{Selected solutions}\label{ch05-selected-solutions}}
+\section{Selected solutions}\label{ch05-selected-solutions}
 
 \textbf{1.} The values are \(-4\), \(3\), and \(5\).
 
@@ -283,15 +297,15 @@ Give two distributions on four labels with different entropy but the same suppor
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Calculate the surprisals and entropy of \((1/2,1/4,1/4)\) in both bits and nats. Show explicitly how division by \(\ln2\) converts between the units.
+  On a four-token binary lattice, calculate the entropy at \(k=0,1,2,3,4\) using natural logarithms. (a) Convert \(k\) to a probability \(k/4\). (b) Show the five entropy values to four decimals. (c) Explain the symmetry of the table.
 \item
-  Draw the prefix tree for codewords \(0,10,11\). Explain why a concatenation of these words can be decoded unambiguously. Compare its expected length under \((1/2,1/4,1/4)\) and under uniform probabilities.
+  Using your entropy table, (a) compute all four first differences, (b) compute all three second differences, (c) identify the sign change of the first differences, and (d) interpret that change as a maximum.
 \item
-  In the demonstration, move probability mass toward a vertex, toward an edge midpoint, and toward the center. Record entropy and expected code length. Keep the code fixed and explain why its expected length need not equal entropy.
+  Define a rule that moves one token to an adjacent binary state with larger entropy, stopping when no neighbor is better. (a) Start at \(k=0\) and list all visited states. (b) Record entropy changes. (c) Verify that every listed change is nonnegative.
 \item
-  For binary counts \((2,2)\), \((4,4)\), and \((8,8)\), compute the multiplicities and their base-two logarithms per observation. Compare them with one bit. Derive the exact finite upper bound rather than assuming equality.
+  Choose a probability vector \(p\) with three categories and four tokens. (a) Calculate its entropy. (b) Find all legal neighboring states. (c) Calculate their entropy values. (d) Determine whether \(p\) is a local maximum on the lattice.
 \item
-  For fixed scores \((0,1,2)\) and intensity \(\ln2\), start with equal probabilities and compute three updates through accumulated scores. Verify that every log-odds increment equals intensity times score difference.
+  Take the trajectories of an entropy-increasing rule and an unequal-multiplier growth rule. (a) Calculate three consecutive entropy values for each. (b) Compare signs of \(\Delta H\). (c) Explain why entropy production is a statement about the update law, not probability in general.
 \end{enumerate}
 
 \FloatBarrier

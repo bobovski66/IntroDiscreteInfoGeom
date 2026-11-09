@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,41 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 8\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 8\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{7}
 
-\chapter{Geodesic steps and shortest graph paths}
+\chapter{Path sums, circulation, and statistical geodesics}
+\section{An integral along a discrete path}\label{ch08-an-integral-along-a-discrete-path}
+
+Let \(G\) be a graph whose vertices are probability states. Orient an edge \(u\to v\), and let \(A(u,v)\) be a value assigned to that directed step, with \(A(v,u)=-A(u,v)\). For a path \(\gamma=(v_0,v_1,\ldots,v_m)\) define its \textbf{discrete line integral} by \[\boxed{\int_\gamma^d A=\sum_{k=0}^{m-1}A(v_k,v_{k+1}).}\] This is a finite sum, so it makes sense before any continuous integration theory.
+
+If a scalar field \(\phi\) is given at the vertices, define its gradient edge value by \[A_\phi(u,v)=\phi(v)-\phi(u).\] For every path from \(u\) to \(v\), \[\int_\gamma^d A_\phi=\phi(v)-\phi(u).\] Intermediate values cancel. This is the discrete fundamental theorem for line integrals. It also tells us that the circulation of a gradient around any closed route is zero.
+
+\section{Circulation detects dependence on the route}\label{ch08-circulation-detects-dependence-on-the-route}
+
+A general edge field is not necessarily a gradient. Take a triangle with oriented edges \(A\to B\), \(B\to C\), and \(C\to A\). If each edge has value \(1\) in that direction, the circulation is \(3\). If the field came from vertex values of one function, the three differences would sum to zero. Thus finite circulation detects a local obstruction to finding a scalar potential.
+
+On a connected graph, an antisymmetric edge field is a gradient exactly when its sum around every closed path is zero. It is enough to check a cycle basis. This fact is a useful discrete parallel to conservative vector fields.
+
+\section{Path length is different from a line integral}\label{ch08-path-length-is-different-from-a-line-integral}
+
+Now assign each unoriented edge a positive weight \(\ell(u,v)\), such as the Fisher--Rao distance between its endpoint distributions. The length of a path is \[L(\gamma)=\sum_{k=0}^{m-1}\ell(v_k,v_{k+1}).\] Unlike a signed gradient integral, each contribution to length is nonnegative. A shortest path minimizes \(L(\gamma)\) among legal paths with fixed endpoints.
+
+For the unweighted \(N\)-token simplex, moving one token counts as one step. To transform count vector \(a\) into \(b\), the smallest possible number of transfers is \[\boxed{d_{\rm token}(a,b)=\frac12\sum_i|a_i-b_i|.}\] Each transfer corrects one excess token and one deficit token. This supplies both a lower bound and a constructive route attaining it.
+
+\section{Compare graph and spherical geometry}\label{ch08-compare-graph-and-spherical-geometry}
+
+The straight route in probability coordinates need not be a legal sequence of token transfers. And a shortest weighted lattice path need not equal the unrestricted Fisher--Rao geodesic on the sphere. The weighted graph enforces finite, local moves; the sphere allows every intermediate positive probability distribution.
+
+Choose \(N=6\), two lattice states, and two legal token-transfer routes between them. Calculate each route's unweighted transfer count and its statistical length. Then calculate the spherical distance between their endpoints. Triangle inequality guarantees that neither path is shorter than the exact spherical distance.
+
+This distinction between path-dependent accumulated length and endpoint distance will matter in information-driven motion.
+
+\section{Further investigations: Path sums, circulation, and statistical geodesics}\label{ch08-further-investigations-path-sums-circulation-and-statistical-geodesics}
+
 A distance tells us how far apart two distributions are. A path specifies how to move between them. There are several reasonable path constructions: ordinary mixtures, equal steps along a spherical arc, and token transfers on a finite graph. Each answers a different question about allowed intermediate states.
 
-\hypertarget{ch08-mixing-and-spherical-interpolation}{%
-\section{Mixing and spherical interpolation}\label{ch08-mixing-and-spherical-interpolation}}
+\section{Mixing and spherical interpolation}\label{ch08-mixing-and-spherical-interpolation}
 
 An ordinary mixture between \(p\) and \(r\) is \[m(t)=(1-t)p+tr,\qquad 0\leq t\leq1.\] Every coordinate is nonnegative and the sum remains one. If we restrict \(t\) to \(0,1/M,\ldots,1\), this is a finite list of distributions with equal coordinate increments.
 
@@ -115,8 +142,7 @@ g_i(t)=\frac{s_i(t)^2}{4}.\] For identical endpoints, set \(g(t)=p\). The trigon
 
 To verify that the vector has length two, choose orthogonal unit vectors \(e_1=s/2\) and \(e_2=(u/2-\cos\alpha\,e_1)/\sin\alpha\). Substitution and the sine subtraction identity give \[s(t)=2\bigl(\cos(t\alpha)e_1+\sin(t\alpha)e_2\bigr).\] The squared length is therefore \(4(\cos^2(t\alpha)+\sin^2(t\alpha))=4\). The recovered entries \(g_i(t)\) add to one. This derivation also shows that the angle between \(s(t_1)\) and \(s(t_2)\) is \(|t_2-t_1|\alpha\).
 
-\hypertarget{ch08-equal-finite-steps-along-a-shortest-arc}{%
-\section{Equal finite steps along a shortest arc}\label{ch08-equal-finite-steps-along-a-shortest-arc}}
+\section{Equal finite steps along a shortest arc}\label{ch08-equal-finite-steps-along-a-shortest-arc}
 
 Choose a positive integer \(M\) and form \(g(0),g(1/M),\ldots,g(1)\). Consecutive states have distance \(2\alpha/M\). Their total path length is \(M(2\alpha/M)=2\alpha=d(p,r)\). Such a shortest spherical path is called a \textbf{geodesic}. Here it is represented by a finite list of equally spaced states, each calculated from a closed formula.
 
@@ -142,8 +168,7 @@ Let \(p=(0.8,0.1,0.1)\) and \(r=(0.1,0.7,0.2)\). Their ordinary midpoint is \((0
 \end{tikzpicture}}
 \caption{A spherical geodesic mapped back to the probability triangle, compared with the ordinary mixture segment between the same endpoints.}\end{figure}
 
-\hypertarget{ch08-restricting-movement-to-token-transfers}{%
-\section{Restricting movement to token transfers}\label{ch08-restricting-movement-to-token-transfers}}
+\section{Restricting movement to token transfers}\label{ch08-restricting-movement-to-token-transfers}
 
 Suppose every intermediate distribution must arise from \(N\) tokens. The allowed states are the lattice vertices \((a/N,b/N,c/N)\). Connect two vertices by an edge if one token can be moved from one category to another. The resulting object is a \textbf{graph}: a collection of vertices with specified connections.
 
@@ -157,8 +182,7 @@ For \(N=3\), move from counts \((3,0,0)\) to \((0,3,0)\) by transferring one tok
 
 \end{example}
 
-\hypertarget{ch08-dijkstras-shortest-path-algorithm}{%
-\section{Dijkstra's shortest-path algorithm}\label{ch08-dijkstras-shortest-path-algorithm}}
+\section{Dijkstra's shortest-path algorithm}\label{ch08-dijkstras-shortest-path-algorithm}
 
 For graphs with nonnegative edge weights, Dijkstra's algorithm finds the shortest distance from a starting vertex to every reachable vertex. Give the start tentative distance zero and all other vertices tentative distance infinity. Mark every vertex unvisited.
 
@@ -172,13 +196,11 @@ Suppose edges \(AB\), \(AC\), \(CB\), \(BD\), and \(CD\) have weights \(4\), \(1
 
 \end{example}
 
-\hypertarget{ch08-choosing-a-path-for-an-application}{%
-\section{Choosing a path for an application}\label{ch08-choosing-a-path-for-an-application}}
+\section{Choosing a path for an application}\label{ch08-choosing-a-path-for-an-application}
 
 A mixture may represent pooling two sources in changing proportions. A spherical path may represent equal statistical changes between tables. A graph path may represent a sequence of feasible changes in an indivisible allocation. Before calculating a shortest path, specify which states and transitions are allowed and what an edge costs. The geometry and the combinatorial constraints together determine the answer.
 
-\hypertarget{ch08-counting-moves-before-assigning-geometric-costs}{%
-\section{Counting moves before assigning geometric costs}\label{ch08-counting-moves-before-assigning-geometric-costs}}
+\section{Counting moves before assigning geometric costs}\label{ch08-counting-moves-before-assigning-geometric-costs}
 
 For two count vectors \(a\) and \(b\) with the same total, define their total surplus \[S=\sum_{i:a_i>b_i}(a_i-b_i)=\frac12\sum_i|a_i-b_i|.\] The surplus equals the total deficit because the counts have the same sum. One token transfer can remove at most one surplus token. Therefore at least \(S\) transfers are required to turn \(a\) into \(b\). This number is attainable: repeatedly move a token from a surplus category to a deficit category until every count agrees.
 
@@ -190,15 +212,13 @@ To transform \((5,1,0)\) into \((1,2,3)\), category A has four surplus tokens. C
 
 \end{example}
 
-\hypertarget{ch08-midpoints-from-a-normalization-calculation}{%
-\section{Midpoints from a normalization calculation}\label{ch08-midpoints-from-a-normalization-calculation}}
+\section{Midpoints from a normalization calculation}\label{ch08-midpoints-from-a-normalization-calculation}
 
 The square-root midpoint can be found without inverse trigonometric functions. Begin with \(v_i=\sqrt{p_i}+\sqrt{r_i}\). Its squared length is \(2+2B\). Normalize \(v\) to unit length and square the entries: \[g_i=\left(\frac{v_i}{\sqrt{2+2B}}\right)^2.\] This is exactly the midpoint formula. The construction treats both endpoints equally and keeps every entry nonnegative. It also shows that if a label is absent at both endpoints, it remains absent at the midpoint and along the whole spherical interpolation.
 
 For a midpoint between two three-label tables, the same arithmetic that computes overlap therefore supplies all its coordinates. The trigonometric formula is needed to choose general equal arc fractions, but halfway has a simpler form.
 
-\hypertarget{ch08-measuring-a-path-from-a-finite-list}{%
-\section{Measuring a path from a finite list}\label{ch08-measuring-a-path-from-a-finite-list}}
+\section{Measuring a path from a finite list}\label{ch08-measuring-a-path-from-a-finite-list}
 
 Given states \(p^{(0)},\ldots,p^{(M)}\), define its polygonal spherical length as \(\sum_{j=0}^{M-1}d(p^{(j)},p^{(j+1)})\). This definition uses a finite sum. Refining a list by inserting a new state cannot lower that sum, because the triangle inequality gives \(d(a,b)\leq d(a,c)+d(c,b)\). If the inserted state lies in order on the same shortest arc, equality holds.
 
@@ -210,8 +230,7 @@ Let \(p=(1,0,0)\) and \(r=(0,1,0)\). The direct distance is \(\pi\). A route thr
 
 When a graph algorithm reports a route, verify its adjacency and independently sum the reported edge costs. When comparing with a direct geodesic, check that the endpoints are identical in both calculations. These straightforward checks distinguish a feasible route, a measured route length, and a proof that no shorter allowed route exists.
 
-\hypertarget{ch08-exercises}{%
-\section{Exercises}\label{ch08-exercises}}
+\section{Exercises}\label{ch08-exercises}
 
 \begin{exercises}
 
@@ -265,8 +284,7 @@ For one pair of lattice endpoints, compare the shortest token path with the dire
 
 \end{exercises}
 
-\hypertarget{ch08-selected-solutions}{%
-\section{Selected solutions}\label{ch08-selected-solutions}}
+\section{Selected solutions}\label{ch08-selected-solutions}
 
 \textbf{3.} The sum of the numerators is \(\sum_i p_i+\sum_i r_i+2\sum_i\sqrt{p_ir_i}=2(1+B)\), exactly the denominator.
 
@@ -283,15 +301,15 @@ For one pair of lattice endpoints, compare the shortest token path with the dire
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  For \(p=(1,0)\) and \(r=(1/4,3/4)\), find the ordinary and spherical midpoints. Verify that the latter has equal spherical distances to the two endpoints.
+  Take a path \(A\to B\to C\) with scalar values \(\phi(A)=1\), \(\phi(B)=4\), and \(\phi(C)=2\). (a) Calculate the two gradient edge values. (b) Add them. (c) Compare with \(\phi(C)-\phi(A)\).
 \item
-  Construct five equally spaced states along a spherical path between two three-label tables. Calculate all four consecutive distances and show that their sum equals the endpoint distance, up to rounding.
+  On a directed triangle \(A\to B\to C\to A\), assign each oriented edge value \(1\). (a) Calculate the circulation. (b) Determine whether this edge field could be the gradient of a scalar potential. (c) Justify using telescoping.
 \item
-  In the demonstration, choose denominator \(6\) and two different lattice vertices. Record the endpoints, the direct distance, the shortest graph length, and every count triple along the route. Verify that each transition moves one token.
+  Consider count states \(a=(4,1,1)\) and \(b=(1,2,3)\) with \(N=6\). (a) Compute \(\sum_i|a_i-b_i|\). (b) Find the minimum number of token transfers. (c) Construct an explicit route attaining that minimum.
 \item
-  Reproduce Dijkstra's algorithm on the five-edge graph in the reading. Record the order of finalized vertices and the predecessor table. Explain the role of nonnegative edge weights in finalizing a distance.
+  Choose two different routes between the same endpoints in the six-token triangle. (a) Calculate a scalar potential such as entropy at every vertex of both routes. (b) Sum the gradient differences. (c) Compare the unsigned cumulative changes \(\sum|\Delta H|\). (d) Explain why the latter can depend on the route.
 \item
-  Choose endpoints that lie on both denominator-\(4\) and denominator-\(8\) lattices. Compare their shortest graph lengths with direct distance. Describe the measured result without assuming that every change in denominator creates a nested lattice.
+  Use Fisher--Rao edge weights for two short legal routes between the same probability states. (a) Compute and add the edge distances with a calculator. (b) Find the exact Fisher--Rao distance between endpoints. (c) Check that neither route length is smaller than the endpoint distance.
 \end{enumerate}
 
 \FloatBarrier

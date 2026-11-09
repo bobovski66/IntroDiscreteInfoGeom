@@ -46,7 +46,7 @@
 \makeindex
 \usepackage[pdfencoding=auto,psdextra,colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,bookmarksnumbered=true]{hyperref}
 \usepackage{bookmark}
-\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Probability, counting, and finite dynamics}}
+\hypersetup{pdftitle={Discrete Information Geometry},pdfsubject={Finite differences, probability, and information flows}}
 \urlstyle{same}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -98,14 +98,41 @@
 \newcommand{\labheading}{\FloatBarrier\section*{Laboratory investigation}\addcontentsline{toc}{section}{Laboratory investigation}}
 
 \begin{document}
-\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Probability, Counting,\\and Finite Dynamics\par}\vspace{1cm}{\Large Chapter 10\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
+\begin{titlepage}\color{ink}\centering\vspace*{1.0in}{\small\sffamily PROBABILITY AND MATHEMATICAL MODELLING\par}\vspace{.45in}{\Huge\bfseries Discrete Information\\[.12in]Geometry\par}\vspace{.35in}{\Large Finite Differences, Probability,\\and Information Flows\par}\vspace{1cm}{\Large Chapter 10\par}\vfill\begin{tikzpicture}[scale=1.05]\draw[teal,line width=1pt](0,0)--(4,0)--(2,3.464)--cycle;\foreach \a in {0,...,6}{\foreach \b in {0,...,6}{\pgfmathtruncatemacro{\c}{6-\a-\b}\ifnum\c>-1\fill[teal] ({(\b+\c/2)*4/6},{\c*3.464/6}) circle(1.5pt);\fi}}\end{tikzpicture}\vfill{\large A course in ten chapters\par}\vspace{.3in}{\small\url{https://bobovski66.github.io/IntroDiscreteInfoGeom/}\par}\end{titlepage}
 \setcounter{chapter}{9}
 
-\chapter{Information networks and coarse-graining}
+\chapter{Graph divergence, diffusion, and information flow}
+\section{Information moves on a network}\label{ch10-information-moves-on-a-network}
+
+Let \(G=(V,E)\) be a finite undirected graph. A probability distribution places mass \(p_i(n)\geq0\) at each vertex, with total mass one. Give each undirected edge a single orientation for bookkeeping and denote the signed current from \(i\) to \(j\) by \(J_{ij}(n)=-J_{ji}(n)\).
+
+The \textbf{discrete divergence} at a vertex is net outward current, \[\operatorname{div}J(i)=\sum_{j\sim i}J_{ij}.\] Then the conservation law is the discrete continuity equation \[\boxed{p_i(n+1)-p_i(n)=-\operatorname{div}J_n(i).}\] Add this equation over every vertex. Each edge current cancels with its opposite, so the total probability remains one. This is a finite analogue of the divergence theorem.
+
+\section{A graph gradient and Laplacian}\label{ch10-a-graph-gradient-and-laplacian}
+
+For a scalar field \(f\) on the vertices, the gradient along an oriented edge \(i\to j\) is \(f_j-f_i\). A diffusion current flowing from higher to lower probability can be chosen as \[J_{ij}=\tau(p_i-p_j),\qquad\tau>0.\] Substitution yields \[\boxed{p_i(n+1)=p_i(n)+\tau\sum_{j\sim i}(p_j(n)-p_i(n)).}\] The sum is a \textbf{graph Laplacian} applied to \(p\). It measures how a vertex differs from its neighbors.
+
+To ensure nonnegative probabilities at every step, choose \(\tau\leq1/d_{\max}\), where \(d_{\max}\) is the largest vertex degree. Then the update matrix is stochastic. Because the graph is undirected, its rows also sum to one, so it is doubly stochastic.
+
+\section{Three vertices, one exact step}\label{ch10-three-vertices-one-exact-step}
+
+On the path \(A\)--\(B\)--\(C\), choose \(\tau=1/4\) and start at \(p_0=(1,0,0)\). The step gives \[p_1=(3/4,1/4,0).\] The next gives \[p_2=(5/8,5/16,1/16).\] Compute \(\Delta p_0\) and \(\Delta p_1\). In each case the three coordinates sum to zero, because the changes are redistribution. Repeating the update brings the distribution toward the stationary uniform state.
+
+\section{Entropy and the direction of change}\label{ch10-entropy-and-the-direction-of-change}
+
+Because this symmetric diffusion is doubly stochastic, it does not decrease Shannon entropy: \[H(p_{n+1})-H(p_n)\geq0.\] One way to prove this is to apply the contraction of relative entropy toward the uniform distribution \(u\). Since \(D(p\|u)=\log|V|-H(p)\) and \(Ku=u\), \[D(Kp\|u)\leq D(p\|u).\] Hence \(\Delta H_n\geq0\). The conclusion depends on the \textbf{doubly stochastic} assumption. An arbitrary stochastic channel may lower entropy.
+
+\section{The course's complete mathematical circle}\label{ch10-the-courses-complete-mathematical-circle}
+
+We started with \(\Delta a_n=a_{n+1}-a_n\). Now the same operation measures probability changes, Lyapunov dissipation, and entropy production, while the graph gradient and divergence describe where probability travels. The fundamental theorem for finite differences and the cancellation of internal fluxes explain why discrete conservation laws work.
+
+For the final investigation, choose a small graph and initial probability vector, compute at least four iterations, verify mass conservation, graph fluxes, and changes in Shannon entropy, then compare the limiting behavior with your predictions. Use finite calculations to explain what the mathematics says about information moving across the network.
+
+\section{Further investigations: Graph divergence, diffusion, and information flow}\label{ch10-further-investigations-graph-divergence-diffusion-and-information-flow}
+
 An observation can be recorded at several resolutions. A detailed label may be replaced by a broader group, passed through a noisy channel, or transported among nodes of a network. These operations transform probability tables by finite weighted sums. They connect graph dynamics with a basic principle of information geometry: applying the same observation rule to two models cannot make them more distinguishable by the discrepancies studied here.
 
-\hypertarget{ch10-a-stochastic-matrix-describes-one-step}{%
-\section{A stochastic matrix describes one step}\label{ch10-a-stochastic-matrix-describes-one-step}}
+\section{A stochastic matrix describes one step}\label{ch10-a-stochastic-matrix-describes-one-step}
 
 Let \(K_{ji}\) be the probability of arriving at output label \(j\) from input label \(i\). Our convention places the input in the column. Thus \[K_{ji}\geq0,\qquad \sum_jK_{ji}=1\quad\hbox{for each }i.\] Such a table is \textbf{column-stochastic}. If input probabilities are \(p_i\), the output probabilities are \[p_j^+=\sum_iK_{ji}p_i,\qquad p^+=Kp.\] The product symbol \(Kp\) abbreviates these weighted sums. Adding over \(j\) gives \(\sum_jp_j^+=\sum_ip_i\sum_jK_{ji}=1\). This is a linear difference equation on probability vectors.
 
@@ -119,8 +146,7 @@ Consider \[K=\begin{pmatrix}3/4&1/4&0\\1/4&1/2&1/4\\0&1/4&3/4\end{pmatrix}.\] Ea
 
 A matrix whose rows and columns both sum to one is \textbf{doubly stochastic}. The cyclic permutation matrix is also doubly stochastic, but every noncentral three-category state repeats with period three. To establish convergence in a general network, additional conditions are required. Our contraction inequalities below concern one-step comparisons and do not require a claim of convergence.
 
-\hypertarget{ch10-coarse-graining-is-a-deterministic-channel}{%
-\section{Coarse-graining is a deterministic channel}\label{ch10-coarse-graining-is-a-deterministic-channel}}
+\section{Coarse-graining is a deterministic channel}\label{ch10-coarse-graining-is-a-deterministic-channel}
 
 Partition the input labels into groups. The output reports only the group containing the input. Set \(K_{ji}=1\) if label \(i\) belongs to group \(j\), and zero otherwise. Each column contains exactly one entry equal to one. The output probabilities are sums over the groups.
 
@@ -144,8 +170,7 @@ Let \(q=(0.4,0.1,0.4,0.1)\) and \(p=(0.1,0.4,0.1,0.4)\). Group labels \(1,2\) to
 \end{tikzpicture}}
 \caption{Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.}\end{figure}
 
-\hypertarget{ch10-the-log-sum-inequality}{%
-\section{The log-sum inequality}\label{ch10-the-log-sum-inequality}}
+\section{The log-sum inequality}\label{ch10-the-log-sum-inequality}
 
 Let \(a_i,b_i\) be nonnegative numbers with positive totals \(A=\sum_i a_i\) and \(B=\sum_i b_i\), and suppose \(b_i>0\) wherever \(a_i>0\). Applying Gibbs' inequality to \(a_i/A\) and \(b_i/B\) gives \[\sum_i a_i\ln\frac{a_i}{b_i}\geq A\ln\frac AB.\] To see this directly, multiply \(D(a/A\|b/B)\geq0\) by \(A\) and expand the logarithm. This is the \textbf{log-sum inequality}. It compares the divergence contributions before and after a set of entries is merged.
 
@@ -160,8 +185,7 @@ For a column-stochastic matrix applied to both distributions, \(D(Kq\|Kp)\leq D(
 
 The same channel must be used for both tables. Applying different recording rules can create differences caused by those rules themselves. For deterministic grouping with positive probabilities, equality holds exactly when \(q_i/p_i\) is constant within each group: no distinction relevant to that ratio is lost within a group.
 
-\hypertarget{ch10-square-root-overlap-also-contracts-distance}{%
-\section{Square-root overlap also contracts distance}\label{ch10-square-root-overlap-also-contracts-distance}}
+\section{Square-root overlap also contracts distance}\label{ch10-square-root-overlap-also-contracts-distance}
 
 For each output label, Cauchy--Schwarz gives \[\sqrt{\left(\sum_iK_{ji}q_i\right)\left(\sum_iK_{ji}p_i\right)}
 \geq\sum_iK_{ji}\sqrt{q_ip_i}.\] Adding over \(j\) and using column sums yields \[B(Kq,Kp)\geq B(q,p).\] Since inverse cosine decreases as its argument increases, the spherical distance satisfies \[d(Kq,Kp)\leq d(q,p).\] Hellinger distance also cannot increase, because its square is \(1-B\). Thus two different constructions, a logarithmic discrepancy and a square-root distance, both obey an information-loss principle under the same finite observation rule.
@@ -172,22 +196,19 @@ Suppose a binary label is flipped with probability \(1/4\), so \(K=\left(\begin{
 
 \end{example}
 
-\hypertarget{ch10-when-does-entropy-increase-on-a-network}{%
-\section{When does entropy increase on a network?}\label{ch10-when-does-entropy-increase-on-a-network}}
+\section{When does entropy increase on a network?}\label{ch10-when-does-entropy-increase-on-a-network}
 
 A stochastic channel can lower entropy. A channel that sends every input to one output converts every distribution into a certain outcome with entropy zero. The data-processing inequality compares two models through the same channel; entropy measures the uncertainty of one table. The questions are related but distinct.
 
 For a doubly stochastic matrix, uniform \(u\) is stationary. Data processing then gives \[D(Kp\|u)=D(Kp\|Ku)\leq D(p\|u).\] Using \(D(p\|u)=\ln k-H(p)\) shows \(H(Kp)\geq H(p)\). This is an exact entropy-increase statement with a specific assumption on the channel. Equality can occur at a nonuniform table, as a permutation simply rearranges its probabilities.
 
-\hypertarget{ch10-a-finite-statistical-family}{%
-\section{A finite statistical family}\label{ch10-a-finite-statistical-family}}
+\section{A finite statistical family}\label{ch10-a-finite-statistical-family}
 
 A collection of probability tables indexed by one or more parameters is a \textbf{statistical family}. On fixed labels \(x_i\), for example, the weights \[p_i(m,a)=\frac{e^{-a(x_i-m)^2}}{\sum_je^{-a(x_j-m)^2}},\qquad a>0,\] form a finite bell-shaped family. Changing \(m\) shifts the emphasis across the labels, and changing \(a\) changes its concentration. These are normalized weights on a fixed finite set. Their entropy, relative entropy, and spherical distance can all be computed by the formulas already developed. Grouping labels produces a coarser family and contracts pairwise discrepancies by the same theorems.
 
 This offers a capstone investigation: choose two parameter values, calculate their tables, apply a recording channel, and quantify the distinctions retained. The finite sums, token graphs, and exact updates developed throughout the course provide the tools for carrying out the investigation and explaining its assumptions.
 
-\hypertarget{ch10-solving-the-three-node-walk-exactly}{%
-\section{Solving the three-node walk exactly}\label{ch10-solving-the-three-node-walk-exactly}}
+\section{Solving the three-node walk exactly}\label{ch10-solving-the-three-node-walk-exactly}
 
 The particular walk introduced earlier can be solved by tracking two contrasts. Write \[a_t=p_{1,t}-p_{3,t},\qquad b_t=p_{1,t}-2p_{2,t}+p_{3,t}.\] Substituting the three update equations and collecting coefficients gives \[a_{t+1}=\frac34a_t,\qquad b_{t+1}=\frac14b_t.\] Both are geometric sequences. Combining these contrasts with \(p_{1,t}+p_{2,t}+p_{3,t}=1\) recovers the probabilities: \[p_{1,t}=\frac13+\frac{b_t}{6}+\frac{a_t}{2},\quad
 p_{2,t}=\frac13-\frac{b_t}{3},\quad
@@ -199,8 +220,7 @@ From \((1,0,0)\), both initial contrasts are one. At step three, \(a_3=27/64\) a
 
 \end{example}
 
-\hypertarget{ch10-where-the-lost-divergence-goes-under-grouping}{%
-\section{Where the lost divergence goes under grouping}\label{ch10-where-the-lost-divergence-goes-under-grouping}}
+\section{Where the lost divergence goes under grouping}\label{ch10-where-the-lost-divergence-goes-under-grouping}
 
 For deterministic groups \(G_j\), define output masses \(Q_j=\sum_{i\in G_j}q_i\) and \(P_j=\sum_{i\in G_j}p_i\). Assume positive input tables. Within group \(j\), form conditional tables \(q_i/Q_j\) and \(p_i/P_j\). Splitting the logarithm gives \[D(q\|p)=D(Q\|P)+\sum_j Q_j D\left(q(\cdot\mid G_j)\middle\|p(\cdot\mid G_j)\right).\] The first term is the discrepancy retained in the group labels. The second is the average discrepancy among labels inside a group. Every lost contribution is nonnegative. Equality under grouping occurs exactly when the two within-group conditional tables agree, equivalent to a constant ratio \(q_i/p_i\) in each group.
 
@@ -210,15 +230,13 @@ For the four-label tables \((0.4,0.1,0.4,0.1)\) and \((0.1,0.4,0.1,0.4)\), adjac
 
 \end{example}
 
-\hypertarget{ch10-composing-observation-rules}{%
-\section{Composing observation rules}\label{ch10-composing-observation-rules}}
+\section{Composing observation rules}\label{ch10-composing-observation-rules}
 
 If channel \(K\) is followed by channel \(L\), the combined rule is the matrix product \(LK\). Its entries are \((LK)_{hi}=\sum_jL_{hj}K_{ji}\). Each term represents passing through intermediate output \(j\). Nonnegativity is immediate, and adding over \(h\) gives one for every input column. Thus the composition is again a stochastic channel.
 
 Applying data processing twice gives \[D(LKq\|LKp)\leq D(Kq\|Kp)\leq D(q\|p).\] The spherical distances obey the same succession of inequalities. This gives a mathematical description of a recording pipeline: sampling labels, adding noise, grouping outputs, and recording an even coarser category can be analyzed one finite operation at a time. A stage may preserve a particular pair's discrepancy, but a later common stage cannot restore a distinction already erased from those output tables.
 
-\hypertarget{ch10-exercises}{%
-\section{Exercises}\label{ch10-exercises}}
+\section{Exercises}\label{ch10-exercises}
 
 \begin{exercises}
 
@@ -272,8 +290,7 @@ Design a capstone comparing two probability models before and after grouping. In
 
 \end{exercises}
 
-\hypertarget{ch10-selected-solutions}{%
-\section{Selected solutions}\label{ch10-selected-solutions}}
+\section{Selected solutions}\label{ch10-selected-solutions}
 
 \textbf{1.} The new table is \((7/16,5/16,1/4)\).
 
@@ -290,15 +307,15 @@ Design a capstone comparing two probability models before and after grouping. In
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  For the three-node walk in the reading, verify the row and column sums and compute three updates from \((1,0,0)\). Check that uniform is stationary. Compare this with a cyclic permutation, which preserves uniform but has periodic trajectories.
+  On A--B--C with \(p=(1,0,0)\) and \(\tau=1/4\), (a) compute both signed edge currents \(J_{AB},J_{BC}\), (b) calculate outward divergence at A, B, C, (c) use \(\Delta p=-\operatorname{div}J\) to determine the next state, and (d) check mass conservation.
 \item
-  In the demonstration, begin with its two four-label tables and apply within-pair noise at levels \(0\), \(0.25\), and \(0.5\). Record both directed relative entropies, overlap, and spherical distance. Explain why the same channel must be applied to both tables.
+  Using the same path, calculate \(p_1\) through \(p_4\). (a) Write each state as a probability vector. (b) Compute all coordinate differences. (c) Verify every difference vector sums to zero. (d) Explain the approach toward uniform.
 \item
-  Compare the two offered groupings of the four labels. Find a grouping that erases the distinction between the default models and a grouping that retains it. Explain the result through the ratios inside each group.
+  For \(p_0=(1,0,0)\) and the first three transport updates, (a) compute entropy at each step, (b) calculate its first differences, (c) identify the sign of every difference, and (d) explain which property of the diffusion matrix supports the pattern.
 \item
-  Derive the log-sum inequality from Gibbs' inequality, then use it to prove the relative-entropy data-processing bound. Separately prove overlap increases using Cauchy--Schwarz.
+  Compare two channels: the symmetric path diffusion and a channel sending every input to A. (a) Construct each stochastic matrix. (b) Calculate both output distributions from uniform input. (c) Compare input/output entropy. (d) Explain why a general stochastic channel does not have to raise entropy.
 \item
-  Prepare a capstone report using two positive finite models of your choice. Specify a recording channel, show input and output tables, compute all discrepancies, and interpret the information retained. Include one example showing why entropy alone need not increase under a general channel.
+  Capstone: choose a four- or five-node undirected graph and an initial probability distribution. (a) Define a legal diffusion step using \(\tau\leq1/d_{\max}\). (b) Calculate at least four iterates with a table or short program. (c) Show currents, divergence, mass conservation, and entropy changes. (d) Compare two states by Fisher--Rao distance and explain what the mathematical results say about the flow of information.
 \end{enumerate}
 
 \FloatBarrier
