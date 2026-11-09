@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Discrete Calculus Operator Explorer | Discrete Information Geometry</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+:root{--op-ink:#18354a;--op-blue:#087e91;--op-orange:#bb763e}
+.op-wrap{max-width:1250px;margin:0 auto;padding:clamp(14px,3vw,36px)}
+.op-intro{max-width:860px}
+.op-intro h1{line-height:1.13;margin-bottom:.6rem}
+.op-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.2rem 0 1.6rem}
+.op-tabs button{border:1px solid #b6cbd1;border-radius:9px;background:#fff;color:#18354a;padding:.65rem 1rem;cursor:pointer;font-weight:650}
+.op-tabs button[aria-pressed="true"]{background:#1f697e;color:#fff;border-color:#1f697e}
+.op-layout{display:grid;grid-template-columns:minmax(230px,290px) minmax(0,1fr);gap:1.25rem;align-items:start}
+.op-controls{background:#f1f6f7;border:1px solid #d2e0e3;border-radius:16px;padding:1.2rem;position:sticky;top:12px}
+.op-controls label{display:block;font-weight:650;margin-bottom:.35rem}
+.op-controls .control{margin-bottom:1.4rem}
+.op-controls input[type=range],.op-controls select{width:100%;accent-color:#127e8f}
+.op-controls output{float:right;font-variant-numeric:tabular-nums;font-weight:650}
+.op-controls button{border:0;background:#1f697e;color:#fff;padding:.65rem .8rem;border-radius:7px;cursor:pointer;margin:.2rem .3rem .2rem 0}
+.op-controls button.secondary{background:#e5eff0;color:#123344;border:1px solid #b7cacf}
+.op-stage{border:1px solid #d2dfe3;border-radius:16px;padding:clamp(1rem,2vw,1.6rem);min-width:0}
+.op-stage h2{margin-top:.1rem}
+.op-stage svg{display:block;width:100%;max-height:420px}
+.op-stage table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:1rem 0}
+.op-stage th,.op-stage td{border-bottom:1px solid #dce4e7;padding:.45rem .65rem;text-align:right}
+.op-stage th:first-child,.op-stage td:first-child{text-align:left}
+.op-stage .op-note{background:#f2f6f7;border-left:3px solid #248293;padding:.8rem 1rem;margin-top:1rem;line-height:1.55}
+.op-stage .op-key{font-size:1.1rem;font-weight:700}
+.op-stage .subtle{color:#506775}
+.op-stage .op-split{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.op-stage .op-metric{background:#f5f8f8;padding:.8rem;border-radius:10px}
+.op-stage .op-metric strong{font-size:1.28rem;font-variant-numeric:tabular-nums}
+.op-stage .op-bars{display:flex;align-items:flex-end;gap:.7rem;min-height:160px;margin:1rem 0}
+.op-stage .op-bar{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;justify-content:flex-end;height:155px}
+.op-stage .op-bar div{background:#278ca0;min-height:2px;border-radius:5px 5px 0 0}
+.op-stage .op-bar span{font-size:.83rem;margin-top:.35rem}
+.op-stage .op-buttonlink{display:inline-block;margin:.5rem 0}
+.op-stage .op-state{font-variant-numeric:tabular-nums}
+.op-stage .op-explain{max-width:67ch;line-height:1.6}
+.op-stage .op-diff td.positive{color:#0b7561;font-weight:700}
+.op-stage .op-diff td.negative{color:#aa5838;font-weight:700}
+.op-stage button:focus-visible,.op-tabs button:focus-visible,.op-controls input:focus-visible{outline:3px solid #e3a440;outline-offset:3px}
+@media(max-width:800px){.op-layout{grid-template-columns:1fr}.op-controls{position:static}.op-stage .op-split{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../guide.html">Course guide</a></nav></header>
+<main id="main" class="op-wrap">
+<section class="op-intro"><p class="eyebrow">Interactive mathematics</p><h1>Discrete Calculus Operator Explorer</h1><p>Explore four connected ideas: differences of sequences, gradients on a probability lattice, probability transport through a graph, and statistical distance. Every number comes from a finite calculation. Select a view, change the controls, and compare the mathematics with the picture.</p></section>
+<nav class="op-tabs" aria-label="Choose an exploration">
+<button type="button" data-mode="sequence" aria-pressed="true">1. Differences &amp; sums</button>
+<button type="button" data-mode="simplex" aria-pressed="false">2. Entropy gradients</button>
+<button type="button" data-mode="transport" aria-pressed="false">3. Divergence &amp; flow</button>
+<button type="button" data-mode="fisher" aria-pressed="false">4. Fisher distance</button>
+</nav>
+<div class="op-layout">
+<aside class="op-controls" aria-label="Controls"><h2>Choose values</h2><div id="op-control-body"></div></aside>
+<section class="op-stage" id="op-stage" aria-live="polite" aria-label="Mathematical visualization"></section>
+</div>
+<section class="op-intro"><h2>Where to study these ideas</h2><p><a href="../readings/week01.html">Week 1: differences and sums</a> develops the fundamental theorem; <a href="../readings/week03.html">Week 3: simplex gradients</a> builds the lattice calculus; <a href="../readings/week04.html">Week 4: transport</a> derives the continuity equation; and <a href="../readings/week07.html">Week 7: Fisher geometry</a> explains statistical length. Revisit this explorer during the final network module.</p></section>
+</main>
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const model={mode:'sequence',kind:'quadratic',N:6,a:2,b:2,c:2,p:[1,0,0],step:0,tau:.25,x:.25,y:.5};
+const fmt=(x,d=4)=>Math.abs(x)<1e-10?'0':Number(x).toFixed(d).replace(/0+$/,'').replace(/\.$/,'');
+const entropy=p=>-p.reduce((a,v)=>a+(v>0?v*Math.log(v):0),0);
+const safe=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const svg=(content,viewBox)=>'<svg role="img" viewBox="'+viewBox+'" xmlns="http://www.w3.org/2000/svg">'+content+'</svg>';
+const slider=(id,label,min,max,step,value)=>'<div class="control"><label for="'+id+'">'+label+' <output id="'+id+'-out">'+value+'</output></label><input id="'+id+'" type="range" min="'+min+'" max="'+max+'" step="'+step+'" value="'+value+'"></div>';
+const viewNames=['sequence','simplex','transport','fisher'];
+function renderControls(){
+ let out='';
+ if(model.mode==='sequence')out='<div class="control"><label for="kind">Sequence</label><select id="kind"><option value="linear">a(n) = 3n + 1</option><option value="quadratic">a(n) = n²</option><option value="cubic">a(n) = n³</option><option value="geometric">a(n) = 2ⁿ</option></select></div><p>We use the nine values n = 0, …, 8, and compute differences by subtracting consecutive entries.</p>';
+ if(model.mode==='simplex')out=slider('N','Total number of tokens',3,10,1,model.N)+'<p>Choose a point in the triangle. Each neighbor differs by transferring one token between categories.</p><p class="subtle">The central state is selected when the number of tokens changes.</p>';
+ if(model.mode==='transport')out=slider('tau','Fraction transported per edge',0,.5,.05,model.tau)+'<div class="control"><button type="button" data-action="advance">Advance one step</button><button type="button" data-action="reset" class="secondary">Reset</button></div><p>Three vertices form a path A–B–C. A fraction τ of each vertex’s current probability moves across each adjacent edge.</p><p class="subtle">τ is at most 1/2, so all updated probabilities remain nonnegative.</p>';
+ if(model.mode==='fisher')out=slider('x','Initial A probability',0,1,.01,model.x)+slider('y','Final A probability',0,1,.01,model.y)+'<p>Each point represents a binary distribution (A probability, B probability).</p>';
+ $('#op-control-body').innerHTML=out;
+ if(model.mode==='sequence')$('#kind').value=model.kind;
+}
+function seq(){
+ const fn=model.kind==='linear'?n=>3*n+1:model.kind==='cubic'?n=>n*n*n:model.kind==='geometric'?n=>2**n:n=>n*n;
+ const A=Array.from({length:9},(_,i)=>fn(i)),D=A.slice(1).map((v,i)=>v-A[i]),DD=D.slice(1).map((v,i)=>v-D[i]);
+ const max=Math.max(...A),w=560,h=225;
+ const pts=A.map((a,i)=>(45+i*60)+','+(190-150*a/Math.max(1,max))).join(' ');
+ let picture='<line x1="35" y1="193" x2="540" y2="193" stroke="#819da5"/><line x1="35" y1="30" x2="35" y2="193" stroke="#819da5"/><polyline points="'+pts+'" fill="none" stroke="#137e95" stroke-width="3"/>';
+ A.forEach((a,i)=>{let x=45+i*60,y=190-150*a/Math.max(1,max);picture+='<circle cx="'+x+'" cy="'+y+'" r="4" fill="#137e95"/><text x="'+x+'" y="213" font-size="11" text-anchor="middle" fill="currentColor">'+i+'</text>';});
+ const rows=[['a(n)',A],['Δ a(n)',D],['Δ² a(n)',DD]];
+ let table='<table class="op-diff"><thead><tr><th>Sequence</th>'+A.map((a,i)=>'<th>'+i+'</th>').join('')+'</tr></thead><tbody>';
+ rows.forEach(row=>{table+='<tr><th>'+row[0]+'</th>';for(let i=0;i<9;i++)table+='<td>'+((i<row[1].length)?fmt(row[1][i],1):'—')+'</td>';table+='</tr>';});
+ table+='</tbody></table>';
+ const check=D.slice(0,5).reduce((a,b)=>a+b,0);
+ $('#op-stage').innerHTML='<h2>Difference table and telescoping sum</h2><p class="op-explain">The first difference is the next value minus the current value. Repeat the operation for a second difference. The total of five differences is exactly the change from step 0 to step 5.</p>'+svg(picture,w+' '+h)+table+'<p class="op-key">Δa(0) + ⋯ + Δa(4) = '+fmt(check,2)+' = a(5) − a(0)</p><div class="op-note">For a polynomial of degree d, the d-th differences are constant. The geometric sequence behaves differently: its differences are proportional to itself.</div>';
+}
+function simplex(){
+ const N=model.N, xof=(a,b,c)=>(a*280+b*48+c*512)/N, yof=(a,b,c)=>(a*42+(b+c)*390)/N, pts=[];
+ for(let a=0;a<=N;a++)for(let b=0;b<=N-a;b++){let c=N-a-b,p=[a/N,b/N,c/N];pts.push({a,b,c,x:xof(a,b,c),y:yof(a,b,c),H:entropy(p)});}
+ let edges='',dots='';
+ pts.forEach(p=>{
+   [[1,-1,0],[1,0,-1],[0,1,-1]].forEach(d=>{let a=p.a+d[0],b=p.b+d[1],c=p.c+d[2];if(a>=0&&b>=0&&c>=0&&a+b+c===N)edges+='<line x1="'+p.x+'" y1="'+p.y+'" x2="'+xof(a,b,c)+'" y2="'+yof(a,b,c)+'" stroke="#b9cbcf" stroke-width="1"/>';});
+ });
+ pts.forEach(p=>{let selected=p.a===model.a&&p.b===model.b&&p.c===model.c,light=90-45*p.H/Math.log(3);dots+='<circle data-a="'+p.a+'" data-b="'+p.b+'" data-c="'+p.c+'" cx="'+p.x+'" cy="'+p.y+'" r="'+(selected?12:Math.max(4,8-N*.3))+'" fill="hsl(190,55%,'+light+'%)" stroke="'+(selected?'#b66b2c':'#267b8f')+'" stroke-width="'+(selected?3:1.3)+'"><title>('+p.a+','+p.b+','+p.c+'), H='+fmt(p.H)+'</title></circle>';});
+ const p=pts.find(v=>v.a===model.a&&v.b===model.b&&v.c===model.c)||pts[0];let neighbors=[];
+ ['A','B','C'].forEach((target,t)=>['A','B','C'].forEach((donor,d)=>{if(t===d)return;let cs=[p.a,p.b,p.c];if(cs[d]===0)return;cs[t]++;cs[d]--;let ent=entropy(cs.map(v=>v/N));neighbors.push({name:donor+' → '+target,counts:cs.join(','),delta:ent-p.H});}));
+ neighbors.sort((u,v)=>v.delta-u.delta);
+ let rows='<table><thead><tr><th>Token move</th><th>New counts</th><th>ΔH</th></tr></thead><tbody>'+neighbors.map(n=>'<tr><td>'+n.name+'</td><td>('+n.counts+')</td><td style="color:'+(n.delta>=-1e-10?'#08765c':'#a15333')+'">'+(n.delta>1e-10?'+':'')+fmt(n.delta)+'</td></tr>').join('')+'</tbody></table>';
+ $('#op-stage').innerHTML='<h2>Discrete gradient of entropy</h2><p class="op-explain">Click a distribution on the lattice. Each legal token transfer gives an exact directional difference: H(next) − H(current). The largest positive difference identifies a steepest improving move among the available edges.</p>'+svg(edges+dots+'<text x="280" y="25" text-anchor="middle" font-size="13" fill="currentColor">A</text><text x="32" y="405" text-anchor="middle" font-size="13" fill="currentColor">B</text><text x="530" y="405" text-anchor="middle" font-size="13" fill="currentColor">C</text>','0 0 560 425')+'<p class="op-key">Selected counts: ('+[p.a,p.b,p.c].join(',')+'), H = '+fmt(p.H)+'</p>'+rows+'<div class="op-note">An edge gradient is a signed difference between endpoint values. Adding gradient values along a complete path telescopes, so every closed-path circulation is zero.</div>';
+}
+function transport(){
+ const p=model.p,t=model.tau,Jab=t*(p[0]-p[1]),Jbc=t*(p[1]-p[2]);
+ const dp=[-Jab,Jab-Jbc,Jbc],q=p.map((v,i)=>v+dp[i]);
+ const bars='<div class="op-bars">'+p.map((v,i)=>'<div class="op-bar"><div style="height:'+(v*130)+'px"></div><span>'+'ABC'[i]+': '+fmt(v,4)+'</span></div>').join('')+'</div>';
+ let lines='<line x1="85" y1="70" x2="245" y2="70" stroke="#7f9caa" stroke-width="4"/><line x1="285" y1="70" x2="445" y2="70" stroke="#7f9caa" stroke-width="4"/>';
+ [85,265,465].forEach((x,i)=>{lines+='<circle cx="'+x+'" cy="70" r="21" fill="#1f758d"/><text x="'+x+'" y="76" text-anchor="middle" fill="white" font-size="18">'+'ABC'[i]+'</text>';});
+ lines+='<text x="175" y="43" text-anchor="middle" fill="currentColor" font-size="13">J(A→B) = '+fmt(Jab)+'</text><text x="365" y="43" text-anchor="middle" fill="currentColor" font-size="13">J(B→C) = '+fmt(Jbc)+'</text>';
+ const div=[Jab,-Jab+Jbc,-Jbc];
+ $('#op-stage').innerHTML='<h2>Continuity equation on three vertices</h2><p class="op-explain">The currents are positive from left to right and negative in the other direction. Divergence is net outward current, and each vertex changes by minus its divergence.</p>'+svg(lines,'0 0 550 120')+'<p>Step <strong>'+model.step+'</strong>; current probability:</p>'+bars+'<table><thead><tr><th>Vertex</th><th>Outward divergence</th><th>Δp</th><th>Next p</th></tr></thead><tbody>'+p.map((v,i)=>'<tr><th>'+'ABC'[i]+'</th><td>'+fmt(div[i])+'</td><td>'+fmt(dp[i])+'</td><td>'+fmt(q[i])+'</td></tr>').join('')+'</tbody></table><div class="op-split"><div class="op-metric">Total probability now<br><strong>'+fmt(p.reduce((a,b)=>a+b,0))+'</strong></div><div class="op-metric">Entropy now (nats)<br><strong>'+fmt(entropy(p))+'</strong></div></div><div class="op-note">Internal currents cancel: Δp(A) + Δp(B) + Δp(C) = '+fmt(dp.reduce((a,b)=>a+b,0))+'. This symmetric diffusion is doubly stochastic, so Shannon entropy cannot decrease.</div>';
+}
+function fisher(){
+ const x=model.x,y=model.y,arc=2*Math.abs(Math.asin(Math.sqrt(x))-Math.asin(Math.sqrt(y))),local=x>0&&x<1?Math.abs(y-x)/Math.sqrt(x*(1-x)):null,overlap=Math.sqrt(x*y)+Math.sqrt((1-x)*(1-y));
+ const at=z=>({x:65+180*Math.sqrt(z),y:265-180*Math.sqrt(1-z)}),p=at(x),q=at(y);
+ let drawing='<path d="M65 85 A180 180 0 0 1 245 265" fill="none" stroke="#9bbdc8" stroke-width="7"/><line x1="65" y1="265" x2="255" y2="265" stroke="#8ca2a7"/><line x1="65" y1="265" x2="65" y2="75" stroke="#8ca2a7"/><line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="#b67d3e" stroke-width="2.5" stroke-dasharray="6,4"/><circle cx="'+p.x+'" cy="'+p.y+'" r="8" fill="#1586a1"/><circle cx="'+q.x+'" cy="'+q.y+'" r="8" fill="#c57d32"/><text x="150" y="287" text-anchor="middle" fill="currentColor" font-size="12">2√p(A)</text><text x="10" y="70" fill="currentColor" font-size="12">2√p(B)</text><text x="'+(p.x+10)+'" y="'+(p.y-9)+'" font-size="12" fill="#087b96">start</text><text x="'+(q.x+10)+'" y="'+(q.y+20)+'" font-size="12" fill="#b2692d">end</text>';
+ $('#op-stage').innerHTML='<h2>Exact arc length versus local approximation</h2><p class="op-explain">Each binary probability distribution becomes a point on a quarter circle of radius two. The arc length measures exact Fisher–Rao distance. A local quadratic approximation is accurate only for short interior steps.</p>'+svg(drawing,'0 0 340 310')+'<div class="op-split"><div class="op-metric">Ordinary coordinate change<br><strong>'+fmt(Math.abs(y-x))+'</strong></div><div class="op-metric">Exact Fisher–Rao distance<br><strong>'+fmt(arc)+'</strong></div><div class="op-metric">Local estimate at start<br><strong>'+(local===null?'Not defined at boundary':fmt(local))+'</strong></div><div class="op-metric">Square-root overlap<br><strong>'+fmt(overlap)+'</strong></div></div><div class="op-note">The exact formula is 2 |arcsin√y − arcsin√x|. In the interior, a short move δ has approximate length |δ| / √(x(1−x)). The local estimate is not an exact finite distance.</div>';
+}
+function render(){renderControls();({sequence:seq,simplex:simplex,transport:transport,fisher:fisher})[model.mode]();}
+document.querySelector('.op-tabs').addEventListener('click',e=>{let b=e.target.closest('[data-mode]');if(!b)return;model.mode=b.dataset.mode;document.querySelectorAll('.op-tabs button').forEach(v=>v.setAttribute('aria-pressed',String(v===b)));render();});
+$('#op-control-body').addEventListener('input',e=>{
+ if(e.target.id==='kind')model.kind=e.target.value;
+ if(e.target.id==='N'){model.N=Number(e.target.value);model.a=Math.floor(model.N/3);model.b=Math.floor((model.N-model.a)/2);model.c=model.N-model.a-model.b;}
+ if(e.target.id==='tau')model.tau=Number(e.target.value);
+ if(e.target.id==='x')model.x=Number(e.target.value);
+ if(e.target.id==='y')model.y=Number(e.target.value);
+ render();
+});
+$('#op-control-body').addEventListener('click',e=>{let b=e.target.closest('[data-action]');if(!b)return;if(b.dataset.action==='reset'){model.p=[1,0,0];model.step=0;}else{const p=model.p,t=model.tau,Jab=t*(p[0]-p[1]),Jbc=t*(p[1]-p[2]);model.p=[p[0]-Jab,p[1]+Jab-Jbc,p[2]+Jbc];model.step++;}render();});
+$('#op-stage').addEventListener('click',e=>{const pt=e.target.closest('[data-a][data-b][data-c]');if(!pt||model.mode!=='simplex')return;model.a=Number(pt.dataset.a);model.b=Number(pt.dataset.b);model.c=Number(pt.dataset.c);simplex();});
+render();
+})();
+</script>
+</body></html>
