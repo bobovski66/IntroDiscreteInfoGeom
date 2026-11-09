@@ -1,0 +1,39 @@
+name: Rebuild discrete calculus course
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - ".github/workflows/rebuild-course.yml"
+permissions:
+  contents: write
+jobs:
+  build-course:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out course
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install textbook build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc poppler-utils texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-pictures
+      - name: Build readings, labs, quizzes and printable textbook
+        run: python3 scripts/build.py
+      - name: Check mathematics and website links
+        run: |
+          node tests/math.test.js
+          python3 scripts/verify.py
+      - name: Publish generated course materials
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html guide.html readings demos labs quizzes textbook assets
+          if ! git diff --cached --quiet; then
+            git commit -m "Rebuild calculus-first course site and textbook PDFs"
+            git push
+          fi
