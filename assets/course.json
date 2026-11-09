@@ -1,1090 +1,1090 @@
 [
   {
-    "title": "Sequences, growth, and proportions",
-    "short": "Growth and proportions",
-    "summary": "Solve finite growth rules, normalize counts, and use odds to calculate entire trajectories.",
+    "title": "Sequences, differences, and discrete integration",
+    "short": "Finite differences",
+    "summary": "Differentiate and integrate sequences by exact differences and sums; apply the results to changes in population proportions.",
     "objectives": [
-      "Solve a constant-multiplier recurrence.",
-      "Derive and interpret normalized growth.",
-      "Use odds to find a target step and distinguish counts from proportions."
+      "Compute first and second differences of sequences.",
+      "Use telescoping sums to reconstruct a sequence.",
+      "Measure finite changes in a normalized population model."
     ],
-    "demo": "Compare a count table, a proportion trajectory, and the exact odds formula as the relative multiplier changes.",
+    "demo": "Use the new operator explorer to see a sequence, its differences, and its accumulated sum; compare with normalized population growth.",
     "lab": [
-      "Start with counts $(20,80)$ and multipliers $(2,1)$. Make a table for steps zero through six, recording both counts, the total, the A proportion, and the odds. Explain why the odds column is simpler than the proportion column.",
-      "In the demonstration, set the initial A proportion to $0.20$ and the relative multiplier to $2$. Compare the first six computed proportions with your table. Use the exact formula to determine the first step at which A has proportion at least $0.95$.",
-      "Choose multipliers for which both types grow in count while A falls in proportion. Calculate three steps and explain the role of the total. Compare your result with a second initial population ten times as large.",
-      "Use $p=(1/2,1/3,1/6)$ and multipliers $(1,2,3)$. Compute two normalized updates. Show that multiplying every multiplier by seven changes neither updated table.",
-      "Write a short algorithm for normalized growth. State how it checks nonnegative proportions, unit total, and positive multipliers. Explain why rounding to whole percentages at each step can alter the support of a trajectory."
+      "Start with the sequence $a_n=n^2$ for $n=0,1,2,3,4,5$. (a) Calculate the six values. (b) List every first difference $\\Delta a_n$. (c) Calculate the second differences. (d) Explain what constant second differences tell you.",
+      "Suppose the daily number of new messages is $b_n=3n+2$, beginning at day $n=0$. (a) Calculate $b_0,b_1,b_2,b_3$. (b) Compute the running totals $S_0,S_1,S_2,S_3,S_4$, where $S_0=0$. (c) Verify $\\Delta S_2=b_2$.",
+      "Let $A_0=20$, $B_0=60$, $w_A=2$, and $w_B=1$. (a) Compute counts at steps 0, 1, and 2. (b) Calculate the A proportions $x_0,x_1,x_2$. (c) Find $\\Delta x_0$ and $\\Delta x_1$. (d) Verify the telescoping identity $\\Delta x_0+\\Delta x_1=x_2-x_0$.",
+      "In the original growth demonstration, start at proportion $x_0=0.2$ with relative multiplier $2$. (a) Record five consecutive proportions. (b) Subtract to construct their difference sequence. (c) Add those differences and compare with the net change. (d) Explain why the differences get smaller near the limiting state.",
+      "Choose one sequence of your own whose first differences are constant and another whose second differences are constant. (a) Write five terms of each. (b) Show the appropriate difference tables. (c) Explain how the original sequence can be recovered by summing changes."
     ],
     "quiz": [
       {
-        "prompt": "A quantity grows by 25% per step. Its multiplier is:",
+        "prompt": "For $a_n=n^2$, the first difference $\\Delta a_n$ is",
         "choices": [
-          "0.25",
-          "1.25",
-          "25",
-          "0.75"
-        ],
-        "answer": 1,
-        "explanation": "A percentage increase of 25% adds one quarter of the current amount, so the new amount is 1.25 times the old."
-      },
-      {
-        "prompt": "Counts (6, 18) have A proportion:",
-        "choices": [
-          "1/3",
-          "3/4",
-          "1/4",
-          "6"
-        ],
-        "answer": 2,
-        "explanation": "Divide the A count by the total: 6/(6+18)=1/4."
-      },
-      {
-        "prompt": "If A and B multipliers are 3 and 2, the odds multiplier is:",
-        "choices": [
-          "3/2",
-          "5",
-          "2/3",
-          "1"
+          "$2n+1$",
+          "$2n$",
+          "$n+1$",
+          "$n^2$"
         ],
         "answer": 0,
-        "explanation": "The common total cancels in the ratio of the two updated proportions."
+        "explanation": "Subtract $n^2$ from $(n+1)^2$."
       },
       {
-        "prompt": "With initial A proportion 1/5 and relative multiplier 2, the proportion after two steps is:",
+        "prompt": "The second differences of $0,1,4,9,16$ are",
         "choices": [
-          "4/5",
-          "2/5",
-          "1/3",
-          "1/2"
-        ],
-        "answer": 3,
-        "explanation": "Initial odds are 1/4; two doublings make the odds one, corresponding to proportion 1/2."
-      },
-      {
-        "prompt": "Multiplying every type multiplier by the same positive constant:",
-        "choices": [
-          "Doubles all proportions",
-          "Leaves the normalized update unchanged",
-          "Removes rare types",
-          "Reverses the direction of change"
+          "$1,3,5$",
+          "$2,2,2$",
+          "$0,0,0$",
+          "$4,9,16$"
         ],
         "answer": 1,
-        "explanation": "The common factor cancels between every numerator and the denominator."
+        "explanation": "First differences are 1,3,5,7; their consecutive differences are 2."
       },
       {
-        "prompt": "Under positive normalized growth, a type with zero current proportion:",
+        "prompt": "If $\\Delta a_n=5$ and $a_0=2$, then $a_3$ equals",
         "choices": [
-          "Becomes uniform",
-          "Must grow next step",
-          "Stays absent",
-          "Gets negative proportion"
+          "7",
+          "12",
+          "17",
+          "22"
         ],
         "answer": 2,
-        "explanation": "Its numerator remains zero. Migration or mutation would require an additional rule."
+        "explanation": "Each of three steps adds five, giving 2+15=17."
       },
       {
-        "prompt": "A fixed point of a recurrence is:",
+        "prompt": "Which identity expresses the discrete fundamental theorem?",
         "choices": [
-          "A state left unchanged by one update",
-          "The first state of every trajectory",
-          "Any state on a graph",
-          "A state with integer counts"
+          "$\\sum_{k=0}^{n-1}\\Delta a_k=a_n-a_0$",
+          "$\\Delta a_n=a_n+a_{n+1}$",
+          "$\\sum a_k=0$",
+          "$a_n=a_0$"
         ],
         "answer": 0,
-        "explanation": "A fixed point satisfies the same state before and after the stated update."
+        "explanation": "The sum telescopes because each interior value appears with opposite signs."
       },
       {
-        "prompt": "If both types grow in count, the A proportion:",
+        "prompt": "If $S_n=\\sum_{k=0}^{n-1}b_k$, what is $\\Delta S_n$?",
         "choices": [
-          "Must increase",
-          "Must be 1/2",
-          "Must decrease",
-          "Can increase or decrease depending on relative growth"
+          "$S_n$",
+          "$b_{n+1}$",
+          "$0$",
+          "$b_n$"
         ],
         "answer": 3,
-        "explanation": "Composition depends on how A grows relative to the total, not only on its own count."
+        "explanation": "One more term $b_n$ is included when the upper limit increases from n−1 to n."
+      },
+      {
+        "prompt": "For $x_0=1/4$ and multipliers $(2,1)$, the next A proportion is",
+        "choices": [
+          "$1/2$",
+          "$2/5$",
+          "$1/4$",
+          "$3/5$"
+        ],
+        "answer": 1,
+        "explanation": "The new normalized weights are $(1/2,3/4)$; A has proportion $(1/2)/(5/4)=2/5$."
+      },
+      {
+        "prompt": "The difference $\\Delta x_n$ of a probability sequence measures",
+        "choices": [
+          "The current total count",
+          "The next count only",
+          "The exact change in proportion over one step",
+          "The second derivative"
+        ],
+        "answer": 2,
+        "explanation": "It subtracts the present proportion from the next."
+      },
+      {
+        "prompt": "An antidifference of a sequence is determined up to",
+        "choices": [
+          "A multiplicative factor",
+          "A constant additive term",
+          "A negative index",
+          "A permutation"
+        ],
+        "answer": 1,
+        "explanation": "Adding a constant to every value does not change successive differences."
       }
     ],
     "week": 1
   },
   {
-    "title": "Payoff tables and finite selection",
-    "short": "Payoff tables",
-    "summary": "Build scores from encounter tables and compare linear and exponential finite updates.",
+    "title": "Difference equations, feedback, and stability",
+    "short": "Difference equations",
+    "summary": "Solve recurrence relations, test fixed-point stability, and analyze finite selection with changing fitness scores.",
     "objectives": [
-      "Read a score matrix using a stated row and column convention.",
-      "Find fixed points using the score difference.",
-      "Check positivity and investigate equilibrium crossing."
+      "Convert between a difference equation and an update rule.",
+      "Solve and classify linear feedback recurrences.",
+      "Explain sign and size of changes in nonlinear selection updates."
     ],
-    "demo": "Compare coexistence and coordination tables, two multiplier rules, and their finite trajectories.",
+    "demo": "Compare stable, oscillatory, and unstable feedback recurrences; use the payoff demo to study finite updates.",
     "lab": [
-      "For the coexistence table $\\left(\\begin{smallmatrix}2&4\\\\3&1\\end{smallmatrix}\\right)$, derive both average scores, their difference, and the mean score. Find all fixed points of the linear and exponential rules.",
-      "At initial proportion $0.25$, compare five steps of the linear and exponential rules with intensity $1$. Record values in a table. Explain why agreement on the direction of the first step does not imply agreement on the trajectory.",
-      "For exponential coexistence, compare intensities $0.2$, $1$, and $2$. Record the first step that crosses $0.75$, if one occurs in the first twenty steps. State your findings as observations over a specified run.",
-      "Use the coordination table $\\left(\\begin{smallmatrix}4&1\\\\2&3\\end{smallmatrix}\\right)$ and initial proportions $0.45$ and $0.55$. Predict the long-run direction using the score difference, then check twenty steps.",
-      "Add a common score of five to the coexistence table. Derive why the exponential update is unchanged and why the linear update at intensity $1$ becomes the original linear update at intensity $1/6$. Verify at one state."
+      "Consider $\\Delta x_n=\\tfrac12(10-x_n)$ with $x_0=2$. (a) Rewrite as $x_{n+1}=F(x_n)$. (b) Find the fixed point. (c) Calculate $x_1,x_2,x_3$. (d) Find the errors relative to the fixed point and their ratio.",
+      "Study $\\Delta x_n=-k(x_n-1/2)$ from $x_0=1/4$. (a) Compute three steps for $k=1/2$. (b) Repeat for $k=3/2$. (c) Describe which sequence crosses the target and why. (d) Check the prediction from $|1-k|$.",
+      "Use the same equation with $k=2$ and $k=5/2$. (a) Compute four steps. (b) Explain how the signs and sizes of the errors change. (c) State why a large corrective step can destabilize a discrete system.",
+      "With payoff matrix $M=((2,4),(3,1))$, write $f_A(x)$ and $f_B(x)$ and solve $f_A=f_B$. (a) Evaluate the sign of $f_A-f_B$ at $x=1/4$ and $x=9/10$. (b) Use the original demo to compare finite updates with two intensities. (c) Explain why the sign test does not give the step size.",
+      "Choose an update $x_{n+1}=F(x_n)$ on $[0,1]$. (a) List four iterates for two nearby initial states. (b) Compute each first-difference sequence. (c) Give numerical evidence for attraction or repulsion and distinguish this from a proof."
     ],
     "quiz": [
       {
-        "prompt": "In the row-focal convention, the entry in row A, column B is:",
+        "prompt": "A fixed point $c$ of $x_{n+1}=F(x_n)$ satisfies",
         "choices": [
-          "B’s score against A",
-          "The total population",
-          "A’s score against B",
-          "The probability of A"
-        ],
-        "answer": 2,
-        "explanation": "The row gives the focal strategy; the column gives its opponent."
-      },
-      {
-        "prompt": "For the coexistence table, the score difference is:",
-        "choices": [
-          "3−4x",
-          "4−3x",
-          "1+5x−4x²",
-          "x(1−x)"
+          "$F(c)=c$",
+          "$F(c)=0$",
+          "$\\Delta c=1$",
+          "$c=0$"
         ],
         "answer": 0,
-        "explanation": "Subtract (1+2x) from (4−2x)."
+        "explanation": "A fixed point is unchanged by one update."
       },
       {
-        "prompt": "An interior fixed point under either positive rule requires:",
+        "prompt": "The equation $\\Delta x_n=-k(x_n-c)$ is equivalent to",
         "choices": [
-          "Zero total score",
-          "Equal population counts",
-          "Maximum entropy",
-          "Equal scores of the two types"
-        ],
-        "answer": 3,
-        "explanation": "The two positive types must receive equal multipliers, which here is equivalent to equal scores."
-      },
-      {
-        "prompt": "Linear multipliers are valid only when:",
-        "choices": [
-          "Scores are integers",
-          "Every multiplier 1+ηf is positive",
-          "The intensity is above one",
-          "Every proportion equals 1/2"
+          "$x_{n+1}=kx_n$",
+          "$x_{n+1}=c+(1-k)(x_n-c)$",
+          "$x_{n+1}=c+k(x_n-c)$",
+          "$x_{n+1}=x_n+c$"
         ],
         "answer": 1,
-        "explanation": "Negative multipliers cannot represent positive growth. Positivity must be checked for the states under consideration."
+        "explanation": "Add $x_n$ to both sides and group the error relative to c."
       },
       {
-        "prompt": "Adding a common score to exponential weights:",
+        "prompt": "For the feedback equation, the fixed point attracts when",
         "choices": [
-          "Always changes their ratios",
-          "Makes all scores zero",
-          "Cancels in normalization",
-          "Forces uniformity"
+          "$k>2$",
+          "$k<0$",
+          "$0<k<2$",
+          "$k=2$"
         ],
         "answer": 2,
-        "explanation": "Every exponential weight acquires the same positive factor."
+        "explanation": "The error multiplier is $1-k$, whose absolute value must be less than 1."
       },
       {
-        "prompt": "For the coordination table, a state below x=1/2:",
+        "prompt": "When $1<k<2$, errors about the target",
         "choices": [
-          "Moves to a smaller x",
-          "Moves to a larger x",
-          "Is always fixed",
-          "Must cross 1/2"
+          "Alternate sign and shrink",
+          "Shrink without crossing",
+          "Stay constant",
+          "Grow with constant sign"
         ],
         "answer": 0,
-        "explanation": "Its score difference is 4x−2<0, so a positive normalized step decreases x."
+        "explanation": "The multiplier $1-k$ is negative and has magnitude less than 1."
       },
       {
-        "prompt": "A sign diagram by itself determines:",
+        "prompt": "With $c=1/2$, $x_0=1/4$, and $k=3/2$, the next state is",
         "choices": [
-          "The exact time to convergence",
-          "Whether every step avoids crossing an equilibrium",
-          "The numerical size of every step",
-          "The sign of the one-step change"
+          "$1/8$",
+          "$3/8$",
+          "$1/2$",
+          "$5/8$"
         ],
         "answer": 3,
-        "explanation": "Crossing requires an additional estimate on the step size."
+        "explanation": "The correction is $(3/2)(1/4)=3/8$, giving $1/4+3/8=5/8$."
       },
       {
-        "prompt": "At x=1/2, the linear coexistence update with η=1 gives:",
+        "prompt": "A difference equation prescribes",
         "choices": [
-          "1/2",
-          "4/7",
-          "3/4",
-          "1"
+          "Only a graph's axes",
+          "The next state from current state information",
+          "Only an infinite sum",
+          "A continuum limit"
         ],
         "answer": 1,
-        "explanation": "Scores are 3 and 2, so equal starting proportions reweight by multipliers 4 and 3."
+        "explanation": "An update law generates an orbit one step at a time."
+      },
+      {
+        "prompt": "At an interior fixed point of positive normalized selection, the two fitness scores",
+        "choices": [
+          "Must be zero",
+          "Must sum to 1",
+          "Are equal",
+          "Must be negative"
+        ],
+        "answer": 2,
+        "explanation": "Equal positive multipliers leave the proportion unchanged."
+      },
+      {
+        "prompt": "The sign of $\\Delta x$ and its absolute size are",
+        "choices": [
+          "Different aspects of a finite update",
+          "Always identical",
+          "Always independent of the model",
+          "Given by entropy alone"
+        ],
+        "answer": 0,
+        "explanation": "Direction and magnitude require different pieces of information."
       }
     ],
     "week": 2
   },
   {
-    "title": "Three strategies and probability triangles",
-    "short": "Probability triangles",
-    "summary": "Represent compositions with barycentric coordinates and token lattices, then examine cyclic dynamics.",
+    "title": "Discrete gradients on the probability simplex",
+    "short": "Simplex gradients",
+    "summary": "Use token transfers as coordinate steps, calculate directional entropy differences, and study circulation and divergence on a probability lattice.",
     "objectives": [
-      "Convert between triangle and probability coordinates.",
-      "Count and connect finite token states.",
-      "Use a product diagnostic to analyze a finite cyclic update."
+      "Describe the lattice of three-category distributions.",
+      "Compute entropy differences along allowed transfers.",
+      "Distinguish gradient circulation from general edge flux."
     ],
-    "demo": "Follow a cyclic trajectory in the triangle while monitoring its coordinate product and time series.",
+    "demo": "Explore a token lattice and compare entropy values at neighboring distributions; use path sums to check conservative fields.",
     "lab": [
-      "Plot the states $(1,0,0)$, $(1/2,1/2,0)$, $(1/3,1/3,1/3)$, and $(1/2,1/3,1/6)$. Calculate their Cartesian coordinates and label the absent types on each edge.",
-      "Draw the denominator-four token lattice. Count its states in two ways and list all neighbors of $(2,1,1)$. Distinguish a one-token move from a general normalized growth step.",
-      "For the balanced cyclic table, derive the three scores at $(1/2,1/3,1/6)$. Verify that their sum and their probability-weighted mean are both zero. Calculate one exponential step with intensity $1$.",
-      "Run exponential cyclic updates at intensities $0.1$, $0.5$, and $1$ for fifty steps from the same state. Record the initial and final coordinate products and inspect the triangle traces. Use the exact product identity to explain the direction of change.",
-      "Compare with the permutation rule. List its first four states and prove its period and product preservation. Explain why the permutation calculation does not establish product preservation for score-based selection."
+      "Take $N=4$. (a) List all 15 count triples $(a,b,c)$ adding to four. (b) Draw their triangular arrangement or use the lattice demo. (c) Count neighbors of $(2,1,1)$ and $(4,0,0)$. (d) Explain why the boundary has fewer neighbors.",
+      "Starting at $(2,1,1)$, move one token from C to A and one from A to B, in separate trials. (a) Record both new count triples. (b) Convert the triples to probabilities. (c) Calculate the entropy at each distribution, taking $0\\log0=0$. (d) Determine the signs of both directional differences.",
+      "At an interior state $p$, define $u=e_A-e_C$ and $v=e_B-e_C$. (a) Write $p+u/N$ and $p+v/N$. (b) Explain when each transfer is legal. (c) Evaluate the two differences of $H$ at $p=(1/4,1/4,1/2)$ with $N=4$.",
+      "Choose two different three-step routes on the token lattice with the same start and finish. (a) Label the entropy at each visited point. (b) Add the successive entropy differences along each route. (c) Explain why the route sums agree, even if the intermediate values differ.",
+      "Draw a triangle of three allowed states and assign a clockwise flow of one unit along each edge. (a) Compute divergence at each vertex. (b) Compute the circulation around the triangle. (c) Explain how zero divergence can coexist with nonzero circulation."
     ],
     "quiz": [
       {
-        "prompt": "A probability triple must have:",
+        "prompt": "The number of three-category count states with $N=4$ tokens is",
         "choices": [
-          "Three positive integers",
-          "Nonnegative entries summing to one",
-          "Equal entries",
-          "At least one zero"
-        ],
-        "answer": 1,
-        "explanation": "Zero entries are allowed; the total must be one."
-      },
-      {
-        "prompt": "On edge AB of the probability triangle:",
-        "choices": [
-          "pA=0",
-          "pB=0",
-          "pC=0",
-          "All entries equal 1/3"
+          "9",
+          "12",
+          "15",
+          "16"
         ],
         "answer": 2,
-        "explanation": "Only the two endpoint types contribute on that edge."
+        "explanation": "There are $(N+1)(N+2)/2=15$ nonnegative integer triples summing to four."
       },
       {
-        "prompt": "The denominator-four token lattice has:",
+        "prompt": "An allowed token-transfer step changes the total count by",
         "choices": [
-          "15 states",
-          "12 states",
-          "16 states",
-          "10 states"
+          "0",
+          "1",
+          "−1",
+          "2"
         ],
         "answer": 0,
-        "explanation": "The stars-and-bars count is (4+1)(4+2)/2=15."
+        "explanation": "One category gains exactly the token another loses."
       },
       {
-        "prompt": "A general normalized growth step:",
+        "prompt": "The directional difference $D_{A\\leftarrow C}H(p)$ is",
         "choices": [
-          "Always moves one token",
-          "Always lands on the same token lattice",
-          "Must keep all counts integer",
-          "Can land between lattice vertices"
+          "$H(p)$",
+          "$H(p+e_A)$",
+          "$H(p)-H(p+e_A)$",
+          "$H(p+(e_A-e_C)/N)-H(p)$"
         ],
         "answer": 3,
-        "explanation": "The deterministic proportions need not be integer multiples of 1/N."
+        "explanation": "Evaluate H after the legal one-token transfer and subtract its previous value."
       },
       {
-        "prompt": "For balanced exponential cyclic updates, the coordinate product away from the interior center:",
+        "prompt": "An edge field obtained from a vertex potential $H$ assigns $u\\to v$ the value",
         "choices": [
-          "Is always conserved",
-          "Strictly decreases",
-          "Strictly increases",
-          "Equals zero after one step"
+          "$H(u)+H(v)$",
+          "$H(v)-H(u)$",
+          "$H(u)H(v)$",
+          "$H(u)$"
         ],
         "answer": 1,
-        "explanation": "Its new value is the old value divided by Z cubed, with Z>1 away from the center."
+        "explanation": "It is a discrete gradient difference."
       },
       {
-        "prompt": "For the balanced cyclic table, the probability-weighted mean score is:",
+        "prompt": "The sum of gradient differences around a closed path is",
         "choices": [
-          "Always one",
-          "The coordinate product",
-          "Zero",
-          "The largest score"
+          "Always 1",
+          "Always positive",
+          "0",
+          "Undefined"
         ],
         "answer": 2,
-        "explanation": "Opposite pair terms cancel in the finite sum."
+        "explanation": "Consecutive endpoint terms cancel, including the first and last on a closed path."
       },
       {
-        "prompt": "The permutation of three coordinates satisfies:",
+        "prompt": "At a boundary lattice state, which moves may be forbidden?",
         "choices": [
-          "T³(p)=p",
-          "T²(p)=p for every p",
-          "T(p)=p for every p",
-          "T(p)=uniform"
+          "Moves donating from an empty category",
+          "Moves preserving total count",
+          "Moves between occupied categories",
+          "All moves"
         ],
         "answer": 0,
-        "explanation": "Three cyclic shifts return each coordinate to its original position."
+        "explanation": "An empty category has no token to transfer."
       },
       {
-        "prompt": "A decreasing product proves that:",
+        "prompt": "With net outward flux as divergence, a positive divergence means",
         "choices": [
-          "Each coordinate is decreasing",
-          "The state reaches a vertex in one step",
-          "The trajectory has period three",
-          "The product is a one-step diagnostic, even if coordinates oscillate"
+          "More mass arrives than leaves",
+          "Net mass leaves the vertex",
+          "All edge values vanish",
+          "The entropy is maximal"
         ],
-        "answer": 3,
-        "explanation": "A scalar diagnostic can be monotone while individual proportions vary in different directions."
+        "answer": 1,
+        "explanation": "Outgoing minus incoming flow is positive."
+      },
+      {
+        "prompt": "A circulating edge field on a closed three-edge triangle can have",
+        "choices": [
+          "No flux anywhere",
+          "Only gradient values",
+          "Nonzero circulation but zero divergence",
+          "Negative total probability"
+        ],
+        "answer": 2,
+        "explanation": "A balanced cycle can carry flow through every vertex without changing its mass."
       }
     ],
     "week": 3
   },
   {
-    "title": "Counting outcomes and sampling distributions",
-    "short": "Counting and sampling",
-    "summary": "Use trees, binomial coefficients, and multinomial counts to describe finite samples and their variation.",
+    "title": "Probability transport and conservation",
+    "short": "Probability currents",
+    "summary": "Describe stochastic updates as vector difference equations, derive the continuity equation, and connect transport to finite sampling.",
     "objectives": [
-      "Calculate ordered-sample and count-vector probabilities.",
-      "Compute expectation and variance from sums.",
-      "Quantify the possibility of missing a rare category."
+      "Check stochastic matrices and probability conservation.",
+      "Compute graph currents and their divergence.",
+      "Separate expected probability transport from sampled integer counts."
     ],
-    "demo": "Compare exact binomial probabilities with a reproducible simulation of repeated samples.",
+    "demo": "Use a three-node transport rule and compare deterministic probability mass with sampled count fluctuations.",
     "lab": [
-      "Draw the complete outcome tree for three independent binary observations with success probability $1/3$. Group the eight leaves by success count and recover the four binomial probabilities.",
-      "In the demonstration, choose sample size $10$ and success probability $0.3$. Compute the exact probability of counts zero, three, and ten. Run 200 simulated samples and compare empirical histogram frequencies with the exact probabilities.",
-      "For sample size $40$ and success probability $0.3$, calculate the mean and standard deviation of the empirical proportion. Compare this with size $10$. Explain the factor by which the spread changes.",
-      "For counts $(2,1,1)$ under $p=(1/2,1/3,1/6)$, calculate the probability of one specified ordered sample and of the entire count vector. Explain where the multinomial coefficient enters.",
-      "A category has probability $0.02$. Calculate its chance of being missed in samples of sizes $20$, $50$, and $100$. Discuss the inference one can draw from a zero count, and distinguish sampling variation from deterministic growth."
+      "Use $K=((3/4,1/4,0),(1/4,1/2,1/4),(0,1/4,3/4))$. (a) Check every column sum. (b) Starting with $p_0=(1,0,0)$, calculate $p_1$ and $p_2$. (c) Write the two vector differences $\\Delta p_0,\\Delta p_1$.",
+      "On the path A–B–C, suppose one quarter of the mass at each vertex travels to each adjacent vertex. (a) Find net current on each edge for $p_0=(1,0,0)$. (b) Compute divergence at each vertex. (c) Verify that minus divergence agrees with $\\Delta p_0$.",
+      "Compare $p=(1/2,1/3,1/6)$ with a direct count sample of 12 outcomes. (a) Give one integer count triple exactly matching those probabilities. (b) Give another feasible sample count triple. (c) Explain why two samples need not equal their expected counts.",
+      "Find a fixed point for the three-node matrix. (a) Verify the proposed vector sums to one. (b) Multiply by K to check stationarity. (c) Compare with the cyclic permutation of three labels, which can be stationary at uniform while other orbits rotate.",
+      "Design a two-vertex network with a transition probability $a$ from A to B and $b$ from B to A. (a) Construct the column-stochastic matrix. (b) Write $\\Delta p_A$ in terms of $p_A,p_B$. (c) Find a stationary distribution when $a+b>0$."
     ],
     "quiz": [
       {
-        "prompt": "Independence means that specified joint outcomes have probability:",
+        "prompt": "With input probabilities in columns, a stochastic matrix has",
         "choices": [
-          "Equal to the sum of their individual probabilities",
-          "Always one half",
-          "Equal to the product of their individual probabilities",
-          "Zero"
-        ],
-        "answer": 2,
-        "explanation": "For independent observations, branch probabilities multiply along an outcome tree."
-      },
-      {
-        "prompt": "There are how many binary length-four samples with two successes?",
-        "choices": [
-          "6",
-          "4",
-          "8",
-          "16"
-        ],
-        "answer": 0,
-        "explanation": "Choose the two success positions: binomial coefficient 4 choose 2."
-      },
-      {
-        "prompt": "For counts (2,1,1), the multinomial multiplicity is:",
-        "choices": [
-          "4",
-          "8",
-          "24",
-          "12"
-        ],
-        "answer": 3,
-        "explanation": "It is 4!/(2!1!1!)=12."
-      },
-      {
-        "prompt": "The mean of a binomial count with N=20 and p=0.3 is:",
-        "choices": [
-          "0.3",
-          "6",
-          "14",
-          "20"
+          "Every row sum zero",
+          "Every column sum one",
+          "Every entry one",
+          "Negative entries allowed"
         ],
         "answer": 1,
-        "explanation": "The expectation is Np."
+        "explanation": "Each column is an output probability distribution."
       },
       {
-        "prompt": "The variance of an empirical binary proportion is:",
+        "prompt": "For $p_{n+1}=Kp_n$, the vector difference is",
         "choices": [
-          "Np",
-          "Np(1−p)",
-          "p(1−p)/N",
-          "p/N²"
-        ],
-        "answer": 2,
-        "explanation": "The count variance is Np(1−p); division by N squares the denominator."
-      },
-      {
-        "prompt": "A fourfold increase in sample size changes the standard deviation of the empirical proportion by a factor of:",
-        "choices": [
-          "1/2",
-          "1/4",
-          "2",
-          "4"
+          "$(K-I)p_n$",
+          "$K+p_n$",
+          "$p_n/K$",
+          "$p_{n+1}+p_n$"
         ],
         "answer": 0,
-        "explanation": "Standard deviation is proportional to one over the square root of N."
+        "explanation": "Subtract $p_n=Ip_n$ from both sides."
       },
       {
-        "prompt": "The chance of missing a category of probability p in N independent observations is:",
+        "prompt": "The sum of the coordinates of $\\Delta p_n$ is",
         "choices": [
-          "pN",
-          "1−Np",
-          "p^N",
-          "(1−p)^N"
+          "1",
+          "−1",
+          "0",
+          "Always 2"
+        ],
+        "answer": 2,
+        "explanation": "Total probability is preserved by column-stochastic updates."
+      },
+      {
+        "prompt": "From $(1,0,0)$ on the given three-node path, one step gives",
+        "choices": [
+          "$(1,0,0)$",
+          "$(1/2,1/2,0)$",
+          "$(0,1,0)$",
+          "$(3/4,1/4,0)$"
         ],
         "answer": 3,
-        "explanation": "Every observation must fall outside the category, with probability 1−p each time."
+        "explanation": "One quarter of the mass at A moves to its neighbor B."
       },
       {
-        "prompt": "A zero empirical count establishes that the underlying probability is:",
+        "prompt": "With outward divergence, the continuity equation is",
         "choices": [
-          "Zero",
-          "Not determined to be zero by that fact alone",
-          "One",
-          "Negative"
+          "$\\Delta p=\\operatorname{div}J$",
+          "$\\Delta p=-\\operatorname{div}J$",
+          "$p=0$",
+          "$J=\\Delta p$"
         ],
         "answer": 1,
-        "explanation": "A positive-probability category can be missed in a finite sample."
+        "explanation": "A vertex loses the net amount sent outward."
+      },
+      {
+        "prompt": "A stationary probability vector $\\pi$ satisfies",
+        "choices": [
+          "$K\\pi=\\pi$",
+          "$K\\pi=0$",
+          "$\\pi=(1,1,1)$",
+          "$\\pi$ has integer entries"
+        ],
+        "answer": 0,
+        "explanation": "One update leaves a stationary state unchanged."
+      },
+      {
+        "prompt": "A finite sample from a probability distribution",
+        "choices": [
+          "Must exactly match the probabilities",
+          "Cannot have integer counts",
+          "May fluctuate around expected counts",
+          "Must be uniform"
+        ],
+        "answer": 2,
+        "explanation": "Sampling introduces random counts even when the underlying probabilities are fixed."
+      },
+      {
+        "prompt": "A three-state cyclic permutation",
+        "choices": [
+          "Always converges to uniform",
+          "Destroys total mass",
+          "Has negative probabilities",
+          "Can have periodic trajectories"
+        ],
+        "answer": 3,
+        "explanation": "Cyclic relabeling returns to its starting table after three steps."
       }
     ],
     "week": 4
   },
   {
-    "title": "Entropy, code trees, and multiplicity",
-    "short": "Entropy and codes",
-    "summary": "Interpret logarithmic surprise through prefix trees and the number of samples with a given composition.",
+    "title": "Entropy and its discrete derivatives",
+    "short": "Entropy differences",
+    "summary": "Compute first and second differences of entropy, construct entropy-increasing updates, and interpret counting and coding as applications.",
     "objectives": [
-      "Calculate entropy in bits and nats.",
-      "Construct prefix codes and apply the Kraft inequality.",
-      "Compare finite logarithmic counts with entropy."
+      "Calculate entropy at finite probability states.",
+      "Use first and second differences to analyze discrete concavity.",
+      "State when a particular update increases entropy."
     ],
-    "demo": "Adjust a three-label distribution and compare its entropy, a prefix-code length, and a finite type-class count.",
+    "demo": "Inspect the entropy of a binary token lattice, its discrete slopes, and an entropy-increasing trajectory.",
     "lab": [
-      "Calculate the surprisals and entropy of $(1/2,1/4,1/4)$ in both bits and nats. Show explicitly how division by $\\ln2$ converts between the units.",
-      "Draw the prefix tree for codewords $0,10,11$. Explain why a concatenation of these words can be decoded unambiguously. Compare its expected length under $(1/2,1/4,1/4)$ and under uniform probabilities.",
-      "In the demonstration, move probability mass toward a vertex, toward an edge midpoint, and toward the center. Record entropy and expected code length. Keep the code fixed and explain why its expected length need not equal entropy.",
-      "For binary counts $(2,2)$, $(4,4)$, and $(8,8)$, compute the multiplicities and their base-two logarithms per observation. Compare them with one bit. Derive the exact finite upper bound rather than assuming equality.",
-      "For fixed scores $(0,1,2)$ and intensity $\\ln2$, start with equal probabilities and compute three updates through accumulated scores. Verify that every log-odds increment equals intensity times score difference."
+      "On a four-token binary lattice, calculate the entropy at $k=0,1,2,3,4$ using natural logarithms. (a) Convert $k$ to a probability $k/4$. (b) Show the five entropy values to four decimals. (c) Explain the symmetry of the table.",
+      "Using your entropy table, (a) compute all four first differences, (b) compute all three second differences, (c) identify the sign change of the first differences, and (d) interpret that change as a maximum.",
+      "Define a rule that moves one token to an adjacent binary state with larger entropy, stopping when no neighbor is better. (a) Start at $k=0$ and list all visited states. (b) Record entropy changes. (c) Verify that every listed change is nonnegative.",
+      "Choose a probability vector $p$ with three categories and four tokens. (a) Calculate its entropy. (b) Find all legal neighboring states. (c) Calculate their entropy values. (d) Determine whether $p$ is a local maximum on the lattice.",
+      "Take the trajectories of an entropy-increasing rule and an unequal-multiplier growth rule. (a) Calculate three consecutive entropy values for each. (b) Compare signs of $\\Delta H$. (c) Explain why entropy production is a statement about the update law, not probability in general."
     ],
     "quiz": [
       {
-        "prompt": "An outcome of probability 1/8 has surprisal:",
+        "prompt": "For a binary distribution $(1/2,1/2)$, natural-log entropy is",
         "choices": [
-          "1/8 bit",
-          "8 bits",
-          "0 bits",
-          "3 bits"
-        ],
-        "answer": 3,
-        "explanation": "Negative log base two of 1/8 is 3."
-      },
-      {
-        "prompt": "Entropy is the:",
-        "choices": [
-          "Largest possible codeword",
-          "Average surprisal under the given distribution",
-          "Number of labels",
-          "Logarithm of the sample size"
-        ],
-        "answer": 1,
-        "explanation": "Each outcome’s surprisal is weighted by its probability."
-      },
-      {
-        "prompt": "The entropy in bits of (1/2,1/4,1/4) is:",
-        "choices": [
-          "1.5",
+          "$\\ln2$",
+          "0",
           "2",
-          "0.75",
-          "3"
+          "$1/2$"
         ],
         "answer": 0,
-        "explanation": "The three contributions are 1/2, 1/2, and 1/2 bit."
+        "explanation": "Each outcome contributes $-(1/2)\\ln(1/2)$."
       },
       {
-        "prompt": "A prefix code requires that:",
+        "prompt": "For a pure distribution $(1,0)$, entropy is",
         "choices": [
-          "All words have length one",
-          "Every label has equal probability",
-          "No codeword begins another codeword",
-          "Every word ends in zero"
+          "$\\ln2$",
+          "1",
+          "0",
+          "Infinite"
         ],
         "answer": 2,
-        "explanation": "This property lets a decoder identify each word without an extra separator."
+        "explanation": "The certain outcome contributes $-1\\ln1=0$ and $0\\ln0$ is defined as zero."
       },
       {
-        "prompt": "The Kraft sum for lengths (1,2,2) is:",
+        "prompt": "On the four-token binary lattice, the entropy maximum occurs at",
         "choices": [
-          "2",
-          "3/2",
-          "3/4",
-          "1"
-        ],
-        "answer": 3,
-        "explanation": "The sum is 1/2+1/4+1/4=1."
-      },
-      {
-        "prompt": "For k equally likely labels, entropy in nats is:",
-        "choices": [
-          "k",
-          "ln k",
-          "1/k",
-          "zero"
+          "$k=0$",
+          "$k=2$",
+          "$k=4$",
+          "Every k"
         ],
         "answer": 1,
-        "explanation": "Every surprisal equals ln k, so their average is ln k."
+        "explanation": "The balanced distribution $(1/2,1/2)$ has maximal entropy."
       },
       {
-        "prompt": "At finite N, the logarithmic multiplicity per observation satisfies:",
+        "prompt": "The first difference $\\Delta H_k$ equals",
         "choices": [
-          "ln Ω/N ≤ H(q)",
-          "ln Ω/N = H(q) always",
-          "ln Ω/N > H(q) always",
-          "ln Ω = 0 always"
+          "$H_k+H_{k+1}$",
+          "$H_{k+2}-H_k$",
+          "$2H_k$",
+          "$H_{k+1}-H_k$"
+        ],
+        "answer": 3,
+        "explanation": "A forward difference subtracts the current value from the next."
+      },
+      {
+        "prompt": "Negative second differences indicate that",
+        "choices": [
+          "First differences decrease",
+          "Every entropy value is negative",
+          "All first differences vanish",
+          "Time steps are continuous"
         ],
         "answer": 0,
-        "explanation": "The probability Ω exp(−NH(q)) of the full type class is at most one."
+        "explanation": "$\\Delta^2H_k=\\Delta H_{k+1}-\\Delta H_k<0$."
       },
       {
-        "prompt": "Under exponential reweighting, a log-odds increment is:",
+        "prompt": "For the four-token entropy sequence, $\\Delta H_1$ is approximately",
         "choices": [
-          "The normalizing constant",
-          "Always zero",
-          "η times the score difference",
-          "The entropy"
+          "−0.5623",
+          "+0.5623",
+          "+0.1308",
+          "−0.1308"
         ],
         "answer": 2,
-        "explanation": "Taking a ratio cancels normalization and taking a logarithm turns multiplication into addition."
+        "explanation": "Subtract $H_1\\approx0.5623$ from $H_2\\approx0.6931$."
+      },
+      {
+        "prompt": "If an update always chooses a neighbor with larger entropy when possible, then along its orbit",
+        "choices": [
+          "Entropy must fall",
+          "$\\Delta H_n\\geq0$",
+          "Entropy is always zero",
+          "Entropy is undefined"
+        ],
+        "answer": 1,
+        "explanation": "The update rule explicitly selects nonnegative entropy change."
+      },
+      {
+        "prompt": "Do all stochastic probability updates increase entropy?",
+        "choices": [
+          "Yes",
+          "Only for two categories",
+          "Only at a vertex",
+          "No"
+        ],
+        "answer": 3,
+        "explanation": "An arbitrary channel can merge outcomes and reduce entropy."
       }
     ],
     "week": 5
   },
   {
-    "title": "Relative entropy and finite contraction",
-    "short": "Relative entropy",
-    "summary": "Compare models using logarithmic likelihood and prove a contraction bound for mixture updates.",
+    "title": "Relative entropy and discrete Lyapunov theory",
+    "short": "Lyapunov differences",
+    "summary": "Measure KL divergence from a reference state and use its one-step difference to prove contraction and stability.",
     "objectives": [
-      "Keep the two arguments of relative entropy in their intended roles.",
-      "Derive likelihood and nonnegativity identities.",
-      "Prove and test a one-step mixture bound."
+      "Evaluate directed KL divergence between finite models.",
+      "Construct and interpret a discrete Lyapunov sequence.",
+      "Prove and use a finite contraction bound for mixing."
     ],
-    "demo": "Move toward a target table and compare the actual divergence with its geometric upper bound.",
+    "demo": "Monitor KL divergence to a fixed reference under repeated mixture updates, and compare net dissipation with its telescoping sum.",
     "lab": [
-      "For $q=(1/2,1/2)$ and $p=(3/4,1/4)$, compute both directed relative entropies. Explain the meaning of each argument and why the results need not agree.",
-      "An independent binary sample has counts $(8,2)$. Compare the empirical and fair-model likelihoods directly and through $10D(\\widehat q\\|p)$. Report both a log-likelihood ratio and a likelihood ratio.",
-      "In the demonstration, choose target A proportion $0.5$, initial A proportion $0.9$, and mixture fraction $0.5$. Record five steps of the table, the actual $D(q\\|p_t)$, and the bound $(1-\\lambda)^tD(q\\|p_0)$.",
-      "Prove the coordinatewise arithmetic-geometric inequality used in the contraction argument. Explain what happens if the initial table has a zero where the target is positive and why the first mixture step repairs that support mismatch.",
-      "Choose two three-label tables and a mixture fraction. Verify the entropy concavity identity numerically, including both divergence terms. Explain what the identity says about hiding the source label when tables are pooled."
+      "Let $p=(3/4,1/4)$ and $q=(1/2,1/2)$. (a) Compute $D(p\\|q)$ exactly as a logarithmic expression. (b) Compute $D(q\\|p)$. (c) Explain why the two differ.",
+      "Use the mixture update $p_{n+1}=\\tfrac12p_n+\\tfrac12q$, with $p_0=(3/4,1/4)$. (a) Calculate $p_1,p_2,p_3$. (b) Check each is a probability vector. (c) Calculate the errors $p_n-q$.",
+      "Using the sequence from Investigation 2, (a) calculate $V_n=D(p_n\\|q)$ for $n=0,1,2,3$, (b) compute $\\Delta V_0,\\Delta V_1,\\Delta V_2$, and (c) test $V_{n+1}\\leq\\tfrac12 V_n$ numerically.",
+      "Prove by induction that $p_n-q=(1-\\lambda)^n(p_0-q)$ for a general mixture parameter $\\lambda$. (a) Verify at $n=0$. (b) Show the step from $n$ to $n+1$. (c) Explain why the formula establishes convergence for $0<\\lambda\\leq1$.",
+      "Treat $V_n$ as a sequence of potential values. (a) Write its first three dissipation terms $V_n-V_{n+1}$. (b) Sum them. (c) Explain why the cancellation identity measures total information discrepancy lost over three updates."
     ],
     "quiz": [
       {
-        "prompt": "Relative entropy D(q||p) is:",
+        "prompt": "Relative entropy $D(p\\|q)$ is",
         "choices": [
-          "Always symmetric",
-          "Always at most one",
-          "Nonnegative and directed",
-          "Always finite"
+          "Usually symmetric",
+          "Always nonpositive",
+          "Directional and nonnegative",
+          "Equal to Euclidean distance"
         ],
         "answer": 2,
-        "explanation": "It is nonnegative but can change when the arguments are reversed and can be infinite."
+        "explanation": "KL divergence is nonnegative but generally changes when p and q are exchanged."
       },
       {
-        "prompt": "If q has positive mass where p is zero, D(q||p) is:",
+        "prompt": "For the same positive probability table, $D(p\\|p)$ equals",
         "choices": [
-          "Infinite",
-          "Zero",
-          "Negative",
-          "Equal to entropy"
+          "0",
+          "1",
+          "$\\ln2$",
+          "Infinite"
         ],
         "answer": 0,
-        "explanation": "The model p assigns zero probability to an outcome that q says is possible."
+        "explanation": "Every log ratio is log 1, which is zero."
       },
       {
-        "prompt": "For uniform u on k labels, D(p||u) equals:",
+        "prompt": "A discrete Lyapunov function along an orbit satisfies",
         "choices": [
-          "H(p)",
-          "ln k + H(p)",
-          "k−H(p)",
-          "ln k−H(p)"
-        ],
-        "answer": 3,
-        "explanation": "Expand ln(p_i/(1/k)) and sum."
-      },
-      {
-        "prompt": "For N observations, the empirical model’s log-likelihood advantage over p is:",
-        "choices": [
-          "D(p||qhat)",
-          "N D(qhat||p)",
-          "H(p)/N",
-          "Always zero"
+          "$\\Delta V_n>0$ always",
+          "$\\Delta V_n\\leq0$",
+          "$V_n<0$ always",
+          "$V_n=n$"
         ],
         "answer": 1,
-        "explanation": "The empirical count fractions weight the logarithms in the sample likelihood."
+        "explanation": "It is a potential that does not increase from one step to the next."
       },
       {
-        "prompt": "The mixture update with λ=1 produces:",
+        "prompt": "For $p^+=(1-\\lambda)p+\\lambda q$, the error $p^+-q$ equals",
         "choices": [
-          "The old table",
-          "The midpoint",
-          "The target table",
-          "A pure state"
+          "$p-q$",
+          "$\\lambda(p-q)$",
+          "$q$",
+          "$(1-\\lambda)(p-q)$"
+        ],
+        "answer": 3,
+        "explanation": "Subtract q and combine the two q terms."
+      },
+      {
+        "prompt": "With $p_0=(3/4,1/4)$, $q=(1/2,1/2)$, $\\lambda=1/2$, the next state is",
+        "choices": [
+          "$(5/8,3/8)$",
+          "$(3/4,1/4)$",
+          "$(1/2,1/2)$",
+          "$(1,0)$"
+        ],
+        "answer": 0,
+        "explanation": "Average the two probability vectors coordinatewise."
+      },
+      {
+        "prompt": "A contraction bound for the mixing rule is",
+        "choices": [
+          "$V_{n+1}\\geq2V_n$",
+          "$V_{n+1}=V_n+1$",
+          "$V_{n+1}\\leq(1-\\lambda)V_n$",
+          "$V_n<0$"
         ],
         "answer": 2,
-        "explanation": "All weight is assigned to q in (1−λ)p+λq."
+        "explanation": "Convexity of KL in the first argument yields the finite inequality."
       },
       {
-        "prompt": "Under the mixture rule, the coordinate error is multiplied by:",
+        "prompt": "The sum $\\sum_{n=0}^{T-1}(V_n-V_{n+1})$ equals",
         "choices": [
-          "1−λ",
-          "λ",
-          "1+λ",
-          "N"
-        ],
-        "answer": 0,
-        "explanation": "Subtract q from the update equation."
-      },
-      {
-        "prompt": "The proven bound for D(q||p+) is:",
-        "choices": [
-          "At least D(q||p)",
-          "Exactly zero for all λ",
-          "Exactly D(q||p) for all λ",
-          "At most (1−λ)D(q||p)"
-        ],
-        "answer": 3,
-        "explanation": "Coordinatewise arithmetic-geometric mean gives this one-step contraction."
-      },
-      {
-        "prompt": "Entropy concavity says the entropy of a mixture is:",
-        "choices": [
-          "Always zero",
-          "At least the corresponding mixture of entropies",
-          "At most both component entropies",
-          "Always ln k"
+          "$TV_0$",
+          "$V_0-V_T$",
+          "$V_T+V_0$",
+          "0 always"
         ],
         "answer": 1,
-        "explanation": "The excess is a nonnegative weighted sum of relative entropies."
+        "explanation": "All interior potential terms cancel pairwise."
+      },
+      {
+        "prompt": "Which statement follows from $V_n\\to0$?",
+        "choices": [
+          "All probability entries vanish",
+          "KL becomes negative",
+          "Each update is a permutation",
+          "The reference discrepancy tends to zero"
+        ],
+        "answer": 3,
+        "explanation": "V measures discrepancy to the fixed reference state."
       }
     ],
     "week": 6
   },
   {
-    "title": "Square roots and statistical distance",
-    "short": "Square-root geometry",
-    "summary": "Map finite distributions to a sphere and calculate overlap, arc length, and Hellinger distance.",
+    "title": "Discrete Fisher geometry and statistical distance",
+    "short": "Fisher edge lengths",
+    "summary": "Measure probability lattice edges by Fisher–Rao distance and compare exact arc lengths with local quadratic approximations.",
     "objectives": [
-      "Verify the radius-two square-root construction.",
-      "Calculate and compare three finite discrepancies.",
-      "Interpret binary probabilities through angle coordinates."
+      "Use square-root coordinates to compute exact statistical distance.",
+      "Calculate the Fisher quadratic length of a small interior step.",
+      "Explain why boundary edges need an exact-distance treatment."
     ],
-    "demo": "Compare two binary distributions using their probability coordinates and their positions on a quarter circle.",
+    "demo": "Compare Fisher–Rao arc lengths and local quadratic edge estimates while refining probability steps.",
     "lab": [
-      "Map $(1/4,1/4,1/2)$ and $(1/2,1/4,1/4)$ to square-root vectors. Calculate their squared lengths, dot product, overlap, and spherical distance.",
-      "In the demonstration, compare binary first probabilities $0.01$ and $0.02$, then $0.49$ and $0.50$. Each pair differs by $0.01$. Compare the spherical distances and interpret the difference using the quarter-circle picture.",
-      "For first probabilities $0$, $1/4$, $1/2$, $3/4$, and $1$, calculate the angle and radius-two arc coordinate. Label both quantities so that the angle is not confused with arc length.",
-      "Choose a pair with a support mismatch. Calculate its finite spherical and Hellinger distances and identify which directed relative entropy is infinite. Explain how the boundary is represented in each construction.",
-      "Write a distance-computation procedure for two probability lists. Include a unit-sum check and a numerical clamp of overlap to $[0,1]$. Test symmetry, zero self-distance, and one triangle inequality on a three-table example."
+      "For binary distributions $p=(1,0)$ and $q=(1/4,3/4)$, (a) calculate their square-root vectors on the radius-two circle, (b) find the overlap $\\sum_i\\sqrt{p_iq_i}$, and (c) calculate the exact Fisher–Rao distance.",
+      "Compare the moves $x:0\\to1/4$ and $x:1/4\\to1/2$. (a) Write both coordinate changes. (b) Compute the arc distances by $2|\\arcsin\\sqrt y-\\arcsin\\sqrt x|$. (c) Explain why equal coordinate steps have unequal lengths.",
+      "Take $p=(1/2,1/2)$ and $q=(11/20,9/20)$. (a) Calculate $\\delta=q-p$. (b) Find $g_p(\\delta,\\delta)=\\sum_i\\delta_i^2/p_i$. (c) Calculate $\\sqrt{g_p(\\delta,\\delta)}$ and the exact spherical distance. (d) Compare numerically.",
+      "Take $p=(1/4,3/4)$ and move to $q=(1/2,1/2)$. (a) Compute the local Fisher estimate at p. (b) Compute the exact arc distance. (c) Break the move into two equal probability steps and add their local estimates. (d) Explain the effect of finer resolution.",
+      "Consider an edge starting at $p=(0,1)$. (a) Explain why the expression $\\sum_i\\delta_i^2/p_i$ is unavailable there for a move into the first category. (b) Compute the exact Fisher–Rao distance from $(0,1)$ to $(1/4,3/4)$. (c) Explain why the exact metric is useful."
     ],
     "quiz": [
       {
-        "prompt": "The squared length of 2√p is:",
+        "prompt": "The Fisher local quadratic form at positive p is",
         "choices": [
+          "$\\sum_i\\delta_i^2/p_i$",
+          "$\\sum_i p_i^2$",
+          "$\\sum_i\\delta_i$",
+          "$D(p\\|p)$"
+        ],
+        "answer": 0,
+        "explanation": "The local metric weights squared coordinate changes by inverse probabilities."
+      },
+      {
+        "prompt": "The local Fisher length estimate is",
+        "choices": [
+          "$2\\sum_i\\delta_i$",
+          "$\\sqrt{\\sum_i\\delta_i^2/p_i}$",
+          "$\\sum_i p_i\\delta_i$",
+          "$\\log2$"
+        ],
+        "answer": 1,
+        "explanation": "Take the square root of the Fisher quadratic form."
+      },
+      {
+        "prompt": "The exact categorical Fisher–Rao distance uses",
+        "choices": [
+          "A raw coordinate sum",
+          "A maximum of coordinates",
+          "$2\\arccos\\sum_i\\sqrt{p_iq_i}$",
+          "Only integer counts"
+        ],
+        "answer": 2,
+        "explanation": "The square-root sphere has radius two, so distance equals twice the angle."
+      },
+      {
+        "prompt": "Every square-root probability vector $s(p)=(2\\sqrt{p_i})$ has norm",
+        "choices": [
+          "0",
           "1",
-          "2",
-          "k",
-          "4"
+          "$\\sqrt2$",
+          "2"
         ],
         "answer": 3,
-        "explanation": "It is 4 times the sum of the probabilities."
+        "explanation": "Its squared norm is $4\\sum_i p_i=4$."
       },
       {
-        "prompt": "The overlap B(p,r) is:",
+        "prompt": "The Fisher–Rao distance from $(1,0)$ to $(1/4,3/4)$ is",
         "choices": [
-          "The sum of p_i−r_i",
-          "The sum of square roots of p_i r_i",
-          "D(p||r)",
-          "The maximum entry"
-        ],
-        "answer": 1,
-        "explanation": "It is the dot product of the unit square-root vectors."
-      },
-      {
-        "prompt": "The categorical spherical distance used here is:",
-        "choices": [
-          "2 arccos B",
-          "arccos(2B)",
-          "1−B",
-          "D(p||r)"
+          "$2\\pi/3$",
+          "$\\pi/3$",
+          "$\\pi$",
+          "0"
         ],
         "answer": 0,
-        "explanation": "The sphere radius is two, so arc length is twice the central angle."
+        "explanation": "The overlap is 1/2, and $2\\arccos(1/2)=2\\pi/3$."
       },
       {
-        "prompt": "For disjoint supports, overlap is:",
+        "prompt": "At a probability coordinate $p_i=0$, a local expression containing $1/p_i$",
         "choices": [
-          "One",
-          "One half",
-          "Zero",
-          "Infinite"
+          "Always equals zero",
+          "Needs special care; exact spherical distance remains defined",
+          "Is always one",
+          "Makes all distances zero"
+        ],
+        "answer": 1,
+        "explanation": "The quadratic approximation is an interior construction."
+      },
+      {
+        "prompt": "A short interior step satisfies approximately",
+        "choices": [
+          "$D(p+\\delta\\|p)=0$",
+          "$2D=2g$",
+          "$2D(p+\\delta\\|p)\\approx g_p(\\delta,\\delta)$",
+          "$D=\\|p\\|$"
         ],
         "answer": 2,
-        "explanation": "Every product p_i r_i vanishes."
+        "explanation": "Twice the second-order KL contribution is the local Fisher quadratic form."
       },
       {
-        "prompt": "For disjoint supports, spherical distance is:",
+        "prompt": "Along a monotone Bernoulli arc, splitting a step into two exact sub-arcs",
         "choices": [
-          "Infinite",
-          "Zero",
-          "Two",
-          "π"
+          "Doubles the total distance",
+          "Makes total zero",
+          "Makes distance negative",
+          "Preserves total arc length"
         ],
         "answer": 3,
-        "explanation": "Overlap zero gives angle π/2 and radius-two arc length π."
-      },
-      {
-        "prompt": "The Hellinger convention used here has h² equal to:",
-        "choices": [
-          "B",
-          "1−B",
-          "2 arccos B",
-          "D(p||r)"
-        ],
-        "answer": 1,
-        "explanation": "Its squared value is one minus square-root overlap."
-      },
-      {
-        "prompt": "For binary first probability x, the arc coordinate from x=0 is:",
-        "choices": [
-          "2 arcsin √x",
-          "arcsin x",
-          "x²",
-          "2√x"
-        ],
-        "answer": 0,
-        "explanation": "The central angle is arcsin √x and the radius is two."
-      },
-      {
-        "prompt": "Equal increments in a binary probability:",
-        "choices": [
-          "Always have equal spherical length",
-          "Always have infinite length",
-          "Can have different spherical lengths at different locations",
-          "Force equal entropy"
-        ],
-        "answer": 2,
-        "explanation": "The square-root map changes how equal probability changes are represented geometrically."
+        "explanation": "Consecutive ordered sub-arcs add to the length of the whole arc."
       }
     ],
     "week": 7
   },
   {
-    "title": "Geodesic steps and shortest graph paths",
-    "short": "Paths and token graphs",
-    "summary": "Construct equal spherical steps and solve shortest-path problems with finite token constraints.",
+    "title": "Path sums, circulation, and statistical geodesics",
+    "short": "Discrete path integrals",
+    "summary": "Sum edge gradients, measure circulation, and compare token-transfer routes with Fisher–Rao distances.",
     "objectives": [
-      "Calculate a spherical midpoint and finite geodesic steps.",
-      "Build a weighted token-transfer graph.",
-      "Run Dijkstra’s algorithm and compare constrained and direct distances."
+      "Compute discrete line integrals along graph paths.",
+      "Use cycle sums to recognize gradient edge fields.",
+      "Find token-transfer and weighted shortest paths."
     ],
-    "demo": "Choose two lattice vertices and compare a shortest token-transfer route with the direct spherical geodesic.",
+    "demo": "Explore two paths on the probability lattice; compare telescoping gradient sums and statistical route lengths.",
     "lab": [
-      "For $p=(1,0)$ and $r=(1/4,3/4)$, find the ordinary and spherical midpoints. Verify that the latter has equal spherical distances to the two endpoints.",
-      "Construct five equally spaced states along a spherical path between two three-label tables. Calculate all four consecutive distances and show that their sum equals the endpoint distance, up to rounding.",
-      "In the demonstration, choose denominator $6$ and two different lattice vertices. Record the endpoints, the direct distance, the shortest graph length, and every count triple along the route. Verify that each transition moves one token.",
-      "Reproduce Dijkstra’s algorithm on the five-edge graph in the reading. Record the order of finalized vertices and the predecessor table. Explain the role of nonnegative edge weights in finalizing a distance.",
-      "Choose endpoints that lie on both denominator-$4$ and denominator-$8$ lattices. Compare their shortest graph lengths with direct distance. Describe the measured result without assuming that every change in denominator creates a nested lattice."
+      "Take a path $A\\to B\\to C$ with scalar values $\\phi(A)=1$, $\\phi(B)=4$, and $\\phi(C)=2$. (a) Calculate the two gradient edge values. (b) Add them. (c) Compare with $\\phi(C)-\\phi(A)$.",
+      "On a directed triangle $A\\to B\\to C\\to A$, assign each oriented edge value $1$. (a) Calculate the circulation. (b) Determine whether this edge field could be the gradient of a scalar potential. (c) Justify using telescoping.",
+      "Consider count states $a=(4,1,1)$ and $b=(1,2,3)$ with $N=6$. (a) Compute $\\sum_i|a_i-b_i|$. (b) Find the minimum number of token transfers. (c) Construct an explicit route attaining that minimum.",
+      "Choose two different routes between the same endpoints in the six-token triangle. (a) Calculate a scalar potential such as entropy at every vertex of both routes. (b) Sum the gradient differences. (c) Compare the unsigned cumulative changes $\\sum|\\Delta H|$. (d) Explain why the latter can depend on the route.",
+      "Use Fisher–Rao edge weights for two short legal routes between the same probability states. (a) Compute and add the edge distances with a calculator. (b) Find the exact Fisher–Rao distance between endpoints. (c) Check that neither route length is smaller than the endpoint distance."
     ],
     "quiz": [
       {
-        "prompt": "An ordinary mixture follows:",
+        "prompt": "A discrete line integral along a path is",
         "choices": [
-          "A straight segment in probability coordinates",
-          "A token edge only",
-          "A permutation cycle",
-          "A constant table only"
-        ],
-        "answer": 0,
-        "explanation": "Each probability is an affine function of the mixture fraction."
-      },
-      {
-        "prompt": "The spherical midpoint is obtained by:",
-        "choices": [
-          "Averaging logarithms",
-          "Averaging probabilities always",
-          "Subtracting the endpoints",
-          "Normalizing the sum of square-root vectors, then squaring"
-        ],
-        "answer": 3,
-        "explanation": "Normalize √p+√r to unit length and square its entries."
-      },
-      {
-        "prompt": "M equal geodesic steps each have length:",
-        "choices": [
-          "M times the endpoint distance",
-          "The endpoint distance divided by M",
-          "Always one",
-          "The number of tokens"
+          "The product of vertex values",
+          "A finite sum of oriented edge contributions",
+          "Always zero",
+          "Only a continuum limit"
         ],
         "answer": 1,
-        "explanation": "Spherical interpolation advances by equal central angles."
+        "explanation": "Add the directed edge values visited along the route."
       },
       {
-        "prompt": "A token-graph edge transfers:",
+        "prompt": "For a gradient edge field $A(u,v)=\\phi(v)-\\phi(u)$, a path sum from a to b equals",
         "choices": [
-          "Every token",
-          "Half the population",
-          "One token between categories",
-          "A score between rows"
+          "$\\phi(a)+\\phi(b)$",
+          "$\\phi(a)\\phi(b)$",
+          "$\\phi(b)-\\phi(a)$",
+          "0 always"
         ],
         "answer": 2,
-        "explanation": "The counts change by −1 in one category and +1 in another."
+        "explanation": "The sum telescopes to the endpoint difference."
       },
       {
-        "prompt": "A graph path weighted by spherical edge distance has length:",
+        "prompt": "The circulation of a gradient around any closed path is",
         "choices": [
-          "At least the direct spherical distance",
-          "Always smaller than the direct distance",
-          "Always exactly one",
-          "Independent of its edges"
+          "0",
+          "1",
+          "Positive",
+          "The number of vertices"
         ],
         "answer": 0,
-        "explanation": "Repeated triangle inequalities give the lower bound."
+        "explanation": "The first and last endpoint coincide, so their difference vanishes."
       },
       {
-        "prompt": "Dijkstra’s algorithm next finalizes the unvisited vertex with:",
+        "prompt": "A triangle with clockwise edge values all equal to 1 has clockwise circulation",
         "choices": [
-          "The most neighbors",
-          "The largest index",
-          "The largest tentative distance",
-          "The smallest tentative distance"
+          "0",
+          "1",
+          "2",
+          "3"
         ],
         "answer": 3,
-        "explanation": "With nonnegative weights, no later detour can improve that selected distance."
+        "explanation": "Sum the three oriented contributions."
       },
       {
-        "prompt": "A denominator-N lattice is necessarily contained in a denominator-(N+1) lattice:",
+        "prompt": "The minimum transfers between count triples a and b is",
         "choices": [
-          "Always",
-          "No",
-          "Only if all states are interior",
-          "Only for three labels"
+          "$\\sum_i|a_i-b_i|$",
+          "$\\frac12\\sum_i|a_i-b_i|$",
+          "$N^2$",
+          "Always N"
         ],
         "answer": 1,
-        "explanation": "Fractions with denominator N are not generally fractions with denominator N+1."
+        "explanation": "One transfer simultaneously removes one excess and fills one deficit."
       },
       {
-        "prompt": "Equal token transfers on a binary edge give:",
+        "prompt": "For $a=(4,1,1)$ and $b=(1,2,3)$, the minimum number of transfers is",
         "choices": [
-          "Equal arc increments always",
-          "A shorter route than the endpoint distance",
-          "Generally unequal arc increments",
-          "Infinite arc lengths"
+          "2",
+          "4",
+          "3",
+          "6"
         ],
         "answer": 2,
-        "explanation": "The angle coordinate is nonlinear in the probability."
+        "explanation": "Half the L1 distance is $(3+1+2)/2=3$."
+      },
+      {
+        "prompt": "A weighted path length made from exact Fisher–Rao edge distances",
+        "choices": [
+          "Cannot be below the direct endpoint distance",
+          "Must be zero",
+          "Equals every other route length",
+          "Is always an integer"
+        ],
+        "answer": 0,
+        "explanation": "Repeated triangle inequalities bound endpoint distance by the route sum."
+      },
+      {
+        "prompt": "The sum of absolute potential changes $\\sum|\\phi(v_{k+1})-\\phi(v_k)|$",
+        "choices": [
+          "Always telescopes with signs",
+          "Always vanishes",
+          "Is necessarily independent of path",
+          "Can depend on path"
+        ],
+        "answer": 3,
+        "explanation": "Absolute changes can count backtracking and detours even when endpoints agree."
       }
     ],
     "week": 8
   },
   {
-    "title": "Exponential updates and KL-penalized learning",
-    "short": "Finite learning updates",
-    "summary": "Derive multiplicative weights as the exact optimizer of a finite relative-entropy penalized objective.",
+    "title": "Discrete natural-gradient ideas and learning dynamics",
+    "short": "Information-driven updates",
+    "summary": "Construct KL-penalized exponential updates, calculate their difference sequences, and compare finite steps with natural-gradient directions.",
     "objectives": [
-      "Use a KL identity to solve a finite optimization problem.",
-      "Prove fixed-score improvement with a double sum.",
-      "Distinguish accumulated external scores from state-dependent feedback."
+      "Calculate an exponential probability update.",
+      "Use exact log-odds differences to describe two-category learning.",
+      "Explain KL-penalized optimization and its local geometric interpretation."
     ],
-    "demo": "Vary intensity in a three-choice update and compare reward, relative-entropy cost, and the exact objective.",
+    "demo": "Compare exponential updates at different intensities and track finite changes, scores, and relative entropy.",
     "lab": [
-      "Use current table $(1/2,1/3,1/6)$ and scores $(0,1,2)$. Calculate the exponential update at intensity $\\ln2$. Verify its normalizing constant and its log-odds increments.",
-      "In the demonstration, compare intensities $0.1$, $0.5$, $1$, and $2$. For each, record the new table, average score, $D(r\\|p)$, and objective. Explain the balance between reward and departure from the initial table.",
-      "Choose three candidate tables, including the current table and a pure table. Check $J(q)=\\ln Z-D(q\\|r)$ for each. Use nonnegativity to explain why the computed optimizer beats every candidate, not just those tested.",
-      "For fixed scores $(0,1,1)$, compare four rounds from equal initial weights and from $(1/2,1/3,1/6)$. Explain the retained ratio of the tied leaders and prove the direction of the average-score change using the double-sum identity.",
-      "Choose two rounds of external scores and reverse their order. Compare intermediate and final tables. Then explain why this rearrangement argument need not hold when scores are computed from the current state."
+      "Let $p=(1/2,1/3,1/6)$, scores $s=(0,1,2)$, and intensity $\\eta=\\ln2$. (a) Find the three unnormalized weights. (b) Normalize. (c) Compute each coordinate of $\\Delta p$. (d) Verify that the three differences sum to zero.",
+      "Take $p=(1/2,1/2)$, score difference $d=\\ln2$, and $\\eta=1$. (a) Calculate the next A probability. (b) Calculate $\\Delta x$. (c) Find the initial and new odds. (d) Verify $\\Delta\\log O=\\eta d$.",
+      "Using your three-category example, compute $J(q)=\\eta q\\cdot s-D(q\\|p)$ for the original p and for the exponential optimizer r. (a) Evaluate both. (b) Find $Z$. (c) Check $J(r)=\\ln Z$.",
+      "Repeat the three-category update for $\\eta=0.1$ and $\\eta=0.5$. (a) Compute the actual coordinate changes. (b) Find $\\eta p_i(s_i-\\bar s)$ at each intensity. (c) Compare approximation errors and explain why the smaller step agrees better.",
+      "Design scores for which one category begins rare but becomes more likely. (a) Choose a valid positive starting table. (b) Calculate four updates. (c) List the probability differences and the score-weighted means. (d) Explain what each number reveals about the dynamics."
     ],
     "quiz": [
       {
-        "prompt": "The finite objective maximized by the exponential update is:",
+        "prompt": "The exponential learning update is",
         "choices": [
-          "D(q||p) alone",
-          "Entropy alone",
-          "η q·s−D(q||p)",
-          "Euclidean distance"
-        ],
-        "answer": 2,
-        "explanation": "Scores reward favorable choices while KL penalizes departure from the current table."
-      },
-      {
-        "prompt": "At the optimizer r, the objective value is:",
-        "choices": [
-          "ln Z",
-          "Zero always",
-          "D(p||r)",
-          "η alone"
-        ],
-        "answer": 0,
-        "explanation": "The exact identity leaves ln Z−D(r||r)=ln Z."
-      },
-      {
-        "prompt": "For fixed scores, an exponential update makes their average:",
-        "choices": [
-          "Always zero",
-          "Always smaller",
-          "Unchanged at every table",
-          "Nondecreasing"
-        ],
-        "answer": 3,
-        "explanation": "The change is a sum of nonnegative pair terms divided by Z."
-      },
-      {
-        "prompt": "For state-dependent scores, the fixed-score improvement proof:",
-        "choices": [
-          "Proves every possible potential increases",
-          "Does not automatically prove the recomputed average increases",
-          "Makes the dynamics linear",
-          "Forbids cycles"
+          "$q_i=p_i+s_i$",
+          "$q_i=p_ie^{\\eta s_i}/\\sum_jp_je^{\\eta s_j}$",
+          "$q_i=s_i/\\sum_js_j$",
+          "$q_i=1/k$"
         ],
         "answer": 1,
-        "explanation": "The proof compares the same numerical scores before and after the update."
+        "explanation": "Multiply current probabilities by positive exponential weights, then normalize."
       },
       {
-        "prompt": "Subtracting the largest score before exponentiation:",
+        "prompt": "The update automatically preserves",
         "choices": [
-          "Changes the optimizer",
+          "Only integer counts",
+          "The initial entropy",
+          "Nonnegative coordinates and total mass one",
+          "All score differences"
+        ],
+        "answer": 2,
+        "explanation": "Positive weighted entries normalized by their sum give a probability vector."
+      },
+      {
+        "prompt": "With binary initial probability 1/2 and relative weight 2, the next A probability is",
+        "choices": [
+          "$2/3$",
+          "$1/3$",
+          "$3/4$",
+          "$1/2$"
+        ],
+        "answer": 0,
+        "explanation": "The unnormalized weights are 1 and 1/2, yielding 2/3 for A."
+      },
+      {
+        "prompt": "If scores differ by d, the binary log-odds difference is",
+        "choices": [
+          "0",
+          "$d/\\eta$",
+          "$\\log x$",
+          "$\\eta d$"
+        ],
+        "answer": 3,
+        "explanation": "Odds are multiplied by $e^{\\eta d}$ at each update."
+      },
+      {
+        "prompt": "Adding a common constant to every score",
+        "choices": [
+          "Reverses the update",
+          "Leaves the normalized result unchanged",
           "Makes probabilities negative",
-          "Preserves the update and helps numerical stability",
-          "Sets the intensity to zero"
-        ],
-        "answer": 2,
-        "explanation": "It removes a common exponential factor that cancels in normalization."
-      },
-      {
-        "prompt": "With tied highest fixed scores, their probability ratios:",
-        "choices": [
-          "Stay at their initial ratios",
-          "Become one immediately",
-          "Become zero",
-          "Alternate signs"
-        ],
-        "answer": 0,
-        "explanation": "Equal multipliers preserve ratios at every round."
-      },
-      {
-        "prompt": "For a predetermined external score sequence, the final table depends on:",
-        "choices": [
-          "Only the last round",
-          "Only the first round",
-          "The labels’ alphabetical order",
-          "Initial weights and accumulated scores"
-        ],
-        "answer": 3,
-        "explanation": "Intervening normalizing constants cancel in the product of updates."
-      },
-      {
-        "prompt": "Mixing a nonuniform table with uniform with 0<λ<1:",
-        "choices": [
-          "Always lowers entropy",
-          "Strictly raises entropy",
-          "Leaves all entries unchanged",
-          "Creates negative entries"
+          "Changes support"
         ],
         "answer": 1,
-        "explanation": "Strict entropy concavity and the maximality of uniform entropy give the result."
+        "explanation": "A common exponential multiplier cancels in normalization."
+      },
+      {
+        "prompt": "The exponential update uniquely maximizes",
+        "choices": [
+          "Euclidean distance",
+          "The largest raw score alone",
+          "$\\eta q\\cdot s-D(q\\|p)$",
+          "The sum of all scores"
+        ],
+        "answer": 2,
+        "explanation": "It balances score reward against the KL cost of changing the distribution."
+      },
+      {
+        "prompt": "For small intensity $\\eta$, the first-order coordinate change is approximately",
+        "choices": [
+          "$\\eta p_i(s_i-\\bar s)$",
+          "$p_i^2$",
+          "$\\eta/p_i$",
+          "$s_i+\\bar s$"
+        ],
+        "answer": 0,
+        "explanation": "The centered score has zero weighted mean, preserving total probability to first order."
+      },
+      {
+        "prompt": "Under strictly positive exponential multipliers, a zero coordinate",
+        "choices": [
+          "Instantly becomes uniform",
+          "Becomes negative",
+          "Must double",
+          "Remains zero"
+        ],
+        "answer": 3,
+        "explanation": "Multiplying zero by a positive weight and normalizing still gives zero."
       }
     ],
     "week": 9
   },
   {
-    "title": "Information networks and coarse-graining",
-    "short": "Networks and information",
-    "summary": "Transport tables through finite channels and prove contraction under noise and grouping.",
+    "title": "Graph divergence, diffusion, and information flow",
+    "short": "Graph information flows",
+    "summary": "Unify discrete calculus and information geometry through graph gradients, divergence, Laplacians, diffusion, and entropy change.",
     "objectives": [
-      "Interpret and iterate a column-stochastic matrix.",
-      "Prove data processing through the log-sum inequality.",
-      "Explain entropy behavior under general and doubly stochastic channels."
+      "Derive and compute the graph continuity equation.",
+      "Implement a stable discrete diffusion update.",
+      "Verify conservation, entropy change, and data processing in one example."
     ],
-    "demo": "Pass two four-label models through noise and grouping, monitoring divergence and spherical distance.",
+    "demo": "Evolve mass on a graph and monitor probability currents, discrete divergence, entropy, and a stationary state.",
     "lab": [
-      "For the three-node walk in the reading, verify the row and column sums and compute three updates from $(1,0,0)$. Check that uniform is stationary. Compare this with a cyclic permutation, which preserves uniform but has periodic trajectories.",
-      "In the demonstration, begin with its two four-label tables and apply within-pair noise at levels $0$, $0.25$, and $0.5$. Record both directed relative entropies, overlap, and spherical distance. Explain why the same channel must be applied to both tables.",
-      "Compare the two offered groupings of the four labels. Find a grouping that erases the distinction between the default models and a grouping that retains it. Explain the result through the ratios inside each group.",
-      "Derive the log-sum inequality from Gibbs’ inequality, then use it to prove the relative-entropy data-processing bound. Separately prove overlap increases using Cauchy–Schwarz.",
-      "Prepare a capstone report using two positive finite models of your choice. Specify a recording channel, show input and output tables, compute all discrepancies, and interpret the information retained. Include one example showing why entropy alone need not increase under a general channel."
+      "On A–B–C with $p=(1,0,0)$ and $\\tau=1/4$, (a) compute both signed edge currents $J_{AB},J_{BC}$, (b) calculate outward divergence at A, B, C, (c) use $\\Delta p=-\\operatorname{div}J$ to determine the next state, and (d) check mass conservation.",
+      "Using the same path, calculate $p_1$ through $p_4$. (a) Write each state as a probability vector. (b) Compute all coordinate differences. (c) Verify every difference vector sums to zero. (d) Explain the approach toward uniform.",
+      "For $p_0=(1,0,0)$ and the first three transport updates, (a) compute entropy at each step, (b) calculate its first differences, (c) identify the sign of every difference, and (d) explain which property of the diffusion matrix supports the pattern.",
+      "Compare two channels: the symmetric path diffusion and a channel sending every input to A. (a) Construct each stochastic matrix. (b) Calculate both output distributions from uniform input. (c) Compare input/output entropy. (d) Explain why a general stochastic channel does not have to raise entropy.",
+      "Capstone: choose a four- or five-node undirected graph and an initial probability distribution. (a) Define a legal diffusion step using $\\tau\\leq1/d_{\\max}$. (b) Calculate at least four iterates with a table or short program. (c) Show currents, divergence, mass conservation, and entropy changes. (d) Compare two states by Fisher–Rao distance and explain what the mathematical results say about the flow of information."
     ],
     "quiz": [
       {
-        "prompt": "Under the column-input convention, a stochastic matrix has:",
+        "prompt": "The graph gradient on an oriented edge $i\\to j$ is",
         "choices": [
-          "Columns summing to one",
-          "Rows summing to zero",
-          "Only integer entries",
-          "Equal columns"
+          "$f_j-f_i$",
+          "$f_i+f_j$",
+          "$f_i f_j$",
+          "$1/f_i$"
         ],
         "answer": 0,
-        "explanation": "Each column is the conditional distribution of the output given one input label."
+        "explanation": "Take the difference of vertex values in the direction of orientation."
       },
       {
-        "prompt": "A stationary distribution satisfies:",
+        "prompt": "With outward flux divergence, the continuity equation is",
         "choices": [
-          "Every entry zero",
-          "Kp=0",
-          "Every entry one",
-          "Kp=p"
-        ],
-        "answer": 3,
-        "explanation": "It is a fixed point of the one-step channel."
-      },
-      {
-        "prompt": "A stationary distribution guarantees convergence from every initial table:",
-        "choices": [
-          "Always",
-          "No",
-          "Only by definition",
-          "Only for permutations"
+          "$p^+=p+1$",
+          "$\\Delta p=-\\operatorname{div}J$",
+          "$\\Delta p=\\operatorname{div}J$",
+          "$\\Delta p=0$ always"
         ],
         "answer": 1,
-        "explanation": "A cyclic permutation is a counterexample: it has a stationary uniform table and periodic noncentral trajectories."
+        "explanation": "Net outward flux decreases mass at the vertex."
       },
       {
-        "prompt": "Applying the same stochastic channel to q and p makes D(q||p):",
+        "prompt": "For diffusion current $J_{ij}=\\tau(p_i-p_j)$, the update is",
         "choices": [
-          "Always larger",
-          "Always zero",
-          "Nonincreasing",
-          "Symmetric"
+          "$p_i^+=\\tau p_i$",
+          "$p_i^+=\\sum_jp_j$",
+          "$p_i^+=p_i+\\tau\\sum_{j\\sim i}(p_j-p_i)$",
+          "$p_i^+=1-p_i$"
         ],
         "answer": 2,
-        "explanation": "This is the finite relative-entropy data-processing inequality."
+        "explanation": "Substitute the flux into the continuity equation."
       },
       {
-        "prompt": "Under a common channel, square-root overlap is:",
+        "prompt": "A sufficient condition for nonnegative diffusion steps is",
         "choices": [
-          "Nondecreasing",
-          "Always zero",
-          "Strictly decreasing",
-          "Unrelated to distance"
+          "$\\tau>100$",
+          "$\\tau<0$",
+          "$\\tau=10d_{\\max}$",
+          "$0\\leq\\tau\\leq1/d_{\\max}$"
+        ],
+        "answer": 3,
+        "explanation": "The coefficient remaining at each vertex is $1-\\tau d_i$, which must be nonnegative."
+      },
+      {
+        "prompt": "On A–B–C with $p=(1,0,0)$ and $\\tau=1/4$, the next state is",
+        "choices": [
+          "$(3/4,1/4,0)$",
+          "$(1/2,1/2,0)$",
+          "$(0,0,1)$",
+          "$(1/3,1/3,1/3)$"
         ],
         "answer": 0,
-        "explanation": "Cauchy–Schwarz at each output and the column sums prove the bound."
+        "explanation": "One quarter of A's mass crosses to B in one step."
       },
       {
-        "prompt": "A doubly stochastic channel makes entropy:",
+        "prompt": "For symmetric diffusion on an undirected graph, the update matrix is",
         "choices": [
-          "Always zero",
-          "Always strictly smaller",
-          "Undefined",
-          "Nondecreasing"
-        ],
-        "answer": 3,
-        "explanation": "It preserves uniform, so KL contraction to uniform gives entropy increase or equality."
-      },
-      {
-        "prompt": "A general stochastic channel can lower entropy:",
-        "choices": [
-          "Never",
-          "Yes, for example by merging all inputs into one output",
-          "Only with negative probabilities",
-          "Only for infinite label sets"
+          "Always negative",
+          "Doubly stochastic under the stated step bound",
+          "Never stochastic",
+          "Always a permutation"
         ],
         "answer": 1,
-        "explanation": "A certain output has entropy zero even if the input was uncertain."
+        "explanation": "Symmetric edge exchange preserves every row sum and column sum."
       },
       {
-        "prompt": "For deterministic grouping with positive entries, KL equality holds when:",
+        "prompt": "Entropy under a doubly stochastic update",
         "choices": [
-          "All labels have the same name",
-          "There is only one sample",
-          "q_i/p_i is constant within each group",
-          "Every group has the same size"
+          "Must decrease",
+          "Is undefined",
+          "Does not decrease",
+          "Always equals zero"
         ],
         "answer": 2,
-        "explanation": "The log-sum inequality has equality when normalized within-group tables agree."
+        "explanation": "KL contraction toward uniform implies nondecreasing entropy."
+      },
+      {
+        "prompt": "A general stochastic information channel",
+        "choices": [
+          "Always increases Shannon entropy",
+          "Can never merge labels",
+          "Must conserve every individual coordinate",
+          "May decrease entropy"
+        ],
+        "answer": 3,
+        "explanation": "A channel sending all labels to one output collapses entropy to zero."
       }
     ],
     "week": 10
