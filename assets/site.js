@@ -5,7 +5,7 @@
  document.querySelectorAll('[data-complete]').forEach(box=>{const key='dig-complete-'+box.dataset.complete;box.checked=read(key,false);box.addEventListener('change',()=>save(key,box.checked));});
  const week=$('[data-week]')?.dataset.week;
  if($('.lab-form')){
-   const key='dig-lab-'+week,answers=read(key,{}),fields=[...document.querySelectorAll('textarea')],status=$('#save-status');
+   const key='dig-lab-calculus-'+week,answers=read(key,{}),fields=[...document.querySelectorAll('textarea')],status=$('#save-status');
    fields.forEach(t=>{t.value=answers[t.name]||'';t.addEventListener('input',()=>{answers[t.name]=t.value;status.textContent=save(key,answers)?'Answers saved on this device.':'Storage is unavailable; download your answers to keep them.';});});
    if(Object.values(answers).some(Boolean))status.textContent='Saved answers restored.';
    $('#clear-lab').addEventListener('click',()=>{if(!confirm('Clear the answers saved for this week on this device?'))return;fields.forEach(t=>{t.value='';delete answers[t.name];});save(key,answers);status.textContent='Answers cleared.';});
@@ -23,9 +23,9 @@
    });
  }
  if($('#quiz-form')){
-   const qs=JSON.parse($('#quiz-data').textContent),key='dig-quiz-'+week,state=read(key,{choices:{},checked:false});
+   const qs=JSON.parse($('#quiz-data').textContent),key='dig-quiz-calculus-'+week,state=read(key,{choices:{},checked:false});
    if(!state.choices)state.choices={};
-   const grade=()=>{let count=0,attempted=0;qs.forEach((q,i)=>{const v=state.choices[i],p=$('#feedback-'+i);if(v===undefined){p.className='feedback';p.textContent='Choose an answer to receive feedback.';return;}attempted++;const right=Number(v)===q.answer;if(right)count++;p.className='feedback '+(right?'correct':'incorrect');p.textContent=(right?'Correct. ':'Review. The correct answer is '+q.choices[q.answer]+'. ')+q.explanation;});$('#quiz-score').textContent=count+' of '+qs.length+' correct; '+attempted+' answered.';};
+   const grade=()=>{let count=0,attempted=0;qs.forEach((q,i)=>{const v=state.choices[i],p=$('#feedback-'+i);if(v===undefined){p.className='feedback';p.textContent='Choose an answer to receive feedback.';return;}attempted++;const right=Number(v)===q.answer;if(right)count++;p.className='feedback '+(right?'correct':'incorrect');p.textContent=((right?'Correct. ':'Review. The correct answer is '+q.choices[q.answer]+'. ')+q.explanation).replace(/\$([^$]+)\$/g,'\\($1\\)');});$('#quiz-score').textContent=count+' of '+qs.length+' correct; '+attempted+' answered.';if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([...document.querySelectorAll('.feedback')]).catch(()=>{});};
    document.querySelectorAll('#quiz-form input').forEach(r=>{const i=Number(r.name.slice(1));if(String(state.choices[i])===r.value)r.checked=true;r.addEventListener('change',()=>{state.choices[i]=Number(r.value);state.checked=false;save(key,state);$('#feedback-'+i).textContent='';$('#quiz-score').textContent='Selection saved. Check answers when ready.';});});
    $('#check-quiz').addEventListener('click',()=>{state.checked=true;save(key,state);grade();});
    $('#reset-quiz').addEventListener('click',()=>{state.choices={};state.checked=false;save(key,state);$('#quiz-form').reset();document.querySelectorAll('.feedback').forEach(p=>p.textContent='');$('#quiz-score').textContent='Quiz reset.';});
