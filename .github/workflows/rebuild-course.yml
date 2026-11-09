@@ -9,6 +9,9 @@ on:
       - ".github/workflows/rebuild-course.yml"
 permissions:
   contents: write
+concurrency:
+  group: discrete-course-rebuild
+  cancel-in-progress: true
 jobs:
   build-course:
     runs-on: ubuntu-latest
