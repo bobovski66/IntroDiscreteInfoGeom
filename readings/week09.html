@@ -13,12 +13,7 @@ methods. Each method receives a score after a round of observations. The
 algorithm should give more attention to better-performing methods, while
 retaining a valid probability distribution and avoiding an unnecessarily
 abrupt change.</p>
-<p>Earlier chapters introduced all the ingredients for such a rule.
-Scores specify a preferred direction. Relative entropy measures the cost
-of departure from the current table. Fisher geometry describes the scale
-of small changes. We will combine these ideas into an exact finite
-optimization problem, solve it algebraically, and then explain its
-connection to natural gradients.</p>
+<p>If we move all the probability to the highest-scoring method, we get the best immediate score, but we make the largest possible commitment. Suppose we want to reward good scores without moving too far from the present distribution. We can express that compromise as a calculation and ask which new distribution does best.</p>
 <h2 id="a-score-specifies-what-an-update-should-improve">A score
 specifies what an update should improve</h2>
 <p>Let <span class="math inline">\(p=(p_1,\ldots,p_k)\)</span> be
@@ -105,6 +100,7 @@ whose sum is zero. The negative first coordinate records attention
 released to the other choices.</p>
 <h2 id="why-this-table-solves-the-optimization-problem">Why this table
 solves the optimization problem</h2>
+<p>The reweighting formula is easy to use: multiply, then normalize. The more interesting question is why this particular table is the best one for the score-and-change objective. An identity involving relative entropy will answer it.</p>
 <p>The proof follows by expanding one relative entropy. From the formula
 for <span class="math inline">\(r_i\)</span>, <span
 class="math display">\[\ln r_i=\ln p_i+\eta s_i-\ln Z.\]</span>
@@ -401,9 +397,7 @@ demonstration</a> lets you compare finite reweighting steps. Begin with
 the worked three-method example, record the displacement, and then lower
 the intensity to compare <span class="math inline">\((r-p)/\eta\)</span>
 with the natural-gradient direction.</p>
-<p>We can now choose an update by an objective and explain its geometry.
-Chapter 10 asks what remains observable when distributions move through
-a network or pass through a noisy recording system.</p>
+<p>We have chosen a new distribution by an explicit objective, found an exact formula for it, and compared it with the local statistical geometry. The score tells the rule what to favor; the change penalty determines how strongly it responds.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
