@@ -12,11 +12,7 @@ a desired state, and makes a correction. Repeating a sensible correction
 can produce smooth adjustment, repeated overshooting, or growing
 instability. The size of the correction matters as much as its
 direction.</p>
-<p>Chapter 1 gave us a language for changes. In this chapter we use it
-to prescribe changes and study what repeated updates do. We will first
-solve a feedback model completely. Then we will return to population
-proportions, where the advantage of a type can depend on how common it
-is.</p>
+<p>In the previous reading, a difference told us what happened between two values. Now suppose we get to choose the difference. We might instruct a stockroom to replace part of what it lacks, or a controller to correct an error. The first question is what happens when the instruction is repeated.</p>
 <h2 id="an-update-rule-generates-a-trajectory">An update rule generates
 a trajectory</h2>
 <p>A <strong>difference equation</strong>, also called a
@@ -104,6 +100,7 @@ the fixed-point equation before dividing prevents this exceptional case
 from being lost.</p>
 <h2 id="how-corrections-can-settle-or-overshoot">How corrections can
 settle or overshoot</h2>
+<p>The first few stockroom corrections look promising. But what if a controller tries to correct more than the whole error in one step? It may cross the target. Whether that crossing is harmless depends on the size of the next error.</p>
 <p>The multiplier <span class="math inline">\(1-k\)</span> controls both
 the sign and the size of the error. A negative multiplier crosses the
 target. A multiplier whose absolute value is less than one shrinks the
@@ -207,10 +204,7 @@ class="math inline">\(0&lt;k&lt;2\)</span>. This compares whole
 trajectories, rather than comparing a single trajectory with a fixed
 point. It is an early example of contraction: a rule can systematically
 reduce the difference between states.</p>
-<p>The word eventually concerns the tail of an infinite sequence. We can
-still make it concrete by giving a tolerance and a finite step after
-which the bound holds. In later chapters, information inequalities will
-provide similar stopping estimates for probability models.</p>
+<p>The word <em>eventually</em> becomes useful when we give it a numerical meaning. Set a tolerance, such as one unit from the stockroom target, and find a step after which every error stays inside it. That is a question we can answer using ordinary powers.</p>
 <figure><img src="../assets/fig-feedback.svg" alt="Feedback errors from initial error -1/4. On the left, both magnitudes shrink and one alternates sign. On the right, an excessive correction amplifies the error; note the different vertical scale." width="381" height="153" loading="lazy"><figcaption>Feedback errors from initial error -1/4. On the left, both magnitudes shrink and one alternates sign. On the right, an excessive correction amplifies the error; note the different vertical scale.</figcaption></figure>
 <h2 id="fixed-points-are-found-before-trajectories-are-solved">Fixed
 points are found before trajectories are solved</h2>
@@ -302,9 +296,7 @@ four. This interval check is a useful way to catch reversed weights or a
 mistaken row convention.</p>
 <h2 id="turning-a-score-into-a-multiplier">Turning a score into a
 multiplier</h2>
-<p>A population multiplier must be nonnegative, and we will use strictly
-positive multipliers. Scores may be negative. We therefore state an
-explicit conversion.</p>
+<p>The payoff table gives scores, and a score can be negative. But the multiplier in our population update must be positive. Before updating the proportions, we need to turn each score into an admissible multiplier.</p>
 <p>The <strong>linear multiplier rule</strong> is <span
 class="math display">\[w_i=1+\eta f_i,\]</span> where <span
 class="math inline">\(\eta&gt;0\)</span> controls the intensity. It
@@ -440,9 +432,7 @@ href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week02.html">payo
 demonstration</a> to test the coexistence table. Keep the starting state
 fixed while changing one parameter. Then compare the signs and
 magnitudes of successive errors.</p>
-<p>With three types, a single proportion no longer specifies the state.
-Chapter 3 replaces the interval by a triangle and gives us a way to
-measure changes in several directions.</p>
+<p>For two types, one proportion determines the other. With three types, knowing one proportion leaves a choice about how the remainder is divided. We need a picture that has room for two independent changes.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
