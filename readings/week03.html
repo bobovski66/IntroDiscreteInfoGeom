@@ -13,12 +13,7 @@ responses are in the first category, a third in the second, and a sixth
 in the third. Changing one share forces at least one other share to
 change. The three numbers describe a state with two independent degrees
 of freedom.</p>
-<p>Chapter 2 studied motion on a probability interval. With three
-categories, the state space becomes a triangle. We will use a finite
-grid of possible survey compositions to develop directional differences,
-gradients, circulation, and divergence. Each operation will have a
-concrete meaning in terms of changing one response or moving a quantity
-along an edge.</p>
+<p>For two categories, choosing the share of one determines the other. The three-category survey has one more choice. Picture a survey response moving from one category to another: one count decreases, another increases, and the total stays fixed. These small moves will give us a way to explore the triangle.</p>
 <h2 id="why-probability-states-form-a-triangle">Why probability states
 form a triangle</h2>
 <p>Write <span class="math inline">\(p=(p_A,p_B,p_C)\)</span>, with
@@ -136,11 +131,7 @@ class="math inline">\((4,0,0)\)</span> only <span
 class="math inline">\(A\)</span> can donate, giving two neighbors.
 Boundary restrictions are part of the geometry, not a failure of the
 formula.</p>
-<p>These tokens represent units of composition. A token transfer through
-probability space need not describe a person physically traveling
-between locations. Chapter 4 will introduce another graph whose vertices
-are physical or categorical locations. Keeping these two meanings of a
-vertex separate will help.</p>
+<p>A token transfer changes a composition. It does not mean that a person physically travels from one place to another. Each vertex of this graph represents a whole distribution, and each edge represents one permitted change of that distribution.</p>
 <p>The lattice is also a graph: its count states are vertices and its
 legal transfers are edges. A drawing of the triangle helps us see the
 graph, but the definition does not depend on the drawing. A computer can
@@ -165,6 +156,7 @@ part of a coarse lattice. Ignoring illegal moves would change the model
 substantially, rather than introduce only a small numerical error.</p>
 <h2 id="a-directional-difference-compares-two-permitted-states">A
 directional difference compares two permitted states</h2>
+<p>We can now move between neighboring survey compositions. To compare the states, assign each one a number. The next question is how much that number changes during a single permitted move.</p>
 <p>A <strong>scalar field</strong> assigns one number to every state.
 For a first example, consider <span
 class="math display">\[C(p)=p_A^2+p_B^2+p_C^2.\]</span> This
@@ -299,11 +291,7 @@ Ties require a fixed choice rule. Because the lattice has finitely many
 states and every actual move strictly raises <span
 class="math inline">\(F\)</span>, this rule cannot revisit a state. It
 must stop after finitely many moves.</p>
-<p>The stopping state is a local maximum with respect to the permitted
-edges. For a general field, a local maximum need not be the largest
-value anywhere on the graph. For entropy on this complete token-transfer
-lattice, balancing the counts identifies the maxima; Chapter 5 explains
-why.</p>
+<p>The stopping state is a <em>local</em> maximum: none of its permitted neighboring moves raises the field. That need not be the largest value anywhere on an arbitrary graph. On this particular token-transfer lattice, try moving a token from a larger count to a smaller one and checking how the entropy changes.</p>
 <p>A reproducible ascent rule requires more than the phrase “move
 uphill.” At a state, list its legal neighbors, evaluate the scalar field
 at each, and compare the increases. Select the largest strictly positive
@@ -354,10 +342,7 @@ incoming flux.</p>
 unit leaves at every vertex. Every divergence is zero, but the
 circulation is three. Zero accumulation at a vertex can coexist with
 sustained circulation through it.</p>
-<p>Conversely, a vertex may send mass to several neighbors and receive
-little. Its divergence is positive, so its stored mass decreases. This
-is the reason for the minus sign in the continuity equation developed in
-Chapter 4.</p>
+<p>Conversely, a vertex may send more mass to its neighbors than it receives. Its outward divergence is positive, and the amount stored there decreases. The negative sign in the change of stored mass records that simple bookkeeping fact.</p>
 <p>For any chosen collection of vertices, add their divergences. Every
 edge joining two vertices in the collection contributes once positively
 and once negatively, so it cancels. Only edges crossing the boundary
@@ -449,13 +434,7 @@ class="math inline">\(T^3(p)=p\)</span> and preserves the product
 exactly. Two rules can both look cyclic while having different
 invariants. An <strong>invariant</strong> is a quantity unchanged at
 every step of the particular recurrence.</p>
-<p>Use the simplex view of the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
-explorer</a> to compare neighboring entropy values. The <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week03.html">weekly
-demonstration</a> also explores lattices and cyclic selection. Chapter 4
-turns the flux bookkeeping into a model for transporting actual
-probability among labeled locations.</p>
+<p>Use the simplex view of the operator explorer to compare the values at neighboring lattice points. Then try a few paths in the weekly demonstration. Which changes depend only on the starting and ending states, and which depend on the route?</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
