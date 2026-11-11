@@ -15,11 +15,7 @@ class="math inline">\((1/4,3/4)\)</span> have identical uncertainty, but
 they favor opposite outcomes. Entropy describes a distribution on its
 own. Comparing a changing model with a particular target requires
 another function.</p>
-<p>Relative entropy supplies a directed comparison. We will derive its
-formula from the extra surprise incurred by using one table to describe
-observations from another. Then we will use its one-step difference to
-prove that a mixing update approaches its target. This joins information
-theory to the stability questions from Chapter 2.</p>
+<p>Suppose one of the two weather models actually generates the observations. We can ask how much additional surprise we incur if we describe those observations using the other model. The answer depends on which model supplies the observations. That asymmetry is worth calculating before giving the comparison its formal name.</p>
 <h2 id="comparing-a-source-distribution-with-a-model">Comparing a source
 distribution with a model</h2>
 <p>Suppose observations follow <span class="math inline">\(p\)</span>,
@@ -144,6 +140,7 @@ lowering relative entropy as well. The reference determines the question
 being asked.</p>
 <h2 id="a-mixing-update-makes-the-target-explicit">A mixing update makes
 the target explicit</h2>
+<p>We now have a number that measures disagreement with a specified model. Consider a simple process that replaces part of the current distribution with that model at every step. Does the disagreement shrink?</p>
 <p>Fix a positive reference distribution <span
 class="math inline">\(q\)</span> and a parameter <span
 class="math inline">\(0\leq\lambda\leq1\)</span>. Define <span
@@ -419,10 +416,7 @@ href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week06.html">mixi
 demonstration</a> to compare the recorded divergence with its geometric
 bound. Keep track of the order of its arguments. Then calculate
 successive losses and verify their telescoping sum.</p>
-<p>Relative entropy gives a powerful potential, but its asymmetry and
-infinite boundary values limit its use as an ordinary distance. Chapter
-7 changes coordinates and constructs a symmetric geometry that remains
-finite at the boundary.</p>
+<p>Relative entropy can measure how a distribution approaches a chosen target, and its one-step decrease can prove convergence. But reversing the distributions changes the answer, and some boundary cases give infinity. Those features matter when we decide what kind of comparison a problem calls for.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
