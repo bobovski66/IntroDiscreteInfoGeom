@@ -15,12 +15,7 @@ class="math inline">\(0.02\)</span> both add one percentage point. The
 second change doubles the chance of a rare outcome. If probabilities
 describe measurements or competing models, equal coordinate changes need
 not represent equally substantial statistical changes.</p>
-<p>Chapter 6 compared distributions with a directed divergence. This
-chapter constructs a symmetric distance. The main idea is simple: take
-square roots of the probabilities, place the resulting vectors on a
-sphere, and measure their angular separation. The construction uses
-finite sums and elementary geometry, so we can calculate exact distances
-before developing a continuous theory of metrics.</p>
+<p>The last comparison depended on which distribution was treated as the reference. This time we want a distance that gives the same answer in either direction. Ordinary differences of coordinates are easy to calculate, but they do not reflect the relative size of a change near a rare outcome. Let's look for coordinates in which the geometry is easier to see.</p>
 <h2 id="what-an-ordinary-coordinate-distance-misses">What an ordinary
 coordinate distance misses</h2>
 <p>A Euclidean displacement from <span class="math inline">\(p\)</span>
@@ -69,6 +64,7 @@ more coordinates, the equation still defines the object and its dot
 products still make sense, even when a picture is unavailable.</p>
 <h2 id="square-roots-turn-normalization-into-a-sphere-equation">Square
 roots turn normalization into a sphere equation</h2>
+<p>The probabilities already satisfy an equation: their sum is one. The sum of the <em>squares</em> of coordinates is the familiar equation for a sphere. Taking square roots is a way to turn the first equation into the second.</p>
 <p>Map a probability vector to <span
 class="math display">\[s(p)=(2\sqrt{p_1},\ldots,2\sqrt{p_k}).\]</span>
 Its squared length is <span
@@ -162,11 +158,7 @@ close binary distributions, the arcsine-coordinate formula is often
 convenient because it directly compares their arc coordinates.</p>
 <h2 id="why-this-construction-gives-a-distance">Why this construction
 gives a distance</h2>
-<p>On a sphere, the shorter great-circle arc is a shortest route between
-its endpoints. Our points are never antipodal because their coordinates
-are nonnegative. Moreover, the shorter arc remains in the nonnegative
-region: its points can be written as positive combinations of the
-endpoint sphere vectors, as Chapter 8 will show.</p>
+<p>On a sphere, the shorter great-circle arc is a shortest route between two points. Our transformed probability vectors are never antipodal, since all their coordinates are nonnegative. The arc joining them stays in the nonnegative part of the sphere as well, so it represents valid probability distributions all along the way.</p>
 <p>A route from <span class="math inline">\(p\)</span> to <span
 class="math inline">\(q\)</span> followed by one from <span
 class="math inline">\(q\)</span> to <span
@@ -422,13 +414,7 @@ class="math inline">\(0.546874\)</span>, closer to the exact value. The
 exact arc lengths already add to <span
 class="math inline">\(\pi/6\)</span> at every such ordered
 subdivision.</p>
-<p>Use the Fisher-distance view of the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
-explorer</a> to compare these quantities. The <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week07.html">weekly
-demonstration</a> explores the spherical coordinates. Chapter 8 uses the
-exact edge lengths to ask which routes are shortest when only certain
-changes are permitted.</p>
+<p>Use the Fisher-distance view of the operator explorer to compare ordinary coordinate changes with statistical distances. In the weekly demonstration, move points on the sphere and compare an arc with its chord. Where do the two measurements differ most?</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
