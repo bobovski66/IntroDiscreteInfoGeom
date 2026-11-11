@@ -12,12 +12,7 @@ day. A mobile device can connect to one of several towers. A system can
 report one of several operating modes. In each case, we can describe
 uncertainty about its location or mode by a probability vector, then ask
 how that vector changes after one step.</p>
-<p>The edge bookkeeping from Chapter 3 gives us a local description of
-these changes: what leaves one location enters another. A stochastic
-matrix packages all the transition rules into a single table. We will
-derive the matrix update from individual contributions, recover its
-currents, and then explain how a finite collection of observations
-fluctuates around the predicted probabilities.</p>
+<p>Picture a bicycle leaving one station and arriving at another. The probability assigned to the first station decreases while the probability assigned to the second increases. A table of transition probabilities tells us how likely each move is. We will build the next distribution by adding the contributions arriving at each station.</p>
 <h2 id="what-one-transition-probability-means">What one transition
 probability means</h2>
 <p>Let the possible locations be <span
@@ -117,6 +112,7 @@ row distributions instead. Both conventions are valid when used
 consistently; mixing them changes the transition rule.</p>
 <h2 id="conservation-follows-from-column-sums">Conservation follows from
 column sums</h2>
+<p>We have calculated the probability of arriving at each destination. Before using the new distribution, check something basic: if every starting location leads somewhere, can any of the total probability be lost?</p>
 <p>The sum of all new probabilities is <span
 class="math display">\[\begin{aligned}
 \sum_i p_i^+
@@ -484,10 +480,7 @@ explorer</a> to check that the negative divergence equals each
 coordinate change. Use the <a
 href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week04.html">sampling
 demonstration</a> to compare repeated empirical distributions.</p>
-<p>So far we can describe where probability goes and how observations
-fluctuate. Chapter 5 asks what uncertainty does during those changes. It
-turns entropy from a field we can evaluate into a quantity whose
-differences we can interpret and analyze.</p>
+<p>The transition table predicts a distribution, while a finite sample produces actual counts. Those counts need not match their expectations exactly. Keeping the two separate makes it easier to say what a model predicts and what an observation can tell us.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
