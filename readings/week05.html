@@ -13,11 +13,7 @@ that reports four symbols equally often is harder to predict. Both
 devices have four labels available, but their probability distributions
 carry different amounts of uncertainty. We need a numerical function
 that depends on the probabilities themselves.</p>
-<p>Entropy provides that function. We met its formula on the probability
-lattice in Chapter 3. Here we will build its interpretation from
-surprise, connect it to counting and communication, and then apply the
-difference calculus to its values. The central question is precise: for
-a stated change of probability, how much does uncertainty change?</p>
+<p>The function we want is called <strong>entropy</strong>. We have already seen its formula as a number assigned to a probability table. To understand that number, begin with a single observed symbol and ask how surprising it would be. We can then average that surprise over the symbols a device might report.</p>
 <h2 id="why-surprise-is-measured-with-a-logarithm">Why surprise is
 measured with a logarithm</h2>
 <p>An event of probability one is unsurprising. An event of probability
@@ -141,6 +137,7 @@ bits are zero, <span class="math inline">\(3/2\)</span>, and two. The
 bound is attained only by the last distribution.</p>
 <h2 id="an-entropy-table-turns-the-field-into-a-sequence">An entropy
 table turns the field into a sequence</h2>
+<p>A whole triangle of probability tables is hard to take in at once. Start with four tokens and two categories. There are only five compositions, so we can put their entropy values in order and compare neighboring entries.</p>
 <p>Restrict to a binary lattice with four tokens. Let <span
 class="math inline">\(k\)</span> be the number assigned to <span
 class="math inline">\(A\)</span>, and define <span
@@ -330,10 +327,7 @@ recurrence being used.</p>
 <span class="math display">\[\boxed{\sum_{n=0}^{T-1}[H(p_{n+1})-H(p_n)]
 =H(p_T)-H(p_0).}\]</span> Positive and negative steps can cancel. An
 endpoint entropy change does not reveal every intermediate change.</p>
-<p>When a process always raises entropy, the summands measure the
-uncertainty gained during each step. In Chapter 6 we will use a related
-quantity that decreases toward a reference distribution, allowing
-stability to be proved by a one-step inequality.</p>
+<p>For an entropy-increasing process, each step contributes a nonnegative change. Add those changes and the intermediate entropy values cancel, leaving the total gain. This is a useful way to distinguish a property of a particular update rule from a property of entropy itself.</p>
 <h2 id="prefix-codes-connect-uncertainty-to-messages">Prefix codes
 connect uncertainty to messages</h2>
 <p>Suppose symbols are transmitted as bit strings. A <strong>prefix
@@ -432,13 +426,7 @@ the strict inequality.</p>
 surprise, attainable coding rates, and the exponential scale of sample
 multiplicities. Our discrete calculus measures how this function changes
 between probability states.</p>
-<p>Use the simplex view of the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
-explorer</a> to compare neighboring entropy values. In the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week05.html">weekly
-demonstration</a>, explore surprise and code lengths. Two different
-distributions can still have the same entropy. Chapter 6 develops a
-comparison that keeps track of a specific reference model.</p>
+<p>Use the simplex view of the operator explorer to compare neighboring entropy values. Then try the weekly demonstration with different symbol probabilities and code lengths. Can you find two different distributions with the same entropy? What does the number fail to distinguish?</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
