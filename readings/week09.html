@@ -1,378 +1,476 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 9: Discrete natural-gradient ideas and learning dynamics · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="9"><p class="eyebrow">Week 9 · Reading</p><h1>Discrete natural-gradient ideas and learning dynamics</h1><nav class="week-nav" aria-label="Week 9 resources"><a aria-current=page href="../readings/week09.html">Reading</a><a  href="../demos/week09.html">Demonstration</a><a  href="../labs/week09.html">Lab</a><a  href="../quizzes/week09.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter09.pdf">Chapter 9 PDF</a> · <a href="../textbook/latex/chapter09.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Calculate an exponential probability update.</li><li>Use exact log-odds differences to describe two-category learning.</li><li>Explain KL-penalized optimization and its local geometric interpretation.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 9 -->
-<h2 id="a-gradient-should-depend-on-the-geometry">A gradient should
-depend on the geometry</h2>
-<p>Suppose a probability distribution <span
-class="math inline">\(p=(p_1,\ldots,p_k)\)</span> describes how
-attention is divided among <span class="math inline">\(k\)</span>
-choices. A score <span class="math inline">\(s_i\)</span> says how
-attractive each choice is. Simply adding a number to one coordinate can
-destroy nonnegativity or make the coordinates sum to something other
-than one.</p>
-<p>An information-geometric update should remain in the simplex and
-measure the cost of changing probabilities. With intensity <span
-class="math inline">\(\eta&gt;0\)</span>, choose <span
-class="math inline">\(q\)</span> to maximize <span
-class="math display">\[J(q)=\eta\sum_iq_is_i-D(q\|p).\]</span> This
-rewards high average score but penalizes departure from the current
-distribution. The exact optimizer is <span
-class="math display">\[\boxed{q_i=\frac{p_i e^{\eta
-s_i}}{\sum_jp_je^{\eta s_j}}.}\]</span> The sections that follow prove
-this result using an algebraic identity involving relative entropy.</p>
-<h2 id="its-discrete-derivative">Its discrete derivative</h2>
-<p>Put <span class="math inline">\(p_{n+1}=q\)</span> and write <span
-class="math inline">\(\Delta p_n=q-p_n\)</span>. For two categories, if
-<span class="math inline">\(p=(x,1-x)\)</span> and the score difference
-is <span class="math inline">\(s_A-s_B=d\)</span>, then <span
-class="math display">\[x^+=\frac{xe^{\eta d}}{xe^{\eta d}+1-x},\qquad
-\Delta x=x^+-x.\]</span> For <span class="math inline">\(x=1/2\)</span>,
-<span class="math inline">\(d=\log2\)</span>, and <span
-class="math inline">\(\eta=1\)</span>, we get <span
-class="math inline">\(x^+=2/3\)</span> and <span
-class="math inline">\(\Delta x=1/6\)</span>. The update is a fully
-finite difference equation on probability distributions.</p>
-<p>In terms of odds <span class="math inline">\(O=x/(1-x)\)</span>, the
-same rule is even simpler: <span class="math display">\[O^+=e^{\eta
-d}O,\qquad
-\log O^+-\log O=\eta d.\]</span> Thus <strong>log odds have an exact
-constant discrete derivative</strong> when the score difference stays
-constant.</p>
-<h2 id="why-this-is-related-to-natural-gradients">Why this is related to
-natural gradients</h2>
-<p>In the interior of the simplex, the Fisher metric weighs
-displacements by <span
-class="math inline">\(\sum_i(\delta_i)^2/p_i\)</span>. For a small
-intensity <span class="math inline">\(\eta\)</span>, the exponential
-update has the first-order behavior <span
-class="math display">\[p_i^+-p_i\approx\eta p_i(s_i-\bar s),\qquad \bar
-s=\sum_jp_js_j.\]</span> This is the replicator/natural-gradient
-direction associated with a linear score potential. We can compare the
-finite step with the approximation numerically; deriving the limiting
-formula formally belongs in the companion calculus course.</p>
-<h2 id="a-useful-experiment">A useful experiment</h2>
-<p>Start with <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> and
-scores <span class="math inline">\(s=(0,1,2)\)</span>. Compute the
-exponential update for <span class="math inline">\(\eta=\log2\)</span>,
-then calculate all three differences <span
-class="math inline">\(q_i-p_i\)</span>. Verify that they sum to zero.
-Repeat for a smaller intensity and compare the changes to the
-approximate formula.</p>
-<p>This is what discrete natural-gradient dynamics should mean
-pedagogically: an exact, probability-preserving update whose geometry
-and finite changes can be understood from the first principles developed
-earlier.</p>
-<h2
-id="further-investigations-discrete-natural-gradient-ideas-and-learning-dynamics">Further
-investigations: Discrete natural-gradient ideas and learning
-dynamics</h2>
-<p>A learning rule redistributes attention among possible decisions. At
-each round, a decision receives a score, and the next probability table
-places more weight on decisions with higher scores. Exponential
-normalization provides such a rule. Its interpretation as a finite
-optimization problem follows from an exact relative-entropy
-identity.</p>
-<h2 id="multiplicative-weights">Multiplicative weights</h2>
-<p>Let <span class="math inline">\(p_i&gt;0\)</span> be current
-probabilities and let <span class="math inline">\(s_i\)</span> be scores
-assigned to the possible decisions. With intensity <span
-class="math inline">\(\eta&gt;0\)</span>, define <span
-class="math display">\[r_i=\frac{p_i e^{\eta s_i}}{Z},\qquad
-Z=\sum_jp_je^{\eta s_j}.\]</span> This is the same algebraic rule used
-for exponential selection. In learning, <span
-class="math inline">\(p\)</span> may describe attention, investment
-fractions in an abstract allocation problem, or probabilities of
-choosing experts. Scores may change from round to round. The rule is
-commonly called <strong>multiplicative weights</strong> or an
-<strong>exponential update</strong>.</p>
-<p>The score units and the intensity enter only through the product
-<span class="math inline">\(\eta s_i\)</span>. A common score shift has
-no effect. For numerical computation, replace each score by <span
-class="math inline">\(s_i-s_{\max}\)</span> before exponentiating. The
-common factor cancels and the largest exponent becomes zero, reducing
-the risk of overflow.</p>
-<div class="example" title="Updating three choices">
-<p><strong>Example. Updating three choices</strong></p>
-<p>Let <span class="math inline">\(p=(1/2,1/3,1/6)\)</span>, <span
-class="math inline">\(s=(0,1,2)\)</span>, and <span
-class="math inline">\(\eta=\ln2\)</span>. The unnormalized weights are
-<span class="math inline">\((1/2,2/3,2/3)\)</span> and <span
-class="math inline">\(Z=11/6\)</span>. The new table is <span
-class="math inline">\(r=(3/11,4/11,4/11)\)</span>. The third choice had
-the largest score but not the largest starting weight. Both enter the
-update.</p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 9: Discrete natural-gradient ideas and learning dynamics · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="9"><p class="eyebrow">Week 9 · Reading</p><h1>Discrete natural-gradient ideas and learning dynamics</h1><nav class="week-nav" aria-label="Week 9 resources"><a aria-current=page href="../readings/week09.html">Reading</a><a  href="../demos/week09.html">Demonstration</a><a  href="../labs/week09.html">Lab</a><a  href="../quizzes/week09.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter09.pdf">Chapter 9 PDF</a> · <a href="../textbook/latex/chapter09.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Calculate an exponential probability update.</li><li>Use exact log-odds differences to describe two-category learning.</li><li>Explain KL-penalized optimization and its local geometric interpretation.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#a-score-specifies-what-an-update-should-improve">A score
+specifies what an update should improve</a></li><li><a href="#reweight-then-normalize">Reweight, then normalize</a></li><li><a href="#why-this-table-solves-the-optimization-problem">Why this table
+solves the optimization problem</a></li><li><a href="#what-the-update-guarantees-about-scores">What the update
+guarantees about scores</a></li><li><a href="#odds-reveal-an-exact-additive-update">Odds reveal an exact
+additive update</a></li><li><a href="#the-geometry-determines-a-local-direction">The geometry
+determines a local direction</a></li><li><a href="#comparing-the-finite-update-with-the-local-direction">Comparing
+the finite update with the local direction</a></li><li><a href="#intensity-support-and-stable-computation">Intensity, support,
+and stable computation</a></li><li><a href="#repeated-rounds-accumulate-evidence">Repeated rounds accumulate
+evidence</a></li><li><a href="#bayesian-updating-is-a-particular-reweighting-rule">Bayesian
+updating is a particular reweighting rule</a></li><li><a href="#seeking-uncertainty-is-another-objective">Seeking uncertainty is
+another objective</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>Suppose an algorithm divides attention among three prediction
+methods. Each method receives a score after a round of observations. The
+algorithm should give more attention to better-performing methods, while
+retaining a valid probability distribution and avoiding an unnecessarily
+abrupt change.</p>
+<p>Earlier chapters introduced all the ingredients for such a rule.
+Scores specify a preferred direction. Relative entropy measures the cost
+of departure from the current table. Fisher geometry describes the scale
+of small changes. We will combine these ideas into an exact finite
+optimization problem, solve it algebraically, and then explain its
+connection to natural gradients.</p>
+<h2 id="a-score-specifies-what-an-update-should-improve">A score
+specifies what an update should improve</h2>
+<p>Let <span class="math inline">\(p=(p_1,\ldots,p_k)\)</span> be
+current probabilities, initially with every <span
+class="math inline">\(p_i&gt;0\)</span>. Let <span
+class="math inline">\(s_i\)</span> be the score of choice <span
+class="math inline">\(i\)</span>. If a proposed new table is <span
+class="math inline">\(q\)</span>, its average score is <span
+class="math display">\[q\cdot s=\sum_i q_i s_i.\]</span> This is a
+linear function of <span class="math inline">\(q\)</span>. Without any
+restriction on change, maximizing it would place all probability on a
+highest-scoring choice.</p>
+<p>That may be too abrupt. Scores may be noisy, and the current table
+may encode accumulated evidence. Introduce a positive intensity <span
+class="math inline">\(\eta\)</span> and maximize <span
+class="math display">\[\boxed{J(q)=\eta\,q\cdot s-D(q\|p)}\]</span> over
+probability vectors <span class="math inline">\(q\)</span>.</p>
+<p>The score term rewards improvement; the relative-entropy term charges
+for changing the current table. Larger <span
+class="math inline">\(\eta\)</span> gives scores greater importance
+relative to that charge. The product <span class="math inline">\(\eta
+s_i\)</span> must be dimensionless, so score units and intensity should
+be chosen consistently.</p>
+<p>The direction of KL is part of this objective: the candidate <span
+class="math inline">\(q\)</span> supplies the averaging weights, and the
+old state <span class="math inline">\(p\)</span> is the reference.
+Reversing those arguments defines a different problem.</p>
+<p>A score can represent a reward or the negative of a loss. If <span
+class="math inline">\(s_i\)</span> is an error count, directly favoring
+larger <span class="math inline">\(s_i\)</span> would reward worse
+predictions. To discourage loss <span
+class="math inline">\(\ell_i\)</span>, use <span
+class="math inline">\(s_i=-\ell_i\)</span>, giving multipliers <span
+class="math inline">\(e^{-\eta\ell_i}\)</span>. All the algebra remains
+valid; the interpretation is determined by which values are
+desirable.</p>
+<p>The current probabilities matter even when scores are fixed. They can
+represent past evidence, an initial allocation, or the frequency with
+which choices are used. The update is therefore a response to both the
+prior state and the new score, rather than a fresh ranking that discards
+history.</p>
+<p>A tie in scores illustrates this clearly. If <span
+class="math inline">\(s_i=s_j\)</span>, then <span
+class="math inline">\(r_i/r_j=p_i/p_j\)</span>: their relative weight is
+unchanged. If every score is equal, the whole table remains unchanged.
+This provides a quick consistency check on both the formula and a
+numerical implementation.</p>
+<p>The objective also explains the role of the intensity. At very small
+intensity, the departure penalty dominates and the optimizer remains
+close to <span class="math inline">\(p\)</span>. At a large intensity,
+distinctions among scores matter more. Exact probabilities remain
+nonnegative at every finite intensity, but numerical underflow can make
+a very small weight appear zero. That computational artifact should be
+distinguished from the support behavior of the exact recurrence.</p>
+<h2 id="reweight-then-normalize">Reweight, then normalize</h2>
+<p>The optimizer will be <span
+class="math display">\[\boxed{r_i=\frac{p_i e^{\eta s_i}}{Z},\qquad
+Z=\sum_j p_j e^{\eta s_j}.}\]</span> First multiply each current
+probability by a positive exponential score factor. Then normalize the
+resulting weights. This is called an <strong>exponential update</strong>
+or a <strong>multiplicative-weights update</strong>.</p>
+<p>Every new entry is positive and the total is one. The rule is the
+same normalized multiplication used in population selection, now
+interpreted as a learning step.</p>
+<div class="example"
+title="Redistributing attention among three methods">
+<p><strong>Example. Redistributing attention among three
+methods</strong></p>
+<p>Take <span class="math inline">\(p=(1/2,1/3,1/6)\)</span>, scores
+<span class="math inline">\(s=(0,1,2)\)</span>, and <span
+class="math inline">\(\eta=\ln2\)</span>. The multipliers are <span
+class="math inline">\((1,2,4)\)</span>. Thus <span
+class="math display">\[Z=\frac12+\frac23+\frac23=\frac{11}6,\qquad
+r=\left(\frac3{11},\frac4{11},\frac4{11}\right).\]</span> The third
+method has the highest score but starts with the smallest probability.
+Its updated probability ties the second method because its larger
+multiplier compensates for its smaller starting weight.</p>
 </div>
-<h2 id="an-exact-optimization-identity">An exact optimization
-identity</h2>
-<p>Suppose we seek a new table <span class="math inline">\(q\)</span>
-that balances a high average score against changing the current table
-too much. One objective is <span
-class="math display">\[J(q)=\eta\sum_iq_is_i-D(q\|p).\]</span> The first
-term rewards the average score under <span
-class="math inline">\(q\)</span>. The second penalizes departure from
-<span class="math inline">\(p\)</span>. Larger <span
-class="math inline">\(\eta\)</span> gives the score term more importance
-relative to the penalty.</p>
-<p>From the update formula, <span class="math inline">\(\ln r_i=\ln
-p_i+\eta s_i-\ln Z\)</span>. Substitute this into <span
-class="math inline">\(D(q\|r)\)</span>: <span
-class="math display">\[D(q\|r)=D(q\|p)-\eta\sum_iq_is_i+\ln Z.\]</span>
-Rearranging gives <span class="math display">\[J(q)=\ln
-Z-D(q\|r).\]</span> Gibbs’ inequality now proves that <span
-class="math inline">\(J\)</span> is uniquely maximized at <span
-class="math inline">\(q=r\)</span>, with value <span
-class="math inline">\(\ln Z\)</span>. This is a complete solution of the
-finite optimization problem. It does not require searching every
-candidate table or taking a derivative.</p>
-<div class="proposition"
-title="The exponential update solves a KL-penalized problem">
-<p><strong>Proposition. The exponential update solves a KL-penalized
-problem</strong></p>
-<p>For a positive current table <span class="math inline">\(p\)</span>,
-finite scores, and positive intensity, the normalized exponential table
-is the unique maximizer of <span class="math inline">\(\eta q\cdot
-s-D(q\|p)\)</span> over all probability vectors <span
-class="math inline">\(q\)</span>.</p>
-</div>
-<p>If some current probabilities vanish, a finite penalty permits only
-tables supported on those existing labels. The same proof works on that
-support. To allow a previously absent choice to reappear, one can first
-mix <span class="math inline">\(p\)</span> with a positive reference
-table and then apply the update. That is an additional modeling
-operation.</p>
-<div class="example" title="Comparing a candidate with the optimizer">
-<p><strong>Example. Comparing a candidate with the
+<figure><img src="../assets/fig-learning.svg" alt="An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11)." width="356" height="161" loading="lazy"><figcaption>An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11).</figcaption></figure>
+<p>Subtracting the old table gives the discrete derivative <span
+class="math display">\[\Delta p=r-p.\]</span> For the example, its
+coordinates are <span class="math inline">\((-5/22,1/33,13/66)\)</span>,
+whose sum is zero. The negative first coordinate records attention
+released to the other choices.</p>
+<h2 id="why-this-table-solves-the-optimization-problem">Why this table
+solves the optimization problem</h2>
+<p>The proof follows by expanding one relative entropy. From the formula
+for <span class="math inline">\(r_i\)</span>, <span
+class="math display">\[\ln r_i=\ln p_i+\eta s_i-\ln Z.\]</span>
+Substitute into <span class="math inline">\(D(q\|r)\)</span>: <span
+class="math display">\[\begin{aligned}
+D(q\|r)
+&amp;=\sum_i q_i(\ln q_i-\ln r_i)\\
+&amp;=D(q\|p)-\eta\sum_iq_i s_i+\ln Z.
+\end{aligned}\]</span> The last term is <span class="math inline">\(\ln
+Z\)</span> because <span class="math inline">\(\sum_iq_i=1\)</span>.
+Rearranging gives <span class="math display">\[\boxed{J(q)=\ln
+Z-D(q\|r).}\]</span> Gibbs’ inequality makes the right side at most
+<span class="math inline">\(\ln Z\)</span>, with equality exactly when
+<span class="math inline">\(q=r\)</span>. Therefore <span
+class="math inline">\(r\)</span> is the unique optimizer.</p>
+<p>The identity does more than identify a best table. It measures the
+loss from any candidate: <span
+class="math display">\[J(r)-J(q)=D(q\|r).\]</span> A candidate’s
+directed discrepancy from the optimizer is exactly its objective
+shortfall.</p>
+<div class="example"
+title="Comparing an unchanged state with the optimizer">
+<p><strong>Example. Comparing an unchanged state with the
 optimizer</strong></p>
-<p>Take <span class="math inline">\(p=(1/2,1/2)\)</span>, scores <span
-class="math inline">\((0,1)\)</span>, and <span
-class="math inline">\(\eta=\ln3\)</span>. Then <span
-class="math inline">\(r=(1/4,3/4)\)</span> and <span
-class="math inline">\(Z=2\)</span>. The objective at <span
-class="math inline">\(r\)</span> is <span
-class="math inline">\(\ln2\)</span>. At the unchanged table <span
-class="math inline">\(p\)</span>, it is <span
-class="math inline">\((1/2)\ln3\)</span>. Their difference is <span
-class="math inline">\(D(p\|r)=\ln2-(1/2)\ln3\approx0.1438\)</span>,
-exactly as the identity predicts.</p>
-</div>
-<h2 id="fixed-scores-improve-their-own-average">Fixed scores improve
-their own average</h2>
-<p>Let the scores be fixed numbers <span
-class="math inline">\(c_i\)</span> and apply an exponential update. The
-average score changes from <span class="math inline">\(\sum_i
-p_ic_i\)</span> to <span class="math inline">\(\sum_i r_ic_i\)</span>.
-Subtracting gives <span class="math display">\[\sum_i r_ic_i-\sum_i
-p_ic_i
-=\frac{\sum_i p_ic_ie^{\eta c_i}-(\sum_i p_ic_i)(\sum_jp_je^{\eta
-c_j})}{Z}.\]</span> The numerator can be rearranged symmetrically: <span
-class="math display">\[\frac12\sum_{i,j}p_ip_j(c_i-c_j)(e^{\eta
-c_i}-e^{\eta c_j}).\]</span> Every term is nonnegative because the
-exponential is increasing. Therefore the fixed-score average never
-decreases. Equality holds precisely when all scores on the current
-support are equal.</p>
-<p>This proof compares the same score table before and after the update.
-If the scores are recomputed from the state, the next table may be
-evaluated by different numbers, so this conclusion does not
-automatically apply to the recomputed average. The cyclic examples make
-that dependence concrete.</p>
-<p>Repeated fixed-score updates have the explicit form <span
-class="math display">\[p_{i,t}=\frac{p_{i,0}e^{t\eta
-c_i}}{\sum_jp_{j,0}e^{t\eta c_j}}.\]</span> If one available choice has
-the uniquely largest score, its probability approaches one. If several
-available choices tie for largest score, their mutual ratios stay at
-their initial values while lower-scoring choices fade.</p>
-<figure><img src="../assets/fig-learning.svg" alt="An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11)." loading="lazy"><figcaption>An exponential update of (1/2,1/3,1/6) with scores (0,1,2) and intensity ln 2 gives (3/11,4/11,4/11).</figcaption></figure>
-<h2 id="finite-rounds-and-accumulated-scores">Finite rounds and
-accumulated scores</h2>
-<p>Suppose round <span class="math inline">\(t\)</span> assigns scores
-<span class="math inline">\(s_{i,t}\)</span>. Repeating the
-multiplicative rule gives <span
-class="math display">\[p_{i,T}=\frac{p_{i,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{i,t}\bigr)}{
-\sum_jp_{j,0}\exp\bigl(\eta\sum_{t=0}^{T-1}s_{j,t}\bigr)}.\]</span> All
-intervening normalizing constants cancel. If the score sequence is
-specified in advance, only the accumulated scores determine the final
-distribution. Intermediate distributions still depend on their order.
-When scores respond to decisions made during the run, changing the order
-can also change the scores themselves.</p>
-<div class="example" title="Two rounds of evidence">
-<p><strong>Example. Two rounds of evidence</strong></p>
-<p>Start with equal probabilities on three hypotheses. Two observations
-have likelihood tables proportional to <span
-class="math inline">\((2,1,1)\)</span> and <span
-class="math inline">\((1,3,1)\)</span>. Multiplication gives posterior
-weights <span class="math inline">\((2,3,1)\)</span>, hence
-probabilities <span class="math inline">\((1/3,1/2,1/6)\)</span>. Taking
-scores to be logarithms of the likelihoods and setting <span
-class="math inline">\(\eta=1\)</span> makes each Bayesian reweighting an
-exponential update.</p>
-</div>
-<h2 id="moving-deliberately-toward-higher-entropy">Moving deliberately
-toward higher entropy</h2>
-<p>Let <span class="math inline">\(u\)</span> be uniform and choose
-<span class="math inline">\(0&lt;\lambda\leq1\)</span>. The mixture rule
-<span class="math inline">\(p^+=(1-\lambda)p+\lambda u\)</span> raises
-entropy. Indeed, concavity gives <span
-class="math display">\[H(p^+)\geq(1-\lambda)H(p)+\lambda H(u)\geq
-H(p).\]</span> The second inequality uses the maximality of uniform
-entropy. Relative entropy to uniform contracts at the same time because
-<span class="math inline">\(D(p\|u)=\ln k-H(p)\)</span> and the mixture
-admits direct bounds. This is a finite entropy-seeking rule with a
-transparent interpretation: each round replaces a fixed fraction of the
-current table with a uniform allocation.</p>
-<p>The geometric course connection is that the penalty <span
-class="math inline">\(D(q\|p)\)</span> measures change using probability
-tables themselves, while the scores choose a preferred direction. The
-exact optimizer supplies a useful finite update. Its relationship with
-infinitesimal gradient methods belongs to a later course; the finite
-identity already explains the present rule completely.</p>
-<h2 id="quantifying-what-an-update-has-gained">Quantifying what an
-update has gained</h2>
-<p>The exact optimization identity gives more than the optimizer.
-Compare its objective with that of keeping the current table <span
-class="math inline">\(p\)</span>. Since <span
-class="math inline">\(D(p\|p)=0\)</span>, the old objective is <span
-class="math inline">\(J(p)=\eta p\cdot s\)</span>. The gain is <span
-class="math display">\[J(r)-J(p)=\ln Z-\eta p\cdot s=D(p\|r).\]</span>
-Thus the improvement is itself a directed relative entropy. Comparing
-the new objective expression <span class="math inline">\(J(r)=\eta
-r\cdot s-D(r\|p)\)</span> with the old one gives the further identity
-<span class="math display">\[\eta(r-p)\cdot s=D(r\|p)+D(p\|r).\]</span>
-Both terms on the right are nonnegative. For a single update, the
-average of the scores used in that update must improve, unless it stays
-unchanged. The two directions of KL appear together because the
-calculation compares the tables in both roles.</p>
-<div class="example" title="Both directed costs in a binary step">
-<p><strong>Example. Both directed costs in a binary step</strong></p>
 <p>For <span class="math inline">\(p=(1/2,1/2)\)</span>, scores <span
 class="math inline">\((0,1)\)</span>, and <span
 class="math inline">\(\eta=\ln3\)</span>, the update is <span
-class="math inline">\(r=(1/4,3/4)\)</span>. Its average score rises by
-<span class="math inline">\(1/4\)</span>. Multiplying by <span
-class="math inline">\(\ln3\)</span> gives approximately <span
-class="math inline">\(0.2747\)</span>. The two divergences are
-approximately <span class="math inline">\(0.1308\)</span> and <span
-class="math inline">\(0.1438\)</span>, and their sum is the same value.
-The identity checks the update and clarifies the contribution of each
-directed discrepancy.</p>
+class="math inline">\(r=(1/4,3/4)\)</span> and <span
+class="math inline">\(Z=2\)</span>. The maximum objective is <span
+class="math inline">\(\ln2\)</span>. At the unchanged table, <span
+class="math display">\[J(p)=\frac12\ln3.\]</span> Their difference is
+<span class="math inline">\(\ln2-\tfrac12\ln3=\tfrac12\ln(4/3)\)</span>,
+equal to <span class="math inline">\(D(p\|r)\)</span>.</p>
 </div>
-<h2 id="how-concentrated-can-an-update-become">How concentrated can an
-update become?</h2>
+<p>The optimizer ranges over all probability vectors, including boundary
+candidates. The problem concerns a finite-step update on a finite label
+set; the set of possible real-valued probability vectors is still
+continuous. If candidates must belong to a token lattice, the exact
+optimizer may be unavailable, and the identity can instead compare the
+permitted candidates.</p>
+<h2 id="what-the-update-guarantees-about-scores">What the update
+guarantees about scores</h2>
+<p>Because <span class="math inline">\(p\)</span> itself is an available
+candidate and <span class="math inline">\(D(p\|p)=0\)</span>, <span
+class="math display">\[\eta\,r\cdot s-D(r\|p)\geq\eta\,p\cdot
+s.\]</span> Hence <span class="math display">\[\boxed{\eta(r-p)\cdot
+s\geq D(r\|p)\geq0.}\]</span> The new table has at least as large an
+average under the scores used to choose the update. When those scores
+differ on the positive support, the table changes, the divergence is
+positive, and the average strictly improves.</p>
+<p>This is a statement about a <strong>fixed score vector during the
+step</strong>. If scores are recomputed from the new state, the next
+vector of scores may differ. Improving the old average does not
+automatically improve an average evaluated under new scores. Cyclic
+interactions from Chapter 3 are a useful reminder of this
+distinction.</p>
+<p>For the three-method example, the average rises from <span
+class="math inline">\(2/3\)</span> to <span
+class="math inline">\(12/11\)</span>. The one-step improvement is <span
+class="math inline">\(14/33\)</span>. Repeatedly using the same scores
+keeps favoring the same methods. A learning problem with new
+observations at each round generally supplies changing scores.</p>
+<h2 id="odds-reveal-an-exact-additive-update">Odds reveal an exact
+additive update</h2>
+<p>For two positive coordinates, the common normalization cancels: <span
+class="math display">\[\frac{r_i}{r_j}=\frac{p_i}{p_j}e^{\eta(s_i-s_j)}.\]</span>
+Taking logarithms yields <span
+class="math display">\[\boxed{\ln\frac{r_i}{r_j}-\ln\frac{p_i}{p_j}
+=\eta(s_i-s_j).}\]</span> Relative log weights have an exact finite
+difference equal to the score gap times the intensity.</p>
+<p>For binary choices with <span
+class="math inline">\(p=(x,1-x)\)</span> and <span
+class="math inline">\(d=s_A-s_B\)</span>, <span
+class="math display">\[x^+=\frac{xe^{\eta d}}{xe^{\eta d}+1-x}.\]</span>
+At <span class="math inline">\(x=1/2\)</span>, <span
+class="math inline">\(d=\ln2\)</span>, and <span
+class="math inline">\(\eta=1\)</span>, the next value is <span
+class="math inline">\(2/3\)</span>. The proportion changes by <span
+class="math inline">\(1/6\)</span>, while the log odds change by <span
+class="math inline">\(\ln2\)</span>.</p>
+<p>This is the odds simplification from Chapter 1 expressed on a
+logarithmic scale. Repeated multiplication has become accumulated
+addition.</p>
+<h2 id="the-geometry-determines-a-local-direction">The geometry
+determines a local direction</h2>
+<p>Why is the update connected with a <strong>natural gradient</strong>?
+An ordinary gradient chooses steepness using ordinary Euclidean length.
+A natural gradient uses the statistical length supplied by the Fisher
+metric. We can derive the direction by completing a square, without
+differentiating a function.</p>
+<p>Consider a small displacement <span
+class="math inline">\(\delta\)</span> with <span
+class="math inline">\(\sum_i\delta_i=0\)</span>. Approximate the change
+penalty using the Fisher form from Chapter 7: <span
+class="math display">\[D(p+\delta\|p)\approx\frac12\sum_i\frac{\delta_i^2}{p_i}.\]</span>
+The part of the objective that depends on the displacement is
+approximately <span class="math display">\[Q(\delta)=\eta\sum_i\delta_i
+s_i-\frac12\sum_i\frac{\delta_i^2}{p_i}.\]</span></p>
+<p>Let <span class="math inline">\(\bar s=\sum_i p_i s_i\)</span>. Since
+<span class="math inline">\(\sum_i\delta_i=0\)</span>, replacing <span
+class="math inline">\(s_i\)</span> by <span
+class="math inline">\(s_i-\bar s\)</span> does not change the linear
+term. Completing the square gives <span
+class="math display">\[\begin{aligned}
+Q(\delta)
+&amp;=\frac{\eta^2}{2}\sum_i p_i(s_i-\bar s)^2\\
+&amp;\quad-\frac12\sum_i
+\frac{[\delta_i-\eta p_i(s_i-\bar s)]^2}{p_i}.
+\end{aligned}\]</span> The second sum is nonnegative. It is zero exactly
+at <span class="math display">\[\boxed{\delta_i=\eta p_i(s_i-\bar
+s).}\]</span> These coordinates add to zero, so the proposed
+displacement satisfies the mass constraint.</p>
+<p>Thus <span class="math display">\[v_i=p_i(s_i-\bar s)\]</span> is the
+Fisher natural-gradient direction for a linear score function. The
+factor <span class="math inline">\(p_i\)</span> reflects the local
+statistical geometry. The subtraction of the mean score enforces
+conservation of total probability.</p>
+<p>A large step <span class="math inline">\(p+\eta v\)</span> may
+acquire negative entries. This local quadratic calculation therefore
+does not replace the exact finite update. It explains its small-step
+direction.</p>
+<p>The same direction can be characterized by a fixed statistical
+movement budget. Suppose <span
+class="math inline">\(\sum_i\delta_i=0\)</span> and <span
+class="math inline">\(g_p(\delta,\delta)\leq\varepsilon^2\)</span>. The
+score improvement is <span class="math display">\[\sum_i\delta_i s_i
+=\sum_i\frac{\delta_i}{\sqrt{p_i}}\sqrt{p_i}(s_i-\bar s).\]</span>
+Cauchy–Schwarz bounds it by <span
+class="math display">\[\varepsilon\sqrt{\sum_i p_i(s_i-\bar
+s)^2}.\]</span> Equality is attained when <span
+class="math inline">\(\delta_i\)</span> is a positive multiple of <span
+class="math inline">\(p_i(s_i-\bar s)\)</span>, unless all scores are
+equal. The sum-zero constraint is satisfied by that vector.</p>
+<p>Thus the Fisher natural gradient identifies the direction of greatest
+score increase for a specified small statistical budget. The
+completed-square calculation chooses a step along that direction by
+trading gain against a quadratic cost. The exact exponential
+optimization uses the full KL cost instead of its local quadratic
+approximation.</p>
+<p>This interpretation makes the geometry operational. A rare coordinate
+is expensive to change by a fixed absolute amount because its squared
+displacement is divided by a small <span
+class="math inline">\(p_i\)</span>. The maximizing direction adjusts
+changes to that cost while also preserving total probability. Steepness
+is meaningful only after the measure of movement has been chosen.</p>
+<h2 id="comparing-the-finite-update-with-the-local-direction">Comparing
+the finite update with the local direction</h2>
+<p>For small <span class="math inline">\(\eta\)</span>, the exponential
+satisfies <span class="math inline">\(e^{\eta s_i}\approx1+\eta
+s_i\)</span>. Its normalizing factor is approximately <span
+class="math inline">\(1+\eta\bar s\)</span>. Dividing and retaining
+first-order changes gives <span
+class="math display">\[r_i-p_i\approx\eta p_i(s_i-\bar s).\]</span> The
+same direction emerges from the exact update and from the local
+quadratic optimization.</p>
+<p>For <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> and <span
+class="math inline">\(s=(0,1,2)\)</span>, the mean is <span
+class="math inline">\(2/3\)</span> and <span
+class="math display">\[v=\left(-\frac13,\frac19,\frac29\right).\]</span>
+For a small intensity, the change should be close to <span
+class="math inline">\(\eta v\)</span>. As intensity grows, the exact
+normalization accounts for finite effects that this first-order
+approximation omits.</p>
+<p>The relation is also the algebra behind the <strong>replicator
+direction</strong> in population dynamics: a type gains share when its
+score exceeds the population average. The present course studies the
+exact finite recurrence. The companion calculus course develops the
+limiting differential equation.</p>
+<h2 id="intensity-support-and-stable-computation">Intensity, support,
+and stable computation</h2>
+<p>Adding a common number <span class="math inline">\(C\)</span> to all
+scores multiplies every unnormalized weight by <span
+class="math inline">\(e^{\eta C}\)</span>, which cancels. Multiplying
+all scores by a positive number rescales the intensity. Only score
+differences affect the normalized result.</p>
 <p>Let <span class="math inline">\(s_{\min}\)</span> and <span
 class="math inline">\(s_{\max}\)</span> be the smallest and largest
-scores on the support of <span class="math inline">\(p\)</span>. Since
-<span class="math inline">\(Z\)</span> is a weighted average of their
+scores, and let <span
+class="math inline">\(R=s_{\max}-s_{\min}\)</span>. Since <span
+class="math inline">\(Z\)</span> is a weighted average of the
 exponentials, <span class="math display">\[e^{\eta s_{\min}}\leq Z\leq
-e^{\eta s_{\max}}.\]</span> For any two available labels, <span
-class="math inline">\(r_i/r_j=(p_i/p_j)e^{\eta(s_i-s_j)}\)</span>. This
-ratio provides a direct way to understand intensity: increasing <span
-class="math inline">\(\eta\)</span> magnifies score differences while
-preserving the contribution of the starting ratios.</p>
-<p>For a uniquely highest fixed score at label <span
-class="math inline">\(m\)</span>, divide the fixed-score solution’s
-numerator and denominator by <span class="math inline">\(e^{t\eta
-c_m}\)</span>. Every other contribution contains <span
-class="math inline">\(e^{-t\eta(c_m-c_j)}\)</span>, which approaches
-zero. The leading probability therefore approaches one. If several
-labels tie, divide by their common leading factor instead. Their initial
-weights remain in the denominator and determine the final ratios within
-the tied set.</p>
-<h2 id="updating-from-likelihoods">Updating from likelihoods</h2>
-<p>Suppose a hypothesis label <span class="math inline">\(i\)</span> has
-prior probability <span class="math inline">\(p_i\)</span>, and an
-observation <span class="math inline">\(y\)</span> has conditional
-likelihood <span class="math inline">\(L_i=P(y\mid i)\)</span>. The
-joint probability of hypothesis and observation is <span
-class="math inline">\(p_iL_i\)</span>. Adding over hypotheses gives
-<span class="math inline">\(P(y)=\sum_i p_iL_i\)</span>. Conditional
-probability then gives <span class="math display">\[P(i\mid
-y)=\frac{p_iL_i}{\sum_jp_jL_j}.\]</span> This is Bayes’ rule for a
-finite hypothesis set. If all likelihoods are positive, set <span
-class="math inline">\(s_i=\ln L_i\)</span> and <span
-class="math inline">\(\eta=1\)</span> to obtain the exponential update
-exactly.</p>
-<div class="example" title="Posterior odds from one observation">
-<p><strong>Example. Posterior odds from one observation</strong></p>
-<p>Two hypotheses have prior probabilities <span
-class="math inline">\(1/3\)</span> and <span
-class="math inline">\(2/3\)</span>. A positive test result has
-likelihoods <span class="math inline">\(3/4\)</span> and <span
-class="math inline">\(1/4\)</span> under the hypotheses. The
-unnormalized posterior weights are <span
-class="math inline">\(1/4\)</span> and <span
-class="math inline">\(1/6\)</span>, with total <span
-class="math inline">\(5/12\)</span>. The posterior is <span
-class="math inline">\((3/5,2/5)\)</span>. Prior odds <span
-class="math inline">\(1/2\)</span> have been multiplied by likelihood
-ratio <span class="math inline">\(3\)</span>, producing posterior odds
-<span class="math inline">\(3/2\)</span>.</p>
-</div>
-<p>For several observations, multiplication of likelihoods is justified
-when they are conditionally independent given the hypothesis. The
-condition concerns independence within each hypothesis model. Without
-it, a joint likelihood or sequential conditional likelihoods must
-replace the simple product.</p>
+e^{\eta s_{\max}}.\]</span> It follows that <span
+class="math display">\[e^{-\eta R}\leq\frac{r_i}{p_i}\leq e^{\eta
+R}.\]</span> This gives a finite bound on relative reweighting. A small
+product <span class="math inline">\(\eta R\)</span> limits how
+dramatically one step can change each positive coordinate.</p>
+<p>For computation, subtract <span
+class="math inline">\(s_{\max}\)</span> before exponentiating. The
+update becomes <span class="math display">\[r_i=\frac{p_i
+e^{\eta(s_i-s_{\max})}}
+{\sum_jp_j e^{\eta(s_j-s_{\max})}}.\]</span> The largest exponent is now
+zero, reducing overflow risk without changing the answer.</p>
+<p>If a current coordinate is zero, multiplicative updating keeps it
+zero. The optimization explanation agrees: a candidate assigning
+positive mass there would have infinite <span
+class="math inline">\(D(q\|p)\)</span>. To reopen missing choices, one
+can first mix with a positive reference table. That is an additional
+operation with a clear interpretation.</p>
+<p>A finite update should be evaluated at the scale at which its
+assumptions apply. If a score summarizes one new batch of observations,
+using that score repeatedly without receiving new data would count the
+same evidence more than once in a Bayesian interpretation. In a
+fixed-payoff population model, repeated use may be exactly what the
+model intends. The formula alone does not settle this distinction.</p>
+<p>It is also useful to separate the score used for an update from the
+score used to evaluate its eventual performance. The one-step
+improvement inequality is exact for the supplied vector. It does not
+guarantee that a prediction method will perform better on the next
+unseen batch. Such a claim would need assumptions relating future
+observations to current scores.</p>
+<p>When comparing update intensities experimentally, keep the score
+vector and current distribution fixed at first. Compare <span
+class="math inline">\(\Delta p\)</span>, the new average score, and
+<span class="math inline">\(D(r\|p)\)</span>. These measurements expose
+how a larger response trades greater score improvement against greater
+movement. After that controlled comparison, allow scores to vary across
+rounds.</p>
+<h2 id="repeated-rounds-accumulate-evidence">Repeated rounds accumulate
+evidence</h2>
+<p>For a specified score sequence <span
+class="math inline">\(s_{i,n}\)</span> and constant intensity, <span
+class="math display">\[p_{i,T}=
+\frac{p_{i,0}\exp\left(\eta\sum_{n=0}^{T-1}s_{i,n}\right)}
+{\sum_jp_{j,0}\exp\left(\eta\sum_{n=0}^{T-1}s_{j,n}\right)}.\]</span>
+Each round multiplies the previous weights by another exponential. All
+intermediate normalizing factors cancel in the final ratio.</p>
+<p>If scores are fixed at <span class="math inline">\(c_i\)</span>, this
+reduces to <span class="math display">\[p_{i,T}=\frac{p_{i,0}e^{T\eta
+c_i}}
+{\sum_jp_{j,0}e^{T\eta c_j}}.\]</span> A uniquely highest-scoring
+available choice approaches probability one. Tied leaders retain their
+initial ratios while lower-scoring choices fade. Finite positive
+multipliers preserve positive coordinates at every finite time, even
+when their limiting values are zero.</p>
+<p>If score vectors are supplied independently of the evolving state,
+their order does not change the final accumulated scores. Intermediate
+states can still differ. When scores depend on the state, reordering
+rounds may change the scores themselves, so this order-independence
+conclusion no longer follows.</p>
+<h2 id="bayesian-updating-is-a-particular-reweighting-rule">Bayesian
+updating is a particular reweighting rule</h2>
+<p>Suppose <span class="math inline">\(p_i\)</span> is a current
+probability for hypothesis <span class="math inline">\(i\)</span>, and
+an observation has likelihood <span
+class="math inline">\(L_i&gt;0\)</span> under that hypothesis. Bayes’
+rule gives <span
+class="math display">\[r_i=\frac{p_iL_i}{\sum_jp_jL_j}.\]</span> Setting
+<span class="math inline">\(s_i=\ln L_i\)</span> and <span
+class="math inline">\(\eta=1\)</span> turns this into the exponential
+update. Likelihood is the probability of the observation under a
+hypothesis; it is not the hypothesis’s prior probability.</p>
+<p>Start with equal probabilities for three hypotheses. One observation
+has likelihoods <span class="math inline">\((0.8,0.4,0.4)\)</span>,
+proportional to <span class="math inline">\((2,1,1)\)</span>. A second
+conditionally independent observation has likelihoods <span
+class="math inline">\((0.25,0.75,0.25)\)</span>, proportional to <span
+class="math inline">\((1,3,1)\)</span>. Multiplying gives weights
+proportional to <span class="math inline">\((2,3,1)\)</span>, hence
+posterior probabilities <span
+class="math inline">\((1/3,1/2,1/6)\)</span>.</p>
+<p>The example connects relative growth, accumulated log evidence, and
+learning within the same normalization formula. The interpretation
+depends on what the weights and scores represent.</p>
+<p>Conditional independence is the assumption that allows the
+likelihoods of the two observations to multiply once a hypothesis is
+fixed. Without it, use the second observation’s conditional likelihood
+given both the hypothesis and the first observation. Bayes’ rule still
+reweights, but the table of multipliers may change.</p>
+<p>A zero likelihood has a direct meaning: the hypothesis says the
+observed event is impossible. It removes that hypothesis from the
+posterior support. Our exponential formula with finite scores uses
+positive likelihoods because <span class="math inline">\(\ln0\)</span>
+is not finite. A model that permits exact zeros should handle them
+explicitly, rather than substitute an arbitrary very negative score and
+call the result exact.</p>
+<p>The optimization interpretation and the evidence interpretation
+therefore overlap under stated assumptions. Both normalize positive
+reweighting factors, while each supplies its own reason for choosing
+those factors. This is why the recurrence appears in several subjects
+without making their underlying mechanisms identical.</p>
+<h2 id="seeking-uncertainty-is-another-objective">Seeking uncertainty is
+another objective</h2>
+<p>A high-score update need not increase entropy. If the scores favor
+one option, the table may become more concentrated. To seek uncertainty
+deliberately, a simple rule is mixing toward uniform: <span
+class="math display">\[p^+=(1-\lambda)p+\lambda u.\]</span> Concavity
+and maximal uniform entropy give <span
+class="math display">\[H(p^+)\geq(1-\lambda)H(p)+\lambda H(u)\geq
+H(p).\]</span> Relative entropy to uniform decreases at the same time
+because it is the entropy gap.</p>
+<p>The <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week09.html">learning
+demonstration</a> lets you compare finite reweighting steps. Begin with
+the worked three-method example, record the displacement, and then lower
+the intensity to compare <span class="math inline">\((r-p)/\eta\)</span>
+with the natural-gradient direction.</p>
+<p>We can now choose an update by an objective and explain its geometry.
+Chapter 10 asks what remains observable when distributions move through
+a network or pass through a noisy recording system.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
 <li>Compute the exponential update of <span
-class="math inline">\(p=(1/4,1/4,1/2)\)</span> with scores <span
+class="math inline">\((1/4,1/4,1/2)\)</span> with scores <span
 class="math inline">\((2,1,0)\)</span> and <span
 class="math inline">\(\eta=\ln2\)</span>.</li>
-<li>Verify directly that adding a common constant to all scores leaves
-the update unchanged.</li>
-<li>Derive the identity <span class="math inline">\(J(q)=\ln
-Z-D(q\|r)\)</span>, stating where the condition <span
-class="math inline">\(\sum_iq_i=1\)</span> is used.</li>
+<li>Derive <span class="math inline">\(J(q)=\ln Z-D(q\|r)\)</span> and
+identify where normalization of <span class="math inline">\(q\)</span>
+enters the proof.</li>
 <li>For <span class="math inline">\(p=(1/2,1/2)\)</span>, scores <span
 class="math inline">\((0,1)\)</span>, and <span
-class="math inline">\(\eta=\ln3\)</span>, evaluate the objective at
-<span class="math inline">\(q=(0,1)\)</span> and compare it with its
-maximum.</li>
-<li>Derive the symmetric double-sum formula for the fixed-score
-improvement.</li>
-<li>Starting with equal weights on three choices, fixed scores <span
-class="math inline">\((0,1,1)\)</span>, and <span
-class="math inline">\(\eta=\ln2\)</span>, find the probabilities after
-four rounds.</li>
-<li>Repeat Exercise 6 with initial weights <span
-class="math inline">\((1/2,1/3,1/6)\)</span>. Explain the ratio of the
-two tied leaders.</li>
-<li>Give a two-round score sequence whose final distribution agrees when
-its rounds are reversed, but whose intermediate distribution
-changes.</li>
-<li>Explain why a zero current probability stays zero under
-multiplicative weights. Describe a mixture operation that permits it to
-become positive.</li>
-<li>Show that mixing with uniform strictly raises entropy whenever <span
-class="math inline">\(p\)</span> is not uniform and <span
-class="math inline">\(0&lt;\lambda&lt;1\)</span>.</li>
-<li>A program reports overflow when exponentiating scores <span
-class="math inline">\((1000,1001,999)\)</span>. Explain how subtracting
-the largest score resolves this without changing the answer.</li>
-<li>Choose a small finite set of candidate tables and verify the
-optimization identity numerically for each. Explain why this check
-illustrates the theorem but does not replace its proof.</li>
+class="math inline">\(\eta=\ln3\)</span>, compare the objectives at
+<span class="math inline">\(p\)</span>, the optimizer, and <span
+class="math inline">\((0,1)\)</span>.</li>
+<li>Use optimality to prove <span class="math inline">\(\eta(r-p)\cdot
+s\geq D(r\|p)\)</span>.</li>
+<li>Derive the exact log-ratio increment and use it for two rounds with
+binary score gaps <span class="math inline">\(\ln2\)</span> and <span
+class="math inline">\(\ln3\)</span>, starting at equal probabilities and
+<span class="math inline">\(\eta=1\)</span>.</li>
+<li>Calculate the natural-gradient direction for <span
+class="math inline">\(p=(1/2,1/3,1/6)\)</span> and scores <span
+class="math inline">\((0,1,2)\)</span>. Verify its coordinates sum to
+zero.</li>
+<li>Expand the completed-square formula for <span
+class="math inline">\(Q(\delta)\)</span> and explain why its maximizer
+satisfies the mass constraint.</li>
+<li>Starting from equal probabilities, use fixed scores <span
+class="math inline">\((0,1,1)\)</span> and <span
+class="math inline">\(\eta=\ln2\)</span>. Find the table after four
+rounds.</li>
+<li>Repeat Exercise 8 from <span
+class="math inline">\((1/2,1/3,1/6)\)</span> and explain the ratio of
+the tied leaders.</li>
+<li>Show that shifting scores <span
+class="math inline">\((1000,1001,999)\)</span> by their largest entry
+leaves the normalized answer unchanged.</li>
+<li>Apply the two Bayesian likelihood updates in the worked example.
+State the independence assumption needed to multiply their
+likelihoods.</li>
+<li>Compare entropy change under a score-favoring update and under
+mixing toward uniform. Explain why the update objective matters.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>1.</strong> The unnormalized entries are <span
+<p><strong>1.</strong> The unnormalized weights are <span
 class="math inline">\((1,1/2,1/2)\)</span>, giving <span
 class="math inline">\((1/2,1/4,1/4)\)</span>.</p>
-<p><strong>3.</strong> The term <span class="math inline">\(\ln
-Z\)</span> is multiplied by <span
-class="math inline">\(\sum_iq_i\)</span>, which equals one. All other
-terms combine by the logarithm identities.</p>
-<p><strong>4.</strong> At <span class="math inline">\(q=(0,1)\)</span>,
-<span class="math inline">\(J=\ln3-\ln2=\ln(3/2)\)</span>. The maximum
-is <span class="math inline">\(\ln2\)</span>, larger by <span
-class="math inline">\(\ln(4/3)=D(q\|r)\)</span>.</p>
-<p><strong>6.</strong> The weights are proportional to <span
-class="math inline">\((1,16,16)\)</span>, giving <span
+<p><strong>3.</strong> The three objective values are <span
+class="math inline">\(\tfrac12\ln3\)</span>, <span
+class="math inline">\(\ln2\)</span>, and <span
+class="math inline">\(\ln(3/2)\)</span>, respectively. The optimizer has
+the largest value.</p>
+<p><strong>5.</strong> The odds are multiplied first by two and then by
+three. Final odds are six, giving probabilities <span
+class="math inline">\((6/7,1/7)\)</span>. The accumulated log-odds
+change is <span class="math inline">\(\ln6\)</span>.</p>
+<p><strong>6.</strong> The mean score is <span
+class="math inline">\(2/3\)</span>, giving <span
+class="math inline">\((-1/3,1/9,2/9)\)</span>. Their sum is zero.</p>
+<p><strong>8.</strong> The weights are proportional to <span
+class="math inline">\((1,16,16)\)</span>, so the table is <span
 class="math inline">\((1/33,16/33,16/33)\)</span>.</p>
-<p><strong>7.</strong> The unnormalized weights are <span
-class="math inline">\((1/2,16/3,8/3)\)</span>, so the probabilities are
-<span class="math inline">\((1/17,32/51,16/51)\)</span>. The leaders
-retain their initial <span class="math inline">\(2:1\)</span> ratio.</p>
-<p><strong>11.</strong> Use exponents <span
-class="math inline">\((-1,0,-2)\)</span> instead. Both numerator and
-denominator have been divided by <span
-class="math inline">\(e^{1001}\)</span>, which cancels exactly.</p>
+<p><strong>9.</strong> Unnormalized weights are <span
+class="math inline">\((1/2,16/3,8/3)\)</span>, totaling <span
+class="math inline">\(17/2\)</span>. The table is <span
+class="math inline">\((1/17,32/51,16/51)\)</span>; the tied leaders
+retain their original ratio two to one.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week08.html">← Week 8</a><a href="../readings/week10.html">Week 10 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

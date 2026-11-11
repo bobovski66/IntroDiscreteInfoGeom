@@ -1,434 +1,549 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 1: Sequences, differences, and discrete integration · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="1"><p class="eyebrow">Week 1 · Reading</p><h1>Sequences, differences, and discrete integration</h1><nav class="week-nav" aria-label="Week 1 resources"><a aria-current=page href="../readings/week01.html">Reading</a><a  href="../demos/week01.html">Demonstration</a><a  href="../labs/week01.html">Lab</a><a  href="../quizzes/week01.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter01.pdf">Chapter 1 PDF</a> · <a href="../textbook/latex/chapter01.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Compute first and second differences of sequences.</li><li>Use telescoping sums to reconstruct a sequence.</li><li>Measure finite changes in a normalized population model.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 1 -->
-<h2 id="the-discrete-derivative">The discrete derivative</h2>
-<p>A sequence is a function whose input is a whole-number time step.
-Write its values as <span
-class="math inline">\(a_0,a_1,a_2,\ldots\)</span>. We measure the change
-from one step to the next by the <strong>forward difference</strong>
-<span class="math display">\[\Delta a_n=a_{n+1}-a_n.\]</span> This is
-the discrete derivative. It records an exact change over one step,
-rather than a rate obtained from a limit. A positive difference means
-the quantity increases; a negative difference means it decreases. The
-size of the difference tells us how much.</p>
-<p>For example, let <span class="math inline">\(a_n=n^2\)</span>. Then
-<span class="math display">\[\Delta a_n=(n+1)^2-n^2=2n+1.\]</span> The
-first few values of <span class="math inline">\(a_n\)</span> are <span
-class="math inline">\(0,1,4,9,16\)</span> and their first differences
-are <span class="math inline">\(1,3,5,7\)</span>. Taking differences
-again gives <span class="math inline">\(2,2,2\)</span>. We write <span
-class="math inline">\(\Delta^2a_n=\Delta(\Delta a_n)\)</span> and call
-it the <strong>second difference</strong>. Constant second differences
-are the discrete signature of quadratic sequences.</p>
-<h2 id="summation-is-discrete-integration">Summation is discrete
-integration</h2>
-<p>Suppose we know only that <span class="math inline">\(\Delta
-a_n=2n+1\)</span> and <span class="math inline">\(a_0=0\)</span>. We can
-reconstruct the sequence by adding its changes: <span
-class="math display">\[a_n=a_0+\sum_{k=0}^{n-1}(2k+1)=n^2.\]</span> More
-generally, any sequence satisfies the <strong>discrete fundamental
-theorem of calculus</strong>: <span
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 1: Sequences, differences, and discrete integration · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="1"><p class="eyebrow">Week 1 · Reading</p><h1>Sequences, differences, and discrete integration</h1><nav class="week-nav" aria-label="Week 1 resources"><a aria-current=page href="../readings/week01.html">Reading</a><a  href="../demos/week01.html">Demonstration</a><a  href="../labs/week01.html">Lab</a><a  href="../quizzes/week01.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter01.pdf">Chapter 1 PDF</a> · <a href="../textbook/latex/chapter01.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Compute first and second differences of sequences.</li><li>Use telescoping sums to reconstruct a sequence.</li><li>Measure finite changes in a normalized population model.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#reading-a-sequence-as-a-record-of-change">Reading a sequence as
+a record of change</a></li><li><a href="#the-first-difference-measures-one-step">The first difference
+measures one step</a></li><li><a href="#differences-themselves-can-change">Differences themselves can
+change</a></li><li><a href="#summation-reconstructs-accumulated-change">Summation
+reconstructs accumulated change</a></li><li><a href="#why-the-discrete-fundamental-theorem-works">Why the discrete
+fundamental theorem works</a></li><li><a href="#repeated-multiplication-gives-a-different-kind-of-growth">Repeated
+multiplication gives a different kind of growth</a></li><li><a href="#composition-changes-differently-from-total-size">Composition
+changes differently from total size</a></li><li><a href="#a-change-of-coordinates-can-simplify-a-recurrence">A change of
+coordinates can simplify a recurrence</a></li><li><a href="#turning-a-record-into-a-model">Turning a record into a
+model</a></li><li><a href="#from-an-interval-to-probability-vectors">From an interval to
+probability vectors</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>Imagine recording the number of messages arriving at a help desk each
+day. The daily counts tell one story: when demand is high, when it is
+growing, and when it begins to slow. The running total tells another:
+how much work has accumulated. Passing between these two descriptions
+means subtracting consecutive totals or adding consecutive arrivals.
+These are the two basic operations of discrete calculus.</p>
+<p>The word <strong>discrete</strong> tells us that we are working with
+separate steps: days, generations, observations, or rounds of an
+algorithm. We will begin with quantities measured at these steps. Later
+the quantities will be probabilities, and the questions will concern
+learning, uncertainty, and information. The same
+subtraction-and-addition relationship will run through the entire
+course.</p>
+<h2 id="reading-a-sequence-as-a-record-of-change">Reading a sequence as
+a record of change</h2>
+<p>A <strong>sequence</strong> is an ordered list of values. We write it
+as <span class="math inline">\(a_0,a_1,a_2,\ldots\)</span>, where the
+subscript records the step. The symbol <span
+class="math inline">\(a_3\)</span> means the value at step three; it
+does not mean <span class="math inline">\(a\)</span> multiplied by
+three. Starting with subscript zero lets us distinguish an initial
+measurement from measurements made after one or more updates.</p>
+<p>A formula such as <span class="math inline">\(a_n=n^2\)</span> gives
+each value directly. Substituting <span
+class="math inline">\(n=0,1,2,3,4\)</span> gives <span
+class="math inline">\(0,1,4,9,16\)</span>. Another way to specify a
+sequence is to give an initial value and an update rule. For example,
+<span class="math display">\[a_0=10,\qquad a_{n+1}=a_n+3\]</span> means:
+start at ten, then add three each step. The resulting list is <span
+class="math inline">\(10,13,16,19,\ldots\)</span>. The formula <span
+class="math inline">\(a_n=10+3n\)</span> describes the same list.</p>
+<p>Before interpreting a sequence, give its terms and its steps units.
+If <span class="math inline">\(a_n\)</span> is the number of messages
+received by the end of day <span class="math inline">\(n\)</span>, then
+<span class="math inline">\(a_{n+1}-a_n\)</span> counts messages
+arriving during the next day. If measurements are two hours apart,
+dividing the change by two gives a rate per hour. Throughout most of
+this course, one update is our time unit. A finite change and a rate per
+physical unit agree numerically only when that unit has been specified
+appropriately.</p>
+<h2 id="the-first-difference-measures-one-step">The first difference
+measures one step</h2>
+<p>The <strong>forward difference</strong> of a sequence is <span
+class="math display">\[\boxed{\Delta a_n=a_{n+1}-a_n.}\]</span> Read the
+symbol <span class="math inline">\(\Delta\)</span> as “change in.” The
+subscript <span class="math inline">\(n\)</span> identifies the step
+that starts at <span class="math inline">\(n\)</span> and ends at <span
+class="math inline">\(n+1\)</span>. A positive difference means an
+increase, a negative difference means a decrease, and a zero difference
+means no change during that step.</p>
+<div class="example" title="Separating a total from its increments">
+<p><strong>Example. Separating a total from its increments</strong></p>
+<p>Suppose cumulative arrivals at a help desk are <span
+class="math inline">\(a_0=0\)</span>, <span
+class="math inline">\(a_1=2\)</span>, <span
+class="math inline">\(a_2=7\)</span>, <span
+class="math inline">\(a_3=15\)</span>, and <span
+class="math inline">\(a_4=26\)</span>. Subtract consecutive entries:
+<span class="math display">\[\Delta a_0=2,\quad\Delta a_1=5,\quad\Delta
+a_2=8,\quad\Delta a_3=11.\]</span> There are five totals and four
+intervals between them. The differences count the arrivals during those
+four intervals. The total rises throughout, and its increments are also
+rising.</p>
+</div>
+<p>This operation plays the role of a derivative. It asks how the value
+changes as the input advances one step. Everything needed to compute it
+is present in two neighboring entries. A finite table can therefore
+support a useful calculus even when no formula between the observations
+is available.</p>
+<p>Differences obey simple algebraic rules. For sequences <span
+class="math inline">\(a_n,b_n\)</span> and a fixed number <span
+class="math inline">\(c\)</span>, <span
+class="math display">\[\Delta(a_n+b_n)=\Delta a_n+\Delta b_n,\qquad
+\Delta(ca_n)=c\Delta a_n.\]</span> For example, the first identity
+follows by expanding <span
+class="math inline">\((a_{n+1}+b_{n+1})-(a_n+b_n)\)</span> and
+regrouping. Such identities let us analyze a complicated record by
+separating its parts.</p>
+<h2 id="differences-themselves-can-change">Differences themselves can
+change</h2>
+<p>If <span class="math inline">\(a_n=n^2\)</span>, then <span
+class="math display">\[\Delta
+a_n=(n+1)^2-n^2=(n^2+2n+1)-n^2=2n+1.\]</span> The square sequence has
+first differences <span class="math inline">\(1,3,5,7,\ldots\)</span>.
+They increase by two each time. Applying the difference operation again
+gives the <strong>second difference</strong>: <span
+class="math display">\[\Delta^2a_n=\Delta a_{n+1}-\Delta a_n
+=a_{n+2}-2a_{n+1}+a_n.\]</span> For the square sequence, every second
+difference is two.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Step <span class="math inline">\(n\)</span></th>
+<th><span class="math inline">\(a_n=n^2\)</span></th>
+<th><span class="math inline">\(\Delta a_n\)</span></th>
+<th><span class="math inline">\(\Delta^2a_n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>4</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>9</td>
+<td>7</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>16</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The blank entries cannot be obtained from this five-term table
+because they need values beyond its end. The formula supplies those
+additional values if we want them.</p>
+<p>A positive second difference says the first differences are
+increasing. It does not, by itself, say the original values are
+increasing. A falling sequence can have negative increments that become
+less negative. For instance, the values <span
+class="math inline">\(9,4,1,0\)</span> have differences <span
+class="math inline">\(-5,-3,-1\)</span> and second differences <span
+class="math inline">\(2,2\)</span>. The quantity falls, but its fall
+slows.</p>
+<p>This distinction will matter when we study entropy. The sign of its
+first difference will tell us whether uncertainty rises or falls; its
+second difference will tell us how that tendency changes across
+neighboring states.</p>
+<div class="example" title="A triangular accumulation">
+<p><strong>Example. A triangular accumulation</strong></p>
+<p>Suppose a workshop completes one item in its first interval, two in
+its second, three in its third, and so on. Let <span
+class="math inline">\(T_n\)</span> be the number completed after <span
+class="math inline">\(n\)</span> intervals. Then <span
+class="math display">\[T_0=0,\qquad \Delta T_n=n+1.\]</span> The initial
+values are <span class="math inline">\(0,1,3,6,10\)</span>. Pairing the
+terms of <span class="math inline">\(1+2+\cdots+n\)</span> in forward
+and reverse order gives <span class="math inline">\(n\)</span> pairs,
+each with sum <span class="math inline">\(n+1\)</span>. Therefore <span
+class="math display">\[T_n=\frac{n(n+1)}2.\]</span> Check the formula by
+subtracting neighboring values: <span
+class="math display">\[\frac{(n+1)(n+2)}2-\frac{n(n+1)}2=n+1.\]</span>
+The cumulative sequence is quadratic because its first differences
+increase linearly. Its second differences are one.</p>
+</div>
+<p>This gives a way to move in both directions between patterns.
+Constant first differences suggest an affine formula <span
+class="math inline">\(an+b\)</span>. Constant second differences suggest
+a quadratic formula. The suggestion becomes a proof after substitution
+verifies the formula and its starting value. A short table alone does
+not determine all future terms: many rules can agree on its entries and
+disagree later.</p>
+<p>A table also makes clear what information a difference requires.
+Measurements at steps zero through four provide four changes. We cannot
+calculate the change starting at four until the fifth-step measurement
+arrives. A formula can supply information beyond the observed table, but
+that information comes from the formula’s assumptions.</p>
+<p>For measured data, subtraction can mix several effects. If
+yesterday’s reading was too high and today’s is too low, their
+difference exaggerates an apparent fall. The operation is exact
+arithmetic; its interpretation depends on measurement quality. A
+deterministic sequence lets us study the operation before adding
+measurement error.</p>
+<figure><img src="../assets/fig-differences.svg" alt="Six values of the square sequence determine five first differences. Each difference is indexed by the starting step of its interval." width="368" height="153" loading="lazy"><figcaption>Six values of the square sequence determine five first differences. Each difference is indexed by the starting step of its interval.</figcaption></figure>
+<h2 id="summation-reconstructs-accumulated-change">Summation
+reconstructs accumulated change</h2>
+<p>Return to the arrivals <span class="math inline">\(2,5,8,11\)</span>.
+Starting from zero and adding them gives the cumulative values <span
+class="math inline">\(0,2,7,15,26\)</span>. Summation reverses the
+difference operation once an initial value is supplied.</p>
+<p>The notation <span
+class="math display">\[\sum_{k=0}^{n-1}b_k\]</span> means “add the terms
+<span class="math inline">\(b_k\)</span> as <span
+class="math inline">\(k\)</span> takes the integer values from zero
+through <span class="math inline">\(n-1\)</span>.” For example, <span
+class="math inline">\(\sum_{k=0}^3 b_k=b_0+b_1+b_2+b_3\)</span>. The
+letter <span class="math inline">\(k\)</span> is a running index; we use
+a different letter from the endpoint <span
+class="math inline">\(n\)</span> to keep their roles distinct.</p>
+<p>Define the running sum by <span class="math inline">\(S_0=0\)</span>
+and <span class="math display">\[S_n=\sum_{k=0}^{n-1}b_k.\]</span> Then
+<span class="math inline">\(S_{n+1}\)</span> contains all the terms in
+<span class="math inline">\(S_n\)</span> plus one new term, <span
+class="math inline">\(b_n\)</span>. Thus <span
+class="math display">\[\Delta S_n=S_{n+1}-S_n=b_n.\]</span> A sequence
+whose difference is <span class="math inline">\(b_n\)</span> is called
+an <strong>antidifference</strong> of <span
+class="math inline">\(b_n\)</span>. Adding a constant to an
+antidifference gives another one. Specifying the starting value removes
+that ambiguity.</p>
+<div class="example" title="An antidifference found by inspection">
+<p><strong>Example. An antidifference found by inspection</strong></p>
+<p>We already know that <span
+class="math inline">\(\Delta(n^2)=2n+1\)</span>. Therefore <span
+class="math inline">\(n^2\)</span> is an antidifference of <span
+class="math inline">\(2n+1\)</span>. Starting at <span
+class="math inline">\(a_0=7\)</span> instead of zero gives <span
+class="math inline">\(a_n=7+n^2\)</span>. The increments remain <span
+class="math inline">\(2n+1\)</span> because the constant seven cancels
+in every subtraction.</p>
+</div>
+<h2 id="why-the-discrete-fundamental-theorem-works">Why the discrete
+fundamental theorem works</h2>
+<p>Write out three successive differences: <span
+class="math display">\[\begin{aligned}
+\Delta a_m+\Delta a_{m+1}+\Delta a_{m+2}
+&amp;=(a_{m+1}-a_m)+(a_{m+2}-a_{m+1})\\
+&amp;\quad +(a_{m+3}-a_{m+2})\\
+&amp;=a_{m+3}-a_m.
+\end{aligned}\]</span> Every intermediate value is added once and
+subtracted once. This cancellation is called
+<strong>telescoping</strong>. The same argument works for any number of
+steps and gives the discrete fundamental theorem of calculus: <span
 class="math display">\[\boxed{\sum_{k=m}^{n-1}\Delta
-a_k=a_n-a_m.}\]</span> Every intermediate term cancels. This is why the
-identity is sometimes called <em>telescoping</em>. An antidifference of
-a sequence <span class="math inline">\(b_n\)</span> is a sequence <span
-class="math inline">\(A_n\)</span> such that <span
-class="math inline">\(\Delta A_n=b_n\)</span>. Two antidifferences
-differ by a constant.</p>
-<p>To practice, suppose the number of messages received per day is <span
-class="math inline">\(b_n=3n+2\)</span> for days <span
-class="math inline">\(n=0,1,\ldots\)</span>. The total received in the
-first four days is <span class="math inline">\(2+5+8+11=26\)</span>. The
-cumulative total <span
-class="math inline">\(S_n=\sum_{k=0}^{n-1}b_k\)</span> satisfies <span
-class="math inline">\(\Delta S_n=b_n\)</span> exactly.</p>
-<h2 id="from-counts-to-proportions">From counts to proportions</h2>
-<p>Now let two types have counts <span
-class="math inline">\(A_n,B_n\)</span> and multipliers <span
-class="math inline">\(w_A,w_B&gt;0\)</span>. Their updates are <span
-class="math inline">\(A_{n+1}=w_AA_n\)</span> and <span
-class="math inline">\(B_{n+1}=w_BB_n\)</span>. Define the proportion
-<span class="math display">\[x_n=\frac{A_n}{A_n+B_n}.\]</span>
-Normalizing the new counts gives the recurrence <span
-class="math display">\[x_{n+1}=\frac{w_Ax_n}{w_Ax_n+w_B(1-x_n)}.\]</span>
-Subtract the old proportion to obtain a genuine discrete derivative:
-<span class="math display">\[\boxed{\Delta
-x_n=\frac{x_n(1-x_n)(w_A-w_B)}{w_Ax_n+w_B(1-x_n)}.}\]</span> This
-formula distinguishes changes in total population from changes in its
-composition. It also proves that <span class="math inline">\(0\leq
-x_n\leq1\)</span> is preserved when the multipliers are positive.</p>
-<p>Take <span class="math inline">\(x_0=1/4\)</span>, <span
-class="math inline">\(w_A=2\)</span>, and <span
-class="math inline">\(w_B=1\)</span>. The next proportion is <span
-class="math inline">\(2/5\)</span>, so <span
-class="math inline">\(\Delta x_0=2/5-1/4=3/20\)</span>. We know both
-where the state moved and exactly how far it moved along the probability
-interval.</p>
-<h2 id="try-it-as-calculus">Try it as calculus</h2>
-<p>Use the population demonstration to record <span
-class="math inline">\(x_0,\ldots,x_5\)</span> and the difference
-sequence <span class="math inline">\(\Delta x_0,\ldots,\Delta
-x_4\)</span>. Add the differences and verify that their sum is <span
-class="math inline">\(x_5-x_0\)</span>. Then change the relative
-multiplier and repeat. This is the first glimpse of information
-geometry: the points are probability distributions, and our calculus
-measures changes between them.</p>
+a_k=a_n-a_m.}\]</span> There are <span
+class="math inline">\(n-m\)</span> changes between steps <span
+class="math inline">\(m\)</span> and <span
+class="math inline">\(n\)</span>. The last change starts at <span
+class="math inline">\(n-1\)</span>, which explains the upper summation
+limit.</p>
+<p>This identity is useful even when the changes alternate in sign. A
+sequence <span class="math inline">\(5,8,6,10\)</span> has differences
+<span class="math inline">\(3,-2,4\)</span>. Their sum is five, exactly
+the endpoint change <span class="math inline">\(10-5\)</span>. Adding
+the absolute changes would instead give nine, a measure of total
+movement. Net change and total movement answer different questions. We
+will encounter the same distinction for paths through probability
+space.</p>
+<div class="example" title="A balance equation for a stockroom">
+<p><strong>Example. A balance equation for a stockroom</strong></p>
+<p>Let <span class="math inline">\(S_n\)</span> be stock at the
+beginning of a day, <span class="math inline">\(R_n\)</span> the
+deliveries received during that day, and <span
+class="math inline">\(D_n\)</span> the items used. Assuming no other
+additions or losses, <span class="math display">\[\Delta
+S_n=R_n-D_n.\]</span> Take <span class="math inline">\(S_0=20\)</span>,
+deliveries <span class="math inline">\((5,0,8)\)</span>, and use <span
+class="math inline">\((3,6,4)\)</span> over three days. Net changes are
+<span class="math inline">\((2,-6,4)\)</span>, giving stock levels <span
+class="math inline">\(20,22,16,20\)</span>. Summing the balance
+equations yields <span
+class="math display">\[S_3-S_0=(5+0+8)-(3+6+4)=0.\]</span> Final and
+initial stocks agree, although activity occurred throughout. Summing
+deliveries alone would describe throughput rather than the change in
+stored quantity.</p>
+</div>
+<p>This balance structure will reappear when probability moves through a
+network. A vertex’s stored mass changes by arrivals minus departures.
+The form of that law is already visible in a stockroom calculation.</p>
 <h2
-id="further-investigations-sequences-differences-and-discrete-integration">Further
-investigations: Sequences, differences, and discrete integration</h2>
-<p>A population, a collection of observations, and a set of possible
-messages can all be described by lists of nonnegative numbers. Dividing
-each entry by the total produces proportions. The proportions retain the
-composition of the collection even when its size changes. This simple
-operation connects growth models with probability.</p>
-<p>Our time variable takes the values <span
-class="math inline">\(t=0,1,2,\ldots\)</span>. One step might represent
-a generation, a round of a game, or the arrival of another batch of
-data. A rule that determines the next state from the present state is a
-<strong>difference equation</strong>. We will study such rules by
-calculating successive states, solving some rules exactly, and comparing
-quantities before and after a step.</p>
-<h2 id="sequences-and-repeated-multiplication">Sequences and repeated
-multiplication</h2>
-<p>A sequence is an ordered list <span
-class="math inline">\(a_0,a_1,a_2,\ldots\)</span>. The recurrence <span
-class="math inline">\(a_{t+1}=r a_t\)</span>, together with an initial
-value <span class="math inline">\(a_0\)</span>, determines every term.
-Substitution gives <span class="math inline">\(a_1=ra_0\)</span>, <span
-class="math inline">\(a_2=r^2a_0\)</span>, and, after <span
-class="math inline">\(t\)</span> steps, <span
-class="math display">\[a_t=a_0r^t.\]</span> Here <span
-class="math inline">\(r\)</span> is the multiplier per step. A
-multiplier of <span class="math inline">\(1.2\)</span> means a <span
-class="math inline">\(20\%\)</span> increase in one step; a multiplier
-of <span class="math inline">\(0.8\)</span> means a <span
-class="math inline">\(20\%\)</span> decrease. The percentage change and
-the multiplier are different numbers.</p>
-<p>Suppose two types, <span class="math inline">\(A\)</span> and <span
-class="math inline">\(B\)</span>, have positive counts <span
-class="math inline">\(N_{A,t}\)</span> and <span
-class="math inline">\(N_{B,t}\)</span>. With constant multipliers <span
-class="math inline">\(w_A,w_B&gt;0\)</span>, their counts satisfy <span
-class="math display">\[N_{A,t+1}=w_A N_{A,t},\qquad N_{B,t+1}=w_B
-N_{B,t}.\]</span> Counts may be interpreted as expected counts or
-amounts when a multiplier produces a noninteger result. A model of
-literal indivisible individuals would require an additional sampling or
-rounding rule. We will state explicitly when such a rule is present.</p>
-<div class="example" title="The same population at two scales">
-<p><strong>Example. The same population at two scales</strong></p>
-<p>Begin with <span class="math inline">\(20\)</span> individuals of
-type <span class="math inline">\(A\)</span> and <span
-class="math inline">\(80\)</span> of type <span
-class="math inline">\(B\)</span>. Let <span
-class="math inline">\(w_A=2\)</span> and <span
-class="math inline">\(w_B=1\)</span>. The count pairs are <span
-class="math inline">\((20,80)\)</span>, <span
-class="math inline">\((40,80)\)</span>, <span
-class="math inline">\((80,80)\)</span>, and <span
-class="math inline">\((160,80)\)</span>. Their <span
-class="math inline">\(A\)</span> proportions are <span
-class="math inline">\(1/5\)</span>, <span
-class="math inline">\(1/3\)</span>, <span
-class="math inline">\(1/2\)</span>, and <span
-class="math inline">\(2/3\)</span>. Beginning instead at <span
-class="math inline">\((200,800)\)</span> produces exactly the same
-proportions. Multiplying every count by a common positive number leaves
-composition unchanged.</p>
+id="repeated-multiplication-gives-a-different-kind-of-growth">Repeated
+multiplication gives a different kind of growth</h2>
+<p>A fixed addition gives constant first differences. A fixed
+multiplication gives a <strong>geometric sequence</strong>: <span
+class="math display">\[a_{n+1}=r a_n,\qquad a_n=a_0r^n.\]</span> To see
+the formula, compute <span class="math inline">\(a_1=ra_0\)</span>, then
+<span class="math inline">\(a_2=r(ra_0)=r^2a_0\)</span>, and continue.
+Here <span class="math inline">\(r\)</span> is the multiplier per step.
+Growth of twenty percent corresponds to <span
+class="math inline">\(r=1.2\)</span>; a decrease of twenty percent
+corresponds to <span class="math inline">\(r=0.8\)</span>.</p>
+<p>Its first difference is <span class="math display">\[\Delta
+a_n=(r-1)a_n.\]</span> The absolute increment depends on the current
+amount. Ten percent of a larger amount is a larger increment, even
+though the percentage rate is unchanged.</p>
+<p>In a population model, a multiplier may produce noninteger counts. We
+then interpret counts as amounts or expected counts. A rule for a
+literal finite population would also need a sampling or rounding
+procedure. Chapter 4 develops the sampling interpretation.</p>
+<p>There are two separate uses of the word discrete here. The time index
+may be discrete while the state takes arbitrary real values, as in <span
+class="math inline">\(a_{n+1}=1.2a_n\)</span>. Alternatively, the
+permitted states may form a finite list, as when a fixed number of
+tokens is allocated among categories. Both will occur in this course. A
+finite number of category labels does not force every probability to be
+an integer fraction with a fixed denominator.</p>
+<h2 id="composition-changes-differently-from-total-size">Composition
+changes differently from total size</h2>
+<p>Suppose two types have counts <span
+class="math inline">\(A_n\)</span> and <span
+class="math inline">\(B_n\)</span>. Their proportions are <span
+class="math display">\[x_n=\frac{A_n}{A_n+B_n},\qquad
+1-x_n=\frac{B_n}{A_n+B_n}.\]</span> Dividing by the total is called
+<strong>normalization</strong>. It removes overall size and retains
+composition. Counts <span class="math inline">\((20,80)\)</span> and
+<span class="math inline">\((200,800)\)</span> both give <span
+class="math inline">\(x=1/5\)</span>.</p>
+<p>Let each type multiply once per step: <span
+class="math display">\[A_{n+1}=w_AA_n,\qquad B_{n+1}=w_BB_n,\qquad
+w_A,w_B&gt;0.\]</span> The new total is <span
+class="math inline">\(w_AA_n+w_BB_n\)</span>. Substituting the old
+proportions into the ratio gives <span
+class="math display">\[\boxed{x_{n+1}=\frac{w_Ax_n}{w_Ax_n+w_B(1-x_n)}.}\]</span>
+The denominator is the average multiplier in the old population. It is
+required because both the numerator and the total can change.</p>
+<div class="example" title="Both counts rise while one share falls">
+<p><strong>Example. Both counts rise while one share falls</strong></p>
+<p>Start with counts <span class="math inline">\((50,50)\)</span> and
+multipliers <span class="math inline">\((1.1,1.3)\)</span>. The new
+counts are <span class="math inline">\((55,65)\)</span>, so the <span
+class="math inline">\(A\)</span> share becomes <span
+class="math inline">\(55/120=11/24\)</span>. Although <span
+class="math inline">\(A\)</span> increased from fifty to fifty-five, its
+share fell from <span class="math inline">\(1/2\)</span> to about <span
+class="math inline">\(0.4583\)</span>. The other type grew faster.</p>
 </div>
-<h2 id="normalization-gives-an-exact-update">Normalization gives an
-exact update</h2>
-<p>Write <span
-class="math inline">\(x_t=N_{A,t}/(N_{A,t}+N_{B,t})\)</span>. The other
-proportion is <span class="math inline">\(1-x_t\)</span>. Dividing the
-new <span class="math inline">\(A\)</span> count by the new total gives
-<span class="math display">\[x_{t+1}=\frac{x_t w_A}{x_t
-w_A+(1-x_t)w_B}.\]</span> The denominator is the average multiplier in
-the current population. It accounts for the growth of the total. We
-often write <span class="math inline">\(x^+\)</span> for the next value
-of <span class="math inline">\(x\)</span> and <span
-class="math inline">\(Z=xw_A+(1-x)w_B\)</span> for this average. Then
-<span class="math display">\[x^+-x=\frac{x(1-x)(w_A-w_B)}{Z}.\]</span>
-To verify the formula, put <span class="math inline">\(xw_A/Z-x\)</span>
-over the denominator <span class="math inline">\(Z\)</span> and factor
-the numerator. This identity gives a complete sign test: an interior
-proportion increases when <span
-class="math inline">\(w_A&gt;w_B\)</span>, decreases when <span
-class="math inline">\(w_A&lt;w_B\)</span>, and remains fixed when the
-multipliers agree.</p>
-<p>The endpoints also have a direct meaning. If <span
-class="math inline">\(x=0\)</span>, there are no <span
-class="math inline">\(A\)</span> individuals to multiply, so <span
-class="math inline">\(x^+=0\)</span>. If <span
-class="math inline">\(x=1\)</span>, the next state is again <span
-class="math inline">\(1\)</span>. An absent type remains absent under
-this particular rule. Introducing a type by migration or mutation
-requires another term in the model.</p>
+<p>To measure composition change, subtract <span
+class="math inline">\(x_n\)</span> from the update. Write <span
+class="math inline">\(Z=w_Ax+w_B(1-x)\)</span> for the denominator at
+the current step. Then <span class="math display">\[\begin{aligned}
+x^+-x&amp;=\frac{w_Ax-xZ}{Z}
+=\frac{x[w_A-w_Ax-w_B(1-x)]}{Z}\\
+&amp;=\frac{x(1-x)(w_A-w_B)}{Z}.
+\end{aligned}\]</span> Here <span class="math inline">\(x^+\)</span> is
+a shorter name for the next value. Consequently, <span
+class="math display">\[\boxed{\Delta
+x_n=\frac{x_n(1-x_n)(w_A-w_B)}{w_Ax_n+w_B(1-x_n)}.}\]</span> For <span
+class="math inline">\(0&lt;x_n&lt;1\)</span>, every factor other than
+<span class="math inline">\(w_A-w_B\)</span> is positive. The difference
+therefore has the sign of the relative advantage. This is our first
+example of extracting a qualitative conclusion from an exact discrete
+derivative.</p>
+<p>At <span class="math inline">\(x=0\)</span> or <span
+class="math inline">\(x=1\)</span>, the numerator is zero. A missing
+type remains missing under multiplication. Positive multipliers also
+keep every initially present type positive at every finite step. These
+conclusions concern the stated update; adding migration would give
+another model.</p>
 <div class="example"
-title="Both counts can grow while one proportion falls">
-<p><strong>Example. Both counts can grow while one proportion
-falls</strong></p>
-<p>Take equal initial counts and multipliers <span
-class="math inline">\(w_A=1.1\)</span>, <span
-class="math inline">\(w_B=1.3\)</span>. Both types increase in number.
-Nevertheless, <span
-class="math inline">\(x^+=1.1/(1.1+1.3)=11/24\)</span>, which is smaller
-than <span class="math inline">\(1/2\)</span>. The proportion compares
-one type with the total; its change depends on relative
-multiplication.</p>
+title="A finite calculus calculation on proportions">
+<p><strong>Example. A finite calculus calculation on
+proportions</strong></p>
+<p>With <span class="math inline">\(x_0=1/4\)</span>, <span
+class="math inline">\(w_A=2\)</span>, and <span
+class="math inline">\(w_B=1\)</span>, <span
+class="math display">\[x_1=\frac{2(1/4)}{2(1/4)+3/4}=\frac25,\qquad
+\Delta x_0=\frac25-\frac14=\frac3{20}.\]</span> The next state is <span
+class="math inline">\(x_2=4/7\)</span>, so <span
+class="math inline">\(\Delta x_1=4/7-2/5=6/35\)</span>. Adding the two
+differences gives <span class="math inline">\(9/28\)</span>, which
+equals <span class="math inline">\(x_2-x_0\)</span>. Telescoping works
+for this nonlinear update just as it did for a table of message
+totals.</p>
 </div>
-<h2 id="odds-turn-normalization-into-multiplication">Odds turn
-normalization into multiplication</h2>
-<p>For <span class="math inline">\(0&lt;x&lt;1\)</span>, the
-<strong>odds</strong> of <span class="math inline">\(A\)</span> relative
-to <span class="math inline">\(B\)</span> are <span
-class="math inline">\(O=x/(1-x)\)</span>. Odds of <span
-class="math inline">\(3\)</span> mean three <span
-class="math inline">\(A\)</span> individuals per <span
-class="math inline">\(B\)</span> individual, so the corresponding
-proportion is <span class="math inline">\(3/4\)</span>. Solving the
-definition for <span class="math inline">\(x\)</span> gives <span
+<figure><img src="../assets/fig-growth.svg" alt="Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step." width="387" height="153" loading="lazy"><figcaption>Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.</figcaption></figure>
+<h2 id="a-change-of-coordinates-can-simplify-a-recurrence">A change of
+coordinates can simplify a recurrence</h2>
+<p>For <span class="math inline">\(0&lt;x&lt;1\)</span>, define the
+<strong>odds</strong> <span class="math inline">\(O=x/(1-x)\)</span>.
+Odds of three mean three units of type <span
+class="math inline">\(A\)</span> for each unit of type <span
+class="math inline">\(B\)</span>, so the proportion is <span
+class="math inline">\(3/4\)</span>. Solving the definition gives <span
 class="math inline">\(x=O/(1+O)\)</span>.</p>
-<p>The normalized rule has a particularly simple form in odds: <span
-class="math display">\[O_{t+1}=\frac{x_{t+1}}{1-x_{t+1}}=\frac{w_A}{w_B}O_t.\]</span>
-Let <span class="math inline">\(r=w_A/w_B\)</span>. Repeated
-multiplication now yields an explicit solution: <span
-class="math display">\[O_t=O_0r^t,\qquad
-x_t=\frac{x_0r^t}{1-x_0+x_0r^t}.\]</span> The expression is valid for
-every nonnegative integer <span class="math inline">\(t\)</span> and for
-the endpoint initial states as well. It solves the normalized recurrence
-without computing intermediate states.</p>
-<div class="example" title="Reaching a target proportion">
-<p><strong>Example. Reaching a target proportion</strong></p>
-<p>Let <span class="math inline">\(x_0=1/5\)</span> and <span
-class="math inline">\(r=2\)</span>. Then <span
-class="math inline">\(O_t=2^t/4\)</span>. The condition <span
-class="math inline">\(x_t\geq 0.9\)</span> is equivalent to <span
-class="math inline">\(O_t\geq9\)</span>, hence to <span
-class="math inline">\(2^t\geq36\)</span>. Since <span
-class="math inline">\(2^5=32\)</span> and <span
-class="math inline">\(2^6=64\)</span>, the first qualifying step is
-<span class="math inline">\(t=6\)</span>. Checking integer powers is
-often the clearest way to answer a discrete timing question.</p>
-</div>
-<p>If <span class="math inline">\(r&gt;1\)</span> and both types are
-initially present, the odds become arbitrarily large and <span
-class="math inline">\(x_t\)</span> approaches <span
-class="math inline">\(1\)</span>. If <span
-class="math inline">\(r&lt;1\)</span>, the odds approach zero and <span
-class="math inline">\(x_t\)</span> approaches zero. Approaching an
-endpoint does not mean reaching it at a finite step: all finite powers
-of a positive number are positive, so both types remain present in exact
-arithmetic.</p>
-<h2 id="probability-vectors-and-weighted-averages">Probability vectors
-and weighted averages</h2>
-<p>For <span class="math inline">\(k\)</span> types, let <span
-class="math inline">\(p_i\)</span> denote the proportion of type <span
-class="math inline">\(i\)</span>. A <strong>probability vector</strong>
-satisfies <span class="math inline">\(p_i\geq0\)</span> and <span
-class="math inline">\(\sum_{i=1}^k p_i=1\)</span>. The symbol <span
-class="math inline">\(\sum\)</span> means addition over the indicated
-indices. Thus <span
-class="math inline">\(\sum_{i=1}^3p_i=p_1+p_2+p_3\)</span>.</p>
-<p>With positive multipliers <span class="math inline">\(w_i\)</span>,
-the general update is <span
+<p>In the normalized growth model, the common denominator cancels when
+we divide the two new proportions: <span
+class="math display">\[O_{n+1}=\frac{w_A}{w_B}O_n.\]</span> The odds
+follow a geometric sequence. With <span
+class="math inline">\(r=w_A/w_B\)</span>, <span
+class="math display">\[O_n=O_0r^n,\qquad
+x_n=\frac{x_0r^n}{1-x_0+x_0r^n}.\]</span> The final formula also makes
+sense for <span class="math inline">\(x_0=0\)</span> and <span
+class="math inline">\(x_0=1\)</span>, even though the intermediate odds
+calculation assumed an interior starting value.</p>
+<p>If <span class="math inline">\(x_0=1/5\)</span> and <span
+class="math inline">\(r=2\)</span>, then <span
+class="math inline">\(O_n=2^n/4\)</span>. Reaching a proportion of at
+least <span class="math inline">\(0.9\)</span> means reaching odds of at
+least nine, so <span class="math inline">\(2^n\geq36\)</span>. Since
+<span class="math inline">\(2^5=32\)</span> and <span
+class="math inline">\(2^6=64\)</span>, the first qualifying step is six.
+A question about a nonlinear fraction has become a comparison of integer
+powers.</p>
+<p>This use of coordinates anticipates information geometry. Different
+numerical descriptions of the same state can make different features
+easy to see. Proportions display composition; odds simplify relative
+multiplication.</p>
+<p>We can also run a positive growth step backward. New odds satisfy
+<span class="math inline">\(O^+=rO\)</span>, so old odds are <span
+class="math inline">\(O=O^+/r\)</span>. Converting back gives <span
+class="math display">\[x=\frac{x^+}{r(1-x^+)+x^+}.\]</span> Substituting
+a forward update recovers the starting proportion. This checks a
+simulation and explains why exact positive multiplication cannot delete
+a present type in one step. Rounding can destroy that reversibility: a
+small positive proportion rounded to zero loses the information needed
+to reconstruct its earlier value.</p>
+<h2 id="turning-a-record-into-a-model">Turning a record into a
+model</h2>
+<p>A sequence of observations and an update law are different starting
+points. With observations, compute differences and look for patterns.
+With a law, generate observations and prove identities. In applications
+we move between these tasks, and it helps to record which statements
+come from data and which come from assumptions.</p>
+<p>A count table that doubles for three days supports the description
+“doubling occurred during these intervals.” Predicting doubling for a
+hundred days assumes a continuing multiplier of two. Resource limits or
+environmental changes might alter that rule. Similarly, a constant count
+ratio in a short record is evidence about composition, while the
+normalization calculation proves scale independence under the stated
+multiplier model.</p>
+<p>A useful calculation record includes the initial state, the meaning
+of one step, the rule, and a check suited to the quantity. For
+cumulative totals, increments should add to the endpoint change. For
+probabilities, check nonnegativity and total one. For an explicit
+solution, check both its initial value and recurrence. These checks
+connect an answer to the question it is meant to resolve.</p>
+<h2 id="from-an-interval-to-probability-vectors">From an interval to
+probability vectors</h2>
+<p>For three or more categories, collect the proportions into a vector
+<span class="math inline">\(p=(p_1,\ldots,p_k)\)</span> with <span
+class="math display">\[p_i\geq0,\qquad \sum_{i=1}^k p_i=1.\]</span> The
+index <span class="math inline">\(i\)</span> labels a category. Such a
+list is a <strong>probability vector</strong> because selecting one
+individual uniformly gives category <span
+class="math inline">\(i\)</span> with probability <span
+class="math inline">\(p_i\)</span>. The same list can describe uncertain
+outcomes even without a population interpretation.</p>
+<p>Positive multipliers give the general normalized update <span
 class="math display">\[p_i^+=\frac{p_iw_i}{Z},\qquad Z=\sum_{j=1}^k
-p_jw_j.\]</span> All new entries are nonnegative, and adding them gives
-<span class="math inline">\(Z/Z=1\)</span>. This verifies that the rule
-remains inside the set of probability vectors. The quantity <span
-class="math inline">\(Z\)</span> is a <strong>weighted average</strong>
-of the multipliers: a common type contributes more to the average than a
-rare type.</p>
-<div class="example" title="Three types in one step">
-<p><strong>Example. Three types in one step</strong></p>
-<p>Let <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> and <span
-class="math inline">\(w=(1,2,3)\)</span>. The unnormalized entries are
-<span class="math inline">\((1/2,2/3,1/2)\)</span> and their sum is
-<span class="math inline">\(5/3\)</span>. Dividing by that sum gives
-<span class="math inline">\(p^+=(3/10,2/5,3/10)\)</span>. The entries
-add to one, providing a quick arithmetic check.</p>
-</div>
-<p>Multiplying every <span class="math inline">\(w_i\)</span> by the
-same positive constant leaves the normalized result unchanged, because
-that constant cancels between numerator and denominator. This freedom is
-useful when comparing models and when computing with very large or small
-weights.</p>
-<h2 id="what-a-finite-model-specifies">What a finite model
-specifies</h2>
-<p>A recurrence needs an initial state and a rule for each step. Its
-interpretation also needs a meaning for one step. Changing a step from
-one generation to ten generations can change the appropriate multiplier.
-For constant multipliers, ten consecutive steps multiply the odds by
-<span class="math inline">\(r^{10}\)</span>. A state-dependent
-multiplier requires reevaluation after every step and usually cannot be
-replaced by its tenth power at the initial state.</p>
-<p>Throughout the course, a <strong>fixed point</strong> is a state that
-one update leaves unchanged. A <strong>trajectory</strong> is the
-sequence of states generated by repeated updates. A quantity is
-<strong>invariant</strong> if it has exactly the same value at every
-step. These definitions refer to the stated recurrence. They will let us
-ask precise questions even when a closed formula for the trajectory is
-unavailable.</p>
-<figure><img src="../assets/fig-growth.svg" alt="Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step." loading="lazy"><figcaption>Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.</figcaption></figure>
-<h2 id="reversing-an-update-and-checking-a-formula">Reversing an update
-and checking a formula</h2>
-<p>An explicit formula is more than a shortcut. It lets us answer an
-inverse question: which initial composition would produce a given final
-composition? For a constant relative multiplier <span
-class="math inline">\(r&gt;0\)</span>, the odds relation <span
-class="math inline">\(O_t=r^tO_0\)</span> gives <span
-class="math inline">\(O_0=O_t/r^t\)</span>. Convert the observed final
-proportion to odds, divide by the accumulated multiplier, and convert
-back to a proportion. These operations reverse the update when both
-types are present.</p>
-<div class="example" title="Reconstructing an initial composition">
-<p><strong>Example. Reconstructing an initial composition</strong></p>
-<p>After four steps with relative multiplier <span
-class="math inline">\(3/2\)</span>, the A proportion is <span
-class="math inline">\(3/5\)</span>. Its final odds are <span
-class="math inline">\(3/2\)</span>. Dividing by <span
-class="math inline">\((3/2)^4=81/16\)</span> gives initial odds <span
-class="math inline">\(8/27\)</span>. The initial A proportion was
-therefore <span class="math inline">\((8/27)/(1+8/27)=8/35\)</span>.
-Substituting <span class="math inline">\(x_0=8/35\)</span> into the
-explicit formula recovers <span class="math inline">\(3/5\)</span> at
-step four.</p>
-</div>
-<p>Sometimes the multiplier is unknown instead. If both <span
-class="math inline">\(O_0\)</span> and <span
-class="math inline">\(O_t\)</span> are known, then <span
-class="math inline">\(r^t=O_t/O_0\)</span>. For example, doubling the
-odds in three steps requires <span
-class="math inline">\(r=2^{1/3}\)</span> per step. This is a relative
-multiplier. Many absolute pairs <span
-class="math inline">\((w_A,w_B)\)</span> have this ratio, so
-compositions alone do not determine absolute population growth.</p>
-<p>The exact solution can be verified by <strong>mathematical
-induction</strong>. First check the initial step <span
-class="math inline">\(t=0\)</span>, where the formula returns <span
-class="math inline">\(x_0\)</span>. Then assume the formula holds at a
-particular step <span class="math inline">\(t\)</span>. Substituting
-into the recurrence and canceling its common denominator gives the same
-formula with <span class="math inline">\(t+1\)</span> in place of <span
-class="math inline">\(t\)</span>. These two statements establish the
-formula for every nonnegative integer step. Induction is particularly
-well suited to recurrences because the proof follows the way the
-sequence is constructed.</p>
-<h2 id="replenishment-gives-an-affine-recurrence">Replenishment gives an
-affine recurrence</h2>
-<p>Repeated multiplication is one useful mechanism; partial replacement
-is another. Suppose a fixed-size collection replaces a fraction <span
-class="math inline">\(\lambda\)</span> of its members each round with an
-external source whose A proportion is <span
-class="math inline">\(q\)</span>. The next composition is <span
-class="math display">\[x^+=(1-\lambda)x+\lambda q,\qquad
-0&lt;\lambda\leq1.\]</span> This is an <strong>affine
-recurrence</strong>, consisting of a multiple of <span
-class="math inline">\(x\)</span> plus a constant. Its fixed point is
-<span class="math inline">\(q\)</span>. Subtracting that fixed point
-gives a pure multiplication rule for the error: <span
-class="math display">\[x^+-q=(1-\lambda)(x-q).\]</span> Thus <span
-class="math inline">\(x_t=q+(1-\lambda)^t(x_0-q)\)</span>. This
-technique, shifting coordinates to a fixed point, will recur in later
-chapters.</p>
-<div class="example" title="Replacing one quarter of a collection">
-<p><strong>Example. Replacing one quarter of a collection</strong></p>
-<p>Let <span class="math inline">\(x_0=0.8\)</span>, let the external
-source have proportion <span class="math inline">\(q=0.2\)</span>, and
-replace one quarter each round. Then <span
-class="math inline">\(x_t=0.2+0.6(3/4)^t\)</span>. The first two new
-values are <span class="math inline">\(0.65\)</span> and <span
-class="math inline">\(0.5375\)</span>. Every step removes one quarter of
-the remaining difference from the source composition. It does not remove
-one quarter of the current A proportion.</p>
-</div>
-<p>The multiplying-growth model and the replacement model can be
-distinguished by their formulas. Positive multiplication preserves
-absence. Replacement introduces A from the source whenever <span
-class="math inline">\(q&gt;0\)</span> and <span
-class="math inline">\(\lambda&gt;0\)</span>, even if A is initially
-absent. Choosing a recurrence therefore includes choosing the mechanisms
-that can change a population.</p>
-<h2 id="a-calculation-routine">A calculation routine</h2>
-<p>To compute an update reliably, make a short table with columns for
-the old proportion, multiplier, and product. Add the products to obtain
-<span class="math inline">\(Z\)</span>, then divide every product by
-<span class="math inline">\(Z\)</span>. Check the new sum before
-rounding the displayed values. Store more digits than are printed, since
-feeding rounded output back into the next step changes the recurrence.
-Finally, compare a simple diagnostic, such as the two-type odds ratio,
-with its expected update. An independent identity often detects an
-indexing error that a unit-sum check alone would miss.</p>
+p_jw_j.\]</span> The new entries are nonnegative. Adding them gives
+<span class="math inline">\(Z/Z=1\)</span>, so they are still a
+probability vector. Multiplying every multiplier by the same positive
+constant changes both numerator and denominator by that factor and
+leaves the answer unchanged.</p>
+<p>For <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> and <span
+class="math inline">\(w=(1,2,3)\)</span>, the unnormalized entries are
+<span class="math inline">\((1/2,2/3,1/2)\)</span>. Their sum is <span
+class="math inline">\(5/3\)</span>, giving <span
+class="math inline">\(p^+=(3/10,2/5,3/10)\)</span>. The changes add to
+zero because one unit of total probability has been redistributed. This
+conservation will become a vector calculus identity later in the
+course.</p>
+<p>In the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
+explorer</a>, use the differences-and-sums view to compare a sequence
+with its difference table. Then use the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week01.html">growth
+demonstration</a> to record a proportion trajectory and check a
+telescoping sum. Chapter 2 asks a new question about such trajectories:
+when repeated corrections move a state toward a target, what prevents
+them from overshooting and growing unstable?</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
-<li>Starting from <span class="math inline">\(a_0=12\)</span>, list the
-first five terms of <span
-class="math inline">\(a_{t+1}=(3/2)a_t\)</span>, including <span
-class="math inline">\(a_0\)</span>.</li>
-<li>A quantity decreases by <span class="math inline">\(15\%\)</span>
-each step. Write its multiplier and its value after eight steps in terms
-of its initial value.</li>
-<li>Normalize the count triples <span
-class="math inline">\((6,9,15)\)</span> and <span
+<li>A sequence records cumulative arrivals <span
+class="math inline">\(0,3,8,15,24\)</span>. Find all first and second
+differences available from the table. Interpret both in the context of
+arrivals.</li>
+<li>For <span class="math inline">\(a_n=3n^2+2n+5\)</span>, calculate
+<span class="math inline">\(\Delta a_n\)</span> and <span
+class="math inline">\(\Delta^2a_n\)</span> by expanding the
+expressions.</li>
+<li>Starting from <span class="math inline">\(a_0=7\)</span>,
+reconstruct <span class="math inline">\(a_1,a_2,a_3,a_4\)</span> when
+<span class="math inline">\(\Delta a_n=2n+3\)</span>. Check the endpoint
+change by summation.</li>
+<li>Find an antidifference of <span class="math inline">\(2n+1\)</span>.
+Explain why specifying its value at zero determines it uniquely.</li>
+<li>A sequence is <span class="math inline">\(10,7,5,4\)</span>.
+Calculate its differences and second differences. Explain how it can be
+decreasing while its second differences are positive.</li>
+<li>Starting from <span class="math inline">\(a_0=12\)</span>, list five
+terms, including the initial value, of <span
+class="math inline">\(a_{n+1}=(3/2)a_n\)</span>. Give the first
+difference as a multiple of <span
+class="math inline">\(a_n\)</span>.</li>
+<li>Normalize <span class="math inline">\((6,9,15)\)</span> and <span
 class="math inline">\((14,21,35)\)</span>. Explain why the results
 agree.</li>
 <li>Starting with counts <span class="math inline">\((30,70)\)</span>
-and multipliers <span class="math inline">\((3,2)\)</span>, find the
-counts and proportions after two steps.</li>
-<li>Derive the formula for <span class="math inline">\(x^+-x\)</span> by
-putting the two fractions over a common denominator.</li>
-<li>Convert proportions <span class="math inline">\(1/4\)</span>, <span
-class="math inline">\(2/3\)</span>, and <span
-class="math inline">\(0.9\)</span> to odds. Convert odds <span
-class="math inline">\(1/5\)</span>, <span
-class="math inline">\(1\)</span>, and <span
-class="math inline">\(7\)</span> to proportions.</li>
+and multipliers <span class="math inline">\((3,2)\)</span>, calculate
+counts and proportions after two steps. Verify the sum of the two
+proportion changes.</li>
+<li>Derive the displayed formula for <span
+class="math inline">\(x^+-x\)</span> without skipping the
+common-denominator step. Use it to explain why equal multipliers
+preserve composition.</li>
 <li>Let <span class="math inline">\(x_0=1/10\)</span> and <span
-class="math inline">\(w_A/w_B=3\)</span>. Find the first integer step at
-which <span class="math inline">\(x_t\geq1/2\)</span>.</li>
-<li>Prove that the general normalized update preserves the sum of the
-entries and preserves all zero entries.</li>
-<li>Compute one update for <span
+class="math inline">\(w_A/w_B=3\)</span>. Find the first step at which
+<span class="math inline">\(x_n\geq1/2\)</span> by using odds.</li>
+<li>Compute one normalized update for <span
 class="math inline">\(p=(1/4,1/4,1/2)\)</span> and <span
-class="math inline">\(w=(4,2,1)\)</span>. Repeat with <span
-class="math inline">\(w=(20,10,5)\)</span>.</li>
-<li>Show that, for constant multipliers, <span
-class="math inline">\(p_{i,t}=p_{i,0}w_i^t/\sum_jp_{j,0}w_j^t\)</span>.</li>
-<li>A program rounds each new proportion to two decimal places. Explain
-how this can remove a type that the exact recurrence would preserve.
-Give numerical values.</li>
-<li>Two populations have the same initial composition but different
-total sizes. State assumptions under which their compositions remain
-identical, and describe one modification of the model that can break
-this conclusion.</li>
+class="math inline">\(w=(4,2,1)\)</span>. Prove that the answer is
+unchanged for <span class="math inline">\(w=(20,10,5)\)</span>.</li>
+<li>For constant positive multipliers, prove by induction that <span
+class="math inline">\(p_{i,n}=p_{i,0}w_i^n/\sum_jp_{j,0}w_j^n\)</span>.
+State what changes if the multipliers depend on the current
+proportions.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>1.</strong> The terms are <span
-class="math inline">\(12,18,27,81/2,243/4\)</span>. Each is obtained by
-multiplying its predecessor by <span
-class="math inline">\(3/2\)</span>.</p>
-<p><strong>3.</strong> Both triples normalize to <span
-class="math inline">\((1/5,3/10,1/2)\)</span>. The second count triple
-is <span class="math inline">\(7/3\)</span> times the first, and this
-factor cancels upon normalization.</p>
-<p><strong>4.</strong> The new counts are <span
-class="math inline">\((90,140)\)</span> and then <span
-class="math inline">\((270,280)\)</span>. The <span
-class="math inline">\(A\)</span> proportions are <span
-class="math inline">\(9/23\)</span> and <span
-class="math inline">\(27/55\)</span>.</p>
-<p><strong>7.</strong> Initial odds are <span
-class="math inline">\(1/9\)</span>. At step <span
-class="math inline">\(t\)</span> they are <span
-class="math inline">\(3^t/9\)</span>. Reaching <span
-class="math inline">\(1/2\)</span> means reaching odds at least one,
-which first occurs at <span class="math inline">\(t=2\)</span>.</p>
-<p><strong>9.</strong> The unnormalized weights are <span
-class="math inline">\((1,1/2,1/2)\)</span>, so the answer is <span
-class="math inline">\((1/2,1/4,1/4)\)</span> in both calculations.</p>
-<p><strong>10.</strong> The formula holds at <span
-class="math inline">\(t=0\)</span>. If it holds at <span
-class="math inline">\(t\)</span>, multiplying each numerator by <span
-class="math inline">\(w_i\)</span> and normalizing cancels the previous
-common denominator, giving the formula with <span
-class="math inline">\(t+1\)</span>. This is a proof by induction.</p>
+<p><strong>1.</strong> First differences are <span
+class="math inline">\(3,5,7,9\)</span> and second differences are <span
+class="math inline">\(2,2,2\)</span>. Arrivals increase by two from one
+recorded interval to the next.</p>
+<p><strong>2.</strong> Expanding <span
+class="math inline">\(3(n+1)^2+2(n+1)+5-(3n^2+2n+5)\)</span> gives <span
+class="math inline">\(6n+5\)</span>. Taking its difference gives
+six.</p>
+<p><strong>3.</strong> The successive increments are <span
+class="math inline">\(3,5,7,9\)</span>, giving <span
+class="math inline">\(7,10,15,22,31\)</span>. Their sum is <span
+class="math inline">\(24=31-7\)</span>.</p>
+<p><strong>8.</strong> Counts become <span
+class="math inline">\((90,140)\)</span> and <span
+class="math inline">\((270,280)\)</span>. The proportions are <span
+class="math inline">\(x_0=3/10\)</span>, <span
+class="math inline">\(x_1=9/23\)</span>, <span
+class="math inline">\(x_2=27/55\)</span>. The sum of the changes is
+<span class="math inline">\(27/55-3/10=21/110\)</span>.</p>
+<p><strong>10.</strong> Initial odds are <span
+class="math inline">\(1/9\)</span>, so <span
+class="math inline">\(O_n=3^n/9\)</span>. A proportion of at least one
+half requires odds of at least one. The first such step is <span
+class="math inline">\(n=2\)</span>.</p>
+<p><strong>11.</strong> The unnormalized entries are <span
+class="math inline">\((1,1/2,1/2)\)</span> and their total is two. The
+new table is <span class="math inline">\((1/2,1/4,1/4)\)</span>. Scaling
+all multipliers by five scales this total and each numerator by five,
+which cancels.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><span></span><a href="../readings/week02.html">Week 2 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

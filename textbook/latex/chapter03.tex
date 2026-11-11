@@ -92,6 +92,9 @@
 \displaywidowpenalty=10000
 \raggedbottom
 \setcounter{tocdepth}{1}
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3.2em}}
+\makeatother
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\passthrough}[1]{#1}
@@ -102,95 +105,183 @@
 \setcounter{chapter}{2}
 
 \chapter{Discrete gradients on the probability simplex}
-\section{A probability triangle becomes a lattice}\label{ch03-a-probability-triangle-becomes-a-lattice}
+Suppose a campus survey records three ways of reaching class: walking, cycling, and taking a bus. A distribution such as \((1/2,1/3,1/6)\) says that half the responses are in the first category, a third in the second, and a sixth in the third. Changing one share forces at least one other share to change. The three numbers describe a state with two independent degrees of freedom.
 
-With three categories, a probability vector is \(p=(p_A,p_B,p_C)\) with nonnegative coordinates adding to one. Fix a total of \(N\) tokens. Each allowed state has the form \[p=\left(\frac aN,\frac bN,\frac cN\right),\qquad a+b+c=N.\] A single transfer between categories moves us to a neighboring lattice point. There are \((N+1)(N+2)/2\) possible states. For \(N=4\), the fifteen points form a small triangular grid.
+Chapter 2 studied motion on a probability interval. With three categories, the state space becomes a triangle. We will use a finite grid of possible survey compositions to develop directional differences, gradients, circulation, and divergence. Each operation will have a concrete meaning in terms of changing one response or moving a quantity along an edge.
 
-For instance, from the count state \((2,1,1)\), moving one token from \(C\) to \(A\) gives \((3,1,0)\). The probability displacement is \((1/4,0,-1/4)\). A state near the boundary has fewer allowed moves because an empty category cannot donate a token.
+\section{Why probability states form a triangle}\label{ch03-why-probability-states-form-a-triangle}
 
-\section{Directional differences of an information function}\label{ch03-directional-differences-of-an-information-function}
+Write \(p=(p_A,p_B,p_C)\), with nonnegative coordinates adding to one. Knowing \(p_A\) and \(p_B\) determines \(p_C=1-p_A-p_B\). The permitted pairs satisfy \(p_A\geq0\), \(p_B\geq0\), and \(p_A+p_B\leq1\).
 
-A scalar field assigns a number to each probability state. Entropy is one example: \[H(p)=-\sum_i p_i\log p_i,\qquad 0\log0:=0.\] Let \(T_{A\leftarrow C}p=p+(e_A-e_C)/N\), when \(p_C\geq1/N\). Define its directional difference by \[D_{A\leftarrow C}H(p)=H(T_{A\leftarrow C}p)-H(p).\] This is the change in entropy caused by transferring exactly one token. A positive value means that move makes the distribution more uncertain.
+It is often more symmetric to place pure states at the vertices of an equilateral triangle: \[A=(0,0),\qquad B=(1,0),\qquad C=(1/2,\sqrt3/2).\] The \textbf{barycentric representation} places the distribution at the weighted point \[X=p_AA+p_BB+p_CC
+=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\] The square root appears because an equilateral triangle of side one has height \(\sqrt3/2\). It only sets the picture's proportions.
 
-For \(N=4\), begin at counts \((2,1,1)\). The move to \((3,1,0)\) reduces entropy, whereas the move to \((1,2,1)\) leaves entropy unchanged because it permutes the counts. These are calculations about neighboring points, so no limit is required.
+At vertex \(A\), all the probability belongs to \(A\). On edge \(AB\), the \(C\) coordinate is zero. The center corresponds to \((1/3,1/3,1/3)\). Lines parallel to edge \(AB\) have constant height, hence constant \(p_C\).
 
-\section{A discrete gradient is a collection of directional changes}\label{ch03-a-discrete-gradient-is-a-collection-of-directional-changes}
+\begin{example}[Locating and reading a mixture]
 
-Two independent token-transfer directions span the triangular lattice away from its boundary. If \(u=e_A-e_C\) and \(v=e_B-e_C\), we may record \[\nabla_d H(p)=\big(D_uH(p),D_vH(p)\big).\] This is a pair of changes with respect to a specified lattice basis; it is not automatically the Euclidean gradient vector in ambient \(\mathbb R^3\). It tells us which allowed coordinate step raises or lowers the function.
+For \(p=(1/2,1/3,1/6)\), the plotted point is \((5/12,\sqrt3/12)\). Its height is one sixth of the triangle's total height, matching \(p_C=1/6\).
 
-A \textbf{discrete gradient-ascent rule} evaluates allowed neighboring states and moves to one with the greatest positive increase in \(H\). If no neighbor has a positive increase, the rule stops. Ties need a stated choice rule. This is a perfectly concrete difference equation on a finite state space.
-
-\section{Vector fields, circulation, and flux}\label{ch03-vector-fields-circulation-and-flux}
-
-On an oriented edge \(p\to q\), a gradient edge value is \(H(q)-H(p)\). Adding these values along a path cancels intermediate terms: \[\sum_{\text{path }p\to q} \big(H(\text{head})-H(\text{tail})\big)=H(q)-H(p).\] Every closed-path sum is zero. A general edge field need not have this property: its circulation around a small triangular face can be nonzero.
-
-A flux field assigns an amount transported along each oriented edge. The \textbf{discrete divergence} at a vertex is total outgoing flux minus total incoming flux. Summing divergence over vertices cancels internal edges and leaves only boundary flow. We will use this exact cancellation to describe probability transport in Week 4.
-
-\section{Further investigations: Discrete gradients on the probability simplex}\label{ch03-further-investigations-discrete-gradients-on-the-probability-simplex}
-
-Three types allow motion in two independent directions. A triangle provides a complete picture of their proportions, including mixtures on its edges and pure states at its vertices. Integer population counts supply a natural lattice inside the triangle. These two representations connect geometry with combinatorics.
-
-\section{Reading a probability triangle}\label{ch03-reading-a-probability-triangle}
-
-Write \(p=(p_A,p_B,p_C)\) with nonnegative entries adding to one. Place the pure states at \(A=(0,0)\), \(B=(1,0)\), and \(C=(1/2,\sqrt3/2)\). Represent \(p\) by the weighted point \[X=p_AA+p_BB+p_CC=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\] These are \textbf{barycentric coordinates}: the coefficients tell us how much of each vertex contributes. The midpoint of edge \(AB\) is \((1/2,1/2,0)\) in probability coordinates. The center is \((1/3,1/3,1/3)\). A point on edge \(AB\) has \(p_C=0\).
-
-To recover probabilities from a plotted point \((u,v)\), solve the two coordinate equations: \[p_C=\frac{2v}{\sqrt3},\qquad p_B=u-\frac{v}{\sqrt3},\qquad p_A=1-u-\frac{v}{\sqrt3}.\] The point is inside the triangle precisely when these three values are nonnegative.
-
-\begin{example}[Locating a state]
-
-The distribution \((1/2,1/3,1/6)\) is plotted at \((5/12,\sqrt3/12)\). Its height is one sixth of the triangle's altitude, reflecting its \(C\) proportion. Its position is closer to vertex \(A\) than to either of the other vertices, consistent with \(A\) being the most common type.
+Conversely, if a plotted point has coordinates \((u,v)\), solve the plotting equations: \[p_C=\frac{2v}{\sqrt3},\qquad
+p_B=u-\frac{v}{\sqrt3},\qquad
+p_A=1-u-\frac{v}{\sqrt3}.\] At \((u,v)=(1/2,\sqrt3/6)\), these give three equal probabilities.
 
 \end{example}
 
-\section{Tokens produce a triangular lattice}\label{ch03-tokens-produce-a-triangular-lattice}
+The set of probability vectors on \(k\) labels is called the \textbf{probability simplex}. Two labels give an interval, three give a triangle, and four give a tetrahedron. The definition is always the same: nonnegative entries with total one. We can calculate with more labels even when we cannot draw their simplex.
 
-Suppose the total count is a fixed integer \(N\). A count triple \((a,b,c)\) with \(a+b+c=N\) gives the probability vector \((a/N,b/N,c/N)\). The possible states form a lattice. Moving one token from \(A\) to \(B\) changes the counts by \((-1,1,0)\) and the probabilities by \((-1/N,1/N,0)\).
+\section{Fixing a number of tokens makes a finite lattice}\label{ch03-fixing-a-number-of-tokens-makes-a-finite-lattice}
 
-There are \[\frac{(N+1)(N+2)}2=\binom{N+2}{2}\] possible triples. One proof fixes \(c\): for \(c=0,1,\ldots,N\), there are \(N-c+1\) choices for \(a\), with \(b\) then determined. Adding gives \((N+1)+N+\cdots+1\). A second proof encodes the triple as \(N\) stars separated into three groups by two bars; choosing the two bar positions among \(N+2\) positions determines the triple.
+Imagine a survey of exactly \(N\) responses. Counts \((a,b,c)\) satisfy \[a,b,c\text{ are nonnegative integers},\qquad a+b+c=N.\] Their empirical proportions are \(p=(a/N,b/N,c/N)\). The possible points form a triangular \textbf{lattice}, a finite grid inside the simplex. We denote the set by \(\mathcal P_N\).
 
-\begin{example}[A lattice of fifteen states]
+For \(N=4\), group the triples by their \(C\) count:
 
-With \(N=4\), the lattice has \(\binom62=15\) states. The count triple \((2,1,1)\) is adjacent to six states obtained by moving a token between two distinct types. At \((4,0,0)\), only two moves are possible because an empty type cannot donate a token.
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Count \(c\) & Possible pairs \((a,b)\) & Number \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & \((4,0),(3,1),(2,2),(1,3),(0,4)\) & 5 \\
+1 & \((3,0),(2,1),(1,2),(0,3)\) & 4 \\
+2 & \((2,0),(1,1),(0,2)\) & 3 \\
+3 & \((1,0),(0,1)\) & 2 \\
+4 & \((0,0)\) & 1 \\
+\end{longtable}
 
-\end{example}
+The total is fifteen. In general, fixing \(c\) leaves \(N-c+1\) choices, so the number of states is \[1+2+\cdots+(N+1)=\frac{(N+1)(N+2)}2.\] Increasing \(N\) increases the resolution: one response is a smaller fraction of the whole.
 
-A normalized growth update generally does not land on this lattice. It defines a deterministic map on all probability vectors. Sampling \(N\) new individuals from the updated proportions produces a random lattice state instead. These are two distinct models with different sources of variation.
+A \textbf{neighboring state} is obtained by transferring one token from one category to another. From \((2,1,1)\), moving a token from \(C\) to \(A\) gives \((3,1,0)\). The probability displacement is \((1/4,0,-1/4)\). Every transfer preserves the total count and the total probability.
 
 \begin{figure}[htbp]\centering
 \resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\fill[teal] (3,5.19615) circle (2pt);\fill[teal] (3.75,3.89711) circle (2pt);\fill[teal] (4.5,2.59808) circle (2pt);\fill[teal] (5.25,1.29904) circle (2pt);\fill[teal] (6,0) circle (2pt);\fill[teal] (2.25,3.89711) circle (2pt);\fill[teal] (3,2.59808) circle (2pt);\fill[teal] (3.75,1.29904) circle (2pt);\fill[teal] (4.5,0) circle (2pt);\fill[teal] (1.5,2.59808) circle (2pt);\fill[teal] (2.25,1.29904) circle (2pt);\fill[teal] (3,0) circle (2pt);\fill[teal] (0.75,1.29904) circle (2pt);\fill[teal] (1.5,0) circle (2pt);\fill[teal] (0,0) circle (2pt);\node[anchor=west,align=left] at (6.8,3.7){$N=4$: fifteen states\\One token changes two counts.};\draw[copper,thick] (2.25,1.29904) circle (5pt);\node[below=6pt] at (2.25,1.29904){$(2,1,1)$};\draw[copper,->] (2.25,1.29904)--(3.75,1.29904);\draw[copper,->] (2.25,1.29904)--(3,2.59808);\draw[copper,->] (2.25,1.29904)--(0.75,1.29904);\draw[copper,->] (2.25,1.29904)--(1.5,2.59808);\draw[copper,->] (2.25,1.29904)--(1.5,0);\draw[copper,->] (2.25,1.29904)--(3,0);\end{tikzpicture}}
 \caption{The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).}\end{figure}
 
-\section{Cyclic interactions}\label{ch03-cyclic-interactions}
+At \((2,1,1)\) all three categories can donate, so there are six neighbors. At \((4,0,0)\) only \(A\) can donate, giving two neighbors. Boundary restrictions are part of the geometry, not a failure of the formula.
 
-For three strategies, a score table is a \(3\) by \(3\) matrix. The average score of type \(i\) is \(f_i=\sum_jM_{ij}p_j\). Consider \[M_s=\begin{pmatrix}0&1&-s\\-s&0&1\\1&-s&0\end{pmatrix},\qquad s>0.\] Type \(A\) gains against \(B\), type \(B\) gains against \(C\), and type \(C\) gains against \(A\). Each suffers a loss of magnitude \(s\) against the remaining opponent. At the center, all three scores equal \((1-s)/3\), so the center is fixed for both normalized multiplier rules.
+These tokens represent units of composition. A token transfer through probability space need not describe a person physically traveling between locations. Chapter 4 will introduce another graph whose vertices are physical or categorical locations. Keeping these two meanings of a vertex separate will help.
 
-For exponential multipliers, a step is \[p_i^+=\frac{p_i e^{\eta f_i}}{Z},\qquad Z=\sum_jp_j e^{\eta f_j}.\] The current scores must be recomputed before the next step. Using the same scores repeatedly instead would describe fixed external advantages, rather than this interaction game.
+The lattice is also a graph: its count states are vertices and its legal transfers are edges. A drawing of the triangle helps us see the graph, but the definition does not depend on the drawing. A computer can store each triple and list its legal neighbors directly.
 
-\begin{example}[Computing a cyclic step]
+To generate those neighbors, choose a donor category with positive count and a different receiver. Subtract one from the donor and add one to the receiver. There are six ordered donor-receiver pairs for three categories, but some are forbidden at the boundary. This procedure gives both an exact state space and an exact rule for adjacency.
 
-Let \(s=1\) and \(p=(1/2,1/3,1/6)\). The scores are \((1/6,-1/3,1/6)\). With \(\eta=1\), cancelling the common factor \(e^{1/6}\) leaves unnormalized entries \((1/2,e^{-1/2}/3,1/6)\). After normalization the result is approximately \((0.5755,0.2327,0.1918)\). The two equally scoring types retain their ratio \(3:1\) during this step.
+The number of interior states can be counted separately. A strictly positive triple has at least one token in each category. Reserve those three tokens; the remaining \(N-3\) are distributed freely. For \(N\geq3\), there are \((N-1)(N-2)/2\) interior states. Subtracting from the full count gives \(3N\) boundary states. Vertices belong to two triangle edges in the picture but are counted only once in this total.
+
+For \(N=4\), there are three interior states and twelve boundary states. Thus boundaries are a large part of a coarse lattice. Ignoring illegal moves would change the model substantially, rather than introduce only a small numerical error.
+
+\section{A directional difference compares two permitted states}\label{ch03-a-directional-difference-compares-two-permitted-states}
+
+A \textbf{scalar field} assigns one number to every state. For a first example, consider \[C(p)=p_A^2+p_B^2+p_C^2.\] This concentration score is one at a pure state and one third at the balanced state. Larger values indicate a more concentrated composition.
+
+Let \(e_A=(1,0,0)\), \(e_B=(0,1,0)\), and \(e_C=(0,0,1)\). These are unit coordinate vectors. A transfer from \(C\) to \(A\) changes \(p\) by \((e_A-e_C)/N\). Write \[T_{A\leftarrow C}p=p+\frac{e_A-e_C}{N}.\] The arrow names the receiving and donating categories. The move is legal when \(p_C\geq1/N\).
+
+For any field \(F\), define its \textbf{directional difference} \[\boxed{D_{A\leftarrow C}F(p)=F(T_{A\leftarrow C}p)-F(p).}\] First evaluate the field after the move, then subtract its value before the move. This is the same operation as a first difference, now taken in a specified direction through a state space.
+
+\begin{example}[Two directions from the same composition]
+
+At counts \((2,1,1)\) with \(N=4\), we have \(p=(1/2,1/4,1/4)\) and \(C(p)=3/8\).
+
+Moving \(C\) to \(A\) gives \((3/4,1/4,0)\), with concentration \(5/8\). The directional difference is \(1/4\).
+
+Moving \(A\) to \(B\) gives \((1/4,1/2,1/4)\), again with concentration \(3/8\). That directional difference is zero. The state changed, but this field assigns the same number to the two states.
 
 \end{example}
 
-\section{A finite inequality detects outward drift}\label{ch03-a-finite-inequality-detects-outward-drift}
+Our \(D\) records the total change caused by one token. A difference quotient per unit of transferred probability would divide by \(1/N\) and equal \(ND_{A\leftarrow C}F\). A quotient per unit of ordinary Euclidean displacement would use the step length \(\sqrt2/N\). Stating the convention prevents factors from entering unnoticed. We use unscaled edge differences throughout the graph calculus.
 
-The \textbf{weighted arithmetic-geometric mean inequality} states that, for positive \(a_i\) and nonnegative weights \(p_i\) adding to one, \[\sum_i p_i a_i\ \geq\ \prod_i a_i^{p_i}.\] For rational weights, it follows from the ordinary arithmetic-geometric mean inequality by repeating each entry the appropriate number of times. The real-weight version follows by approximation. Equality holds when all entries carrying positive weight are equal. We will use this finite inequality several times.
+We can derive concentration changes for every transfer, rather than calculate a new square sum each time. Let \(h=1/N\), and transfer from category \(j\) to category \(i\). Only those two terms change: \[\begin{aligned}
+C(p+h(e_i-e_j))-C(p)
+&=(p_i+h)^2-p_i^2+(p_j-h)^2-p_j^2\\
+&=2h(p_i-p_j)+2h^2.
+\end{aligned}\] The \(2h^2\) term is a finite-step correction. If the receiver and donor have equal probabilities, the transfer makes them unequal and raises concentration by \(2h^2\). If the donor has exactly one more token than the receiver, the move swaps their counts and leaves concentration unchanged.
 
-For the balanced cyclic table \(s=1\), direct cancellation gives \[\sum_i f_i=0,\qquad \sum_i p_if_i=0.\] Let \(P(p)=p_Ap_Bp_C\). Under exponential normalization, \[P(p^+)=\frac{P(p)e^{\eta(f_A+f_B+f_C)}}{Z^3}=\frac{P(p)}{Z^3}.\] Applying weighted arithmetic-geometric mean to \(a_i=e^{\eta f_i}\) gives \(Z\geq e^{\eta\sum_i p_if_i}=1\). For an interior state other than the center, the scores are not all equal, so \(Z>1\) and \(P\) strictly decreases.
+This is a useful example of what a discrete derivative retains: the actual size of the move. Replacing it by only its term proportional to \(h\) would miss an exact effect at equal coordinates. Later, the local Fisher formula will also be presented alongside an exact finite expression, so that the effect of approximation remains visible.
 
-The product is largest at the center: the ordinary arithmetic-geometric mean inequality gives \(p_Ap_Bp_C\leq(1/3)^3\). Decreasing product therefore records movement through product contours toward the boundary. It does not imply that every individual coordinate moves monotonically, nor does it by itself identify a limit point. A trajectory may continue circulating while this diagnostic decreases.
+We can compare fields on the same graph without changing its geometry of allowed moves. A cost field might assign greater weight to one survey response than another, while concentration and entropy treat labels symmetrically. Directional differences depend jointly on the chosen field and the chosen edge.
 
-\begin{proposition}[The balanced finite rule does not conserve the product]
+\section{An information field for the same lattice}\label{ch03-an-information-field-for-the-same-lattice}
 
-For every positive intensity, an exponential update of the balanced cyclic game strictly decreases \(p_Ap_Bp_C\) at every interior state other than the center.
+A second scalar field is \textbf{entropy}: \[H(p)=-\sum_i p_i\ln p_i,\qquad 0\ln0:=0.\] Here \(\ln z\) is the natural logarithm: the exponent needed to express \(z\) as a power of \(e\). For example, \(\ln1=0\) and \(\ln(1/2)\approx-0.6931\). A calculator's \(\ln\) key is enough to evaluate this field. Chapter 5 will explain its meaning and derive its main properties.
 
-\end{proposition}
+For now, entropy measures uncertainty in the category of one randomly selected response. Pure states have entropy zero. Spreading probability more evenly generally gives greater uncertainty.
 
-There is a similar conclusion for linear multipliers whenever they are positive. Since the weighted mean score is zero, their normalizing denominator is \(1\). Their unweighted sum is \(3\), so their product is at most \(1\). Multiplying the three updated coordinates shows \(P(p^+)\leq P(p)\), again strictly away from the center. These exact calculations explain why changing the size of a finite step can affect a cyclic picture.
+\begin{example}[Computing an entropy difference]
 
-\section{Comparing a different recurrence}\label{ch03-comparing-a-different-recurrence}
+For \(p=(1/2,1/4,1/4)\), \[H(p)=-\frac12\ln\frac12-2\left(\frac14\ln\frac14\right)
+=\frac32\ln2\approx1.0397.\] After the transfer \(C\) to \(A\), the state is \(q=(3/4,1/4,0)\) and \[H(q)=-\frac34\ln\frac34-\frac14\ln\frac14\approx0.5623.\] Thus \(D_{A\leftarrow C}H(p)\approx-0.4774\). Concentration increased while uncertainty decreased. The transfer \(A\) to \(B\) merely permutes the entries and leaves entropy unchanged.
 
-The permutation rule \[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\] also moves states cyclically. It satisfies \(T^3(p)=p\) and preserves the coordinate product exactly. Its trajectories contain at most three states. This recurrence is useful as a simple example of exact periodicity and as a check on a plotting program. It is a different update from score-based selection, with a different algebraic structure.
+\end{example}
+
+A zero contribution for a zero probability means that an outcome which never occurs contributes nothing to the average. We do not ask the calculator to evaluate \(\ln0\).
+
+\section{What a discrete gradient records}\label{ch03-what-a-discrete-gradient-records}
+
+In an interval, there are two possible directions from an interior point. In a triangle, there are several. A \textbf{discrete gradient field} records changes of a scalar field along edges.
+
+For an oriented edge \(p\to q\), define \[A_F(p,q)=F(q)-F(p).\] Reversing the edge reverses the sign: \(A_F(q,p)=-A_F(p,q)\).
+
+Two independent lattice directions are \(u=e_A-e_C\) and \(v=e_B-e_C\). Where both forward moves are legal, one may record the pair \[\nabla_dF(p)=(D_uF(p),D_vF(p)).\] It lists changes in a chosen pair of directions. The directions meet at an angle in the triangle, so this pair is a coordinate record, rather than automatically an ordinary arrow perpendicular to contours. The full edge field is often easier to use because it also works at boundaries.
+
+A simple ascent rule examines every legal neighbor, chooses one with the greatest positive increase in \(F\), and stays put if none improves it. Ties require a fixed choice rule. Because the lattice has finitely many states and every actual move strictly raises \(F\), this rule cannot revisit a state. It must stop after finitely many moves.
+
+The stopping state is a local maximum with respect to the permitted edges. For a general field, a local maximum need not be the largest value anywhere on the graph. For entropy on this complete token-transfer lattice, balancing the counts identifies the maxima; Chapter 5 explains why.
+
+A reproducible ascent rule requires more than the phrase ``move uphill.'' At a state, list its legal neighbors, evaluate the scalar field at each, and compare the increases. Select the largest strictly positive increase. If two increases tie, use a declared ordering of categories or another fixed rule. If none is positive, return the same state.
+
+This algorithm needs no formula for a continuous gradient. On a graph with \(S\) states, it can make at most \(S-1\) strict-improvement moves, because each visited field value is greater than its predecessor and no vertex can recur. The argument does not guarantee that the selected path is the shortest route to a maximum. Ascent and shortest-path optimization are different tasks.
+
+Allowing equal-valued moves changes the termination argument. Two adjacent states with the same value can be visited back and forth forever unless a tie rule prevents it. For entropy, permutations of a balanced count vector can provide such plateaus. The requirement of strict improvement is therefore part of the dynamics.
+
+\section{Path sums reveal the cancellation behind gradients}\label{ch03-path-sums-reveal-the-cancellation-behind-gradients}
+
+Suppose a path visits states \(p_0,p_1,p_2,p_3\). Adding gradient edge values gives \[\begin{aligned}
+A_F(p_0,p_1)+A_F(p_1,p_2)+A_F(p_2,p_3)
+&=[F(p_1)-F(p_0)]\\
+&\quad+[F(p_2)-F(p_1)]+[F(p_3)-F(p_2)]\\
+&=F(p_3)-F(p_0).
+\end{aligned}\] The intermediate values cancel just as they did in Chapter 1. Any two paths with the same endpoints therefore have the same sum of gradient differences. Around a closed path, the sum is zero.
+
+For an arbitrary signed edge field, the sum around a closed route is its \textbf{circulation}. A gradient has zero circulation around every closed route. A field that assigns one unit in a clockwise direction around a triangular face has circulation three around that face, so it cannot be a gradient of vertex values.
+
+This test has a useful interpretation. If local changes are supposed to arise from one underlying score, following them around a loop must return that score to its starting value. A nonzero loop total reveals that the edge values contain additional directional information.
+
+\section{Flux and divergence describe a different feature}\label{ch03-flux-and-divergence-describe-a-different-feature}
+
+An edge field may instead describe \textbf{flux}, an amount transported in one step. Choose an orientation for each edge. Positive flux follows that arrow; negative flux goes against it. The \textbf{outward divergence} at a vertex is outgoing flux minus incoming flux.
+
+For a clockwise unit flow around a triangle, one unit arrives and one unit leaves at every vertex. Every divergence is zero, but the circulation is three. Zero accumulation at a vertex can coexist with sustained circulation through it.
+
+Conversely, a vertex may send mass to several neighbors and receive little. Its divergence is positive, so its stored mass decreases. This is the reason for the minus sign in the continuity equation developed in Chapter 4.
+
+For any chosen collection of vertices, add their divergences. Every edge joining two vertices in the collection contributes once positively and once negatively, so it cancels. Only edges crossing the boundary remain: \[\boxed{\text{sum of outward divergences}
+=\text{net flux leaving the collection}.}\] This is a finite version of a divergence theorem. Its content is exact accounting along edges.
+
+\begin{example}[Divergence on a small directed flow diagram]
+
+Take three vertices \(U,V,W\) with net flows two along \(U\to V\), one along \(V\to W\), and three along \(U\to W\). Outward divergence is five at \(U\), minus one at \(V\), and minus four at \(W\). The sum is zero.
+
+Now consider only the collection \(\{U,V\}\). Its divergences sum to four. The internal flow of two from \(U\) to \(V\) cancels in that sum. The surviving outward flows are three from \(U\) to \(W\) and one from \(V\) to \(W\), also totaling four.
+
+\end{example}
+
+This example separates three levels of description. An edge stores a directional transport amount. A vertex divergence records net departure there. A collection of vertices exchanges mass only through its boundary edges. Moving from one level to the next requires addition and cancellation, rather than an approximation.
+
+The graph in this flow example could represent actual locations. The token graph instead has whole probability distributions as its vertices. Both support the same divergence bookkeeping, but a field on probability states and a probability stored at physical locations should not be confused. The next chapter will explicitly choose locations as vertices and put probability mass on them.
+
+\section{Application: cyclic motion need not be a gradient}\label{ch03-application-cyclic-motion-need-not-be-a-gradient}
+
+Three competing strategies can favor one another cyclically. Consider the balanced score table \[M=\begin{pmatrix}0&1&-1\\-1&0&1\\1&-1&0\end{pmatrix}.\] At state \(p\), its scores are \[f_A=p_B-p_C,\quad f_B=p_C-p_A,\quad f_C=p_A-p_B.\] At the center all three are zero. Away from the center, the advantages encourage circulation rather than simple movement up one coordinate.
+
+Exponential normalization gives \(p_i^+=p_i e^{\eta f_i}/Z\), with \(Z=\sum_i p_i e^{\eta f_i}\). At \(p=(1/2,1/3,1/6)\) the scores are \((1/6,-1/3,1/6)\). With \(\eta=1\), the next state is approximately \((0.5755,0.2327,0.1918)\). The scores must be recomputed before the next step because the composition has changed.
+
+We can examine one exact diagnostic, the product \(P=p_Ap_Bp_C\). Direct cancellation gives \(\sum_i f_i=0\) and \(\sum_i p_if_i=0\). Multiplying the update equations therefore yields \[P(p^+)=\frac{P(p)}{Z^3}.\]
+
+The weighted arithmetic-geometric mean inequality says that for positive numbers \(a_i\) and nonnegative weights \(p_i\) adding to one, \[\sum_i p_i a_i\geq\prod_i a_i^{p_i}.\] It generalizes the fact that the average of two positive numbers is at least their geometric mean. For rational weights it follows by repeating numbers in an ordinary arithmetic-geometric mean inequality. General weights follow by approximation.
+
+Apply it to \(a_i=e^{\eta f_i}\). We obtain \[Z\geq e^{\eta\sum_i p_if_i}=1.\] For an interior state other than the center, the scores differ, giving strict inequality. Consequently \(P(p^+)<P(p)\). A finite cyclic update decreases this product; it does not conserve it.
+
+The product is largest at the center, where it equals \(1/27\). Its decrease describes crossing toward lower product contours. It does not prove that every coordinate approaches zero or that the trajectory has a particular limit. A single scalar diagnostic gives one piece of a multidimensional story.
 
 \begin{figure}[htbp]\centering
 \resizebox{.98\linewidth}{!}{\begin{tikzpicture}\draw[ink,thick] (0,0)--(6,0)--(3,5.196)--cycle;\node[below left] at (0,0){$A$};\node[below right] at (6,0){$B$};\node[above] at (3,5.196){$C$};\draw[teal,line width=1pt,] plot coordinates {(2.5,0.866025) (2.30211,0.914991) (2.13433,0.989415) (2.00434,1.09113) (1.91704,1.22169) (1.87454,1.3817) (1.87635,1.57002) (1.91959,1.78302) (1.99934,2.014) (2.10912,2.25316) (2.2416,2.48824) (2.38957,2.70569) (2.54686,2.89222) (2.70911,3.03607) (2.87405,3.12795) (3.04129,3.16149) (3.21161,3.13339) (3.38597,3.04357) (3.56442,2.8955) (3.74508,2.69646) (3.92355,2.45754) (4.09295,2.19293) (4.24443,1.91836) (4.3683,1.64902) (4.45503,1.39764) (4.4961,1.17313) (4.48445,0.98029) (4.41464,0.820371) (4.28327,0.692054) (4.08965,0.592573) (3.83693,0.518653) (3.53324,0.467199) (3.19222,0.435747) (2.83231,0.422736) (2.4746,0.427675) (2.13975,0.451239) (1.84514,0.495337) (1.60317,0.563116) (1.42101,0.65886) (1.30151,0.787681) (1.24443,0.954869) (1.2474,1.16479) (1.30623,1.41932) (1.41474,1.71605) (1.56431,2.04684) (1.744,2.39749) (1.94142,2.74913) (2.14444,3.08112) (2.34321,3.37439) (2.5317,3.61395) (2.70818,3.78973) (2.87485,3.89591) (3.03679,3.92947) (3.20062,3.88899) (3.37309,3.7742) (3.55961,3.58665) (3.76275,3.33128) (3.98096,3.01809) (4.20804,2.66311) (4.4337,2.28732) (4.64535,1.91367) (4.83045,1.56301) (4.97842,1.25062) (5.08144,0.984702) (5.13404,0.766899) (5.13197,0.594087) (5.07111,0.460494) (4.94694,0.359436) (4.75496,0.28447) (4.49214,0.229994) (4.15941,0.191484) (3.76431,0.165501) (3.32271,0.149618) (2.85811,0.142316) (2.39816,0.142908) (1.96937,0.151513) (1.59225,0.169073) (1.27893,0.197432) (1.03359,0.239463) (0.85476,0.299217) (0.738192,0.382049) (0.679138,0.494619) (0.673725,0.644618) (0.719298,0.839994) (0.813842,1.08747) (0.954673,1.39033) (1.13681,1.74578) (1.35164,2.14306) (1.58679,2.56335) (1.82756,2.98255) (2.05966,3.37612) (2.27206,3.72397) (2.4587,4.01334) (2.61864,4.23892) (2.75509,4.40077) (2.87403,4.50162) (2.98296,4.54436) (3.0901,4.53041) (3.20382,4.45901) (3.33225,4.3274) (3.48251,4.13207) (3.65971,3.87086) (3.86549,3.5458) (4.09666,3.16584) (4.34467,2.74806) (4.5966,2.31618) (4.83773,1.89618) (5.05474,1.51085) (5.23811,1.17555) (5.38285,0.896891) (5.48765,0.673976) (5.55317,0.501037) (5.58036,0.370035) (5.56908,0.272596) (5.51723,0.201121) (5.42044,0.149249) (5.27216,0.111934) (5.0646,0.0853168) (4.79047,0.0665215) (4.44576,0.053457) (4.0331,0.044639) (3.56458,0.0390514) (3.06221,0.0360444) (2.555,0.0352672) (2.07288,0.0366313) (1.64035,0.0403013) (1.27234,0.0467149) (0.973804,0.0566307) (0.74195,0.0712098) (0.569614,0.0921336) (0.448243,0.121762) (0.369969,0.163332) (0.328758,0.221175) (0.320881,0.300924) (0.344943,0.409613) (0.401587,0.555512) (0.492862,0.74747) (0.621167,0.993495) (0.78772,1.29846) (0.990736,1.6612) (1.22388,2.07208) (1.47591,2.51243) (1.73205,2.95717) (1.9771,3.38005) (2.19865,3.75943) (2.38931,4.08194) (2.54698,4.34304) (2.67379,4.54499) (2.7745,4.6939) (2.855,4.79702) (2.92146,4.86085) (2.97988,4.89007) (3.03604,4.88695) (3.09566,4.85123) (3.16458,4.78006) (3.24888,4.66828) (3.35478,4.50906) (3.48814,4.29509) (3.65339,4.02072) (3.85203,3.68474) (4.08103,3.29339)};
@@ -199,35 +290,9 @@ The permutation rule \[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\] also moves states cyclical
 \end{axis}\end{tikzpicture}}
 \caption{Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.}\end{figure}
 
-\section{Reading distances and contours in a triangle}\label{ch03-reading-distances-and-contours-in-a-triangle}
+For comparison, the permutation \(T(p_A,p_B,p_C)=(p_C,p_A,p_B)\) has \(T^3(p)=p\) and preserves the product exactly. Two rules can both look cyclic while having different invariants. An \textbf{invariant} is a quantity unchanged at every step of the particular recurrence.
 
-Barycentric coordinates have another useful interpretation. The perpendicular distance from a point to side \(AB\), divided by the triangle's full altitude, is \(p_C\). To verify this, note that the side is horizontal and that the point's height is \((\sqrt3/2)p_C\). By symmetry, the same statement holds for the other two coordinates and their opposite sides. Lines of constant \(p_C\) are therefore parallel to side \(AB\).
-
-\begin{example}[Recovering a composition from height ratios]
-
-Suppose a point lies at one fifth of the full altitude from side \(AB\) and at one half of the full altitude from side \(BC\). The first measurement gives \(p_C=1/5\), and the second gives \(p_A=1/2\). The remaining coordinate is \(p_B=3/10\). The three normalized distances add to one because they are barycentric coordinates.
-
-\end{example}
-
-A contour of a function is a set of states with the same function value. For the coordinate product, a contour is described by \(p_Ap_Bp_C=c\). The product is zero on the boundary and at most \(1/27\) in the interior. Product contours surround the center, but a one-step decrease in product does not specify a unique direction along a contour or a unique next coordinate. A scalar diagnostic compresses a two-dimensional state into one number, so it necessarily discards some detail.
-
-\section{Counting the interior and the boundary}\label{ch03-counting-the-interior-and-the-boundary}
-
-The stars-and-bars argument extends to \(k\) types. Nonnegative integer counts summing to \(N\) are encoded by \(N\) stars and \(k-1\) bars, so their number is \(\binom{N+k-1}{k-1}\). Empty groups correspond to zero counts. If every count must be positive, first give one token to each type. The remaining \(N-k\) tokens can be distributed freely, giving \(\binom{N-1}{k-1}\) states when \(N\geq k\).
-
-For three types, the number of boundary states is the total minus the strictly positive count. For \(N\geq3\), this is \[\binom{N+2}{2}-\binom{N-1}{2}=3N.\] One can also count \(N+1\) points on each of three edges and subtract three to correct the double counting of vertices. The two answers agree. Comparing two counting arguments is a useful way to verify a combinatorial formula.
-
-\begin{example}[A larger lattice]
-
-At \(N=8\), there are \(\binom{10}{2}=45\) total states and \(\binom72=21\) strictly positive states. The remaining \(24\) are on the boundary. A uniform distribution over these 45 lattice vertices would be a probability model on compositions. It is different from independently sampling eight individuals from a uniform three-type population: the latter assigns each count vector a multinomial weight.
-
-\end{example}
-
-\section{Sampling can change support}\label{ch03-sampling-can-change-support}
-
-At a positive state, deterministic positive multiplication keeps every type present. A sample of \(N\) individuals can omit a type by chance. On an edge of the triangle, a sampling model without mutation cannot restore the missing type, because its sampling probability is zero. A finite sampled population may therefore reach an edge and subsequently evolve on that edge, even when a deterministic trajectory remains in the interior for every finite step.
-
-This observation explains why a deterministic trajectory and a simulated finite population should be labeled separately. Both can be useful descriptions. The deterministic rule isolates state-dependent reweighting; the sampled model also includes fluctuations associated with finitely many individuals. Chapter 4 provides exact probabilities for those fluctuations.
+Use the simplex view of the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html}{operator explorer} to compare neighboring entropy values. The \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week03.html}{weekly demonstration} also explores lattices and cyclic selection. Chapter 4 turns the flux bookkeeping into a model for transporting actual probability among labeled locations.
 
 \section{Exercises}\label{ch03-exercises}
 
@@ -235,67 +300,67 @@ This observation explains why a deterministic trajectory and a simulated finite 
 
 \item 
 
-Plot \((1,0,0)\), \((0,1/2,1/2)\), and \((1/4,1/4,1/2)\) using barycentric coordinates.
+Plot \((1,0,0)\), \((0,1/2,1/2)\), and \((1/4,1/4,1/2)\) in barycentric coordinates.
 
 \item 
 
-Recover the probabilities of the point \((u,v)=(1/2,\sqrt3/6)\).
+List all six states for \(N=2\), and verify the state-count formula.
 
 \item 
 
-List all count triples with \(N=2\). Verify the formula for their number.
+List the neighbors of \((2,1,1)\) for \(N=4\). Explain why the corner \((4,0,0)\) has fewer neighbors.
 
 \item 
 
-How many lattice states are there for \(N=10\)? How many have all three counts positive?
+For \(N=4\) and counts \((2,1,1)\), calculate the concentration differences for transfers \(A\) to \(B\) and \(B\) to \(C\).
 
 \item 
 
-List the neighbors of \((2,1,1)\) under one-token moves.
+Calculate the entropy difference for the transfer from counts \((2,1,1)\) to \((2,2,0)\). Compare its sign with the concentration change.
 
 \item 
 
-Compute the scores of the balanced cyclic table at \((1/5,1/2,3/10)\).
+Explain why \(D_{A\leftarrow C}F\) and \(D_{C\leftarrow A}F\) at the same starting state need not be negatives of each other. Identify the edge reversal that does give the negative.
 
 \item 
 
-Verify algebraically that \(\sum_i p_if_i=0\) for the balanced table.
+Choose two paths from \((4,0,0)\) to \((2,2,0)\). Add the concentration differences along each path and compare the totals.
 
 \item 
 
-Derive the product update formula for exponential multipliers for any three scores, without assuming balance.
+Give a scalar potential on three vertices with values \(0,2,5\). Calculate its three gradient edge values and the circulation around the triangle.
 
 \item 
 
-Explain why the product test says nothing new on an edge of the triangle. Determine whether the update can leave that edge.
+Assign a clockwise unit flux around a triangle. Calculate divergence at each vertex and circulation around the triangle.
 
 \item 
 
-Show that the center is the unique interior state where all balanced cyclic scores agree.
+Count the strictly positive three-category states for \(N=10\) by first placing one token in each category.
 
 \item 
 
-For the permutation rule, determine all fixed states and all possible periods.
+For the balanced cyclic table, verify \(\sum_i f_i=0\) and \(\sum_i p_if_i=0\). Derive the product update identity.
 
 \item 
 
-Compare deterministic normalization with sampling a fixed number of individuals after normalization. Which can lose a type in a single step when every initial proportion is positive?
+Explain why strict ascent of a scalar field must stop on a finite graph. Describe what could change if equal-valued moves were allowed.
 
 \end{exercises}
 
 \section{Selected solutions}\label{ch03-selected-solutions}
 
-\textbf{2.} The recovered probabilities are \((1/3,1/3,1/3)\), the center.
+\textbf{2.} The states are \((2,0,0),(1,1,0),(1,0,1),(0,2,0),(0,1,1),(0,0,2)\) in counts. The formula gives \((3)(4)/2=6\).
 
-\textbf{4.} There are \(\binom{12}{2}=66\) states. Subtract one token from each positive count; the remaining three nonnegative counts sum to \(7\), giving \(\binom92=36\) strictly positive states.
+\textbf{3.} The neighbors are \((1,2,1),(1,1,2),(3,0,1),(2,0,2),(3,1,0),(2,2,0)\). At the corner only the occupied category can donate.
 
-\textbf{5.} The neighbors are \((1,2,1)\), \((1,1,2)\), \((3,0,1)\), \((2,0,2)\), \((3,1,0)\), and \((2,2,0)\).
+\textbf{4.} The initial concentration is \(3/8\). The first transfer gives \((1,2,1)\) and zero change. The second gives \((2,0,2)\) with concentration \(1/2\), hence change \(1/8\).
 
-\textbf{6.} The scores are \((1/5,1/10,-3/10)\).
+\textbf{5.} The new entropy is \(\ln2\approx0.6931\), giving change \(-\tfrac12\ln2\approx-0.3466\). Concentration rises from \(3/8\) to \(1/2\), so its change is positive.
 
-\textbf{8.} Multiplying the three update equations gives \(P(p^+)=P(p)e^{\eta\sum_i f_i}/Z^3\). Balance is needed only to simplify the exponential factor to one.
+\textbf{8.} Orient the triangle \(U\to V\to W\to U\). The edge values are \(2,3,-5\). Their circulation is zero.
 
-\textbf{11.} A fixed state has three equal coordinates and is therefore the center. Every other state has period three, since applying the permutation three times is the identity and a period dividing three is either one or three.
+\textbf{10.} After reserving three tokens, the remaining seven can be distributed in \((8)(9)/2=36\) ways. The total number of states, including the boundary, is sixty-six.
 \labheading\begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist

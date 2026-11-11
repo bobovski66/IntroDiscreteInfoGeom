@@ -1,0 +1,1 @@
+Feedback errors from initial error -1/4. On the left, both magnitudes shrink and one alternates sign. On the right, an excessive correction amplifies the error; note the different vertical scale.

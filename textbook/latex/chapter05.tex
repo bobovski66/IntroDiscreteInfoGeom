@@ -92,6 +92,9 @@
 \displaywidowpenalty=10000
 \raggedbottom
 \setcounter{tocdepth}{1}
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3.2em}}
+\makeatother
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\passthrough}[1]{#1}
@@ -102,65 +105,137 @@
 \setcounter{chapter}{4}
 
 \chapter{Entropy and its discrete derivatives}
-\section{Entropy is a function on probability states}\label{ch05-entropy-is-a-function-on-probability-states}
+A sensor that always reports the same symbol is predictable. A sensor that reports four symbols equally often is harder to predict. Both devices have four labels available, but their probability distributions carry different amounts of uncertainty. We need a numerical function that depends on the probabilities themselves.
 
-For a probability vector \(p\), Shannon entropy in natural-log units is \[H(p)=-\sum_i p_i\log p_i.\] It measures average surprise. We can evaluate it at the states of a probability lattice and take differences along allowed token transfers. Because this is a finite set of states, the resulting calculus is entirely algebraic and numerical.
+Entropy provides that function. We met its formula on the probability lattice in Chapter 3. Here we will build its interpretation from surprise, connect it to counting and communication, and then apply the difference calculus to its values. The central question is precise: for a stated change of probability, how much does uncertainty change?
 
-Begin with two categories and \(N=4\) tokens. Let \[H_k=H\left(\frac k4,1-\frac k4\right),\qquad k=0,1,2,3,4.\] To four decimals the entropy sequence is \[0,\quad0.5623,\quad0.6931,\quad0.5623,\quad0.\] Its forward differences are \[0.5623,\quad0.1308,\quad-0.1308,\quad-0.5623.\] The signs show that entropy rises toward balanced proportions and falls afterward.
+\section{Why surprise is measured with a logarithm}\label{ch05-why-surprise-is-measured-with-a-logarithm}
 
-\section{Second differences describe discrete concavity}\label{ch05-second-differences-describe-discrete-concavity}
+An event of probability one is unsurprising. An event of probability \(1/2\) requires one fair binary choice to identify. An event of probability \(1/8\) is as selective as three specified fair binary choices. A useful surprise scale assigns these events values zero, one, and three.
 
-The second differences are \[\Delta^2H_k=H_{k+2}-2H_{k+1}+H_k.\] For the five-state entropy sequence, these three values are all negative. So the \emph{first differences decrease} as \(k\) increases. This is the discrete expression of concavity: each additional transfer in the same direction provides a smaller entropy gain, then eventually an entropy loss.
+For \(z>0\), the base-two logarithm \(\log_2 z\) is the exponent satisfying \(2^{\log_2z}=z\). Thus \[\log_2 8=3,\qquad \log_2(1/8)=-3.\] The \textbf{surprisal} of an event with probability \(p>0\) is \(-\log_2p\) bits. Lower probabilities give greater positive surprise.
 
-More generally, the binary entropy function is concave on \([0,1]\), so sampling it at equally spaced points gives nonpositive second differences. The conclusion can be investigated from finite tables without assuming students know differential calculus.
+Logarithms turn multiplication into addition: \[\log_2(ab)=\log_2a+\log_2b.\] If independent events have probabilities \(p\) and \(q\), the joint probability is \(pq\) and the joint surprisal is the sum of their surprisals. This additivity is the reason a logarithm is useful.
 
-\section{An entropy-increasing difference equation}\label{ch05-an-entropy-increasing-difference-equation}
+Natural logarithms use base \(e\). The same surprise scale in natural units, or \textbf{nats}, is \(-\ln p\). The conversion is \[\log_2p=\frac{\ln p}{\ln2}.\] Changing base changes units, as converting meters to feet changes the number attached to a length. It does not change which distribution has greater entropy.
 
-A simple deterministic rule on these five states is: move one token toward a neighboring state with larger entropy, and remain in place if neither neighbor improves it. Starting at \(k=0\), the path is \[0\to1\to2\to2\to\cdots.\] Along the trajectory, \(\Delta H_n=H_{k_{n+1}}-H_{k_n}\geq0\). Entropy acts as a \textbf{monotone quantity} for this particular dynamics, because we constructed the update to make it increase.
+\begin{example}[A message's surprise and its frequency]
 
-Do not assume entropy increases under every possible update. Multiplicative selection may lower entropy, and some information channels concentrate probability. Always state the recurrence before making a claim about entropy change.
-
-\section{Accumulated information change}\label{ch05-accumulated-information-change}
-
-The discrete fundamental theorem now reads \[\sum_{n=0}^{T-1}\Delta H_n=H(p_T)-H(p_0).\] This separates the small changes produced at each step from the total change across an experiment. The sections that follow develop code trees and counting formulas that give entropy a second interpretation: how many distinct messages or samples can share the same approximate composition.
-
-\section{Further investigations: Entropy and its discrete derivatives}\label{ch05-further-investigations-entropy-and-its-discrete-derivatives}
-
-A message that was very likely conveys less surprise than a message that was very unlikely. Logarithms turn this idea into an additive numerical measure. The same measure appears in binary code lengths and in the number of ordered samples with a specified composition. These connections give entropy a finite combinatorial interpretation.
-
-\section{Logarithms measure multiplicative scales}\label{ch05-logarithms-measure-multiplicative-scales}
-
-For \(a>0\), \(\log_2a\) is the exponent to which \(2\) must be raised to obtain \(a\). Thus \(\log_2 8=3\) and \(\log_2(1/4)=-2\). The natural logarithm \(\ln a\) uses base \(e\). The conversion formula is \(\log_2a=\ln a/\ln2\).
-
-The identities \[\ln(ab)=\ln a+\ln b,\qquad \ln(a^r)=r\ln a\] allow us to express repeated multiplication as addition. The logarithm is increasing, so it preserves inequalities between positive numbers. No method for differentiating logarithms is needed for these uses.
-
-The \textbf{surprisal} of an outcome of probability \(p>0\) is \(-\log_2p\) bits. An event of probability \(1/2\) has one bit of surprisal; an event of probability \(1/8\) has three bits. For independent outcomes with probabilities \(p\) and \(q\), their combined surprisal is the sum because \(-\log_2(pq)=-\log_2p-\log_2q\).
-
-\section{Entropy is average surprisal}\label{ch05-entropy-is-average-surprisal}
-
-For a finite distribution \(p\), its \textbf{Shannon entropy in bits} is \[H_2(p)=-\sum_i p_i\log_2p_i.\] Using natural logarithms gives entropy in \textbf{nats}: \[H(p)=-\sum_i p_i\ln p_i=H_2(p)\ln2.\] A zero-probability outcome is assigned contribution zero to the entropy sum. This convention reflects that the outcome is never observed; it avoids evaluating its individual infinite surprisal inside an average.
-
-\begin{example}[Three distributions on the same labels]
-
-The distribution \((1,0,0,0)\) has entropy zero bits. The distribution \((1/2,1/4,1/4,0)\) has entropy \(1/2+1/2+1/2=3/2\) bits. The uniform distribution on four labels has entropy \(2\) bits. The label set alone does not determine uncertainty; the probabilities matter.
+Suppose a device reports \(A,B,C\) with probabilities \((1/2,1/4,1/4)\). An \(A\) report has surprisal one bit; a \(B\) or \(C\) report has surprisal two bits. An unlikely report is more surprising when it occurs, but it occurs less often. Average uncertainty must account for both facts.
 
 \end{example}
 
-Entropy is always nonnegative, since \(-\ln p_i\geq0\) for \(0<p_i\leq1\). It is at most \(\ln k\) for a distribution on \(k\) labels. For a positive distribution, weighted arithmetic-geometric mean gives \[\prod_i(1/p_i)^{p_i}\leq\sum_i p_i(1/p_i)=k.\] Taking logarithms proves \(H(p)\leq\ln k\). If some entries vanish, apply the same argument on the support, the set of labels with positive probability. Equality at the \(\ln k\) bound requires all \(k\) probabilities to equal \(1/k\).
+\section{Entropy averages the surprise over observations}\label{ch05-entropy-averages-the-surprise-over-observations}
 
-\section{Binary trees turn messages into bit strings}\label{ch05-binary-trees-turn-messages-into-bit-strings}
+Using the expectation from Chapter 4, define \textbf{Shannon entropy} \[\boxed{H(p)=-\sum_i p_i\ln p_i.}\] The version in bits is \(H_2(p)=H(p)/\ln2\). In the three-symbol example, \[H_2(p)=\frac12(1)+\frac14(2)+\frac14(2)=\frac32\text{ bits}.\]
 
-A \textbf{prefix code} assigns each label a bit string such that no string is the beginning of another. A binary tree represents the code: a left branch contributes \(0\), a right branch contributes \(1\), and a label occupies a leaf. Decoding proceeds along branches until it reaches a leaf, after which it starts again at the root.
+Entropy is an average under the distribution being described. It is not the surprise of every individual observation. Nor does it count how meaningful a message is to a person. It quantifies the uncertainty about which label will be observed within a specified probability model.
 
-\begin{example}[A code matched to three probabilities]
+A zero-probability label contributes zero. It never occurs under the model, so it contributes nothing to the average. We write \(0\ln0:=0\) as a convention for the product and skip such entries in calculations.
 
-For probabilities \((1/2,1/4,1/4)\), assign \(A\mapsto0\), \(B\mapsto10\), \(C\mapsto11\). The codeword lengths are \((1,2,2)\), so their expected length is \((1/2)1+(1/4)2+(1/4)2=3/2\) bits. This equals the entropy because each codeword has length \(-\log_2p_i\).
+Pure states such as \((1,0,0)\) have entropy zero. For a uniform distribution on \(k\) labels, \[H(1/k,\ldots,1/k)=-k\frac1k\ln\frac1k=\ln k.\] More equally plausible possibilities require more information to identify.
+
+Entropy is unchanged by relabeling categories because the sum contains the same probability values. A change of labels is different from merging labels: merging may discard distinctions that were previously observable.
+
+A helpful way to read the entropy sum is to imagine a long list of reports. A report of type \(i\) contributes surprise \(-\ln p_i\). The fraction of reports of that type is modeled by \(p_i\). Multiplying those two quantities gives its contribution to the mean. A rare outcome has high individual surprise but a small averaging weight.
+
+For example, a binary source with probabilities \((0.99,0.01)\) has entropy about \(0.0560\) nats. Its rare outcome has surprisal \(-\ln0.01\approx4.6052\) nats. Those statements are compatible: most reports are easy to predict, while a small fraction are surprising. Confusing individual surprise with average entropy would reverse the interpretation of many information calculations.
+
+One can express entropy as an effective number of equally likely outcomes: \[N_{\mathrm{eff}}=e^{H(p)}.\] A uniform distribution on \(k\) labels has \(N_{\mathrm{eff}}=k\). For \((1/2,1/4,1/4)\), the effective count is \(2^{3/2}\approx2.828\), between two and three. This need not be an integer because it matches an uncertainty level, rather than counting labels literally. The number is sometimes called perplexity in prediction settings.
+
+\section{Why balanced distributions have the largest entropy}\label{ch05-why-balanced-distributions-have-the-largest-entropy}
+
+Nonnegativity follows immediately: \(-\ln p_i\geq0\) when \(0<p_i\leq1\). An upper bound follows from the weighted arithmetic-geometric mean inequality introduced in Chapter 3.
+
+First suppose all \(k\) probabilities are positive. Apply the inequality to numbers \(1/p_i\) with weights \(p_i\): \[\prod_i(1/p_i)^{p_i}\leq\sum_i p_i(1/p_i)=k.\] Taking logarithms gives \[\boxed{0\leq H(p)\leq\ln k.}\] Equality at the upper bound requires the numbers \(1/p_i\) to be equal, hence every probability to be \(1/k\).
+
+If only \(s\) entries are positive, apply the same argument to those entries to obtain \(H(p)\leq\ln s\leq\ln k\). The set of positive-probability labels is the \textbf{support}. Removing available outcomes can lower the largest uncertainty attainable.
+
+For four labels, compare \((1,0,0,0)\), \((1/2,1/4,1/4,0)\), and \((1/4,1/4,1/4,1/4)\). Their entropies in bits are zero, \(3/2\), and two. The bound is attained only by the last distribution.
+
+\section{An entropy table turns the field into a sequence}\label{ch05-an-entropy-table-turns-the-field-into-a-sequence}
+
+Restrict to a binary lattice with four tokens. Let \(k\) be the number assigned to \(A\), and define \[H_k=H(k/4,1-k/4),\qquad k=0,1,2,3,4.\] The result is a five-term sequence indexed by composition.
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+\(k\) & Probability of \(A\) & \(H_k\) in nats & Forward difference \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0 & 0 & \(0.562335\) \\
+1 & \(1/4\) & \(0.562335\) & \(0.130812\) \\
+2 & \(1/2\) & \(0.693147\) & \(-0.130812\) \\
+3 & \(3/4\) & \(0.562335\) & \(-0.562335\) \\
+4 & 1 & 0 & \\
+\end{longtable}
+
+For example, \[H_1=-\frac14\ln\frac14-\frac34\ln\frac34\approx0.562335.\] The first difference is \(\Delta H_k=H_{k+1}-H_k\). Its sign changes from positive to negative as the count passes through the balanced state. This identifies the maximum from a finite table.
+
+Two different indices will appear in this chapter. The index \(k\) describes position on a lattice. The index \(n\) will describe time along an update trajectory. A spatial difference \(H_{k+1}-H_k\) and a time difference \(H(p_{n+1})-H(p_n)\) use the same subtraction operation, but compare different pairs of states.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Count $k$ of four tokens},ylabel={Entropy $H_k$ (nats)},xmin=-.2,xmax=4.2,ymin=0,ymax=.78,xtick={0,...,4},grid=major]
+\addplot[teal,mark=*] coordinates {(0,0)(1,.5623351446)(2,.6931471806)(3,.5623351446)(4,0)};
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Starting count $k$},ylabel={First difference $\Delta H_k$},xmin=-.5,xmax=3.5,ymin=-.7,ymax=.7,xtick={0,...,3},grid=major]
+\addplot[copper,ybar,bar width=13pt] coordinates {(0,.5623351446)(1,.130812036)(2,-.130812036)(3,-.5623351446)};
+\end{axis}\end{tikzpicture}}
+\caption{Binary entropy on the four-token lattice and its forward differences. The differences decrease and change sign at the balanced composition.}\end{figure}
+
+\section{Concavity means diminishing gains in one direction}\label{ch05-concavity-means-diminishing-gains-in-one-direction}
+
+The first differences in the table decrease as \(k\) increases. Taking their differences gives \[\Delta^2H_k=H_{k+2}-2H_{k+1}+H_k.\] For the four-token table, these are approximately \[-0.431523,\quad-0.261624,\quad-0.431523.\] All are negative. Adding successive tokens to \(A\) brings smaller gains, then losses, as the distribution becomes more concentrated in \(A\).
+
+A function on the simplex is \textbf{concave} when \[H((1-t)p+tr)\geq(1-t)H(p)+tH(r),
+\qquad 0\leq t\leq1.\] The left side describes pooling the distributions and forgetting which source an observation came from. The right side averages the uncertainty when that source is retained.
+
+For a binary sequence sampled at equal probability intervals, apply concavity to the midpoint: \[H_{k+1}\geq\frac12(H_k+H_{k+2}).\] Rearranging gives \(\Delta^2H_k\leq0\). This connects the geometric statement about mixtures with the discrete second difference.
+
+Here is a finite proof of concavity. It is useful to follow the meaning of the quantities before the algebra. Fix one coordinate, let its two probabilities be \(a,b\), and let \(m=(1-t)a+tb>0\). Define weights \[\alpha=\frac{(1-t)a}{m},\qquad \beta=\frac{tb}{m}.\] They are nonnegative and add to one. Weighted arithmetic-geometric mean applied to \(m/a\) and \(m/b\) gives \[\alpha\ln(m/a)+\beta\ln(m/b)\leq0.\] Indeed, their weighted arithmetic mean is one. Multiplying by \(m\) and rearranging yields \[m\ln m\leq(1-t)a\ln a+tb\ln b.\] If one entry is zero, omit its zero-weight term; the corresponding arithmetic mean is at most one, giving the same inequality. If \(m=0\), every contribution is zero.
+
+Now apply this coordinate inequality to every pair \(p_i,r_i\), add, and multiply by minus one. The result is the stated entropy inequality. No derivative has been used.
+
+The averaging parameter in concavity deserves a concrete interpretation. Suppose source \(P\) is selected with probability \(1-t\) and source \(R\) with probability \(t\). Conditional on the selected source, draw a label using its table. If the source name is hidden, the label has distribution \(m=(1-t)p+tr\).
+
+Knowing the source makes prediction easier on average. For two certain but different sources, \(p=(1,0)\) and \(r=(0,1)\), the conditional uncertainty is zero. Hiding an equally likely source name produces \(m=(1/2,1/2)\) with entropy \(\ln2\). The uncertainty has come entirely from not knowing which source was used.
+
+Concavity does not say a mixture's entropy is at least the entropy of each input. Mixing a fair binary source with a certain source can lower the fair source's entropy while remaining above the weighted average of the two entropies. The two sides of the concavity inequality should be compared exactly as written.
+
+For a denominator-\(N\) lattice, raw directional changes usually become smaller as the step \(1/N\) shrinks. Comparing slopes across resolutions therefore requires deciding whether to use \(\Delta H\) or the quotient \(N\Delta H\). A smaller one-token entropy change on a finer lattice does not by itself show that the underlying function has become flatter. It may simply mean the token represents less probability.
+
+\section{A rule that balances tokens raises entropy}\label{ch05-a-rule-that-balances-tokens-raises-entropy}
+
+Consider a lattice update that moves to a neighbor with strictly greater entropy whenever one exists, and stays put otherwise. On the binary four-token lattice, starting from \(k=0\) gives \[0\to1\to2\to2\to\cdots.\] The corresponding entropy sequence is \[0,\quad0.562335,\quad0.693147,\quad0.693147,\ldots.\] Its time differences are nonnegative. The rule was constructed to have that property.
+
+For several categories, a transfer from a count \(a\) to a count \(b\) raises entropy whenever \(a\geq b+2\). To see why, write \[h(j)=-\frac jN\ln\frac jN.\] The entropy contribution of the two categories changes by \[[h(a-1)-h(a)]+[h(b+1)-h(b)].\] The increments \(h(j+1)-h(j)\) decrease with \(j\), by the concavity just proved. The gain at the smaller count exceeds the loss at the larger one. When \(a=b+1\), the transfer only swaps the counts and leaves entropy unchanged.
+
+Thus entropy is maximized on the token lattice when counts differ by at most one. If \(N\) is divisible by the number of categories, exact uniformity is available. Otherwise the most balanced integer counts replace the continuous uniform point. A lattice constraint changes which maximum can actually be reached.
+
+\begin{example}[The most balanced four-token state]
+
+With three categories and four tokens, exact uniformity would require \(4/3\) tokens in each category. The maximizing count states are the three permutations of \((2,1,1)\). Moving toward \((3,1,0)\) concentrates the counts and lowers entropy. Moving between two permutations of \((2,1,1)\) leaves entropy unchanged.
 
 \end{example}
 
-If three labels are equally probable, the same code has expected length \(5/3\) bits, while the entropy is \(\log_2 3\approx1.5850\) bits. Individual code lengths must be whole numbers, which can prevent a single-symbol code from attaining the entropy exactly. Coding blocks of several symbols permits finer averages.
+\section{Entropy change is a property of the dynamics}\label{ch05-entropy-change-is-a-property-of-the-dynamics}
 
-For a prefix tree with longest code length \(L\), a leaf at depth \(\ell_i\) occupies \(2^{L-\ell_i}\) positions in a complete depth-\(L\) tree. Different leaves occupy disjoint positions. Consequently, \[\sum_i2^{-\ell_i}\leq1.\] This is the \textbf{Kraft inequality}. It is a counting restriction on possible code lengths. Chapter 6 will use relative entropy to show that every such code has expected length at least \(H_2(p)\).
+An entropy-increasing rule is one possible update. The growth rule from Chapter 1 can do something else. Starting at \((1/2,1/2)\) and giving \(A\) multiplier two and \(B\) multiplier one produces \((2/3,1/3)\). Its entropy is about \(0.6365\) nats, less than the starting value \(\ln2\approx0.6931\).
+
+The normalized growth rule favors one type; the balancing rule favors uncertainty. A probability vector alone imposes neither direction of change. We need to state both the function being measured and the recurrence being used.
+
+For any trajectory, telescoping gives the exact information balance \[\boxed{\sum_{n=0}^{T-1}[H(p_{n+1})-H(p_n)]
+=H(p_T)-H(p_0).}\] Positive and negative steps can cancel. An endpoint entropy change does not reveal every intermediate change.
+
+When a process always raises entropy, the summands measure the uncertainty gained during each step. In Chapter 6 we will use a related quantity that decreases toward a reference distribution, allowing stability to be proved by a one-step inequality.
+
+\section{Prefix codes connect uncertainty to messages}\label{ch05-prefix-codes-connect-uncertainty-to-messages}
+
+Suppose symbols are transmitted as bit strings. A \textbf{prefix code} has the property that no codeword begins another codeword. This allows the receiver to identify where each symbol ends.
+
+For probabilities \((1/2,1/4,1/4)\), assign \[A\mapsto0,\qquad B\mapsto10,\qquad C\mapsto11.\] A binary tree describes the code: each branch contributes a bit, and each leaf identifies a symbol. The expected length is \(3/2\) bits per symbol, matching the entropy.
 
 \begin{figure}[htbp]\centering
 \resizebox{.98\linewidth}{!}{\begin{tikzpicture}[level distance=1.5cm,sibling distance=4cm,every node/.style={font=\small},edge from parent/.style={draw,ink,thick},label distance=2pt]
@@ -174,57 +249,36 @@ edge from parent node[above right]{$1$}};
 \end{tikzpicture}}
 \caption{A binary prefix tree with code lengths 1, 2, and 2, matched to probabilities (1/2,1/4,1/4).}\end{figure}
 
-\section{Multiplicity and entropy}\label{ch05-multiplicity-and-entropy}
+For three equally probable symbols, the same lengths \((1,2,2)\) give an expected length \(5/3\) bits, while the entropy is \(\log_2 3\approx1.5850\). Individual code lengths must be integers. Coding blocks makes finer average lengths possible: nine equally likely two-symbol blocks fit in a fixed four-bit code, or two bits per symbol; twenty-seven three-symbol blocks fit in five bits, or \(5/3\) bits per symbol. For uniform blocks of length \(m\), a fixed code needs \(\lceil m\log_2 3\rceil\) bits, whose per-symbol excess over \(\log_2 3\) is less than \(1/m\).
 
-Let counts \(n_i\) sum to \(N\), and set \(q_i=n_i/N\). The multiplicity \(\Omega=N!/\prod_i n_i!\) counts ordered samples with empirical distribution \(q\). Under the distribution \(q\) itself, every such ordered sample has probability \[\prod_iq_i^{n_i}=\exp\left(N\sum_iq_i\ln q_i\right)=e^{-NH(q)}.\] Therefore the probability of the entire collection of samples with this composition is \[\Omega e^{-NH(q)}\leq1.\] Taking logarithms gives the exact finite bound \[\frac{\ln\Omega}{N}\leq H(q).\] The left side is a logarithmic count per observation. It is generally smaller than the entropy at finite \(N\). This inequality requires only counting and the fact that an event cannot have probability greater than one.
+A tree also imposes a counting restriction. If the longest codeword has length \(L\), a leaf at depth \(\ell_i\) occupies \(2^{L-\ell_i}\) positions at depth \(L\). These sets are disjoint, so \[\sum_i2^{-\ell_i}\leq1.\] This is the Kraft inequality. Chapter 6 combines it with a probability inequality to show that entropy is a lower bound on the expected length of any prefix code.
 
-\begin{example}[A balanced sample of size four]
+\section{Joint observations and repeated information}\label{ch05-joint-observations-and-repeated-information}
 
-For binary counts \((2,2)\), we have \(\Omega=6\). The logarithmic count per observation is \(\log_2 6/4\approx0.6462\) bits, while \(H_2(1/2,1/2)=1\) bit. The probability of exactly two successes under a fair binary model is \(6/16=3/8\). It is not the whole sample space, which explains the gap in the finite bound.
+For a pair of labels \((X,Y)\), let \(p_{ij}\) be the probability that \(X=i\) and \(Y=j\). Its joint entropy is \[H(X,Y)=-\sum_{i,j}p_{ij}\ln p_{ij}.\] The probabilities must add to one over all pairs. This is the same entropy definition applied to a larger label set.
 
-\end{example}
+If the observations are independent, \(p_{ij}=p_iq_j\). Expanding the logarithm gives \[\begin{aligned}
+H(X,Y)
+&=-\sum_{i,j}p_iq_j(\ln p_i+\ln q_j)\\
+&=-\sum_i p_i\ln p_i\sum_jq_j
+-\sum_jq_j\ln q_j\sum_i p_i\\
+&=H(X)+H(Y).
+\end{aligned}\] Independent uncertainties add because their probabilities multiply. Two independent fair binary observations have four equally likely ordered outcomes and entropy \(2\ln2\).
 
-Many different count vectors are possible, so a single composition need not account for most samples. Entropy captures the exponential scale associated with a composition, while the exact multinomial coefficient records its finite multiplicity. We can compare the two numerically without assuming they are equal.
+Now let \(Y\) be an exact copy of a fair binary \(X\). Only pairs \((0,0)\) and \((1,1)\) occur, each with probability one half. The joint entropy is just \(\ln2\). Each individual observation is fair, but the second adds no uncertainty once the first is known. Marginal probability tables alone therefore do not determine joint entropy.
 
-\section{Logarithms also simplify dynamics}\label{ch05-logarithms-also-simplify-dynamics}
+This example also helps interpret coding blocks. A code for a sequence should reflect the sequence's joint probabilities. Repeatedly copying one symbol produces a very different information source from making independent draws with the same single-symbol frequencies. Counting and coding formulas must retain their independence assumptions.
 
-For exponential selection, the ratio of two positive coordinates satisfies \[\frac{p_i^+}{p_j^+}=\frac{p_i}{p_j}e^{\eta(f_i-f_j)}.\] Taking natural logarithms yields the exact \textbf{log-odds increment} \[\ln\frac{p_i^+}{p_j^+}-\ln\frac{p_i}{p_j}=\eta(f_i-f_j).\] This is an additive difference equation. If scores are constant, repeated addition solves it. More directly, \[p_{i,t}=\frac{p_{i,0}e^{t\eta f_i}}{\sum_jp_{j,0}e^{t\eta f_j}}.\] When scores depend on the current state, the log-odds increment still holds for each step, but the score differences must be summed along the trajectory.
+\section{Counting gives another finite meaning to entropy}\label{ch05-counting-gives-another-finite-meaning-to-entropy}
 
-\begin{example}[Accumulating evidence in odds]
+For counts \(n_i\) adding to \(N\), let \(q_i=n_i/N\) be the empirical distribution. Chapter 4 showed that \[\Omega=\frac{N!}{\prod_i n_i!}\] ordered samples have this composition. Under the distribution \(q\) itself, each such sample has probability \[\prod_i q_i^{n_i}
+=\exp\left(N\sum_i q_i\ln q_i\right)=e^{-NH(q)}.\] The probability of the whole count event is therefore \(\Omega e^{-NH(q)}\). An event has probability at most one, so \[\boxed{\frac{\ln\Omega}{N}\leq H(q).}\] The left side is a logarithmic count per observation. This is an exact finite bound, not an equality asserted at every sample size.
 
-Suppose two hypotheses have initial odds \(1:4\). A sequence of observations has likelihood ratios \(2\), \(3\), and \(1/2\) in favor of the first hypothesis. Multiplying gives final odds \(3:4\), so its final probability is \(3/7\). Equivalently, the log-odds change by \(\ln2+\ln3-\ln2=\ln3\). Likelihood ratios are multiplicative weights, a connection we will revisit in learning updates.
+For balanced binary counts \((2,2)\), \(\Omega=6\). Hence \(\log_2\Omega/4\approx0.6462\) bits, while the entropy is one bit. The count event includes six of the sixteen equally likely ordered samples. That incomplete coverage accounts for the strict inequality.
 
-\end{example}
+The same entropy function thus connects three descriptions: average surprise, attainable coding rates, and the exponential scale of sample multiplicities. Our discrete calculus measures how this function changes between probability states.
 
-\section{Entropy of a pair of observations}\label{ch05-entropy-of-a-pair-of-observations}
-
-Let \(X\) and \(Y\) have joint probabilities \(p_{ij}=P(X=i,Y=j)\). Their joint entropy is \(H(X,Y)=-\sum_{i,j}p_{ij}\ln p_{ij}\). The marginal probability of \(X=i\) is \(p_i=\sum_jp_{ij}\). When \(p_i>0\), write \(r_{j\mid i}=p_{ij}/p_i\) for the conditional table of \(Y\) given that value of \(X\).
-
-Using \(p_{ij}=p_i r_{j\mid i}\) and splitting the logarithm gives the \textbf{chain rule} \[H(X,Y)=H(X)+\sum_i p_iH(Y\mid X=i).\] The second term averages the entropy of the conditional tables. Values of \(i\) with probability zero contribute zero. The formula states that describing a pair can be organized as describing the first label and then describing the second label given the first.
-
-If the observations are independent, every conditional table equals the marginal table of \(Y\), so \(H(X,Y)=H(X)+H(Y)\). Applying this repeatedly gives entropy \(NH(p)\) for an independent length-\(N\) sample from \(p\). This is the average surprisal of an ordered sample; it is different from the logarithm of the number of samples in one count class.
-
-\begin{example}[Dependence changes joint uncertainty]
-
-Let \(X\) be a fair binary label. If \(Y=X\), the two possible pairs are \((0,0)\) and \((1,1)\), each with probability \(1/2\). Joint entropy is one bit: knowing the first label determines the second. If \(Y\) is instead an independent fair label, all four pairs have probability \(1/4\), giving two bits of joint entropy. The marginal tables are the same in the two cases, while their dependence differs.
-
-\end{example}
-
-\section{Coding blocks improves fractional averages}\label{ch05-coding-blocks-improves-fractional-averages}
-
-Return to three equally likely labels. A single-label prefix code with lengths \((1,2,2)\) averages \(5/3\) bits per label. For a block of two labels there are nine equally likely ordered pairs. A binary tree can assign seven of these pairs length three and the remaining two length four. Its Kraft sum is \(7/8+2/16=1\), and such a tree can be formed by splitting one leaf of a complete depth-three tree into two children.
-
-The expected length per pair is \((7\cdot3+2\cdot4)/9=29/9\) bits, or \(29/18\approx1.6111\) bits per original label. This is closer to \(\log_23\approx1.5850\) than \(5/3\approx1.6667\). The calculation exhibits how whole-number lengths for blocks allow smaller fractional averages per symbol.
-
-\begin{example}[An explicit two-label code]
-
-List the nine ordered pairs as \(AA,AB,AC,BA,BB,BC,CA,CB,CC\). Assign the first seven the words \(000,001,010,011,100,101,110\), and assign the last two \(1110,1111\). No word prefixes another. Each pair is equally likely, so the expected length is \(29/9\) bits per pair, as calculated above.
-
-\end{example}
-
-\section{Interpreting a change of labels}\label{ch05-interpreting-a-change-of-labels}
-
-Entropy depends on probabilities and is unchanged by merely renaming or permuting labels. Splitting or merging categories is a different operation. Splitting a label into two distinguishable sublabels can increase entropy because there is more to specify. Merging labels can remove that distinction. For example, merging the two probability-\(1/4\) labels in \((1/2,1/4,1/4)\) gives \((1/2,1/2)\) and reduces entropy from \(3/2\) bits to one bit. Later, a stochastic channel will provide a general language for such recording operations.
+Use the simplex view of the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html}{operator explorer} to compare neighboring entropy values. In the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week05.html}{weekly demonstration}, explore surprise and code lengths. Two different distributions can still have the same entropy. Chapter 6 develops a comparison that keeps track of a specific reference model.
 
 \section{Exercises}\label{ch05-exercises}
 
@@ -232,67 +286,71 @@ Entropy depends on probabilities and is unchanged by merely renaming or permutin
 
 \item 
 
-Evaluate \(\log_2(1/16)\), \(\ln(e^3)\), and \(\log_2 32\).
+Find the surprisal in bits of probabilities \(1\), \(1/2\), \(1/8\), and \(1/16\). Explain additivity for two independent events.
 
 \item 
 
-Find the surprisal in bits of outcomes with probabilities \(1/2\), \(1/4\), and \(1/32\).
+Compute entropy in bits and nats for \((1/2,1/4,1/4)\) and \((3/4,1/4)\).
 
 \item 
 
-Compute the entropy in bits of \((1/2,1/8,1/8,1/4)\).
+Construct the full binary entropy table for \(N=4\), including every first and second difference.
 
 \item 
 
-Explain why a certain outcome contributes zero entropy and why an impossible outcome is assigned zero contribution to the average.
+Distinguish the spatial index \(k\) from the time index \(n\) for the trajectory \(k_n=0,1,2,2,\ldots\). Calculate both kinds of differences.
 
 \item 
 
-Construct a prefix code with lengths \((1,2,3,3)\). Find its expected length under the probabilities in Exercise 3, assigning the shortest code to the most probable label.
+Find every maximum-entropy count state for three categories with \(N=5\). Explain why exact uniformity is unavailable.
 
 \item 
 
-Can code lengths \((1,1,2)\) belong to a prefix code? Use the Kraft inequality.
+Starting from counts \((5,0,0)\), give a sequence of entropy-increasing token transfers ending at one of the states in Exercise 5.
 
 \item 
 
-For uniform probabilities on three labels, compute the expected length of the code \(0,10,11\) and compare it with entropy.
+Starting at \((1/2,1/2)\), calculate three normalized growth states for multipliers \((2,1)\). Compare their entropies.
 
 \item 
 
-For binary counts \((3,3)\), compute the multiplicity, its base-two logarithm per observation, and the entropy of the empirical distribution.
+Use concavity to show that mixing any distribution with the uniform distribution cannot lower entropy.
 
 \item 
 
-Derive the finite multiplicity bound, carefully explaining why all ordered samples with the same counts have equal probability under \(q\).
+Verify that \(A\mapsto0\), \(B\mapsto10\), \(C\mapsto11\) is a prefix code. Calculate its expected length under uniform probabilities.
 
 \item 
 
-For fixed scores \((0,1,2)\), equal initial proportions, and \(\eta=\ln2\), find the proportions at step three.
+Derive the Kraft inequality by counting available positions in a full binary tree.
 
 \item 
 
-Show that adding a common value to every fixed score leaves all log-odds increments unchanged.
+For counts \((3,1)\), calculate \(\Omega\), \(\ln\Omega/N\), and \(H(3/4,1/4)\). Check the finite counting bound.
 
 \item 
 
-Give two distributions on four labels with different entropy but the same support. Explain their different average surprisals.
+Prove that two independent observations from \(p\) have joint entropy \(2H(p)\) by expanding the finite sum over pairs.
 
 \end{exercises}
 
 \section{Selected solutions}\label{ch05-selected-solutions}
 
-\textbf{1.} The values are \(-4\), \(3\), and \(5\).
+\textbf{2.} The first table has \(3/2\) bits or \((3/2)\ln2\approx1.0397\) nats. The second has about \(0.811278\) bits or \(0.562335\) nats.
 
-\textbf{3.} The entropy is \(1/2+3/8+3/8+1/2=7/4\) bits.
+\textbf{3.} To six decimal places, the entropy table and its differences are \[\begin{aligned}
+(H_k)&=(0,\;0.562335,\;0.693147,\;0.562335,\;0),\\
+(\Delta H_k)&=(0.562335,\;0.130812,\;-0.130812,\;-0.562335),\\
+(\Delta^2H_k)&=(-0.431523,\;-0.261624,\;-0.431523).
+\end{aligned}\]
 
-\textbf{5.} One code is \(0,10,110,111\), assigned in decreasing probability order. The expected length is \((1/2)1+(1/4)2+(1/8)3+(1/8)3=7/4\) bits.
+\textbf{5.} The maximizing states are the three permutations of \((2,2,1)\). Their counts differ by at most one. Equal counts would require \(5/3\) tokens per category.
 
-\textbf{6.} No.~The Kraft sum is \(1/2+1/2+1/4=5/4>1\).
+\textbf{7.} Including the initial state, the first three are \((1/2,1/2)\), \((2/3,1/3)\), and \((4/5,1/5)\). Their entropies are approximately \(0.6931,0.6365,0.5004\) nats.
 
-\textbf{8.} The multiplicity is \(\binom63=20\), so the logarithmic count per observation is \(\log_2 20/6\approx0.7203\) bits. The entropy is one bit.
+\textbf{9.} No listed word begins another. Expected length is \((1+2+2)/3=5/3\) bits.
 
-\textbf{10.} The unnormalized weights are \((1,8,64)\), giving \((1/73,8/73,64/73)\).
+\textbf{11.} The multiplicity is four and \(\ln4/4\approx0.346574\). Entropy is about \(0.562335\), so the bound holds strictly.
 \labheading\begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist

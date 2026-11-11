@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={Error $x_n-c$},xmin=0,xmax=5,ymin=-.3,ymax=.2,xtick={0,...,5},legend pos=north east,grid=major]
+\addplot[teal,mark=*] coordinates {(0,-0.25) (1,-0.125) (2,-0.0625) (3,-0.03125) (4,-0.015625) (5,-0.0078125)};\addlegendentry{$k=1/2$}
+\addplot[copper,mark=square*] coordinates {(0,-0.25) (1,0.125) (2,-0.0625) (3,0.03125) (4,-0.015625) (5,0.0078125)};\addlegendentry{$k=3/2$}
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={Error $x_n-c$},xmin=0,xmax=5,ymin=-1.5,ymax=2.1,xtick={0,...,5},legend pos=north west,grid=major]
+\addplot[copper,mark=square*] coordinates {(0,-0.25) (1,0.375) (2,-0.5625) (3,0.84375) (4,-1.26562) (5,1.89844)};\addlegendentry{$k=5/2$}
+\end{axis}\end{tikzpicture}

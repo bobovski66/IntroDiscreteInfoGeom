@@ -1,389 +1,462 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 10: Graph divergence, diffusion, and information flow · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="10"><p class="eyebrow">Week 10 · Reading</p><h1>Graph divergence, diffusion, and information flow</h1><nav class="week-nav" aria-label="Week 10 resources"><a aria-current=page href="../readings/week10.html">Reading</a><a  href="../demos/week10.html">Demonstration</a><a  href="../labs/week10.html">Lab</a><a  href="../quizzes/week10.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter10.pdf">Chapter 10 PDF</a> · <a href="../textbook/latex/chapter10.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Derive and compute the graph continuity equation.</li><li>Implement a stable discrete diffusion update.</li><li>Verify conservation, entropy change, and data processing in one example.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 10 -->
-<h2 id="information-moves-on-a-network">Information moves on a
-network</h2>
-<p>Let <span class="math inline">\(G=(V,E)\)</span> be a finite
-undirected graph. A probability distribution places mass <span
-class="math inline">\(p_i(n)\geq0\)</span> at each vertex, with total
-mass one. Give each undirected edge a single orientation for bookkeeping
-and denote the signed current from <span
-class="math inline">\(i\)</span> to <span
-class="math inline">\(j\)</span> by <span
-class="math inline">\(J_{ij}(n)=-J_{ji}(n)\)</span>.</p>
-<p>The <strong>discrete divergence</strong> at a vertex is net outward
-current, <span class="math display">\[\operatorname{div}J(i)=\sum_{j\sim
-i}J_{ij}.\]</span> Then the conservation law is the discrete continuity
-equation <span
-class="math display">\[\boxed{p_i(n+1)-p_i(n)=-\operatorname{div}J_n(i).}\]</span>
-Add this equation over every vertex. Each edge current cancels with its
-opposite, so the total probability remains one. This is a finite
-analogue of the divergence theorem.</p>
-<h2 id="a-graph-gradient-and-laplacian">A graph gradient and
-Laplacian</h2>
-<p>For a scalar field <span class="math inline">\(f\)</span> on the
-vertices, the gradient along an oriented edge <span
-class="math inline">\(i\to j\)</span> is <span
-class="math inline">\(f_j-f_i\)</span>. A diffusion current flowing from
-higher to lower probability can be chosen as <span
-class="math display">\[J_{ij}=\tau(p_i-p_j),\qquad\tau&gt;0.\]</span>
-Substitution yields <span
-class="math display">\[\boxed{p_i(n+1)=p_i(n)+\tau\sum_{j\sim
-i}(p_j(n)-p_i(n)).}\]</span> The sum is a <strong>graph
-Laplacian</strong> applied to <span class="math inline">\(p\)</span>. It
-measures how a vertex differs from its neighbors.</p>
-<p>To ensure nonnegative probabilities at every step, choose <span
-class="math inline">\(\tau\leq1/d_{\max}\)</span>, where <span
-class="math inline">\(d_{\max}\)</span> is the largest vertex degree.
-Then the update matrix is stochastic. Because the graph is undirected,
-its rows also sum to one, so it is doubly stochastic.</p>
-<h2 id="three-vertices-one-exact-step">Three vertices, one exact
-step</h2>
-<p>On the path <span class="math inline">\(A\)</span>–<span
-class="math inline">\(B\)</span>–<span class="math inline">\(C\)</span>,
-choose <span class="math inline">\(\tau=1/4\)</span> and start at <span
-class="math inline">\(p_0=(1,0,0)\)</span>. The step gives <span
-class="math display">\[p_1=(3/4,1/4,0).\]</span> The next gives <span
-class="math display">\[p_2=(5/8,5/16,1/16).\]</span> Compute <span
-class="math inline">\(\Delta p_0\)</span> and <span
-class="math inline">\(\Delta p_1\)</span>. In each case the three
-coordinates sum to zero, because the changes are redistribution.
-Repeating the update brings the distribution toward the stationary
-uniform state.</p>
-<h2 id="entropy-and-the-direction-of-change">Entropy and the direction
-of change</h2>
-<p>Because this symmetric diffusion is doubly stochastic, it does not
-decrease Shannon entropy: <span
-class="math display">\[H(p_{n+1})-H(p_n)\geq0.\]</span> One way to prove
-this is to apply the contraction of relative entropy toward the uniform
-distribution <span class="math inline">\(u\)</span>. Since <span
-class="math inline">\(D(p\|u)=\log|V|-H(p)\)</span> and <span
-class="math inline">\(Ku=u\)</span>, <span
-class="math display">\[D(Kp\|u)\leq D(p\|u).\]</span> Hence <span
-class="math inline">\(\Delta H_n\geq0\)</span>. The conclusion depends
-on the <strong>doubly stochastic</strong> assumption. An arbitrary
-stochastic channel may lower entropy.</p>
-<h2 id="the-courses-complete-mathematical-circle">The course’s complete
-mathematical circle</h2>
-<p>We started with <span class="math inline">\(\Delta
-a_n=a_{n+1}-a_n\)</span>. Now the same operation measures probability
-changes, Lyapunov dissipation, and entropy production, while the graph
-gradient and divergence describe where probability travels. The
-fundamental theorem for finite differences and the cancellation of
-internal fluxes explain why discrete conservation laws work.</p>
-<p>For the final investigation, choose a small graph and initial
-probability vector, compute at least four iterations, verify mass
-conservation, graph fluxes, and changes in Shannon entropy, then compare
-the limiting behavior with your predictions. Use finite calculations to
-explain what the mathematics says about information moving across the
-network.</p>
-<h2
-id="further-investigations-graph-divergence-diffusion-and-information-flow">Further
-investigations: Graph divergence, diffusion, and information flow</h2>
-<p>An observation can be recorded at several resolutions. A detailed
-label may be replaced by a broader group, passed through a noisy
-channel, or transported among nodes of a network. These operations
-transform probability tables by finite weighted sums. They connect graph
-dynamics with a basic principle of information geometry: applying the
-same observation rule to two models cannot make them more
-distinguishable by the discrepancies studied here.</p>
-<h2 id="a-stochastic-matrix-describes-one-step">A stochastic matrix
-describes one step</h2>
-<p>Let <span class="math inline">\(K_{ji}\)</span> be the probability of
-arriving at output label <span class="math inline">\(j\)</span> from
-input label <span class="math inline">\(i\)</span>. Our convention
-places the input in the column. Thus <span
-class="math display">\[K_{ji}\geq0,\qquad \sum_jK_{ji}=1\quad\hbox{for
-each }i.\]</span> Such a table is <strong>column-stochastic</strong>. If
-input probabilities are <span class="math inline">\(p_i\)</span>, the
-output probabilities are <span
-class="math display">\[p_j^+=\sum_iK_{ji}p_i,\qquad p^+=Kp.\]</span> The
-product symbol <span class="math inline">\(Kp\)</span> abbreviates these
-weighted sums. Adding over <span class="math inline">\(j\)</span> gives
-<span
-class="math inline">\(\sum_jp_j^+=\sum_ip_i\sum_jK_{ji}=1\)</span>. This
-is a linear difference equation on probability vectors.</p>
-<p>Repeated application gives <span
-class="math inline">\(p_t=K^tp_0\)</span>. A probability vector <span
-class="math inline">\(\pi\)</span> is <strong>stationary</strong> if
-<span class="math inline">\(K\pi=\pi\)</span>. Stationarity is a
-fixed-point condition. It does not by itself imply that every trajectory
-converges to <span class="math inline">\(\pi\)</span>.</p>
-<div class="example" title="A lazy walk on a three-node path">
-<p><strong>Example. A lazy walk on a three-node path</strong></p>
-<p>Consider <span
-class="math display">\[K=\begin{pmatrix}3/4&amp;1/4&amp;0\\1/4&amp;1/2&amp;1/4\\0&amp;1/4&amp;3/4\end{pmatrix}.\]</span>
-Each column describes remaining at a node or moving to a neighbor.
-Starting at <span class="math inline">\(p_0=(1,0,0)\)</span> gives <span
-class="math inline">\(p_1=(3/4,1/4,0)\)</span> and <span
-class="math inline">\(p_2=(5/8,5/16,1/16)\)</span>. The uniform table is
-stationary because the rows, as well as the columns, sum to one. This
-particular walk approaches uniform, as can be checked from its repeated
-finite updates.</p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 10: Graph divergence, diffusion, and information flow · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="10"><p class="eyebrow">Week 10 · Reading</p><h1>Graph divergence, diffusion, and information flow</h1><nav class="week-nav" aria-label="Week 10 resources"><a aria-current=page href="../readings/week10.html">Reading</a><a  href="../demos/week10.html">Demonstration</a><a  href="../labs/week10.html">Lab</a><a  href="../quizzes/week10.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter10.pdf">Chapter 10 PDF</a> · <a href="../textbook/latex/chapter10.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Derive and compute the graph continuity equation.</li><li>Implement a stable discrete diffusion update.</li><li>Verify conservation, entropy change, and data processing in one example.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#from-an-edge-gradient-to-diffusion">From an edge gradient to
+diffusion</a></li><li><a href="#a-step-size-condition-preserves-probabilities">A step-size
+condition preserves probabilities</a></li><li><a href="#the-three-node-path-gives-an-exact-example">The three-node path
+gives an exact example</a></li><li><a href="#entropy-rises-under-a-doubly-stochastic-update">Entropy rises
+under a doubly stochastic update</a></li><li><a href="#a-general-observation-channel-has-another-interpretation">A
+general observation channel has another interpretation</a></li><li><a href="#the-log-sum-inequality-organizes-the-proof">The log-sum
+inequality organizes the proof</a></li><li><a href="#relative-entropy-to-stationarity-cannot-increase">Relative
+entropy to stationarity cannot increase</a></li><li><a href="#square-root-distance-also-contracts">Square-root distance also
+contracts</a></li><li><a href="#grouping-shows-exactly-where-a-distinction-is-lost">Grouping
+shows exactly where a distinction is lost</a></li><li><a href="#building-a-complete-investigation">Building a complete
+investigation</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>A network can transport something, record something, or do both. A
+random walker changes location on a graph. A sensor converts a detailed
+physical state into an imperfect report. An observer may see only a
+group label rather than the original category. Each operation transforms
+a probability distribution.</p>
+<p>The tools developed throughout the course now meet in one setting.
+Edge differences produce currents; divergence gives conservation;
+entropy measures uncertainty; relative entropy and spherical distance
+measure distinctions between models. We will examine which quantities a
+network preserves, which it changes, and what becomes impossible to
+recover after observations are grouped.</p>
+<h2 id="from-an-edge-gradient-to-diffusion">From an edge gradient to
+diffusion</h2>
+<p>Let a finite undirected graph have vertices <span
+class="math inline">\(i\)</span> and symmetric nonnegative edge weights
+<span class="math inline">\(c_{ij}=c_{ji}\)</span>. A positive weight
+means that the edge permits transport. Let <span
+class="math inline">\(p_i\)</span> be the probability stored at vertex
+<span class="math inline">\(i\)</span>.</p>
+<p>The graph gradient on an oriented edge is <span
+class="math display">\[(\nabla_G p)_{ij}=p_j-p_i.\]</span> It is
+positive when the probability is higher at the destination. Diffusion
+moves down this difference, from larger concentration to smaller
+concentration. With step parameter <span
+class="math inline">\(\tau\geq0\)</span>, define the outward current
+<span class="math display">\[J_{ij}=\tau c_{ij}(p_i-p_j)=-\tau
+c_{ij}(\nabla_Gp)_{ij}.\]</span> The current reverses sign when the edge
+orientation is reversed.</p>
+<p>The <strong>graph Laplacian</strong> is the vertex operator <span
+class="math display">\[\boxed{(Lp)_i=\sum_{j\sim
+i}c_{ij}(p_i-p_j).}\]</span> It adds the weighted differences between
+the value at a vertex and the values at its neighbors. With our
+outward-divergence convention, <span
+class="math inline">\(\operatorname{div}J=\tau Lp\)</span>. The
+continuity equation becomes <span class="math display">\[\boxed{\Delta
+p=-\tau Lp,\qquad p^+=(I-\tau L)p.}\]</span></p>
+<p>This is a complete discrete diffusion equation. The time difference
+on the left records one update; the graph operator on the right measures
+imbalance across adjacent locations.</p>
+<h2 id="a-step-size-condition-preserves-probabilities">A step-size
+condition preserves probabilities</h2>
+<p>Let <span class="math inline">\(d_i=\sum_{j\sim i}c_{ij}\)</span> be
+the weighted degree of vertex <span class="math inline">\(i\)</span>.
+Expanding the update gives <span class="math display">\[p_i^+=(1-\tau
+d_i)p_i+\tau\sum_{j\sim i}c_{ij}p_j.\]</span> A sufficient condition for
+all coefficients to be nonnegative is <span
+class="math display">\[0\leq\tau d_i\leq1\quad\text{for every vertex
+}i.\]</span> When the graph has a positive edge, this is ensured by
+<span class="math display">\[\tau\leq\frac1{\max_i d_i}.\]</span> On a
+graph with no edges, <span class="math inline">\(L=0\)</span> and
+nothing changes.</p>
+<p>Symmetry of the edge weights makes <span
+class="math inline">\(K=I-\tau L\)</span> symmetric. Its rows and
+columns each sum to one. Under the step-size condition it is therefore
+<strong>doubly stochastic</strong>: both a valid transition matrix and a
+table whose row sums are one.</p>
+<p>The algebra explains why excessive steps are problematic. If <span
+class="math inline">\(\tau d_i&gt;1\)</span>, the retained-mass
+coefficient at vertex <span class="math inline">\(i\)</span> is
+negative. Starting with all mass at that vertex can then produce a
+negative probability. A time step belongs to the model, just as
+correction strength did in Chapter 2.</p>
+<h2 id="the-three-node-path-gives-an-exact-example">The three-node path
+gives an exact example</h2>
+<p>For the path <span class="math inline">\(A\)</span>–<span
+class="math inline">\(B\)</span>–<span class="math inline">\(C\)</span>
+with unit edge weights, <span
+class="math display">\[L=\begin{pmatrix}1&amp;-1&amp;0\\-1&amp;2&amp;-1\\0&amp;-1&amp;1\end{pmatrix}.\]</span>
+The largest degree is two, so <span
+class="math inline">\(0\leq\tau\leq1/2\)</span> preserves nonnegativity.
+Taking <span class="math inline">\(\tau=1/4\)</span> recovers the matrix
+from Chapter 4: <span
+class="math display">\[K=\begin{pmatrix}3/4&amp;1/4&amp;0\\1/4&amp;1/2&amp;1/4\\0&amp;1/4&amp;3/4\end{pmatrix}.\]</span></p>
+<p>Starting from <span class="math inline">\((1,0,0)\)</span> gives
+first <span class="math inline">\((3/4,1/4,0)\)</span> and then <span
+class="math inline">\((5/8,5/16,1/16)\)</span>. The uniform vector <span
+class="math inline">\(u=(1/3,1/3,1/3)\)</span> is stationary.</p>
+<p>We can solve every trajectory by splitting deviations into two
+patterns: <span class="math display">\[a(1,0,-1)+b(1,-2,1).\]</span>
+Both patterns have coordinate sum zero. Every probability vector can be
+written <span class="math display">\[p_0=u+a(1,0,-1)+b(1,-2,1),\]</span>
+where <span class="math display">\[a=\frac{p_{A,0}-p_{C,0}}2,\qquad
+b=\frac{p_{A,0}+p_{C,0}-2p_{B,0}}6.\]</span></p>
+<p>Direct matrix multiplication shows <span
+class="math display">\[K(1,0,-1)=\frac34(1,0,-1),\qquad
+K(1,-2,1)=\frac14(1,-2,1).\]</span> The first imbalance shrinks by three
+quarters each step; the second shrinks by one quarter. Linearity then
+gives <span class="math display">\[\boxed{
+p_n=u+a(3/4)^n(1,0,-1)+b(1/4)^n(1,-2,1).
+}\]</span> Both powers tend to zero, proving convergence to uniform from
+every initial distribution.</p>
+<p>For <span class="math inline">\(p_0=(1,0,0)\)</span>, the
+coefficients are <span class="math inline">\(a=1/2\)</span> and <span
+class="math inline">\(b=1/6\)</span>. The slower pattern measures
+imbalance between the two ends of the path. This decomposition shows how
+a network can have several rates of relaxation without requiring us to
+solve a new recurrence at each vertex.</p>
+<div class="example"
+title="A centered initial state relaxes at the faster rate">
+<p><strong>Example. A centered initial state relaxes at the faster
+rate</strong></p>
+<p>Start the three-node walk at <span
+class="math inline">\(p_0=(0,1,0)\)</span>. Its end imbalance
+coefficient is <span class="math inline">\(a=0\)</span>, while <span
+class="math inline">\(b=-1/3\)</span>. Therefore <span
+class="math display">\[p_n=\left(\frac13-\frac13(1/4)^n,\;
+\frac13+\frac23(1/4)^n,\;
+\frac13-\frac13(1/4)^n\right).\]</span> The endpoint probabilities
+remain equal by symmetry. Only the faster pattern is present. Starting
+at one endpoint excites both patterns and retains the slower factor
+<span class="math inline">\((3/4)^n\)</span>.</p>
 </div>
-<p>A matrix whose rows and columns both sum to one is <strong>doubly
-stochastic</strong>. The cyclic permutation matrix is also doubly
-stochastic, but every noncentral three-category state repeats with
-period three. To establish convergence in a general network, additional
-conditions are required. Our contraction inequalities below concern
-one-step comparisons and do not require a claim of convergence.</p>
-<h2 id="coarse-graining-is-a-deterministic-channel">Coarse-graining is a
-deterministic channel</h2>
-<p>Partition the input labels into groups. The output reports only the
-group containing the input. Set <span
-class="math inline">\(K_{ji}=1\)</span> if label <span
-class="math inline">\(i\)</span> belongs to group <span
-class="math inline">\(j\)</span>, and zero otherwise. Each column
-contains exactly one entry equal to one. The output probabilities are
-sums over the groups.</p>
-<div class="example" title="A distinction erased by grouping">
-<p><strong>Example. A distinction erased by grouping</strong></p>
-<p>Let <span class="math inline">\(q=(0.4,0.1,0.4,0.1)\)</span> and
-<span class="math inline">\(p=(0.1,0.4,0.1,0.4)\)</span>. Group labels
-<span class="math inline">\(1,2\)</span> together and labels <span
-class="math inline">\(3,4\)</span> together. Both output distributions
-are <span class="math inline">\((1/2,1/2)\)</span>. Before grouping,
-<span class="math inline">\(D(q\|p)=0.6\ln4\approx0.8318\)</span>. After
-grouping, it is zero. The within-group differences cannot be recovered
-from the recorded group alone.</p>
-</div>
-<figure><img src="../assets/fig-network.svg" alt="Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical." loading="lazy"><figcaption>Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.</figcaption></figure>
-<h2 id="the-log-sum-inequality">The log-sum inequality</h2>
-<p>Let <span class="math inline">\(a_i,b_i\)</span> be nonnegative
-numbers with positive totals <span class="math inline">\(A=\sum_i
-a_i\)</span> and <span class="math inline">\(B=\sum_i b_i\)</span>, and
-suppose <span class="math inline">\(b_i&gt;0\)</span> wherever <span
-class="math inline">\(a_i&gt;0\)</span>. Applying Gibbs’ inequality to
-<span class="math inline">\(a_i/A\)</span> and <span
-class="math inline">\(b_i/B\)</span> gives <span
-class="math display">\[\sum_i a_i\ln\frac{a_i}{b_i}\geq A\ln\frac
-AB.\]</span> To see this directly, multiply <span
-class="math inline">\(D(a/A\|b/B)\geq0\)</span> by <span
-class="math inline">\(A\)</span> and expand the logarithm. This is the
-<strong>log-sum inequality</strong>. It compares the divergence
-contributions before and after a set of entries is merged.</p>
-<p>Apply it separately to each output label <span
-class="math inline">\(j\)</span>, using <span
-class="math inline">\(a_i=K_{ji}q_i\)</span> and <span
-class="math inline">\(b_i=K_{ji}p_i\)</span>. The output totals are
-<span class="math inline">\((Kq)_j\)</span> and <span
-class="math inline">\((Kp)_j\)</span>. Summing over outputs gives <span
-class="math display">\[D(Kq\|Kp)\leq\sum_{j,i}K_{ji}q_i\ln\frac{q_i}{p_i}
-=D(q\|p),\]</span> because each column of <span
-class="math inline">\(K\)</span> sums to one. Terms with <span
-class="math inline">\(K_{ji}=0\)</span> contribute zero. The usual
-support conventions cover zero totals and infinite divergences.</p>
-<div class="proposition" title="Data processing for relative entropy">
-<p><strong>Proposition. Data processing for relative
-entropy</strong></p>
-<p>For a column-stochastic matrix applied to both distributions, <span
-class="math inline">\(D(Kq\|Kp)\leq D(q\|p)\)</span>.</p>
-</div>
-<p>The same channel must be used for both tables. Applying different
-recording rules can create differences caused by those rules themselves.
-For deterministic grouping with positive probabilities, equality holds
-exactly when <span class="math inline">\(q_i/p_i\)</span> is constant
-within each group: no distinction relevant to that ratio is lost within
-a group.</p>
-<h2 id="square-root-overlap-also-contracts-distance">Square-root overlap
-also contracts distance</h2>
+<p>A network’s relaxation rate depends both on its transition rule and
+on which patterns the initial state contains. The exact formula makes
+that dependence visible. A plot of one initial state may miss a slowly
+decaying pattern that another initial state excites.</p>
+<p>For this example, the error at the middle vertex is <span
+class="math inline">\((2/3)(1/4)^n\)</span>. Requiring it to be below
+<span class="math inline">\(0.01\)</span> reduces to a comparison of
+powers, just like the scalar stopping questions in Chapter 2. The
+network problem has been decomposed into scalar difference
+equations.</p>
+<p>These patterns are often called modes. A mode is a vector pattern
+reproduced up to a multiplier by the update. No new notation is needed
+to verify one: multiply the vector by the matrix and compare its
+coordinates with the proposed multiple.</p>
+<h2 id="entropy-rises-under-a-doubly-stochastic-update">Entropy rises
+under a doubly stochastic update</h2>
+<p>Let <span class="math inline">\(h(x)=-x\ln x\)</span>, with <span
+class="math inline">\(h(0)=0\)</span>. Chapter 5 proved its concavity.
+If <span class="math inline">\(K\)</span> is doubly stochastic, each
+output coordinate is a weighted average of input coordinates because its
+row sums to one: <span
+class="math display">\[h\left(\sum_jK_{ij}p_j\right)\geq\sum_jK_{ij}h(p_j).\]</span>
+Summing over output coordinates and using the column sums gives <span
+class="math display">\[\boxed{H(Kp)\geq H(p).}\]</span> Thus the
+nonnegative entropy increment <span
+class="math display">\[\sigma_n=H(p_{n+1})-H(p_n)\]</span> is guaranteed
+for this diffusion rule.</p>
+<p>For the three-node example, <span
+class="math inline">\(H(p_0)=0\)</span>, <span
+class="math inline">\(H(p_1)\approx0.562335\)</span>, and the exact
+trajectory approaches entropy <span class="math inline">\(\ln3\)</span>.
+Telescoping yields <span
+class="math display">\[\sum_{n=0}^{T-1}\sigma_n=H(p_T)-H(p_0)\leq\ln3-H(p_0).\]</span>
+The total possible entropy gain is bounded.</p>
+<p>Doubly stochastic does not by itself imply convergence. A permutation
+matrix is doubly stochastic and preserves entropy exactly. The
+two-vertex diffusion rule at <span class="math inline">\(\tau=1\)</span>
+simply swaps its coordinates. A convergence claim needs information
+about the dynamics beyond entropy monotonicity.</p>
+<p>If the graph is disconnected, mass cannot travel between components.
+Its stationary behavior is constrained by the mass initially present in
+each component. Global uniformity is not generally reachable from every
+initial state.</p>
+<h2 id="a-general-observation-channel-has-another-interpretation">A
+general observation channel has another interpretation</h2>
+<p>A <strong>channel</strong> is a column-stochastic matrix <span
+class="math inline">\(K\)</span> whose entry <span
+class="math inline">\(K_{yi}\)</span> is the probability of reporting
+output <span class="math inline">\(y\)</span> given input label <span
+class="math inline">\(i\)</span>. The output and input label sets may
+have different sizes. An input distribution <span
+class="math inline">\(p\)</span> produces output distribution <span
+class="math display">\[P_y=\sum_iK_{yi}p_i.\]</span> This is the same
+matrix arithmetic as transport, now describing observation.</p>
+<p>A deterministic grouping is a special channel. If labels one and two
+are reported as group <span class="math inline">\(A\)</span>, while
+labels three and four are reported as group <span
+class="math inline">\(B\)</span>, then <span
+class="math display">\[K=\begin{pmatrix}1&amp;1&amp;0&amp;0\\0&amp;0&amp;1&amp;1\end{pmatrix}.\]</span>
+The output retains group totals and discards the original label within
+each group.</p>
+<p>An arbitrary channel need not increase entropy. The two-input channel
+that always reports the same single symbol sends every input to a
+certain output of entropy zero. Even a square channel can do this, for
+example <span
+class="math display">\[K=\begin{pmatrix}1&amp;1\\0&amp;0\end{pmatrix}.\]</span>
+It is column-stochastic but not doubly stochastic.</p>
+<p>There is, however, a general statement about distinguishing two input
+models: passing both through the same channel cannot increase their KL
+divergence or their Fisher–Rao distance. The reference to the
+<strong>same</strong> channel is essential.</p>
+<p>The observational interpretation differs from the physical transport
+interpretation in what is claimed to happen to an individual state. A
+grouping report does not require the original categories to merge
+physically. It records only a coarser label. The fine state can remain
+as detailed as before while the observer loses access to some of its
+distinctions.</p>
+<p>This distinction matters when reading data-processing inequalities.
+They compare the probability tables available before and after the
+chosen recording operation. They do not claim that every internal
+feature of the system has ceased to exist. A more informative
+measurement scheme may retain distinctions that another scheme
+erases.</p>
+<p>Observation rules can be composed. If <span
+class="math inline">\(K\)</span> converts a fine label to an
+intermediate report and <span class="math inline">\(R\)</span> converts
+that report to a final report, the combined channel is <span
+class="math inline">\(RK\)</span>. Its entries are nonnegative, and its
+column sums are one because <span class="math display">\[\sum_z(RK)_{zi}
+=\sum_yK_{yi}\sum_zR_{zy}
+=\sum_yK_{yi}=1.\]</span> Two stages of processing therefore obey the
+same framework as one. Data processing can be applied successively to
+compare the distinctions visible at each stage.</p>
+<h2 id="the-log-sum-inequality-organizes-the-proof">The log-sum
+inequality organizes the proof</h2>
+<p>For nonnegative lists <span class="math inline">\(a_i,b_i\)</span>,
+let <span class="math inline">\(A=\sum_i a_i\)</span> and <span
+class="math inline">\(B=\sum_i b_i\)</span>. When the relevant sums are
+positive and finite, define normalized tables <span
+class="math inline">\(\alpha_i=a_i/A\)</span> and <span
+class="math inline">\(\beta_i=b_i/B\)</span>. Expanding gives <span
+class="math display">\[\sum_i a_i\ln\frac{a_i}{b_i}
+=A\ln\frac AB+A D(\alpha\|\beta).\]</span> Gibbs’ inequality therefore
+implies <span class="math display">\[\boxed{A\ln(A/B)\leq\sum_i
+a_i\ln(a_i/b_i).}\]</span> This is the <strong>log-sum
+inequality</strong>. It says grouping terms can reduce a directed
+logarithmic discrepancy. The established zero and infinity conventions
+extend it to boundary cases.</p>
+<p>Apply the inequality separately to each output label, with <span
+class="math display">\[a_i=K_{yi}p_i,\qquad b_i=K_{yi}q_i.\]</span>
+Their sums are <span class="math inline">\((Kp)_y\)</span> and <span
+class="math inline">\((Kq)_y\)</span>. For nonzero channel entries, the
+factor <span class="math inline">\(K_{yi}\)</span> cancels inside the
+ratio. Summing over outputs gives <span
+class="math display">\[\begin{aligned}
+D(Kp\|Kq)
+&amp;\leq\sum_{y,i}K_{yi}p_i\ln\frac{p_i}{q_i}\\
+&amp;=\sum_i p_i\ln\frac{p_i}{q_i}\sum_yK_{yi}\\
+&amp;=D(p\|q).
+\end{aligned}\]</span> This is the <strong>data-processing
+inequality</strong>.</p>
+<p>The proof uses only finite sums and Gibbs’ inequality. Its meaning is
+observational: a common reporting mechanism cannot make two models more
+distinguishable by this measure. It can preserve a distinction or erase
+some of it.</p>
+<h2 id="relative-entropy-to-stationarity-cannot-increase">Relative
+entropy to stationarity cannot increase</h2>
+<p>If <span class="math inline">\(\pi\)</span> is a stationary
+distribution, then <span class="math inline">\(K\pi=\pi\)</span>. Data
+processing gives <span class="math display">\[D(Kp\|\pi)=D(Kp\|K\pi)\leq
+D(p\|\pi).\]</span> Thus <span
+class="math inline">\(D(p_n\|\pi)\)</span> is a nonincreasing potential
+whenever its initial value is finite.</p>
+<p>This generalizes the Lyapunov viewpoint from Chapter 6 to Markov
+transport. It does not automatically provide the geometric contraction
+factor proved for the mixture rule. Some channels preserve the
+divergence. A separate estimate is needed to obtain a numerical
+convergence rate.</p>
+<p>When <span class="math inline">\(\pi\)</span> is uniform, the
+relation <span class="math inline">\(D(p\|\pi)=\ln k-H(p)\)</span> turns
+divergence decrease into entropy increase. With a nonuniform stationary
+distribution, relative entropy can decrease without ordinary entropy
+increasing. The correct target is determined by the transition
+mechanism.</p>
+<p>An asymmetric two-location channel shows why stationarity, rather
+than uniformity, is the appropriate reference in general. Take <span
+class="math display">\[K=\begin{pmatrix}3/4&amp;1/2\\1/4&amp;1/2\end{pmatrix}.\]</span>
+Its stationary distribution is <span
+class="math inline">\(\pi=(2/3,1/3)\)</span>, from the two-location
+calculation in Chapter 4. Starting at uniform gives the next state <span
+class="math inline">\((5/8,3/8)\)</span>. Entropy decreases because the
+new table is less balanced. Nevertheless, <span
+class="math display">\[D((5/8,3/8)\|\pi)\leq D((1/2,1/2)\|\pi).\]</span>
+The process is approaching its own stationary state rather than
+maximizing uncertainty over all possible states.</p>
+<p>A model can also have several stationary distributions. On a graph
+with disconnected components, any compatible allocation of total mass
+among component equilibria remains stationary. A target must then
+account for those conserved component masses. Measuring divergence to an
+unreachable reference could misrepresent what the dynamics can
+accomplish.</p>
+<p>In the connected symmetric three-node example, the exact solution
+identifies a unique stationary distribution and proves convergence. In a
+new graph, begin by checking connectivity, retained mass, and possible
+periodicity before generalizing that conclusion.</p>
+<h2 id="square-root-distance-also-contracts">Square-root distance also
+contracts</h2>
 <p>For each output label, Cauchy–Schwarz gives <span
-class="math display">\[\sqrt{\left(\sum_iK_{ji}q_i\right)\left(\sum_iK_{ji}p_i\right)}
-\geq\sum_iK_{ji}\sqrt{q_ip_i}.\]</span> Adding over <span
-class="math inline">\(j\)</span> and using column sums yields <span
-class="math display">\[B(Kq,Kp)\geq B(q,p).\]</span> Since inverse
-cosine decreases as its argument increases, the spherical distance
-satisfies <span class="math display">\[d(Kq,Kp)\leq d(q,p).\]</span>
-Hellinger distance also cannot increase, because its square is <span
-class="math inline">\(1-B\)</span>. Thus two different constructions, a
-logarithmic discrepancy and a square-root distance, both obey an
-information-loss principle under the same finite observation rule.</p>
-<div class="example" title="A noisy binary observation">
-<p><strong>Example. A noisy binary observation</strong></p>
-<p>Suppose a binary label is flipped with probability <span
-class="math inline">\(1/4\)</span>, so <span
-class="math inline">\(K=\left(\begin{smallmatrix}3/4&amp;1/4\\1/4&amp;3/4\end{smallmatrix}\right)\)</span>.
-The tables <span class="math inline">\((0.9,0.1)\)</span> and <span
-class="math inline">\((0.1,0.9)\)</span> become <span
-class="math inline">\((0.7,0.3)\)</span> and <span
-class="math inline">\((0.3,0.7)\)</span>. Their overlap increases from
-<span class="math inline">\(0.6\)</span> to <span
-class="math inline">\(2\sqrt{0.21}\approx0.9165\)</span>. Their
-spherical distance decreases from approximately <span
-class="math inline">\(1.8546\)</span> to <span
-class="math inline">\(0.8230\)</span>.</p>
-</div>
-<h2 id="when-does-entropy-increase-on-a-network">When does entropy
-increase on a network?</h2>
-<p>A stochastic channel can lower entropy. A channel that sends every
-input to one output converts every distribution into a certain outcome
-with entropy zero. The data-processing inequality compares two models
-through the same channel; entropy measures the uncertainty of one table.
-The questions are related but distinct.</p>
-<p>For a doubly stochastic matrix, uniform <span
-class="math inline">\(u\)</span> is stationary. Data processing then
-gives <span class="math display">\[D(Kp\|u)=D(Kp\|Ku)\leq
-D(p\|u).\]</span> Using <span class="math inline">\(D(p\|u)=\ln
-k-H(p)\)</span> shows <span class="math inline">\(H(Kp)\geq
-H(p)\)</span>. This is an exact entropy-increase statement with a
-specific assumption on the channel. Equality can occur at a nonuniform
-table, as a permutation simply rearranges its probabilities.</p>
-<h2 id="a-finite-statistical-family">A finite statistical family</h2>
-<p>A collection of probability tables indexed by one or more parameters
-is a <strong>statistical family</strong>. On fixed labels <span
-class="math inline">\(x_i\)</span>, for example, the weights <span
-class="math display">\[p_i(m,a)=\frac{e^{-a(x_i-m)^2}}{\sum_je^{-a(x_j-m)^2}},\qquad
-a&gt;0,\]</span> form a finite bell-shaped family. Changing <span
-class="math inline">\(m\)</span> shifts the emphasis across the labels,
-and changing <span class="math inline">\(a\)</span> changes its
-concentration. These are normalized weights on a fixed finite set. Their
-entropy, relative entropy, and spherical distance can all be computed by
-the formulas already developed. Grouping labels produces a coarser
-family and contracts pairwise discrepancies by the same theorems.</p>
-<p>This offers a capstone investigation: choose two parameter values,
-calculate their tables, apply a recording channel, and quantify the
-distinctions retained. The finite sums, token graphs, and exact updates
-developed throughout the course provide the tools for carrying out the
-investigation and explaining its assumptions.</p>
-<h2 id="solving-the-three-node-walk-exactly">Solving the three-node walk
-exactly</h2>
-<p>The particular walk introduced earlier can be solved by tracking two
-contrasts. Write <span class="math display">\[a_t=p_{1,t}-p_{3,t},\qquad
-b_t=p_{1,t}-2p_{2,t}+p_{3,t}.\]</span> Substituting the three update
-equations and collecting coefficients gives <span
-class="math display">\[a_{t+1}=\frac34a_t,\qquad
-b_{t+1}=\frac14b_t.\]</span> Both are geometric sequences. Combining
-these contrasts with <span
-class="math inline">\(p_{1,t}+p_{2,t}+p_{3,t}=1\)</span> recovers the
-probabilities: <span
-class="math display">\[p_{1,t}=\frac13+\frac{b_t}{6}+\frac{a_t}{2},\quad
-p_{2,t}=\frac13-\frac{b_t}{3},\quad
-p_{3,t}=\frac13+\frac{b_t}{6}-\frac{a_t}{2}.\]</span> Because <span
-class="math inline">\((3/4)^t\)</span> and <span
-class="math inline">\((1/4)^t\)</span> approach zero, every initial
-table for this walk approaches uniform. This proves the claim for the
-stated matrix by two scalar recurrences, without needing a general
-matrix convergence theorem.</p>
-<div class="example" title="An exact three-step distribution">
-<p><strong>Example. An exact three-step distribution</strong></p>
-<p>From <span class="math inline">\((1,0,0)\)</span>, both initial
-contrasts are one. At step three, <span
-class="math inline">\(a_3=27/64\)</span> and <span
-class="math inline">\(b_3=1/64\)</span>. The recovered table is <span
-class="math inline">\((35/64,21/64,8/64)\)</span>. Direct multiplication
-of the step-two table <span
-class="math inline">\((5/8,5/16,1/16)\)</span> by the walk matrix gives
-the same answer.</p>
-</div>
-<h2 id="where-the-lost-divergence-goes-under-grouping">Where the lost
-divergence goes under grouping</h2>
-<p>For deterministic groups <span class="math inline">\(G_j\)</span>,
-define output masses <span class="math inline">\(Q_j=\sum_{i\in
-G_j}q_i\)</span> and <span class="math inline">\(P_j=\sum_{i\in
-G_j}p_i\)</span>. Assume positive input tables. Within group <span
-class="math inline">\(j\)</span>, form conditional tables <span
-class="math inline">\(q_i/Q_j\)</span> and <span
-class="math inline">\(p_i/P_j\)</span>. Splitting the logarithm gives
-<span class="math display">\[D(q\|p)=D(Q\|P)+\sum_j Q_j
-D\left(q(\cdot\mid G_j)\middle\|p(\cdot\mid G_j)\right).\]</span> The
-first term is the discrepancy retained in the group labels. The second
-is the average discrepancy among labels inside a group. Every lost
-contribution is nonnegative. Equality under grouping occurs exactly when
-the two within-group conditional tables agree, equivalent to a constant
-ratio <span class="math inline">\(q_i/p_i\)</span> in each group.</p>
-<div class="example" title="Retained and lost distinctions">
-<p><strong>Example. Retained and lost distinctions</strong></p>
-<p>For the four-label tables <span
-class="math inline">\((0.4,0.1,0.4,0.1)\)</span> and <span
-class="math inline">\((0.1,0.4,0.1,0.4)\)</span>, adjacent-pair grouping
-gives the same output masses. All the divergence is in the conditional
-tables <span class="math inline">\((0.8,0.2)\)</span> and <span
-class="math inline">\((0.2,0.8)\)</span> within each pair. Grouping
-labels <span class="math inline">\(1,3\)</span> together instead gives
-outputs <span class="math inline">\((0.8,0.2)\)</span> and <span
-class="math inline">\((0.2,0.8)\)</span>, while each within-group
-conditional table is uniform. This second grouping preserves the full
-divergence.</p>
-</div>
-<h2 id="composing-observation-rules">Composing observation rules</h2>
-<p>If channel <span class="math inline">\(K\)</span> is followed by
-channel <span class="math inline">\(L\)</span>, the combined rule is the
-matrix product <span class="math inline">\(LK\)</span>. Its entries are
-<span class="math inline">\((LK)_{hi}=\sum_jL_{hj}K_{ji}\)</span>. Each
-term represents passing through intermediate output <span
-class="math inline">\(j\)</span>. Nonnegativity is immediate, and adding
-over <span class="math inline">\(h\)</span> gives one for every input
-column. Thus the composition is again a stochastic channel.</p>
-<p>Applying data processing twice gives <span
-class="math display">\[D(LKq\|LKp)\leq D(Kq\|Kp)\leq D(q\|p).\]</span>
-The spherical distances obey the same succession of inequalities. This
-gives a mathematical description of a recording pipeline: sampling
-labels, adding noise, grouping outputs, and recording an even coarser
-category can be analyzed one finite operation at a time. A stage may
-preserve a particular pair’s discrepancy, but a later common stage
-cannot restore a distinction already erased from those output
-tables.</p>
+class="math display">\[\sqrt{\left(\sum_iK_{yi}p_i\right)
+\left(\sum_iK_{yi}q_i\right)}
+\geq\sum_iK_{yi}\sqrt{p_iq_i}.\]</span> Add over outputs and use the
+channel column sums: <span class="math display">\[B(Kp,Kq)\geq
+B(p,q).\]</span> The output distributions have at least as much overlap.
+Since inverse cosine decreases as its argument increases, <span
+class="math display">\[\boxed{d_{\mathrm{FR}}(Kp,Kq)\leq
+d_{\mathrm{FR}}(p,q).}\]</span> The Hellinger distance also cannot
+increase because its square is <span
+class="math inline">\(1-B\)</span>.</p>
+<p>This result links the sphere geometry to observation. A channel is
+not merely a linear map between numerical lists: it has a definite
+effect on the statistical distances we constructed.</p>
+<h2 id="grouping-shows-exactly-where-a-distinction-is-lost">Grouping
+shows exactly where a distinction is lost</h2>
+<p>Take <span class="math display">\[p=(0.1,0.4,0.1,0.4),\qquad
+q=(0.4,0.1,0.4,0.1).\]</span> The input models differ within both pairs
+of labels. Their divergence is <span
+class="math display">\[D(p\|q)=0.6\ln4&gt;0.\]</span> After grouping
+<span class="math inline">\(\{1,2\}\)</span> and <span
+class="math inline">\(\{3,4\}\)</span>, both output tables are <span
+class="math inline">\((1/2,1/2)\)</span>. The output divergence and
+spherical distance are zero.</p>
+<figure><img src="../assets/fig-network.svg" alt="Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical." width="293" height="170" loading="lazy"><figcaption>Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.</figcaption></figure>
+<p>We can account for the lost divergence exactly. For each group <span
+class="math inline">\(g\)</span>, let <span
+class="math display">\[P_g=\sum_{i\in g}p_i,\qquad Q_g=\sum_{i\in
+g}q_i.\]</span> When the group masses are positive, define conditional
+distributions within that group: <span class="math display">\[p(i\mid
+g)=p_i/P_g,\qquad q(i\mid g)=q_i/Q_g.\]</span> The conditional
+probability describes the fine label after the group is known.</p>
+<p>Factor the ratio as <span
+class="math display">\[\frac{p_i}{q_i}=\frac{P_g}{Q_g}
+\frac{p(i\mid g)}{q(i\mid g)}.\]</span> Taking logarithms, multiplying
+by <span class="math inline">\(p_i\)</span>, and summing first within
+groups gives <span class="math display">\[\boxed{
+D(p\|q)=D(P\|Q)+\sum_g P_gD(p(\cdot\mid g)\|q(\cdot\mid g)).
+}\]</span> For positive tables this is an exact identity. Terms of zero
+group mass are omitted under the usual conventions.</p>
+<p>The first term is the distinction still visible in the reported
+groups. The remaining terms describe distinctions inside groups, which
+that report no longer resolves. In the four-label example, all
+discrepancy lies in these conditional tables.</p>
+<p>A whole family can collapse under grouping. For <span
+class="math display">\[p_\theta=(\theta/2,(1-\theta)/2,\theta/2,(1-\theta)/2),
+\qquad 0\leq\theta\leq1,\]</span> the same grouping always outputs <span
+class="math inline">\((1/2,1/2)\)</span>. The parameter changes the fine
+distribution, but this observation scheme cannot identify it. This is a
+concrete information-geometric question: which directions through a
+family of probability models remain observable?</p>
+<p>The conditional decomposition provides an equality condition for
+deterministic grouping. If the two models have identical conditional
+distributions inside every group carrying positive first-model mass,
+then grouping loses no KL divergence. Their entire distinction was
+already visible in the group totals.</p>
+<p>For example, <span class="math inline">\(p=(0.3,0.3,0.2,0.2)\)</span>
+and <span class="math inline">\(q=(0.1,0.1,0.4,0.4)\)</span> differ in
+the totals of the two pairs, but both are uniform within each pair.
+Grouping the pairs retains their full KL divergence. This differs from
+the earlier example, where the group totals agreed and every distinction
+was internal.</p>
+<p>The comparison gives a concrete way to design observations. If a
+question concerns relative mass between groups, recording group labels
+may retain the relevant distinction. If it concerns how probability is
+divided inside a group, that same recording scheme is insufficient. A
+suitable observation depends on the family of models and the question,
+rather than on the number of recorded symbols alone.</p>
+<p>For the parameter family <span
+class="math inline">\(p_\theta\)</span>, grouping <span
+class="math inline">\(\{1,3\}\)</span> and <span
+class="math inline">\(\{2,4\}\)</span> returns <span
+class="math inline">\((\theta,1-\theta)\)</span> and retains the
+parameter exactly. The alternative grouping returns a constant table.
+Both reports have two possible outputs; the decisive difference is which
+fine distinctions their outputs encode.</p>
+<h2 id="building-a-complete-investigation">Building a complete
+investigation</h2>
+<p>A useful final investigation begins with a small transport graph and
+a precise update. Choose an initial probability vector and a step size
+satisfying the nonnegativity condition. Record several states, their
+differences, and their edge currents. Check conservation directly.</p>
+<p>Next track entropy and divergence to a stationary reference. Separate
+a numerical pattern from a proof: the continuity equation proves
+conservation, double stochasticity proves entropy monotonicity, and a
+particular contraction estimate or exact solution can prove
+convergence.</p>
+<p>Finally pass two initial models through the same observation channel.
+Compare their fine and reported divergences, overlaps, and spherical
+distances. If labels are grouped, use the conditional decomposition to
+identify the distinctions that disappear.</p>
+<p>The <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week10.html">network
+demonstration</a> explores channels and model comparisons. The transport
+view of the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
+explorer</a> exposes currents and divergences directly. The <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/guide.html#capstone">course
+guide</a> suggests longer investigations.</p>
+<p>These calculations bring the course’s original question into a
+concrete setting: a probability distribution changes through a sequence
+of finite operations, and the available observations determine which
+changes can still be distinguished.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
-<li>Verify the column sums of the three-node walk matrix and compute one
-update of <span class="math inline">\((1/2,1/4,1/4)\)</span>.</li>
-<li>Show algebraically that a column-stochastic matrix maps probability
-vectors to probability vectors.</li>
-<li>Find the stationary table of the binary flip channel in the
-example.</li>
-<li>Write the matrix for the cyclic permutation <span
-class="math inline">\((p_A,p_B,p_C)\mapsto(p_C,p_A,p_B)\)</span> and
-verify its period.</li>
-<li>For <span class="math inline">\(q=(0.4,0.1,0.4,0.1)\)</span> and
-<span class="math inline">\(p=(0.1,0.4,0.1,0.4)\)</span>, compute their
-overlap before and after the stated grouping.</li>
-<li>Derive the log-sum inequality from Gibbs’ inequality.</li>
-<li>Give a grouping for which two distinct positive tables retain their
-relative entropy exactly. Explain the ratio condition within
-groups.</li>
-<li>Verify the relative-entropy contraction numerically for the binary
-flip example.</li>
-<li>Prove that a doubly stochastic matrix preserves the uniform
-distribution.</li>
-<li>Give a stochastic channel that strictly lowers the entropy of the
-uniform distribution. Explain why this does not violate data
-processing.</li>
-<li>On labels <span class="math inline">\(-2,-1,0,1,2\)</span>,
-calculate the finite bell-shaped table with <span
-class="math inline">\(m=0\)</span> and <span
-class="math inline">\(a=\ln2\)</span>. Compare its entropy with uniform
-entropy.</li>
-<li>Design a capstone comparing two probability models before and after
-grouping. Include a data table, both directed relative entropies,
-spherical distance, a channel specification, and an interpretation of
-any lost distinction.</li>
+<li>Derive the three-node Laplacian from its edge weights. Verify that
+<span class="math inline">\(I-\tfrac14L\)</span> is the matrix used in
+Chapter 4.</li>
+<li>Find a sufficient step-size bound for nonnegative diffusion on a
+four-vertex star with unit edge weights. Explain the role of its central
+degree.</li>
+<li>For the three-node path and <span
+class="math inline">\(p=(1,0,0)\)</span>, calculate currents,
+divergence, and one probability update at <span
+class="math inline">\(\tau=1/4\)</span>.</li>
+<li>Verify that <span class="math inline">\((1,0,-1)\)</span> and <span
+class="math inline">\((1,-2,1)\)</span> are multiplied by <span
+class="math inline">\(3/4\)</span> and <span
+class="math inline">\(1/4\)</span> under the path matrix.</li>
+<li>Use the exact trajectory formula to calculate <span
+class="math inline">\(p_2\)</span> from <span
+class="math inline">\(p_0=(1,0,0)\)</span>.</li>
+<li>Prove entropy monotonicity for a doubly stochastic matrix using
+concavity of <span class="math inline">\(-x\ln x\)</span>.</li>
+<li>Give a column-stochastic channel that lowers entropy. Explain why it
+does not contradict Exercise 6.</li>
+<li>Derive the log-sum inequality from Gibbs’ inequality by normalizing
+the two lists.</li>
+<li>Prove data processing for <span
+class="math inline">\(D(Kp\|Kq)\)</span>, identifying where the channel
+column sums enter.</li>
+<li>For the four-label grouping example, calculate input and output
+overlaps and compare Fisher–Rao distances.</li>
+<li>Derive the conditional divergence decomposition for grouping. Use it
+to locate the lost distinction in the worked example.</li>
+<li>Choose two distinct parameter values in the family <span
+class="math inline">\(p_\theta\)</span>. Show that the fine
+distributions differ but the grouped observations agree. Propose a
+different grouping that would retain information about <span
+class="math inline">\(\theta\)</span>.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>1.</strong> The new table is <span
-class="math inline">\((7/16,5/16,1/4)\)</span>.</p>
-<p><strong>3.</strong> Solving <span
-class="math inline">\(x=(3/4)x+(1/4)(1-x)\)</span> gives <span
-class="math inline">\(x=1/2\)</span>, so the stationary table is
-uniform.</p>
-<p><strong>5.</strong> The input overlap is <span
-class="math inline">\(4\sqrt{0.04}=0.8\)</span>. The equal outputs have
-overlap one.</p>
-<p><strong>7.</strong> Group labels <span
-class="math inline">\(1,2\)</span> together and <span
-class="math inline">\(3,4\)</span> together. Take <span
-class="math inline">\(p=(0.1,0.2,0.3,0.4)\)</span> and <span
-class="math inline">\(q=(0.2,0.4,6/35,8/35)\)</span>. Both sum to one,
-and the within-group ratios are <span class="math inline">\(2\)</span>
-and <span class="math inline">\(4/7\)</span>. Log-sum has equality in
-each group, so the divergence is preserved.</p>
-<p><strong>9.</strong> For <span class="math inline">\(u_i=1/k\)</span>,
-the output entry is <span
-class="math inline">\((Ku)_j=(1/k)\sum_iK_{ji}=1/k\)</span> by the
-row-sum condition.</p>
-<p><strong>11.</strong> The unnormalized weights are <span
-class="math inline">\((1/16,1/2,1,1/2,1/16)\)</span> with total <span
-class="math inline">\(17/8\)</span>. The table is <span
-class="math inline">\((1/34,4/17,8/17,4/17,1/34)\)</span>. It is
-nonuniform and has entropy strictly less than <span
-class="math inline">\(\ln5\)</span>.</p>
+<p><strong>2.</strong> The central weighted degree is three and each
+outer degree is one. The bound is <span
+class="math inline">\(0\leq\tau\leq1/3\)</span>.</p>
+<p><strong>3.</strong> Currents are <span
+class="math inline">\(J_{AB}=1/4\)</span> and <span
+class="math inline">\(J_{BC}=0\)</span>. Divergence is <span
+class="math inline">\((1/4,-1/4,0)\)</span>, giving next state <span
+class="math inline">\((3/4,1/4,0)\)</span>.</p>
+<p><strong>5.</strong> With <span class="math inline">\(a=1/2\)</span>,
+<span class="math inline">\(b=1/6\)</span>, the formula gives <span
+class="math inline">\((5/8,5/16,1/16)\)</span>, agreeing with direct
+multiplication.</p>
+<p><strong>7.</strong> The channel <span
+class="math inline">\(\left(\begin{smallmatrix}1&amp;1\\0&amp;0\end{smallmatrix}\right)\)</span>
+sends a fair input to <span class="math inline">\((1,0)\)</span>,
+lowering entropy from <span class="math inline">\(\ln2\)</span> to zero.
+Its first row sums to two, so it is not doubly stochastic.</p>
+<p><strong>10.</strong> Each input overlap term is <span
+class="math inline">\(\sqrt{0.04}=0.2\)</span>, so <span
+class="math inline">\(B(p,q)=0.8\)</span> and <span
+class="math inline">\(d_{\mathrm{FR}}=2\arccos0.8\)</span>. Output
+overlap is one and output distance is zero.</p>
+<p><strong>12.</strong> Grouping <span
+class="math inline">\(\{1,3\}\)</span> and <span
+class="math inline">\(\{2,4\}\)</span> yields <span
+class="math inline">\((\theta,1-\theta)\)</span>, which retains the
+parameter. The original grouping always yields <span
+class="math inline">\((1/2,1/2)\)</span>.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week09.html">← Week 9</a><a href="../guide.html#capstone">Capstone guidance →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

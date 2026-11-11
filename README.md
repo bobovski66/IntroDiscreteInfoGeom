@@ -11,7 +11,7 @@ The course develops a discrete calculus of information: finite differences and s
 - [Complete self-contained LaTeX file](textbook/latex/discrete_information_geometry.tex)
 - Ten individual chapter PDFs and LaTeX files, linked below
 - Ten original demonstrations plus the shared operator explorer, fifty guided laboratory investigations, and eighty check-in questions with explanatory feedback
-- 120 textbook exercises, sixty selected exercise solutions, worked examples, and eleven vector figures
+- 120 textbook exercises, sixty selected exercise solutions, worked calculations, and fifteen vector figures
 
 | Week | Topic | Materials | Chapter |
 | --- | --- | --- | --- |
@@ -48,7 +48,7 @@ Mathematical typesetting uses MathJax 3.2.2 from a CDN. The core demonstrations 
 
 ## Edit and rebuild
 
-The editable reading sources are `src/ch01.md` through `src/ch10.md`, with additional worked developments in `src/extensions.py`. The calculus-first titles, laboratory prompts, check-ins, and objectives are in `src/calculus_curriculum.py` and are applied in `src/course.py`. The guide source is `src/guide_body.html`. The same sources generate HTML readings and textbook chapters. Exact vector figures are defined in `src/figures.py` and embedded directly in the LaTeX files using TikZ and PGFPlots.
+The complete editable chapter sources are src/ch01.md through src/ch10.md. Each contains the narrative, definitions, worked developments, exercises, and selected solutions in reading order; the build does not append a separate extension layer. The calculus-first titles, laboratory prompts, check-ins, and objectives are in `src/calculus_curriculum.py` and are applied in `src/course.py`. The guide source is `src/guide_body.html`. The same complete chapter sources generate HTML readings, standalone chapter PDFs, and the full textbook. The web readings include a collapsible contents list and horizontally scrollable tables. Exact vector figures are defined in `src/figures.py` and embedded directly in the LaTeX files using TikZ and PGFPlots.
 
 Rebuilding requires Python 3, Pandoc, pdfLaTeX with common TeX Live packages (including Palatino, TikZ, PGFPlots, and standalone), and Poppler's `pdftocairo`:
 

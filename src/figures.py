@@ -127,3 +127,43 @@ FIGURES['network']=(r'''\begin{tikzpicture}[every node/.style={font=\small},>=St
 \node[anchor=west,align=left] at (7.2,1){Group $\{3,4\}$\\Both models: $1/2$};
 \node[anchor=west] at (0,-.5){$D(q\Vert p)=0.6\ln4\quad\longrightarrow\quad D(Kq\Vert Kp)=0$};
 \end{tikzpicture}''','Grouping can erase a distinction carried entirely by the probabilities inside each group. Both recorded output tables are identical.')
+
+# Foundational diagrams introduce the operations before their later applications.
+FIGURES['differences']=(r'''\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={$a_n=n^2$},xmin=-.2,xmax=5.2,ymin=0,ymax=27,xtick={0,...,5},grid=major]
+\addplot[teal,only marks,mark=*,mark size=2.5pt] coordinates {(0,0)(1,1)(2,4)(3,9)(4,16)(5,25)};
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Starting step $n$},ylabel={$\Delta a_n=2n+1$},xmin=-.3,xmax=4.3,ymin=0,ymax=10,xtick={0,...,4},grid=major]
+\addplot[copper,ycomb,mark=*,mark size=2.5pt] coordinates {(0,1)(1,3)(2,5)(3,7)(4,9)};
+\end{axis}\end{tikzpicture}''','Six values of the square sequence determine five first differences. Each difference is indexed by the starting step of its interval.')
+
+FIGURES['feedback']=(r'''\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={Error $x_n-c$},xmin=0,xmax=5,ymin=-.3,ymax=.2,xtick={0,...,5},legend pos=north east,grid=major]
+\addplot[teal,mark=*] coordinates {'''+coords((n,-.25*.5**n) for n in range(6))+r'''};\addlegendentry{$k=1/2$}
+\addplot[copper,mark=square*] coordinates {'''+coords((n,-.25*(-.5)**n) for n in range(6))+r'''};\addlegendentry{$k=3/2$}
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={Error $x_n-c$},xmin=0,xmax=5,ymin=-1.5,ymax=2.1,xtick={0,...,5},legend pos=north west,grid=major]
+\addplot[copper,mark=square*] coordinates {'''+coords((n,-.25*(-1.5)**n) for n in range(6))+r'''};\addlegendentry{$k=5/2$}
+\end{axis}\end{tikzpicture}''','Feedback errors from initial error -1/4. On the left, both magnitudes shrink and one alternates sign. On the right, an excessive correction amplifies the error; note the different vertical scale.')
+
+FIGURES['entropy-differences']=(r'''\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Count $k$ of four tokens},ylabel={Entropy $H_k$ (nats)},xmin=-.2,xmax=4.2,ymin=0,ymax=.78,xtick={0,...,4},grid=major]
+\addplot[teal,mark=*] coordinates {(0,0)(1,.5623351446)(2,.6931471806)(3,.5623351446)(4,0)};
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Starting count $k$},ylabel={First difference $\Delta H_k$},xmin=-.5,xmax=3.5,ymin=-.7,ymax=.7,xtick={0,...,3},grid=major]
+\addplot[copper,ybar,bar width=13pt] coordinates {(0,.5623351446)(1,.130812036)(2,-.130812036)(3,-.5623351446)};
+\end{axis}\end{tikzpicture}''','Binary entropy on the four-token lattice and its forward differences. The differences decrease and change sign at the balanced composition.')
+
+FIGURES['transport']=(r'''\begin{tikzpicture}[>=Stealth,every node/.style={font=\small}]
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (A) at (0,0) {$A$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (B) at (4.2,0) {$B$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (C) at (8.4,0) {$C$};
+\draw[->,copper,line width=1.4pt] (A)--node[above=5pt] {$J_{AB}=1/8$}(B);
+\draw[->,copper,line width=1.4pt] (B)--node[above=5pt] {$J_{BC}=1/16$}(C);
+\node[above=13pt] at (A) {$p_A=3/4$};
+\node[above=13pt] at (B) {$p_B=1/4$};
+\node[above=13pt] at (C) {$p_C=0$};
+\node[below=15pt,align=center] at (A) {$\operatorname{div}J=1/8$\\$\Delta p_A=-1/8$\\$p_A^+=5/8$};
+\node[below=15pt,align=center] at (B) {$\operatorname{div}J=-1/16$\\$\Delta p_B=1/16$\\$p_B^+=5/16$};
+\node[below=15pt,align=center] at (C) {$\operatorname{div}J=-1/16$\\$\Delta p_C=1/16$\\$p_C^+=1/16$};
+\end{tikzpicture}''','One transport step from (3/4,1/4,0). The middle vertex gains mass even while sending some onward, because its incoming current is larger.')

@@ -1,368 +1,500 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 7: Discrete Fisher geometry and statistical distance · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="7"><p class="eyebrow">Week 7 · Reading</p><h1>Discrete Fisher geometry and statistical distance</h1><nav class="week-nav" aria-label="Week 7 resources"><a aria-current=page href="../readings/week07.html">Reading</a><a  href="../demos/week07.html">Demonstration</a><a  href="../labs/week07.html">Lab</a><a  href="../quizzes/week07.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter07.pdf">Chapter 7 PDF</a> · <a href="../textbook/latex/chapter07.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Use square-root coordinates to compute exact statistical distance.</li><li>Calculate the Fisher quadratic length of a small interior step.</li><li>Explain why boundary edges need an exact-distance treatment.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 7 -->
-<h2 id="two-notions-of-length-for-a-finite-step">Two notions of length
-for a finite step</h2>
-<p>Let <span class="math inline">\(p\)</span> and <span
-class="math inline">\(q\)</span> be probability vectors. A simple
-coordinate distance is the Euclidean norm <span
-class="math inline">\(\|q-p\|\)</span>. But equal coordinate changes can
-be more significant when they affect rare outcomes. Information geometry
-uses another notion of length to describe this statistical effect.</p>
-<p>For positive <span class="math inline">\(p_i\)</span> and a small
-step <span class="math inline">\(\delta=q-p\)</span> with <span
-class="math inline">\(\sum_i\delta_i=0\)</span>, the Fisher quadratic
-form is <span
-class="math display">\[\boxed{g_p(\delta,\delta)=\sum_i\frac{\delta_i^2}{p_i}.}\]</span>
-Its square root is a local approximation to the statistical length of a
-small move. Notice that the denominators depend on the initial state. A
-change to a rare outcome counts more.</p>
-<p>The relationship with relative entropy is <span
-class="math display">\[2D(p+\delta\|p)\approx
-g_p(\delta,\delta)\]</span> for small displacements in the interior.
-Thus the local length is <span
-class="math inline">\(\sqrt{g_p(\delta,\delta)}\)</span>, with no
-additional factor of <span class="math inline">\(\sqrt2\)</span>. We can
-compare the two expressions numerically before learning the continuous
-Taylor expansion that explains the approximation.</p>
-<h2 id="an-exact-distance-without-derivatives">An exact distance without
-derivatives</h2>
-<p>Square-root coordinates give every probability vector a point on the
-radius-two sphere: <span
-class="math display">\[s(p)=(2\sqrt{p_1},\ldots,2\sqrt{p_k}),\qquad\|s(p)\|=2.\]</span>
-The exact Fisher–Rao spherical distance between categorical
-distributions is <span class="math display">\[\boxed{d_{\rm
-FR}(p,q)=2\arccos\left(\sum_i\sqrt{p_iq_i}\right).}\]</span> This
-formula makes sense even when some probabilities are zero. It is an
-exact finite distance, rather than the local approximation defined
-above.</p>
-<p>For Bernoulli distributions <span
-class="math inline">\((x,1-x)\)</span> and <span
-class="math inline">\((y,1-y)\)</span>, the formula becomes <span
-class="math display">\[d_{\rm
-FR}(x,y)=2\left|\arcsin\sqrt{x}-\arcsin\sqrt{y}\right|.\]</span> The
-moves <span class="math inline">\(0\to1/4\)</span> and <span
-class="math inline">\(1/4\to1/2\)</span> have equal coordinate length
-<span class="math inline">\(1/4\)</span>, but their Fisher–Rao lengths
-are respectively <span class="math inline">\(\pi/3\)</span> and <span
-class="math inline">\(\pi/6\)</span>.</p>
-<h2 id="give-the-probability-lattice-edge-lengths">Give the probability
-lattice edge lengths</h2>
-<p>Return to the token lattice <span class="math inline">\(\mathcal
-P_N\)</span> from Week 3. Neighboring states are joined by an edge
-representing one token transfer. Assign that edge the exact weight <span
-class="math display">\[\ell(p,q)=d_{\rm FR}(p,q).\]</span> Now the
-lattice becomes a <strong>weighted graph</strong>. A path consists of
-finitely many legal token transfers, and its length is the sum of its
-edge weights.</p>
-<p>For a short interior edge, we can also use <span
-class="math inline">\(\ell(p,q)\approx\sqrt{\sum_i(q_i-p_i)^2/p_i}\)</span>.
-Near a zero coordinate, do not use this approximation: it divides by
-zero, while the exact spherical distance remains finite.</p>
-<h2 id="a-refinement-experiment">A refinement experiment</h2>
-<p>Compute the exact length of one binary move from <span
-class="math inline">\(x=1/4\)</span> to <span
-class="math inline">\(x=1/2\)</span>. Next split the interval into two
-moves through <span class="math inline">\(x=3/8\)</span> and add their
-exact distances. Because the binary states lie along one spherical arc
-in order, the sum agrees exactly. Try local quadratic edge
-approximations instead: their total changes under refinement and gets
-closer to the exact arc distance as the steps become small.</p>
-<p>This is a direct route from discrete probability geometry toward the
-continuous Fisher metric developed in our companion course.</p>
-<h2
-id="further-investigations-discrete-fisher-geometry-and-statistical-distance">Further
-investigations: Discrete Fisher geometry and statistical distance</h2>
-<p>The probability triangle is an excellent map of compositions, but its
-ordinary Euclidean distances treat all coordinate changes in the same
-way. Statistical comparison also depends on where the probability mass
-sits. Taking square roots reveals another geometry, one in which a
-probability table becomes a point on a sphere.</p>
-<p>This chapter uses lengths, dot products, and angles. Angles will be
-measured in radians: a full turn is <span
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 7: Discrete Fisher geometry and statistical distance · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="7"><p class="eyebrow">Week 7 · Reading</p><h1>Discrete Fisher geometry and statistical distance</h1><nav class="week-nav" aria-label="Week 7 resources"><a aria-current=page href="../readings/week07.html">Reading</a><a  href="../demos/week07.html">Demonstration</a><a  href="../labs/week07.html">Lab</a><a  href="../quizzes/week07.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter07.pdf">Chapter 7 PDF</a> · <a href="../textbook/latex/chapter07.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Use square-root coordinates to compute exact statistical distance.</li><li>Calculate the Fisher quadratic length of a small interior step.</li><li>Explain why boundary edges need an exact-distance treatment.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#what-an-ordinary-coordinate-distance-misses">What an ordinary
+coordinate distance misses</a></li><li><a href="#lengths-angles-and-the-formulas-we-need">Lengths, angles, and
+the formulas we need</a></li><li><a href="#square-roots-turn-normalization-into-a-sphere-equation">Square
+roots turn normalization into a sphere equation</a></li><li><a href="#overlap-determines-an-exact-statistical-distance">Overlap
+determines an exact statistical distance</a></li><li><a href="#why-this-construction-gives-a-distance">Why this construction
+gives a distance</a></li><li><a href="#binary-probabilities-have-a-particularly-useful-coordinate">Binary
+probabilities have a particularly useful coordinate</a></li><li><a href="#local-fisher-length-emerges-from-a-finite-identity">Local Fisher
+length emerges from a finite identity</a></li><li><a href="#comparing-exact-and-approximate-quantities">Comparing exact and
+approximate quantities</a></li><li><a href="#chords-and-hellinger-distance-provide-another-scale">Chords and
+Hellinger distance provide another scale</a></li><li><a href="#giving-the-lattice-statistical-edge-lengths">Giving the lattice
+statistical edge lengths</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>Raising a probability from <span class="math inline">\(0.49\)</span>
+to <span class="math inline">\(0.50\)</span> and raising one from <span
+class="math inline">\(0.01\)</span> to <span
+class="math inline">\(0.02\)</span> both add one percentage point. The
+second change doubles the chance of a rare outcome. If probabilities
+describe measurements or competing models, equal coordinate changes need
+not represent equally substantial statistical changes.</p>
+<p>Chapter 6 compared distributions with a directed divergence. This
+chapter constructs a symmetric distance. The main idea is simple: take
+square roots of the probabilities, place the resulting vectors on a
+sphere, and measure their angular separation. The construction uses
+finite sums and elementary geometry, so we can calculate exact distances
+before developing a continuous theory of metrics.</p>
+<h2 id="what-an-ordinary-coordinate-distance-misses">What an ordinary
+coordinate distance misses</h2>
+<p>A Euclidean displacement from <span class="math inline">\(p\)</span>
+to <span class="math inline">\(q\)</span> is <span
+class="math inline">\(\delta=q-p\)</span>, with squared length <span
+class="math inline">\(\sum_i\delta_i^2\)</span>. This treats a
+coordinate change independently of the probability already present in
+that coordinate.</p>
+<p>Sampling provides a reason to look for a different scale. For a
+binary probability <span class="math inline">\(x\)</span> and <span
+class="math inline">\(N\)</span> independent observations, Chapter 4
+gave the standard deviation of the empirical proportion: <span
+class="math display">\[\sqrt{\frac{x(1-x)}N}.\]</span> A small change
+<span class="math inline">\(\delta\)</span> in <span
+class="math inline">\(x\)</span> can be compared with that fluctuation
+scale. Its magnitude in these units is <span
+class="math display">\[\frac{\sqrt N\,|\delta|}{\sqrt{x(1-x)}}.\]</span>
+The denominator depends on the state. The same numerical change can be
+large relative to one sampling scale and small relative to another.</p>
+<p>This motivates a statistical geometry. It does not supply an
+automatic hypothesis test or a complete measure of practical importance.
+We are building a distance between probability models, with their
+sampling behavior as one source of interpretation.</p>
+<h2 id="lengths-angles-and-the-formulas-we-need">Lengths, angles, and
+the formulas we need</h2>
+<p>For a vector <span class="math inline">\(v=(v_1,\ldots,v_k)\)</span>,
+its Euclidean length is <span class="math display">\[\|v\|=\sqrt{\sum_i
+v_i^2}.\]</span> The dot product of <span
+class="math inline">\(v\)</span> and <span
+class="math inline">\(w\)</span> is <span class="math inline">\(v\cdot
+w=\sum_i v_iw_i\)</span>. For nonzero vectors, the angle <span
+class="math inline">\(\alpha\)</span> between them satisfies <span
+class="math display">\[\cos\alpha=\frac{v\cdot
+w}{\|v\|\|w\|}.\]</span></p>
+<p>We measure angles in radians. A full turn is <span
 class="math inline">\(2\pi\)</span>, a right angle is <span
-class="math inline">\(\pi/2\)</span>, and an arc of angle <span
+class="math inline">\(\pi/2\)</span>, and an arc subtending angle <span
 class="math inline">\(\alpha\)</span> on a circle of radius <span
 class="math inline">\(R\)</span> has length <span
-class="math inline">\(R\alpha\)</span>.</p>
-<h2 id="square-roots-place-probabilities-on-a-sphere">Square roots place
-probabilities on a sphere</h2>
-<p>Map a probability vector <span class="math inline">\(p\)</span> to
-the vector <span
+class="math inline">\(R\alpha\)</span>. A calculator’s <span
+class="math inline">\(\arccos\)</span> function returns the angle having
+a specified cosine. Use radian mode.</p>
+<p>The sphere of radius two is the set of vectors with squared length
+four. For three coordinates this is an ordinary sphere in space. With
+more coordinates, the equation still defines the object and its dot
+products still make sense, even when a picture is unavailable.</p>
+<h2 id="square-roots-turn-normalization-into-a-sphere-equation">Square
+roots turn normalization into a sphere equation</h2>
+<p>Map a probability vector to <span
 class="math display">\[s(p)=(2\sqrt{p_1},\ldots,2\sqrt{p_k}).\]</span>
 Its squared length is <span
-class="math inline">\(\sum_i(2\sqrt{p_i})^2=4\sum_i p_i=4\)</span>. Thus
-<span class="math inline">\(s(p)\)</span> lies on a sphere of radius
-<span class="math inline">\(2\)</span>. Every coordinate is nonnegative,
-so only the nonnegative portion of the sphere is used. Conversely, a
-nonnegative vector <span class="math inline">\(s\)</span> of length
-<span class="math inline">\(2\)</span> gives probabilities <span
-class="math inline">\(p_i=s_i^2/4\)</span>.</p>
-<p>For two categories, the image is a quarter circle. For three, it is
-an octant of an ordinary sphere. The same formula works for more
-categories, although a direct spatial picture is then unavailable. Dot
-products and lengths still make sense as finite sums.</p>
-<div class="example" title="Pure and uniform distributions">
-<p><strong>Example. Pure and uniform distributions</strong></p>
-<p>The pure three-category state <span
+class="math display">\[\|s(p)\|^2=\sum_i(2\sqrt{p_i})^2=4\sum_i
+p_i=4.\]</span> Thus every distribution lies on the radius-two sphere
+after this transformation. All coordinates are nonnegative, so only that
+portion of the sphere is used.</p>
+<p>The inverse transformation is equally explicit: <span
+class="math display">\[p_i=\frac{s_i^2}{4}.\]</span> A nonnegative
+sphere vector gives nonnegative probabilities summing to one. We have a
+new coordinate system for the same probability states.</p>
+<p>For two labels the image is a quarter circle. For three labels it is
+an octant of a sphere. A pure distribution <span
 class="math inline">\((1,0,0)\)</span> maps to <span
-class="math inline">\((2,0,0)\)</span>. The uniform state maps to <span
-class="math inline">\((2/\sqrt3,2/\sqrt3,2/\sqrt3)\)</span>. Two
-different pure states lie at right angles as viewed from the center of
-the sphere. They are maximally separated within its nonnegative
-portion.</p>
-</div>
-<h2 id="overlap-determines-the-angle">Overlap determines the angle</h2>
-<p>The <strong>Bhattacharyya coefficient</strong>, or square-root
-overlap, is <span
-class="math display">\[B(p,r)=\sum_i\sqrt{p_ir_i}.\]</span> The dot
-product of the two sphere vectors is <span
-class="math inline">\(s(p)\cdot s(r)=4B(p,r)\)</span>. Since both
-lengths are <span class="math inline">\(2\)</span>, the cosine of their
-angle <span class="math inline">\(\alpha\)</span> is <span
-class="math inline">\(B(p,r)\)</span>. The Cauchy–Schwarz inequality
-ensures <span class="math inline">\(B\leq1\)</span>: <span
-class="math display">\[\left(\sum_i\sqrt{p_ir_i}\right)^2\leq\left(\sum_ip_i\right)\left(\sum_ir_i\right)=1.\]</span>
-Also <span class="math inline">\(B\geq0\)</span>. The angle therefore
-lies in <span class="math inline">\([0,\pi/2]\)</span>.</p>
-<p>We define the <strong>categorical Fisher–Rao distance</strong> by the
-length of the shorter spherical arc: <span
-class="math display">\[d(p,r)=2\arccos B(p,r).\]</span> This
-normalization uses the sphere of radius <span
-class="math inline">\(2\)</span>. Equality of the tables gives distance
-zero; disjoint supports give distance <span
-class="math inline">\(\pi\)</span>. The construction is a standard
-finite probability geometry. Its arc formula can be used without
-developing differential geometry.</p>
-<div class="example" title="A distance calculated exactly">
-<p><strong>Example. A distance calculated exactly</strong></p>
-<p>Let <span class="math inline">\(p=(1,0)\)</span> and <span
-class="math inline">\(r=(1/4,3/4)\)</span>. Their overlap is <span
-class="math inline">\(1/2\)</span>, so their angle is <span
-class="math inline">\(\pi/3\)</span> and their distance is <span
-class="math inline">\(2\pi/3\)</span>. The coordinate difference of the
-first probabilities is <span class="math inline">\(3/4\)</span>; it
-measures a different feature from the spherical distance.</p>
-</div>
-<h2 id="chords-arcs-and-hellinger-distance">Chords, arcs, and Hellinger
-distance</h2>
-<p>The straight chord joining the sphere vectors has squared length
-<span
-class="math display">\[\|s(p)-s(r)\|^2=8\bigl(1-B(p,r)\bigr).\]</span>
-To verify this, expand the square and use the squared lengths <span
-class="math inline">\(4\)</span> and the dot product <span
-class="math inline">\(4B\)</span>. The <strong>Hellinger
-distance</strong> with the convention used here is <span
-class="math display">\[h(p,r)=\sqrt{1-B(p,r)}
-=\frac1{\sqrt2}\left(\sum_i(\sqrt{p_i}-\sqrt{r_i})^2\right)^{1/2}.\]</span>
-Thus the chord length is <span
-class="math inline">\(2\sqrt2\,h\)</span>. The arc and chord are
-different, but both increase as overlap decreases. Hellinger distance,
-spherical distance, and relative entropy should always be identified by
-their formulas, since their numerical scales and boundary behavior
-differ.</p>
-<div class="example" title="Behavior at zero probabilities">
-<p><strong>Example. Behavior at zero probabilities</strong></p>
-<p>For <span class="math inline">\(p=(1,0)\)</span> and <span
-class="math inline">\(r=(0,1)\)</span>, the overlap is zero, the
-Hellinger distance is one, and the spherical distance is <span
-class="math inline">\(\pi\)</span>. Both directed relative entropies are
-infinite. The square-root construction includes the boundary of the
-probability simplex at finite distance.</p>
-</div>
-<h2 id="a-complete-coordinate-for-binary-probabilities">A complete
-coordinate for binary probabilities</h2>
-<p>For a binary distribution <span
-class="math inline">\((x,1-x)\)</span>, put <span
-class="math display">\[\phi=\arcsin\sqrt{x},\qquad
-0\leq\phi\leq\pi/2.\]</span> Then <span
-class="math inline">\(x=\sin^2\phi\)</span> and <span
-class="math inline">\(s=(2\sin\phi,2\cos\phi)\)</span>. The angle <span
-class="math inline">\(\phi\)</span> specifies a point on the quarter
-circle. Since the radius is <span class="math inline">\(2\)</span>, the
-arc coordinate measured from <span class="math inline">\(x=0\)</span> is
-<span class="math inline">\(2\phi\)</span>. Two binary distributions
-therefore have distance <span
-class="math display">\[d\bigl((x,1-x),(y,1-y)\bigr)=2\left|\arcsin\sqrt{x}-\arcsin\sqrt{y}\right|.\]</span>
-This gives a useful distinction between equal changes in probability and
-equal changes in statistical distance.</p>
-<div class="example"
-title="Equal probability increments at different locations">
-<p><strong>Example. Equal probability increments at different
-locations</strong></p>
-<p>The distance from <span class="math inline">\(x=0\)</span> to <span
-class="math inline">\(x=1/4\)</span> is <span
-class="math inline">\(\pi/3\)</span>. The distance from <span
-class="math inline">\(x=1/4\)</span> to <span
-class="math inline">\(x=1/2\)</span> is <span
-class="math inline">\(\pi/6\)</span>. Both changes add <span
-class="math inline">\(1/4\)</span> to the probability, yet the first
-covers twice the spherical arc. Near a boundary, introducing probability
-into a previously absent category can be a substantial geometric
-change.</p>
-</div>
-<figure><img src="../assets/fig-sphere.svg" alt="Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths." loading="lazy"><figcaption>Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths.</figcaption></figure>
-<h2 id="why-the-arc-formula-is-a-distance">Why the arc formula is a
-distance</h2>
-<p>The shorter great-circle arc joins any two points on a sphere unless
-they are antipodal. Our nonnegative points are never antipodal.
-Elementary spherical geometry identifies this arc as a shortest
-spherical route. Concatenating a route from <span
-class="math inline">\(p\)</span> to <span
-class="math inline">\(q\)</span> with one from <span
-class="math inline">\(q\)</span> to <span
-class="math inline">\(r\)</span> gives a route from <span
-class="math inline">\(p\)</span> to <span
-class="math inline">\(r\)</span>, whose length cannot be smaller than
-the shortest route. Hence <span class="math display">\[d(p,r)\leq
-d(p,q)+d(q,r).\]</span> This is the triangle inequality. Symmetry
-follows from symmetry of overlap, and zero distance forces equal
-square-root coordinates, hence equal probabilities. These properties
-make <span class="math inline">\(d\)</span> a distance. In Chapter 8 we
-will construct intermediate points on the shortest arc using only
-trigonometry.</p>
-<p>When calculations are performed on a computer, tiny rounding errors
-can push an overlap slightly above one. Before applying inverse cosine,
-clamp the computed overlap to <span
-class="math inline">\([0,1]\)</span>. Exact mathematics already
-guarantees this interval; the adjustment handles floating-point
-arithmetic rather than changing the definition.</p>
-<h2 id="a-sum-of-squares-proof-of-the-overlap-bound">A sum-of-squares
-proof of the overlap bound</h2>
-<p>The inequality used to bound overlap can be established directly. For
-any two lists <span class="math inline">\(a_i,b_i\)</span>, expansion
-gives the identity <span class="math display">\[\left(\sum_i
-a_i^2\right)\left(\sum_i b_i^2\right)-\left(\sum_i a_ib_i\right)^2
-=\sum_{i&lt;j}(a_ib_j-a_jb_i)^2.\]</span> Every term on the right is
-nonnegative. This proves Cauchy–Schwarz by finite algebra. Set <span
+class="math inline">\((2,0,0)\)</span>; the uniform distribution maps to
+<span class="math inline">\((2/\sqrt3,2/\sqrt3,2/\sqrt3)\)</span>.</p>
+<p>The factor two is a normalization choice. It makes the local squared
+length agree with the categorical Fisher quadratic form derived below. A
+sphere of radius one would give distances half as large, so the radius
+belongs in the definition.</p>
+<h2 id="overlap-determines-an-exact-statistical-distance">Overlap
+determines an exact statistical distance</h2>
+<p>The dot product of the two transformed vectors is <span
+class="math display">\[s(p)\cdot s(q)=4\sum_i\sqrt{p_iq_i}.\]</span>
+Define the <strong>square-root overlap</strong>, also called the
+Bhattacharyya coefficient, by <span
+class="math display">\[B(p,q)=\sum_i\sqrt{p_iq_i}.\]</span> Since both
+vectors have length two, their angle is <span
+class="math inline">\(\alpha=\arccos B(p,q)\)</span>.</p>
+<p>Every term in the overlap is nonnegative. The Cauchy–Schwarz
+inequality gives <span class="math display">\[B(p,q)^2\leq\left(\sum_i
+p_i\right)\left(\sum_i q_i\right)=1.\]</span> One finite proof of the
+inequality is the sum-of-squares identity <span
+class="math display">\[\left(\sum_i a_i^2\right)\left(\sum_i
+b_i^2\right)
+-\left(\sum_i a_ib_i\right)^2
+=\sum_{i&lt;j}(a_ib_j-a_jb_i)^2\geq0.\]</span> Set <span
 class="math inline">\(a_i=\sqrt{p_i}\)</span> and <span
-class="math inline">\(b_i=\sqrt{r_i}\)</span> to obtain <span
-class="math inline">\(1-B(p,r)^2\geq0\)</span>. Equality requires <span
-class="math inline">\(\sqrt{p_ir_j}=\sqrt{p_jr_i}\)</span> for every
-pair. For probability tables, these conditions force the same normalized
-proportions and hence <span class="math inline">\(p=r\)</span>.</p>
-<p>This identity also makes the geometry concrete. A dot product cannot
-exceed the product of the lengths because the difference of their
-squares is a sum of nonnegative squares. The familiar angle formula is
-therefore compatible with the algebra of finite lists.</p>
-<h2 id="the-same-overlap-in-independent-repeated-observations">The same
-overlap in independent repeated observations</h2>
-<p>Suppose one model assigns table <span
-class="math inline">\(p\)</span> to each of <span
-class="math inline">\(N\)</span> independent observations and another
-assigns table <span class="math inline">\(r\)</span>. Their
-distributions on ordered samples have square-root overlap <span
-class="math display">\[\sum_{i_1,\ldots,i_N}\sqrt{p_{i_1}r_{i_1}\cdots
-p_{i_N}r_{i_N}}
-=\left(\sum_i\sqrt{p_ir_i}\right)^N=B(p,r)^N.\]</span> The equality
-follows by expanding a product of <span class="math inline">\(N\)</span>
-identical finite sums. If <span class="math inline">\(p\ne r\)</span>,
-then <span class="math inline">\(B&lt;1\)</span>, so this overlap
-decreases with sample size. The corresponding spherical distance between
-the full sample distributions is <span
-class="math inline">\(2\arccos(B^N)\)</span>. More observations can make
-two distinct sampling models more distinguishable.</p>
+class="math inline">\(b_i=\sqrt{q_i}\)</span>. Thus <span
+class="math inline">\(0\leq B\leq1\)</span> and <span
+class="math inline">\(0\leq\alpha\leq\pi/2\)</span>.</p>
+<p>Define the categorical <strong>Fisher–Rao distance</strong> <span
+class="math display">\[\boxed{d_{\mathrm{FR}}(p,q)=2\arccos
+B(p,q).}\]</span> It is the length of the shorter great-circle arc
+between the transformed points. The distance lies between zero and <span
+class="math inline">\(\pi\)</span>.</p>
+<div class="example" title="A distance that includes a boundary state">
+<p><strong>Example. A distance that includes a boundary
+state</strong></p>
+<p>Take <span class="math inline">\(p=(1,0)\)</span> and <span
+class="math inline">\(q=(1/4,3/4)\)</span>. The overlap is <span
+class="math inline">\(\sqrt{1/4}=1/2\)</span>. Their angle is <span
+class="math inline">\(\pi/3\)</span>, so their distance is <span
+class="math inline">\(2\pi/3\)</span>.</p>
+<p>Both distributions are allowed even though one coordinate of <span
+class="math inline">\(p\)</span> is zero. The reverse KL comparison
+<span class="math inline">\(D(q\|p)\)</span> is infinite, but the
+spherical distance is finite.</p>
+</div>
+<p>Identical tables have overlap one and distance zero. Tables with
+disjoint supports have overlap zero and distance <span
+class="math inline">\(\pi\)</span>. The construction treats the two
+arguments symmetrically.</p>
 <div class="example"
-title="Overlap after several independent observations">
-<p><strong>Example. Overlap after several independent
-observations</strong></p>
-<p>Take <span class="math inline">\(p=(0.9,0.1)\)</span> and <span
-class="math inline">\(r=(0.1,0.9)\)</span>. A single observation has
-overlap <span class="math inline">\(0.6\)</span>. Two independent
-observations have overlap <span class="math inline">\(0.36\)</span>, and
-five have overlap <span class="math inline">\(0.07776\)</span>. The
-distributions being compared now live on <span
-class="math inline">\(2^N\)</span> ordered samples. We can calculate
-their overlap without listing those samples, because the
-independent-product structure factors the sum.</p>
+title="A three-category comparison carried out numerically">
+<p><strong>Example. A three-category comparison carried out
+numerically</strong></p>
+<p>Compare <span class="math inline">\(p=(1/2,1/3,1/6)\)</span> with the
+uniform table <span class="math inline">\(u=(1/3,1/3,1/3)\)</span>.
+Compute the overlap one coordinate at a time: <span
+class="math display">\[B(p,u)=\sqrt{\frac16}+\frac13+\sqrt{\frac1{18}}
+\approx0.977284.\]</span> Its inverse cosine is about <span
+class="math inline">\(0.21355\)</span> radians, giving distance about
+<span class="math inline">\(0.4271\)</span>. The method is the same for
+three labels as for two: multiply corresponding probabilities, take
+square roots, add, and apply inverse cosine.</p>
 </div>
-<h2 id="a-numerical-table-near-a-boundary">A numerical table near a
-boundary</h2>
-<p>For binary <span class="math inline">\(x\)</span>, its arc coordinate
-is <span class="math inline">\(2\arcsin\sqrt{x}\)</span>. At <span
-class="math inline">\(x=0\)</span>, <span
-class="math inline">\(0.01\)</span>, <span
-class="math inline">\(0.04\)</span>, and <span
-class="math inline">\(0.09\)</span>, these coordinates are approximately
-<span class="math inline">\(0\)</span>, <span
-class="math inline">\(0.2003\)</span>, <span
-class="math inline">\(0.4027\)</span>, and <span
-class="math inline">\(0.6094\)</span>. The corresponding square roots
-are <span class="math inline">\(0\)</span>, <span
-class="math inline">\(0.1\)</span>, <span
-class="math inline">\(0.2\)</span>, and <span
-class="math inline">\(0.3\)</span>. The table helps explain why
-square-root coordinates spread out small probabilities.</p>
-<div class="example" title="Two small perturbations">
-<p><strong>Example. Two small perturbations</strong></p>
-<p>Changing <span class="math inline">\(x\)</span> from <span
-class="math inline">\(0.01\)</span> to <span
-class="math inline">\(0.02\)</span> gives spherical distance
-approximately <span class="math inline">\(0.0834\)</span>. Changing it
-from <span class="math inline">\(0.49\)</span> to <span
-class="math inline">\(0.50\)</span> gives distance approximately <span
-class="math inline">\(0.0200\)</span>. The first pair has the same
-absolute probability difference as the second but a larger square-root
-separation. Both comparisons are finite and use the exact angle
-formula.</p>
+<p>A frequent arithmetic mistake is to take the square root after
+summing the products. That would calculate <span
+class="math inline">\(\sqrt{\sum_i p_iq_i}\)</span>, a different
+expression. Another is to feed a degree-valued angle into a radian arc
+formula. Recording the overlap and the angle separately makes both
+mistakes easier to diagnose.</p>
+<p>Computer arithmetic can produce an overlap such as <span
+class="math inline">\(1.0000000000000002\)</span> for identical
+distributions. Before applying inverse cosine, clamp such a rounded
+value to the interval <span class="math inline">\([0,1]\)</span>. A
+substantial value outside that interval indicates a different issue,
+such as unnormalized inputs; clamping should not conceal it. For very
+close binary distributions, the arcsine-coordinate formula is often
+convenient because it directly compares their arc coordinates.</p>
+<h2 id="why-this-construction-gives-a-distance">Why this construction
+gives a distance</h2>
+<p>On a sphere, the shorter great-circle arc is a shortest route between
+its endpoints. Our points are never antipodal because their coordinates
+are nonnegative. Moreover, the shorter arc remains in the nonnegative
+region: its points can be written as positive combinations of the
+endpoint sphere vectors, as Chapter 8 will show.</p>
+<p>A route from <span class="math inline">\(p\)</span> to <span
+class="math inline">\(q\)</span> followed by one from <span
+class="math inline">\(q\)</span> to <span
+class="math inline">\(r\)</span> is a possible route from <span
+class="math inline">\(p\)</span> to <span
+class="math inline">\(r\)</span>. It cannot be shorter than the shortest
+direct spherical route. Therefore <span
+class="math display">\[d_{\mathrm{FR}}(p,r)\leq
+d_{\mathrm{FR}}(p,q)+d_{\mathrm{FR}}(q,r).\]</span> This is the triangle
+inequality. Symmetry follows from symmetry of overlap. Zero distance
+forces identical square-root coordinates, hence identical
+probabilities.</p>
+<p>Together, these properties justify calling the formula a distance.
+They also let us compare a route through several probability states with
+the distance between its endpoints.</p>
+<h2
+id="binary-probabilities-have-a-particularly-useful-coordinate">Binary
+probabilities have a particularly useful coordinate</h2>
+<p>For <span class="math inline">\(p=(x,1-x)\)</span>, introduce <span
+class="math display">\[\phi=\arcsin\sqrt{x},\qquad
+0\leq\phi\leq\pi/2.\]</span> The function <span
+class="math inline">\(\arcsin\)</span> returns the angle whose sine is
+the given value. Because <span
+class="math inline">\(\sin^2\phi+\cos^2\phi=1\)</span>, the sphere
+coordinates become <span
+class="math display">\[s(p)=(2\sin\phi,2\cos\phi).\]</span> Moving along
+the quarter circle is now measured by the angle <span
+class="math inline">\(\phi\)</span>. The arc coordinate from <span
+class="math inline">\(x=0\)</span> is <span
+class="math inline">\(2\phi\)</span>, giving <span
+class="math display">\[\boxed{d_{\mathrm{FR}}(x,y)
+=2|\arcsin\sqrt y-\arcsin\sqrt x|.}\]</span></p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Probability <span class="math inline">\(x\)</span></th>
+<th>Angle <span class="math inline">\(\phi\)</span></th>
+<th>Arc coordinate <span class="math inline">\(2\phi\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1/4\)</span></td>
+<td><span class="math inline">\(\pi/6\)</span></td>
+<td><span class="math inline">\(\pi/3\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(1/2\)</span></td>
+<td><span class="math inline">\(\pi/4\)</span></td>
+<td><span class="math inline">\(\pi/2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(3/4\)</span></td>
+<td><span class="math inline">\(\pi/3\)</span></td>
+<td><span class="math inline">\(2\pi/3\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(\pi/2\)</span></td>
+<td><span class="math inline">\(\pi\)</span></td>
+</tr>
+</tbody>
+</table></div>
+<p>The equal probability steps <span
+class="math inline">\(0\to1/4\)</span> and <span
+class="math inline">\(1/4\to1/2\)</span> have distances <span
+class="math inline">\(\pi/3\)</span> and <span
+class="math inline">\(\pi/6\)</span>. The first covers twice as much
+arc.</p>
+<figure><img src="../assets/fig-sphere.svg" alt="Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths." width="367" height="205" loading="lazy"><figcaption>Binary distributions form a quarter circle on the radius-two sphere. Equal probability increments generally cover unequal arc lengths.</figcaption></figure>
+<p>This coordinate also makes ordered binary path lengths easy to
+calculate. If <span class="math inline">\(x_0\leq x_1\leq\cdots\leq
+x_m\)</span>, the angle differences all have the same sign. Adding the
+arc distances telescopes to the distance from <span
+class="math inline">\(x_0\)</span> to <span
+class="math inline">\(x_m\)</span>.</p>
+<h2 id="local-fisher-length-emerges-from-a-finite-identity">Local Fisher
+length emerges from a finite identity</h2>
+<p>We can see the local geometry without differentiating a square root.
+Let <span class="math inline">\(q=p+\delta\)</span>, where <span
+class="math inline">\(\sum_i\delta_i=0\)</span>. Rationalizing the
+difference gives the exact identity <span
+class="math display">\[2\sqrt{p_i+\delta_i}-2\sqrt{p_i}
+=\frac{2\delta_i}{\sqrt{p_i+\delta_i}+\sqrt{p_i}}.\]</span> Consequently
+the squared chord length is <span class="math display">\[\|s(q)-s(p)\|^2
+=4\sum_i\frac{\delta_i^2}
+{(\sqrt{p_i+\delta_i}+\sqrt{p_i})^2}.\]</span></p>
+<p>If every <span class="math inline">\(p_i\)</span> is positive and the
+changes are small relative to those probabilities, the denominator is
+close to <span class="math inline">\(4p_i\)</span>. This gives the
+approximation <span
+class="math display">\[\boxed{g_p(\delta,\delta)=\sum_i\frac{\delta_i^2}{p_i}.}\]</span>
+This state-dependent quadratic form is the <strong>Fisher
+metric</strong> for categorical distributions. Its square root is a
+local length estimate.</p>
+<p>Why does a chord approximate an arc? If their angular separation is
+<span class="math inline">\(\alpha\)</span>, the chord has length <span
+class="math inline">\(4\sin(\alpha/2)\)</span> and the arc has length
+<span class="math inline">\(2\alpha\)</span>. For a small angle, these
+are close. Elementary inequalities <span class="math inline">\(\sin
+t\leq t\leq\tan t\)</span> bound their ratio between one and <span
+class="math inline">\(1/\cos t\)</span>, with <span
+class="math inline">\(t=\alpha/2\)</span>. The bound approaches one as
+the angle becomes small.</p>
+<p>Thus the local form has two transparent approximations behind it:
+replacing the square-root denominators by their nearby starting values,
+and replacing a short arc by its chord. Neither replacement is needed in
+the exact distance formula.</p>
+<p>For a binary step <span
+class="math inline">\((x,1-x)\to(x+\delta,1-x-\delta)\)</span>, <span
+class="math display">\[g_x(\delta,\delta)=\frac{\delta^2}{x}+\frac{\delta^2}{1-x}
+=\frac{\delta^2}{x(1-x)}.\]</span> Its square root is <span
+class="math inline">\(|\delta|/\sqrt{x(1-x)}\)</span>, precisely the
+sampling scale considered at the start of the chapter, apart from the
+factor <span class="math inline">\(\sqrt N\)</span>.</p>
+<p>The phrase small relative to the probabilities can be made
+quantitative. Suppose <span
+class="math display">\[|\delta_i|\leq\varepsilon p_i\quad\text{for every
+}i,\qquad 0&lt;\varepsilon&lt;1.\]</span> Then <span
+class="math inline">\(p_i+\delta_i\)</span> lies between <span
+class="math inline">\((1-\varepsilon)p_i\)</span> and <span
+class="math inline">\((1+\varepsilon)p_i\)</span>. Bounding each
+square-root denominator in the exact chord identity gives <span
+class="math display">\[\frac{4}{(1+\sqrt{1+\varepsilon})^2}g_p(\delta,\delta)
+\leq\|s(q)-s(p)\|^2
+\leq\frac{4}{(1+\sqrt{1-\varepsilon})^2}g_p(\delta,\delta).\]</span>
+Both factors approach one when <span
+class="math inline">\(\varepsilon\)</span> becomes small. This is a
+finite error bound supporting the local approximation. It also shows why
+a tiny absolute change in a nearly absent category can be problematic:
+its relative change may still be large.</p>
+<p>The form <span class="math inline">\(g_p\)</span> is positive for
+every nonzero displacement at a positive state, because it adds
+nonnegative squares with positive denominators. It scales quadratically:
+<span
+class="math inline">\(g_p(c\delta,c\delta)=c^2g_p(\delta,\delta)\)</span>.
+Its square root therefore scales like a length. These elementary
+properties explain the term quadratic form without requiring a
+background in differential geometry.</p>
+<p>The allowable displacements also satisfy <span
+class="math inline">\(\sum_i\delta_i=0\)</span>. A proposed direction
+that changes every probability upward cannot be a direction through
+normalized distributions. The local geometry describes this sum-zero
+space of changes at the current state.</p>
+<h2 id="comparing-exact-and-approximate-quantities">Comparing exact and
+approximate quantities</h2>
+<p>Relative entropy has the same local quadratic scale: <span
+class="math display">\[2D(p+\delta\|p)\approx
+g_p(\delta,\delta)\]</span> for sufficiently small changes at a positive
+starting state. This is a local approximation, rather than a formula for
+arbitrary finite steps.</p>
+<div class="example" title="A short step at the center">
+<p><strong>Example. A short step at the center</strong></p>
+<p>Take <span class="math inline">\(p=(1/2,1/2)\)</span> and <span
+class="math inline">\(q=(0.55,0.45)\)</span>. Then <span
+class="math inline">\(\delta=(0.05,-0.05)\)</span> and <span
+class="math display">\[g_p(\delta,\delta)=0.01,\qquad
+\sqrt{g_p}=0.1.\]</span> The exact distance is about <span
+class="math inline">\(0.100167\)</span>, and <span
+class="math inline">\(2D(q\|p)\approx0.0100167\)</span>. The local and
+exact quantities are close, with the expected squared-length
+relationship.</p>
 </div>
-<p>For a statistical application, the labels and the observation
-procedure must be fixed before comparing tables. Adding an unused
-zero-probability label to both tables changes none of the overlap,
-Hellinger, or spherical formulas. Merging existing labels is different
-and can change the values. This distinction prepares the channel
-calculations in Chapter 10.</p>
+<p>A small absolute step need not be small relative to a rare
+probability. For <span class="math inline">\(x:0.01\to0.02\)</span>, the
+local estimate is about <span class="math inline">\(0.100504\)</span>
+while the exact distance is about <span
+class="math inline">\(0.083459\)</span>. The probability doubled, so
+replacing the denominator by its starting value is relatively crude. For
+<span class="math inline">\(x:0.49\to0.50\)</span>, the local estimate
+is about <span class="math inline">\(0.020004\)</span> and the exact
+distance about <span class="math inline">\(0.020001\)</span>.</p>
+<p>At <span class="math inline">\(p_i=0\)</span>, an inward step makes
+<span class="math inline">\(\delta_i^2/p_i\)</span> unavailable. This is
+a limitation of the local expression at the boundary. The exact
+square-root geometry still gives a finite answer. We therefore use exact
+distances for boundary edges.</p>
+<h2 id="chords-and-hellinger-distance-provide-another-scale">Chords and
+Hellinger distance provide another scale</h2>
+<p>Expanding the squared chord directly gives <span
+class="math display">\[\|s(p)-s(q)\|^2=8(1-B(p,q)).\]</span> The
+<strong>Hellinger distance</strong>, with the convention used here, is
+<span class="math display">\[h(p,q)=\sqrt{1-B(p,q)}
+=\frac1{\sqrt2}\sqrt{\sum_i(\sqrt{p_i}-\sqrt{q_i})^2}.\]</span> It is
+the Euclidean distance in square-root coordinates scaled by <span
+class="math inline">\(1/\sqrt2\)</span>. It therefore also satisfies the
+triangle inequality.</p>
+<p>The radius-two chord length is <span
+class="math inline">\(2\sqrt2\,h\)</span>. Hellinger distance and
+Fisher–Rao distance increase together as overlap decreases, but their
+numerical scales differ. For two distinct pure states, <span
+class="math inline">\(h=1\)</span> while <span
+class="math inline">\(d_{\mathrm{FR}}=\pi\)</span>.</p>
+<p>Independent repeated observations supply a further interpretation of
+overlap. For product distributions <span
+class="math inline">\(p^{\otimes N}\)</span> and <span
+class="math inline">\(q^{\otimes N}\)</span>, finite multiplication and
+summation give <span class="math display">\[B(p^{\otimes N},q^{\otimes
+N})=B(p,q)^N.\]</span> For two observations, expand <span
+class="math inline">\(\sum_{i,j}\sqrt{p_ip_jq_iq_j}\)</span> and factor
+it into two identical sums. Repeating gives the formula. If <span
+class="math inline">\(p\ne q\)</span>, the overlap is less than one and
+its repeated-observation value shrinks with <span
+class="math inline">\(N\)</span>. Repeated data can separate models that
+overlap strongly in a single observation.</p>
+<p>The sampling interpretation can now be read more carefully. At <span
+class="math inline">\(x=1/2\)</span> and <span
+class="math inline">\(N=100\)</span>, the standard deviation of an
+empirical binary proportion is <span
+class="math inline">\(0.05\)</span>. A change of <span
+class="math inline">\(0.01\)</span> is one fifth of that scale. At <span
+class="math inline">\(x=0.01\)</span>, the corresponding standard
+deviation is about <span class="math inline">\(0.00995\)</span>, so the
+same absolute change is about one full fluctuation scale.</p>
+<p>This comparison concerns distributions of repeated samples. A single
+sample can vary for many reasons, and a formal statistical test must
+specify a null model and its sampling distribution. The geometry
+identifies a useful state-dependent scale; it does not replace those
+modeling decisions.</p>
+<p>Distances and uncertainties should also be kept separate. Two pure
+distributions have equal entropy zero but maximal spherical separation
+<span class="math inline">\(\pi\)</span>. Two distributions near uniform
+may both have large entropy and still differ from one another. Entropy
+describes uncertainty within one table. A distance describes separation
+between two tables. The sphere construction adds a relational
+measurement that one scalar entropy cannot provide.</p>
+<h2 id="giving-the-lattice-statistical-edge-lengths">Giving the lattice
+statistical edge lengths</h2>
+<p>Return to <span class="math inline">\(\mathcal P_N\)</span>, where an
+edge represents a one-token transfer. Give each edge the exact weight
+<span class="math display">\[\ell(p,q)=d_{\mathrm{FR}}(p,q).\]</span>
+The probability lattice is now a <strong>weighted graph</strong>. One
+token can represent different statistical lengths depending on the
+starting composition.</p>
+<p>For an interior edge, a local estimate is <span
+class="math inline">\(\sqrt{\sum_i(q_i-p_i)^2/p_i}\)</span>. This
+estimate depends on which endpoint is treated as the start, so it is not
+an exact symmetric edge distance. The spherical formula is symmetric and
+works at boundaries.</p>
+<p>For <span class="math inline">\(x:1/4\to1/2\)</span>, the exact
+distance is <span class="math inline">\(\pi/6\approx0.523599\)</span>.
+The local estimate at <span class="math inline">\(1/4\)</span> is about
+<span class="math inline">\(0.577350\)</span>. Splitting through <span
+class="math inline">\(3/8\)</span> gives local estimates about <span
+class="math inline">\(0.288675\)</span> and <span
+class="math inline">\(0.258199\)</span>, totaling <span
+class="math inline">\(0.546874\)</span>, closer to the exact value. The
+exact arc lengths already add to <span
+class="math inline">\(\pi/6\)</span> at every such ordered
+subdivision.</p>
+<p>Use the Fisher-distance view of the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
+explorer</a> to compare these quantities. The <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week07.html">weekly
+demonstration</a> explores the spherical coordinates. Chapter 8 uses the
+exact edge lengths to ask which routes are shortest when only certain
+changes are permitted.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
-<li>Map <span class="math inline">\((1/4,1/4,1/2)\)</span> to the
-radius-two sphere and verify its squared length.</li>
-<li>Recover the distribution represented by <span
-class="math inline">\(s=(1,1,\sqrt2)\)</span>.</li>
-<li>Compute the overlap between <span
-class="math inline">\((1/2,1/2,0)\)</span> and <span
-class="math inline">\((1/2,0,1/2)\)</span>.</li>
-<li>Find the spherical distance and Hellinger distance for the pair in
-Exercise 3.</li>
-<li>Prove the chord-length formula by expanding a squared norm.</li>
-<li>Show that <span class="math inline">\(B(p,r)=0\)</span> exactly when
-<span class="math inline">\(p\)</span> and <span
-class="math inline">\(r\)</span> have disjoint supports.</li>
-<li>Show that <span class="math inline">\(B(p,r)=1\)</span> exactly when
-<span class="math inline">\(p=r\)</span>, using the equality condition
-in Cauchy–Schwarz.</li>
-<li>Find the binary arc coordinates of <span
-class="math inline">\(x=0,1/4,1/2,3/4,1\)</span>.</li>
-<li>Compare the distances from <span class="math inline">\(0.01\)</span>
-to <span class="math inline">\(0.02\)</span> and from <span
-class="math inline">\(0.49\)</span> to <span
-class="math inline">\(0.50\)</span> for binary probabilities.</li>
-<li>Give two distributions whose relative entropy is infinite but whose
-spherical distance is strictly smaller than <span
-class="math inline">\(\pi\)</span>.</li>
-<li>Explain the difference between the angle <span
-class="math inline">\(\alpha\)</span>, the radius-two arc length <span
-class="math inline">\(2\alpha\)</span>, and the chord length <span
-class="math inline">\(4\sin(\alpha/2)\)</span>.</li>
-<li>Write an algorithm that computes overlap and spherical distance for
-any two finite probability tables. Include validation of the inputs and
-handling of rounding near one.</li>
+<li>Map <span class="math inline">\((1,0,0)\)</span>, <span
+class="math inline">\((1/2,1/2,0)\)</span>, and <span
+class="math inline">\((1/3,1/3,1/3)\)</span> to radius-two sphere
+coordinates. Check their lengths.</li>
+<li>Calculate overlap and Fisher–Rao distance between <span
+class="math inline">\((1,0)\)</span> and <span
+class="math inline">\((1/4,3/4)\)</span>.</li>
+<li>Calculate the two distances for <span
+class="math inline">\(x:0\to1/4\)</span> and <span
+class="math inline">\(x:1/4\to1/2\)</span>. Explain the unequal
+results.</li>
+<li>For <span class="math inline">\(p=(1/2,1/2)\)</span> and <span
+class="math inline">\(q=(0.55,0.45)\)</span>, calculate the local
+squared length, local length, exact distance, and <span
+class="math inline">\(2D(q\|p)\)</span>.</li>
+<li>Derive the binary Fisher form <span
+class="math inline">\(\delta^2/[x(1-x)]\)</span>.</li>
+<li>Compare the local estimate for <span
+class="math inline">\(x:1/4\to1/2\)</span> with the sum of estimates
+through <span class="math inline">\(3/8\)</span>. Use each step’s
+starting state.</li>
+<li>Explain why the local formula cannot be used for a move from <span
+class="math inline">\((0,1)\)</span> to <span
+class="math inline">\((1/4,3/4)\)</span>. Calculate the exact
+distance.</li>
+<li>Prove the chord identity <span
+class="math inline">\(\|s(p)-s(q)\|^2=8(1-B)\)</span>.</li>
+<li>Find Hellinger and Fisher–Rao distances between two distinct pure
+states. Compare them with the directed KL values.</li>
+<li>Prove the repeated-observation overlap identity for two observations
+and then for general <span class="math inline">\(N\)</span>.</li>
+<li>Explain why local estimates from opposite endpoints of a finite edge
+may differ. Give numerical values for one binary edge.</li>
+<li>On the binary <span class="math inline">\(N=4\)</span> lattice, add
+all four exact edge lengths from zero to one. Explain why the answer
+agrees with the endpoint distance.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>1.</strong> The image is <span
-class="math inline">\((1,1,\sqrt2)\)</span>, whose squared length is
-<span class="math inline">\(1+1+2=4\)</span>.</p>
-<p><strong>3.</strong> Only the first label contributes, so <span
-class="math inline">\(B=1/2\)</span>.</p>
-<p><strong>4.</strong> The spherical distance is <span
-class="math inline">\(2\pi/3\)</span> and the Hellinger distance is
-<span class="math inline">\(1/\sqrt2\)</span>.</p>
-<p><strong>6.</strong> Each summand is nonnegative. Their sum is zero
-exactly when every product <span class="math inline">\(p_ir_i\)</span>
-is zero, meaning no label has positive probability in both tables.</p>
-<p><strong>8.</strong> The arc coordinates are <span
-class="math inline">\(0,\pi/3,\pi/2,2\pi/3,\pi\)</span>.</p>
-<p><strong>10.</strong> For <span class="math inline">\(p=(1,0)\)</span>
-and <span class="math inline">\(r=(1/2,1/2)\)</span>, <span
-class="math inline">\(D(r\|p)=\infty\)</span>, while their spherical
-distance is <span class="math inline">\(\pi/2\)</span>.</p>
+<p><strong>1.</strong> The vectors are <span
+class="math inline">\((2,0,0)\)</span>, <span
+class="math inline">\((\sqrt2,\sqrt2,0)\)</span>, and <span
+class="math inline">\((2/\sqrt3,2/\sqrt3,2/\sqrt3)\)</span>. Each has
+squared length four.</p>
+<p><strong>2.</strong> The overlap is <span
+class="math inline">\(1/2\)</span> and the distance is <span
+class="math inline">\(2\pi/3\)</span>.</p>
+<p><strong>4.</strong> The squared local length is <span
+class="math inline">\(0.01\)</span>, its square root is <span
+class="math inline">\(0.1\)</span>, the exact distance is about <span
+class="math inline">\(0.100167\)</span>, and twice the divergence is
+about <span class="math inline">\(0.0100167\)</span>.</p>
+<p><strong>6.</strong> The single estimate is <span
+class="math inline">\(0.25/\sqrt{(1/4)(3/4)}\approx0.577350\)</span>.
+The two estimates total <span
+class="math inline">\(0.125/\sqrt{(1/4)(3/4)}+0.125/\sqrt{(3/8)(5/8)}\approx0.546874\)</span>.</p>
+<p><strong>7.</strong> The term for the first coordinate divides by
+zero. The exact overlap is <span
+class="math inline">\(\sqrt3/2\)</span>, giving angle <span
+class="math inline">\(\pi/6\)</span> and distance <span
+class="math inline">\(\pi/3\)</span>.</p>
+<p><strong>12.</strong> The arc coordinates are <span
+class="math inline">\(0,\pi/3,\pi/2,2\pi/3,\pi\)</span>. Their
+successive positive differences sum to <span
+class="math inline">\(\pi\)</span>.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week06.html">← Week 6</a><a href="../readings/week08.html">Week 8 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

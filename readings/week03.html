@@ -1,382 +1,532 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 3: Discrete gradients on the probability simplex · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="3"><p class="eyebrow">Week 3 · Reading</p><h1>Discrete gradients on the probability simplex</h1><nav class="week-nav" aria-label="Week 3 resources"><a aria-current=page href="../readings/week03.html">Reading</a><a  href="../demos/week03.html">Demonstration</a><a  href="../labs/week03.html">Lab</a><a  href="../quizzes/week03.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter03.pdf">Chapter 3 PDF</a> · <a href="../textbook/latex/chapter03.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Describe the lattice of three-category distributions.</li><li>Compute entropy differences along allowed transfers.</li><li>Distinguish gradient circulation from general edge flux.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 3 -->
-<h2 id="a-probability-triangle-becomes-a-lattice">A probability triangle
-becomes a lattice</h2>
-<p>With three categories, a probability vector is <span
-class="math inline">\(p=(p_A,p_B,p_C)\)</span> with nonnegative
-coordinates adding to one. Fix a total of <span
-class="math inline">\(N\)</span> tokens. Each allowed state has the form
-<span class="math display">\[p=\left(\frac aN,\frac bN,\frac
-cN\right),\qquad a+b+c=N.\]</span> A single transfer between categories
-moves us to a neighboring lattice point. There are <span
-class="math inline">\((N+1)(N+2)/2\)</span> possible states. For <span
-class="math inline">\(N=4\)</span>, the fifteen points form a small
-triangular grid.</p>
-<p>For instance, from the count state <span
-class="math inline">\((2,1,1)\)</span>, moving one token from <span
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 3: Discrete gradients on the probability simplex · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="3"><p class="eyebrow">Week 3 · Reading</p><h1>Discrete gradients on the probability simplex</h1><nav class="week-nav" aria-label="Week 3 resources"><a aria-current=page href="../readings/week03.html">Reading</a><a  href="../demos/week03.html">Demonstration</a><a  href="../labs/week03.html">Lab</a><a  href="../quizzes/week03.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter03.pdf">Chapter 3 PDF</a> · <a href="../textbook/latex/chapter03.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Describe the lattice of three-category distributions.</li><li>Compute entropy differences along allowed transfers.</li><li>Distinguish gradient circulation from general edge flux.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#why-probability-states-form-a-triangle">Why probability states
+form a triangle</a></li><li><a href="#fixing-a-number-of-tokens-makes-a-finite-lattice">Fixing a
+number of tokens makes a finite lattice</a></li><li><a href="#a-directional-difference-compares-two-permitted-states">A
+directional difference compares two permitted states</a></li><li><a href="#an-information-field-for-the-same-lattice">An information field
+for the same lattice</a></li><li><a href="#what-a-discrete-gradient-records">What a discrete gradient
+records</a></li><li><a href="#path-sums-reveal-the-cancellation-behind-gradients">Path sums
+reveal the cancellation behind gradients</a></li><li><a href="#flux-and-divergence-describe-a-different-feature">Flux and
+divergence describe a different feature</a></li><li><a href="#application-cyclic-motion-need-not-be-a-gradient">Application:
+cyclic motion need not be a gradient</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>Suppose a campus survey records three ways of reaching class:
+walking, cycling, and taking a bus. A distribution such as <span
+class="math inline">\((1/2,1/3,1/6)\)</span> says that half the
+responses are in the first category, a third in the second, and a sixth
+in the third. Changing one share forces at least one other share to
+change. The three numbers describe a state with two independent degrees
+of freedom.</p>
+<p>Chapter 2 studied motion on a probability interval. With three
+categories, the state space becomes a triangle. We will use a finite
+grid of possible survey compositions to develop directional differences,
+gradients, circulation, and divergence. Each operation will have a
+concrete meaning in terms of changing one response or moving a quantity
+along an edge.</p>
+<h2 id="why-probability-states-form-a-triangle">Why probability states
+form a triangle</h2>
+<p>Write <span class="math inline">\(p=(p_A,p_B,p_C)\)</span>, with
+nonnegative coordinates adding to one. Knowing <span
+class="math inline">\(p_A\)</span> and <span
+class="math inline">\(p_B\)</span> determines <span
+class="math inline">\(p_C=1-p_A-p_B\)</span>. The permitted pairs
+satisfy <span class="math inline">\(p_A\geq0\)</span>, <span
+class="math inline">\(p_B\geq0\)</span>, and <span
+class="math inline">\(p_A+p_B\leq1\)</span>.</p>
+<p>It is often more symmetric to place pure states at the vertices of an
+equilateral triangle: <span class="math display">\[A=(0,0),\qquad
+B=(1,0),\qquad C=(1/2,\sqrt3/2).\]</span> The <strong>barycentric
+representation</strong> places the distribution at the weighted point
+<span class="math display">\[X=p_AA+p_BB+p_CC
+=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\]</span> The square
+root appears because an equilateral triangle of side one has height
+<span class="math inline">\(\sqrt3/2\)</span>. It only sets the
+picture’s proportions.</p>
+<p>At vertex <span class="math inline">\(A\)</span>, all the probability
+belongs to <span class="math inline">\(A\)</span>. On edge <span
+class="math inline">\(AB\)</span>, the <span
+class="math inline">\(C\)</span> coordinate is zero. The center
+corresponds to <span class="math inline">\((1/3,1/3,1/3)\)</span>. Lines
+parallel to edge <span class="math inline">\(AB\)</span> have constant
+height, hence constant <span class="math inline">\(p_C\)</span>.</p>
+<div class="example" title="Locating and reading a mixture">
+<p><strong>Example. Locating and reading a mixture</strong></p>
+<p>For <span class="math inline">\(p=(1/2,1/3,1/6)\)</span>, the plotted
+point is <span class="math inline">\((5/12,\sqrt3/12)\)</span>. Its
+height is one sixth of the triangle’s total height, matching <span
+class="math inline">\(p_C=1/6\)</span>.</p>
+<p>Conversely, if a plotted point has coordinates <span
+class="math inline">\((u,v)\)</span>, solve the plotting equations:
+<span class="math display">\[p_C=\frac{2v}{\sqrt3},\qquad
+p_B=u-\frac{v}{\sqrt3},\qquad
+p_A=1-u-\frac{v}{\sqrt3}.\]</span> At <span
+class="math inline">\((u,v)=(1/2,\sqrt3/6)\)</span>, these give three
+equal probabilities.</p>
+</div>
+<p>The set of probability vectors on <span
+class="math inline">\(k\)</span> labels is called the
+<strong>probability simplex</strong>. Two labels give an interval, three
+give a triangle, and four give a tetrahedron. The definition is always
+the same: nonnegative entries with total one. We can calculate with more
+labels even when we cannot draw their simplex.</p>
+<h2 id="fixing-a-number-of-tokens-makes-a-finite-lattice">Fixing a
+number of tokens makes a finite lattice</h2>
+<p>Imagine a survey of exactly <span class="math inline">\(N\)</span>
+responses. Counts <span class="math inline">\((a,b,c)\)</span> satisfy
+<span class="math display">\[a,b,c\text{ are nonnegative
+integers},\qquad a+b+c=N.\]</span> Their empirical proportions are <span
+class="math inline">\(p=(a/N,b/N,c/N)\)</span>. The possible points form
+a triangular <strong>lattice</strong>, a finite grid inside the simplex.
+We denote the set by <span class="math inline">\(\mathcal
+P_N\)</span>.</p>
+<p>For <span class="math inline">\(N=4\)</span>, group the triples by
+their <span class="math inline">\(C\)</span> count:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Count <span class="math inline">\(c\)</span></th>
+<th>Possible pairs <span class="math inline">\((a,b)\)</span></th>
+<th>Number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><span
+class="math inline">\((4,0),(3,1),(2,2),(1,3),(0,4)\)</span></td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><span class="math inline">\((3,0),(2,1),(1,2),(0,3)\)</span></td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><span class="math inline">\((2,0),(1,1),(0,2)\)</span></td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><span class="math inline">\((1,0),(0,1)\)</span></td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><span class="math inline">\((0,0)\)</span></td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p>The total is fifteen. In general, fixing <span
+class="math inline">\(c\)</span> leaves <span
+class="math inline">\(N-c+1\)</span> choices, so the number of states is
+<span
+class="math display">\[1+2+\cdots+(N+1)=\frac{(N+1)(N+2)}2.\]</span>
+Increasing <span class="math inline">\(N\)</span> increases the
+resolution: one response is a smaller fraction of the whole.</p>
+<p>A <strong>neighboring state</strong> is obtained by transferring one
+token from one category to another. From <span
+class="math inline">\((2,1,1)\)</span>, moving a token from <span
 class="math inline">\(C\)</span> to <span
 class="math inline">\(A\)</span> gives <span
 class="math inline">\((3,1,0)\)</span>. The probability displacement is
-<span class="math inline">\((1/4,0,-1/4)\)</span>. A state near the
-boundary has fewer allowed moves because an empty category cannot donate
-a token.</p>
-<h2 id="directional-differences-of-an-information-function">Directional
-differences of an information function</h2>
-<p>A scalar field assigns a number to each probability state. Entropy is
-one example: <span class="math display">\[H(p)=-\sum_i p_i\log
-p_i,\qquad 0\log0:=0.\]</span> Let <span
-class="math inline">\(T_{A\leftarrow C}p=p+(e_A-e_C)/N\)</span>, when
-<span class="math inline">\(p_C\geq1/N\)</span>. Define its directional
-difference by <span class="math display">\[D_{A\leftarrow
-C}H(p)=H(T_{A\leftarrow C}p)-H(p).\]</span> This is the change in
-entropy caused by transferring exactly one token. A positive value means
-that move makes the distribution more uncertain.</p>
-<p>For <span class="math inline">\(N=4\)</span>, begin at counts <span
-class="math inline">\((2,1,1)\)</span>. The move to <span
-class="math inline">\((3,1,0)\)</span> reduces entropy, whereas the move
-to <span class="math inline">\((1,2,1)\)</span> leaves entropy unchanged
-because it permutes the counts. These are calculations about neighboring
-points, so no limit is required.</p>
-<h2 id="a-discrete-gradient-is-a-collection-of-directional-changes">A
-discrete gradient is a collection of directional changes</h2>
-<p>Two independent token-transfer directions span the triangular lattice
-away from its boundary. If <span
+<span class="math inline">\((1/4,0,-1/4)\)</span>. Every transfer
+preserves the total count and the total probability.</p>
+<figure><img src="../assets/fig-lattice.svg" alt="The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1)." width="365" height="187" loading="lazy"><figcaption>The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).</figcaption></figure>
+<p>At <span class="math inline">\((2,1,1)\)</span> all three categories
+can donate, so there are six neighbors. At <span
+class="math inline">\((4,0,0)\)</span> only <span
+class="math inline">\(A\)</span> can donate, giving two neighbors.
+Boundary restrictions are part of the geometry, not a failure of the
+formula.</p>
+<p>These tokens represent units of composition. A token transfer through
+probability space need not describe a person physically traveling
+between locations. Chapter 4 will introduce another graph whose vertices
+are physical or categorical locations. Keeping these two meanings of a
+vertex separate will help.</p>
+<p>The lattice is also a graph: its count states are vertices and its
+legal transfers are edges. A drawing of the triangle helps us see the
+graph, but the definition does not depend on the drawing. A computer can
+store each triple and list its legal neighbors directly.</p>
+<p>To generate those neighbors, choose a donor category with positive
+count and a different receiver. Subtract one from the donor and add one
+to the receiver. There are six ordered donor-receiver pairs for three
+categories, but some are forbidden at the boundary. This procedure gives
+both an exact state space and an exact rule for adjacency.</p>
+<p>The number of interior states can be counted separately. A strictly
+positive triple has at least one token in each category. Reserve those
+three tokens; the remaining <span class="math inline">\(N-3\)</span> are
+distributed freely. For <span class="math inline">\(N\geq3\)</span>,
+there are <span class="math inline">\((N-1)(N-2)/2\)</span> interior
+states. Subtracting from the full count gives <span
+class="math inline">\(3N\)</span> boundary states. Vertices belong to
+two triangle edges in the picture but are counted only once in this
+total.</p>
+<p>For <span class="math inline">\(N=4\)</span>, there are three
+interior states and twelve boundary states. Thus boundaries are a large
+part of a coarse lattice. Ignoring illegal moves would change the model
+substantially, rather than introduce only a small numerical error.</p>
+<h2 id="a-directional-difference-compares-two-permitted-states">A
+directional difference compares two permitted states</h2>
+<p>A <strong>scalar field</strong> assigns one number to every state.
+For a first example, consider <span
+class="math display">\[C(p)=p_A^2+p_B^2+p_C^2.\]</span> This
+concentration score is one at a pure state and one third at the balanced
+state. Larger values indicate a more concentrated composition.</p>
+<p>Let <span class="math inline">\(e_A=(1,0,0)\)</span>, <span
+class="math inline">\(e_B=(0,1,0)\)</span>, and <span
+class="math inline">\(e_C=(0,0,1)\)</span>. These are unit coordinate
+vectors. A transfer from <span class="math inline">\(C\)</span> to <span
+class="math inline">\(A\)</span> changes <span
+class="math inline">\(p\)</span> by <span
+class="math inline">\((e_A-e_C)/N\)</span>. Write <span
+class="math display">\[T_{A\leftarrow C}p=p+\frac{e_A-e_C}{N}.\]</span>
+The arrow names the receiving and donating categories. The move is legal
+when <span class="math inline">\(p_C\geq1/N\)</span>.</p>
+<p>For any field <span class="math inline">\(F\)</span>, define its
+<strong>directional difference</strong> <span
+class="math display">\[\boxed{D_{A\leftarrow C}F(p)=F(T_{A\leftarrow
+C}p)-F(p).}\]</span> First evaluate the field after the move, then
+subtract its value before the move. This is the same operation as a
+first difference, now taken in a specified direction through a state
+space.</p>
+<div class="example" title="Two directions from the same composition">
+<p><strong>Example. Two directions from the same
+composition</strong></p>
+<p>At counts <span class="math inline">\((2,1,1)\)</span> with <span
+class="math inline">\(N=4\)</span>, we have <span
+class="math inline">\(p=(1/2,1/4,1/4)\)</span> and <span
+class="math inline">\(C(p)=3/8\)</span>.</p>
+<p>Moving <span class="math inline">\(C\)</span> to <span
+class="math inline">\(A\)</span> gives <span
+class="math inline">\((3/4,1/4,0)\)</span>, with concentration <span
+class="math inline">\(5/8\)</span>. The directional difference is <span
+class="math inline">\(1/4\)</span>.</p>
+<p>Moving <span class="math inline">\(A\)</span> to <span
+class="math inline">\(B\)</span> gives <span
+class="math inline">\((1/4,1/2,1/4)\)</span>, again with concentration
+<span class="math inline">\(3/8\)</span>. That directional difference is
+zero. The state changed, but this field assigns the same number to the
+two states.</p>
+</div>
+<p>Our <span class="math inline">\(D\)</span> records the total change
+caused by one token. A difference quotient per unit of transferred
+probability would divide by <span class="math inline">\(1/N\)</span> and
+equal <span class="math inline">\(ND_{A\leftarrow C}F\)</span>. A
+quotient per unit of ordinary Euclidean displacement would use the step
+length <span class="math inline">\(\sqrt2/N\)</span>. Stating the
+convention prevents factors from entering unnoticed. We use unscaled
+edge differences throughout the graph calculus.</p>
+<p>We can derive concentration changes for every transfer, rather than
+calculate a new square sum each time. Let <span
+class="math inline">\(h=1/N\)</span>, and transfer from category <span
+class="math inline">\(j\)</span> to category <span
+class="math inline">\(i\)</span>. Only those two terms change: <span
+class="math display">\[\begin{aligned}
+C(p+h(e_i-e_j))-C(p)
+&amp;=(p_i+h)^2-p_i^2+(p_j-h)^2-p_j^2\\
+&amp;=2h(p_i-p_j)+2h^2.
+\end{aligned}\]</span> The <span class="math inline">\(2h^2\)</span>
+term is a finite-step correction. If the receiver and donor have equal
+probabilities, the transfer makes them unequal and raises concentration
+by <span class="math inline">\(2h^2\)</span>. If the donor has exactly
+one more token than the receiver, the move swaps their counts and leaves
+concentration unchanged.</p>
+<p>This is a useful example of what a discrete derivative retains: the
+actual size of the move. Replacing it by only its term proportional to
+<span class="math inline">\(h\)</span> would miss an exact effect at
+equal coordinates. Later, the local Fisher formula will also be
+presented alongside an exact finite expression, so that the effect of
+approximation remains visible.</p>
+<p>We can compare fields on the same graph without changing its geometry
+of allowed moves. A cost field might assign greater weight to one survey
+response than another, while concentration and entropy treat labels
+symmetrically. Directional differences depend jointly on the chosen
+field and the chosen edge.</p>
+<h2 id="an-information-field-for-the-same-lattice">An information field
+for the same lattice</h2>
+<p>A second scalar field is <strong>entropy</strong>: <span
+class="math display">\[H(p)=-\sum_i p_i\ln p_i,\qquad 0\ln0:=0.\]</span>
+Here <span class="math inline">\(\ln z\)</span> is the natural
+logarithm: the exponent needed to express <span
+class="math inline">\(z\)</span> as a power of <span
+class="math inline">\(e\)</span>. For example, <span
+class="math inline">\(\ln1=0\)</span> and <span
+class="math inline">\(\ln(1/2)\approx-0.6931\)</span>. A calculator’s
+<span class="math inline">\(\ln\)</span> key is enough to evaluate this
+field. Chapter 5 will explain its meaning and derive its main
+properties.</p>
+<p>For now, entropy measures uncertainty in the category of one randomly
+selected response. Pure states have entropy zero. Spreading probability
+more evenly generally gives greater uncertainty.</p>
+<div class="example" title="Computing an entropy difference">
+<p><strong>Example. Computing an entropy difference</strong></p>
+<p>For <span class="math inline">\(p=(1/2,1/4,1/4)\)</span>, <span
+class="math display">\[H(p)=-\frac12\ln\frac12-2\left(\frac14\ln\frac14\right)
+=\frac32\ln2\approx1.0397.\]</span> After the transfer <span
+class="math inline">\(C\)</span> to <span
+class="math inline">\(A\)</span>, the state is <span
+class="math inline">\(q=(3/4,1/4,0)\)</span> and <span
+class="math display">\[H(q)=-\frac34\ln\frac34-\frac14\ln\frac14\approx0.5623.\]</span>
+Thus <span class="math inline">\(D_{A\leftarrow
+C}H(p)\approx-0.4774\)</span>. Concentration increased while uncertainty
+decreased. The transfer <span class="math inline">\(A\)</span> to <span
+class="math inline">\(B\)</span> merely permutes the entries and leaves
+entropy unchanged.</p>
+</div>
+<p>A zero contribution for a zero probability means that an outcome
+which never occurs contributes nothing to the average. We do not ask the
+calculator to evaluate <span class="math inline">\(\ln0\)</span>.</p>
+<h2 id="what-a-discrete-gradient-records">What a discrete gradient
+records</h2>
+<p>In an interval, there are two possible directions from an interior
+point. In a triangle, there are several. A <strong>discrete gradient
+field</strong> records changes of a scalar field along edges.</p>
+<p>For an oriented edge <span class="math inline">\(p\to q\)</span>,
+define <span class="math display">\[A_F(p,q)=F(q)-F(p).\]</span>
+Reversing the edge reverses the sign: <span
+class="math inline">\(A_F(q,p)=-A_F(p,q)\)</span>.</p>
+<p>Two independent lattice directions are <span
 class="math inline">\(u=e_A-e_C\)</span> and <span
-class="math inline">\(v=e_B-e_C\)</span>, we may record <span
-class="math display">\[\nabla_d H(p)=\big(D_uH(p),D_vH(p)\big).\]</span>
-This is a pair of changes with respect to a specified lattice basis; it
-is not automatically the Euclidean gradient vector in ambient <span
-class="math inline">\(\mathbb R^3\)</span>. It tells us which allowed
-coordinate step raises or lowers the function.</p>
-<p>A <strong>discrete gradient-ascent rule</strong> evaluates allowed
-neighboring states and moves to one with the greatest positive increase
-in <span class="math inline">\(H\)</span>. If no neighbor has a positive
-increase, the rule stops. Ties need a stated choice rule. This is a
-perfectly concrete difference equation on a finite state space.</p>
-<h2 id="vector-fields-circulation-and-flux">Vector fields, circulation,
-and flux</h2>
-<p>On an oriented edge <span class="math inline">\(p\to q\)</span>, a
-gradient edge value is <span class="math inline">\(H(q)-H(p)\)</span>.
-Adding these values along a path cancels intermediate terms: <span
-class="math display">\[\sum_{\text{path }p\to q}
-\big(H(\text{head})-H(\text{tail})\big)=H(q)-H(p).\]</span> Every
-closed-path sum is zero. A general edge field need not have this
-property: its circulation around a small triangular face can be
-nonzero.</p>
-<p>A flux field assigns an amount transported along each oriented edge.
-The <strong>discrete divergence</strong> at a vertex is total outgoing
-flux minus total incoming flux. Summing divergence over vertices cancels
-internal edges and leaves only boundary flow. We will use this exact
-cancellation to describe probability transport in Week 4.</p>
-<h2
-id="further-investigations-discrete-gradients-on-the-probability-simplex">Further
-investigations: Discrete gradients on the probability simplex</h2>
-<p>Three types allow motion in two independent directions. A triangle
-provides a complete picture of their proportions, including mixtures on
-its edges and pure states at its vertices. Integer population counts
-supply a natural lattice inside the triangle. These two representations
-connect geometry with combinatorics.</p>
-<h2 id="reading-a-probability-triangle">Reading a probability
-triangle</h2>
-<p>Write <span class="math inline">\(p=(p_A,p_B,p_C)\)</span> with
-nonnegative entries adding to one. Place the pure states at <span
-class="math inline">\(A=(0,0)\)</span>, <span
-class="math inline">\(B=(1,0)\)</span>, and <span
-class="math inline">\(C=(1/2,\sqrt3/2)\)</span>. Represent <span
-class="math inline">\(p\)</span> by the weighted point <span
-class="math display">\[X=p_AA+p_BB+p_CC=\left(p_B+\frac{p_C}{2},\frac{\sqrt3}{2}p_C\right).\]</span>
-These are <strong>barycentric coordinates</strong>: the coefficients
-tell us how much of each vertex contributes. The midpoint of edge <span
-class="math inline">\(AB\)</span> is <span
-class="math inline">\((1/2,1/2,0)\)</span> in probability coordinates.
-The center is <span class="math inline">\((1/3,1/3,1/3)\)</span>. A
-point on edge <span class="math inline">\(AB\)</span> has <span
-class="math inline">\(p_C=0\)</span>.</p>
-<p>To recover probabilities from a plotted point <span
-class="math inline">\((u,v)\)</span>, solve the two coordinate
-equations: <span class="math display">\[p_C=\frac{2v}{\sqrt3},\qquad
-p_B=u-\frac{v}{\sqrt3},\qquad p_A=1-u-\frac{v}{\sqrt3}.\]</span> The
-point is inside the triangle precisely when these three values are
-nonnegative.</p>
-<div class="example" title="Locating a state">
-<p><strong>Example. Locating a state</strong></p>
-<p>The distribution <span class="math inline">\((1/2,1/3,1/6)\)</span>
-is plotted at <span class="math inline">\((5/12,\sqrt3/12)\)</span>. Its
-height is one sixth of the triangle’s altitude, reflecting its <span
-class="math inline">\(C\)</span> proportion. Its position is closer to
-vertex <span class="math inline">\(A\)</span> than to either of the
-other vertices, consistent with <span class="math inline">\(A\)</span>
-being the most common type.</p>
-</div>
-<h2 id="tokens-produce-a-triangular-lattice">Tokens produce a triangular
-lattice</h2>
-<p>Suppose the total count is a fixed integer <span
-class="math inline">\(N\)</span>. A count triple <span
-class="math inline">\((a,b,c)\)</span> with <span
-class="math inline">\(a+b+c=N\)</span> gives the probability vector
-<span class="math inline">\((a/N,b/N,c/N)\)</span>. The possible states
-form a lattice. Moving one token from <span
-class="math inline">\(A\)</span> to <span
-class="math inline">\(B\)</span> changes the counts by <span
-class="math inline">\((-1,1,0)\)</span> and the probabilities by <span
-class="math inline">\((-1/N,1/N,0)\)</span>.</p>
-<p>There are <span
-class="math display">\[\frac{(N+1)(N+2)}2=\binom{N+2}{2}\]</span>
-possible triples. One proof fixes <span
-class="math inline">\(c\)</span>: for <span
-class="math inline">\(c=0,1,\ldots,N\)</span>, there are <span
-class="math inline">\(N-c+1\)</span> choices for <span
-class="math inline">\(a\)</span>, with <span
-class="math inline">\(b\)</span> then determined. Adding gives <span
-class="math inline">\((N+1)+N+\cdots+1\)</span>. A second proof encodes
-the triple as <span class="math inline">\(N\)</span> stars separated
-into three groups by two bars; choosing the two bar positions among
-<span class="math inline">\(N+2\)</span> positions determines the
-triple.</p>
-<div class="example" title="A lattice of fifteen states">
-<p><strong>Example. A lattice of fifteen states</strong></p>
-<p>With <span class="math inline">\(N=4\)</span>, the lattice has <span
-class="math inline">\(\binom62=15\)</span> states. The count triple
-<span class="math inline">\((2,1,1)\)</span> is adjacent to six states
-obtained by moving a token between two distinct types. At <span
-class="math inline">\((4,0,0)\)</span>, only two moves are possible
-because an empty type cannot donate a token.</p>
-</div>
-<p>A normalized growth update generally does not land on this lattice.
-It defines a deterministic map on all probability vectors. Sampling
-<span class="math inline">\(N\)</span> new individuals from the updated
-proportions produces a random lattice state instead. These are two
-distinct models with different sources of variation.</p>
-<figure><img src="../assets/fig-lattice.svg" alt="The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1)." loading="lazy"><figcaption>The denominator-four token lattice. Arrows show the six one-token moves from counts (2,1,1).</figcaption></figure>
-<h2 id="cyclic-interactions">Cyclic interactions</h2>
-<p>For three strategies, a score table is a <span
-class="math inline">\(3\)</span> by <span
-class="math inline">\(3\)</span> matrix. The average score of type <span
-class="math inline">\(i\)</span> is <span
-class="math inline">\(f_i=\sum_jM_{ij}p_j\)</span>. Consider <span
-class="math display">\[M_s=\begin{pmatrix}0&amp;1&amp;-s\\-s&amp;0&amp;1\\1&amp;-s&amp;0\end{pmatrix},\qquad
-s&gt;0.\]</span> Type <span class="math inline">\(A\)</span> gains
-against <span class="math inline">\(B\)</span>, type <span
-class="math inline">\(B\)</span> gains against <span
-class="math inline">\(C\)</span>, and type <span
-class="math inline">\(C\)</span> gains against <span
-class="math inline">\(A\)</span>. Each suffers a loss of magnitude <span
-class="math inline">\(s\)</span> against the remaining opponent. At the
-center, all three scores equal <span
-class="math inline">\((1-s)/3\)</span>, so the center is fixed for both
-normalized multiplier rules.</p>
-<p>For exponential multipliers, a step is <span
-class="math display">\[p_i^+=\frac{p_i e^{\eta f_i}}{Z},\qquad
-Z=\sum_jp_j e^{\eta f_j}.\]</span> The current scores must be recomputed
-before the next step. Using the same scores repeatedly instead would
-describe fixed external advantages, rather than this interaction
-game.</p>
-<div class="example" title="Computing a cyclic step">
-<p><strong>Example. Computing a cyclic step</strong></p>
-<p>Let <span class="math inline">\(s=1\)</span> and <span
-class="math inline">\(p=(1/2,1/3,1/6)\)</span>. The scores are <span
-class="math inline">\((1/6,-1/3,1/6)\)</span>. With <span
-class="math inline">\(\eta=1\)</span>, cancelling the common factor
-<span class="math inline">\(e^{1/6}\)</span> leaves unnormalized entries
-<span class="math inline">\((1/2,e^{-1/2}/3,1/6)\)</span>. After
-normalization the result is approximately <span
-class="math inline">\((0.5755,0.2327,0.1918)\)</span>. The two equally
-scoring types retain their ratio <span
-class="math inline">\(3:1\)</span> during this step.</p>
-</div>
-<h2 id="a-finite-inequality-detects-outward-drift">A finite inequality
-detects outward drift</h2>
-<p>The <strong>weighted arithmetic-geometric mean inequality</strong>
-states that, for positive <span class="math inline">\(a_i\)</span> and
-nonnegative weights <span class="math inline">\(p_i\)</span> adding to
-one, <span class="math display">\[\sum_i p_i a_i\ \geq\ \prod_i
-a_i^{p_i}.\]</span> For rational weights, it follows from the ordinary
-arithmetic-geometric mean inequality by repeating each entry the
-appropriate number of times. The real-weight version follows by
-approximation. Equality holds when all entries carrying positive weight
-are equal. We will use this finite inequality several times.</p>
-<p>For the balanced cyclic table <span
-class="math inline">\(s=1\)</span>, direct cancellation gives <span
-class="math display">\[\sum_i f_i=0,\qquad \sum_i p_if_i=0.\]</span> Let
-<span class="math inline">\(P(p)=p_Ap_Bp_C\)</span>. Under exponential
-normalization, <span
-class="math display">\[P(p^+)=\frac{P(p)e^{\eta(f_A+f_B+f_C)}}{Z^3}=\frac{P(p)}{Z^3}.\]</span>
-Applying weighted arithmetic-geometric mean to <span
-class="math inline">\(a_i=e^{\eta f_i}\)</span> gives <span
-class="math inline">\(Z\geq e^{\eta\sum_i p_if_i}=1\)</span>. For an
-interior state other than the center, the scores are not all equal, so
-<span class="math inline">\(Z&gt;1\)</span> and <span
-class="math inline">\(P\)</span> strictly decreases.</p>
-<p>The product is largest at the center: the ordinary
-arithmetic-geometric mean inequality gives <span
-class="math inline">\(p_Ap_Bp_C\leq(1/3)^3\)</span>. Decreasing product
-therefore records movement through product contours toward the boundary.
-It does not imply that every individual coordinate moves monotonically,
-nor does it by itself identify a limit point. A trajectory may continue
-circulating while this diagnostic decreases.</p>
-<div class="proposition"
-title="The balanced finite rule does not conserve the product">
-<p><strong>Proposition. The balanced finite rule does not conserve the
-product</strong></p>
-<p>For every positive intensity, an exponential update of the balanced
-cyclic game strictly decreases <span
-class="math inline">\(p_Ap_Bp_C\)</span> at every interior state other
-than the center.</p>
-</div>
-<p>There is a similar conclusion for linear multipliers whenever they
-are positive. Since the weighted mean score is zero, their normalizing
-denominator is <span class="math inline">\(1\)</span>. Their unweighted
-sum is <span class="math inline">\(3\)</span>, so their product is at
-most <span class="math inline">\(1\)</span>. Multiplying the three
-updated coordinates shows <span class="math inline">\(P(p^+)\leq
-P(p)\)</span>, again strictly away from the center. These exact
-calculations explain why changing the size of a finite step can affect a
-cyclic picture.</p>
-<h2 id="comparing-a-different-recurrence">Comparing a different
-recurrence</h2>
-<p>The permutation rule <span
-class="math display">\[T(p_A,p_B,p_C)=(p_C,p_A,p_B)\]</span> also moves
-states cyclically. It satisfies <span
-class="math inline">\(T^3(p)=p\)</span> and preserves the coordinate
-product exactly. Its trajectories contain at most three states. This
-recurrence is useful as a simple example of exact periodicity and as a
-check on a plotting program. It is a different update from score-based
-selection, with a different algebraic structure.</p>
-<figure><img src="../assets/fig-cyclic.svg" alt="Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases." loading="lazy"><figcaption>Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.</figcaption></figure>
-<h2 id="reading-distances-and-contours-in-a-triangle">Reading distances
-and contours in a triangle</h2>
-<p>Barycentric coordinates have another useful interpretation. The
-perpendicular distance from a point to side <span
-class="math inline">\(AB\)</span>, divided by the triangle’s full
-altitude, is <span class="math inline">\(p_C\)</span>. To verify this,
-note that the side is horizontal and that the point’s height is <span
-class="math inline">\((\sqrt3/2)p_C\)</span>. By symmetry, the same
-statement holds for the other two coordinates and their opposite sides.
-Lines of constant <span class="math inline">\(p_C\)</span> are therefore
-parallel to side <span class="math inline">\(AB\)</span>.</p>
+class="math inline">\(v=e_B-e_C\)</span>. Where both forward moves are
+legal, one may record the pair <span
+class="math display">\[\nabla_dF(p)=(D_uF(p),D_vF(p)).\]</span> It lists
+changes in a chosen pair of directions. The directions meet at an angle
+in the triangle, so this pair is a coordinate record, rather than
+automatically an ordinary arrow perpendicular to contours. The full edge
+field is often easier to use because it also works at boundaries.</p>
+<p>A simple ascent rule examines every legal neighbor, chooses one with
+the greatest positive increase in <span
+class="math inline">\(F\)</span>, and stays put if none improves it.
+Ties require a fixed choice rule. Because the lattice has finitely many
+states and every actual move strictly raises <span
+class="math inline">\(F\)</span>, this rule cannot revisit a state. It
+must stop after finitely many moves.</p>
+<p>The stopping state is a local maximum with respect to the permitted
+edges. For a general field, a local maximum need not be the largest
+value anywhere on the graph. For entropy on this complete token-transfer
+lattice, balancing the counts identifies the maxima; Chapter 5 explains
+why.</p>
+<p>A reproducible ascent rule requires more than the phrase “move
+uphill.” At a state, list its legal neighbors, evaluate the scalar field
+at each, and compare the increases. Select the largest strictly positive
+increase. If two increases tie, use a declared ordering of categories or
+another fixed rule. If none is positive, return the same state.</p>
+<p>This algorithm needs no formula for a continuous gradient. On a graph
+with <span class="math inline">\(S\)</span> states, it can make at most
+<span class="math inline">\(S-1\)</span> strict-improvement moves,
+because each visited field value is greater than its predecessor and no
+vertex can recur. The argument does not guarantee that the selected path
+is the shortest route to a maximum. Ascent and shortest-path
+optimization are different tasks.</p>
+<p>Allowing equal-valued moves changes the termination argument. Two
+adjacent states with the same value can be visited back and forth
+forever unless a tie rule prevents it. For entropy, permutations of a
+balanced count vector can provide such plateaus. The requirement of
+strict improvement is therefore part of the dynamics.</p>
+<h2 id="path-sums-reveal-the-cancellation-behind-gradients">Path sums
+reveal the cancellation behind gradients</h2>
+<p>Suppose a path visits states <span
+class="math inline">\(p_0,p_1,p_2,p_3\)</span>. Adding gradient edge
+values gives <span class="math display">\[\begin{aligned}
+A_F(p_0,p_1)+A_F(p_1,p_2)+A_F(p_2,p_3)
+&amp;=[F(p_1)-F(p_0)]\\
+&amp;\quad+[F(p_2)-F(p_1)]+[F(p_3)-F(p_2)]\\
+&amp;=F(p_3)-F(p_0).
+\end{aligned}\]</span> The intermediate values cancel just as they did
+in Chapter 1. Any two paths with the same endpoints therefore have the
+same sum of gradient differences. Around a closed path, the sum is
+zero.</p>
+<p>For an arbitrary signed edge field, the sum around a closed route is
+its <strong>circulation</strong>. A gradient has zero circulation around
+every closed route. A field that assigns one unit in a clockwise
+direction around a triangular face has circulation three around that
+face, so it cannot be a gradient of vertex values.</p>
+<p>This test has a useful interpretation. If local changes are supposed
+to arise from one underlying score, following them around a loop must
+return that score to its starting value. A nonzero loop total reveals
+that the edge values contain additional directional information.</p>
+<h2 id="flux-and-divergence-describe-a-different-feature">Flux and
+divergence describe a different feature</h2>
+<p>An edge field may instead describe <strong>flux</strong>, an amount
+transported in one step. Choose an orientation for each edge. Positive
+flux follows that arrow; negative flux goes against it. The
+<strong>outward divergence</strong> at a vertex is outgoing flux minus
+incoming flux.</p>
+<p>For a clockwise unit flow around a triangle, one unit arrives and one
+unit leaves at every vertex. Every divergence is zero, but the
+circulation is three. Zero accumulation at a vertex can coexist with
+sustained circulation through it.</p>
+<p>Conversely, a vertex may send mass to several neighbors and receive
+little. Its divergence is positive, so its stored mass decreases. This
+is the reason for the minus sign in the continuity equation developed in
+Chapter 4.</p>
+<p>For any chosen collection of vertices, add their divergences. Every
+edge joining two vertices in the collection contributes once positively
+and once negatively, so it cancels. Only edges crossing the boundary
+remain: <span class="math display">\[\boxed{\text{sum of outward
+divergences}
+=\text{net flux leaving the collection}.}\]</span> This is a finite
+version of a divergence theorem. Its content is exact accounting along
+edges.</p>
 <div class="example"
-title="Recovering a composition from height ratios">
-<p><strong>Example. Recovering a composition from height
-ratios</strong></p>
-<p>Suppose a point lies at one fifth of the full altitude from side
-<span class="math inline">\(AB\)</span> and at one half of the full
-altitude from side <span class="math inline">\(BC\)</span>. The first
-measurement gives <span class="math inline">\(p_C=1/5\)</span>, and the
-second gives <span class="math inline">\(p_A=1/2\)</span>. The remaining
-coordinate is <span class="math inline">\(p_B=3/10\)</span>. The three
-normalized distances add to one because they are barycentric
-coordinates.</p>
+title="Divergence on a small directed flow diagram">
+<p><strong>Example. Divergence on a small directed flow
+diagram</strong></p>
+<p>Take three vertices <span class="math inline">\(U,V,W\)</span> with
+net flows two along <span class="math inline">\(U\to V\)</span>, one
+along <span class="math inline">\(V\to W\)</span>, and three along <span
+class="math inline">\(U\to W\)</span>. Outward divergence is five at
+<span class="math inline">\(U\)</span>, minus one at <span
+class="math inline">\(V\)</span>, and minus four at <span
+class="math inline">\(W\)</span>. The sum is zero.</p>
+<p>Now consider only the collection <span
+class="math inline">\(\{U,V\}\)</span>. Its divergences sum to four. The
+internal flow of two from <span class="math inline">\(U\)</span> to
+<span class="math inline">\(V\)</span> cancels in that sum. The
+surviving outward flows are three from <span
+class="math inline">\(U\)</span> to <span
+class="math inline">\(W\)</span> and one from <span
+class="math inline">\(V\)</span> to <span
+class="math inline">\(W\)</span>, also totaling four.</p>
 </div>
-<p>A contour of a function is a set of states with the same function
-value. For the coordinate product, a contour is described by <span
-class="math inline">\(p_Ap_Bp_C=c\)</span>. The product is zero on the
-boundary and at most <span class="math inline">\(1/27\)</span> in the
-interior. Product contours surround the center, but a one-step decrease
-in product does not specify a unique direction along a contour or a
-unique next coordinate. A scalar diagnostic compresses a two-dimensional
-state into one number, so it necessarily discards some detail.</p>
-<h2 id="counting-the-interior-and-the-boundary">Counting the interior
-and the boundary</h2>
-<p>The stars-and-bars argument extends to <span
-class="math inline">\(k\)</span> types. Nonnegative integer counts
-summing to <span class="math inline">\(N\)</span> are encoded by <span
-class="math inline">\(N\)</span> stars and <span
-class="math inline">\(k-1\)</span> bars, so their number is <span
-class="math inline">\(\binom{N+k-1}{k-1}\)</span>. Empty groups
-correspond to zero counts. If every count must be positive, first give
-one token to each type. The remaining <span
-class="math inline">\(N-k\)</span> tokens can be distributed freely,
-giving <span class="math inline">\(\binom{N-1}{k-1}\)</span> states when
-<span class="math inline">\(N\geq k\)</span>.</p>
-<p>For three types, the number of boundary states is the total minus the
-strictly positive count. For <span
-class="math inline">\(N\geq3\)</span>, this is <span
-class="math display">\[\binom{N+2}{2}-\binom{N-1}{2}=3N.\]</span> One
-can also count <span class="math inline">\(N+1\)</span> points on each
-of three edges and subtract three to correct the double counting of
-vertices. The two answers agree. Comparing two counting arguments is a
-useful way to verify a combinatorial formula.</p>
-<div class="example" title="A larger lattice">
-<p><strong>Example. A larger lattice</strong></p>
-<p>At <span class="math inline">\(N=8\)</span>, there are <span
-class="math inline">\(\binom{10}{2}=45\)</span> total states and <span
-class="math inline">\(\binom72=21\)</span> strictly positive states. The
-remaining <span class="math inline">\(24\)</span> are on the boundary. A
-uniform distribution over these 45 lattice vertices would be a
-probability model on compositions. It is different from independently
-sampling eight individuals from a uniform three-type population: the
-latter assigns each count vector a multinomial weight.</p>
-</div>
-<h2 id="sampling-can-change-support">Sampling can change support</h2>
-<p>At a positive state, deterministic positive multiplication keeps
-every type present. A sample of <span class="math inline">\(N\)</span>
-individuals can omit a type by chance. On an edge of the triangle, a
-sampling model without mutation cannot restore the missing type, because
-its sampling probability is zero. A finite sampled population may
-therefore reach an edge and subsequently evolve on that edge, even when
-a deterministic trajectory remains in the interior for every finite
-step.</p>
-<p>This observation explains why a deterministic trajectory and a
-simulated finite population should be labeled separately. Both can be
-useful descriptions. The deterministic rule isolates state-dependent
-reweighting; the sampled model also includes fluctuations associated
-with finitely many individuals. Chapter 4 provides exact probabilities
-for those fluctuations.</p>
+<p>This example separates three levels of description. An edge stores a
+directional transport amount. A vertex divergence records net departure
+there. A collection of vertices exchanges mass only through its boundary
+edges. Moving from one level to the next requires addition and
+cancellation, rather than an approximation.</p>
+<p>The graph in this flow example could represent actual locations. The
+token graph instead has whole probability distributions as its vertices.
+Both support the same divergence bookkeeping, but a field on probability
+states and a probability stored at physical locations should not be
+confused. The next chapter will explicitly choose locations as vertices
+and put probability mass on them.</p>
+<h2 id="application-cyclic-motion-need-not-be-a-gradient">Application:
+cyclic motion need not be a gradient</h2>
+<p>Three competing strategies can favor one another cyclically. Consider
+the balanced score table <span
+class="math display">\[M=\begin{pmatrix}0&amp;1&amp;-1\\-1&amp;0&amp;1\\1&amp;-1&amp;0\end{pmatrix}.\]</span>
+At state <span class="math inline">\(p\)</span>, its scores are <span
+class="math display">\[f_A=p_B-p_C,\quad f_B=p_C-p_A,\quad
+f_C=p_A-p_B.\]</span> At the center all three are zero. Away from the
+center, the advantages encourage circulation rather than simple movement
+up one coordinate.</p>
+<p>Exponential normalization gives <span class="math inline">\(p_i^+=p_i
+e^{\eta f_i}/Z\)</span>, with <span class="math inline">\(Z=\sum_i p_i
+e^{\eta f_i}\)</span>. At <span
+class="math inline">\(p=(1/2,1/3,1/6)\)</span> the scores are <span
+class="math inline">\((1/6,-1/3,1/6)\)</span>. With <span
+class="math inline">\(\eta=1\)</span>, the next state is approximately
+<span class="math inline">\((0.5755,0.2327,0.1918)\)</span>. The scores
+must be recomputed before the next step because the composition has
+changed.</p>
+<p>We can examine one exact diagnostic, the product <span
+class="math inline">\(P=p_Ap_Bp_C\)</span>. Direct cancellation gives
+<span class="math inline">\(\sum_i f_i=0\)</span> and <span
+class="math inline">\(\sum_i p_if_i=0\)</span>. Multiplying the update
+equations therefore yields <span
+class="math display">\[P(p^+)=\frac{P(p)}{Z^3}.\]</span></p>
+<p>The weighted arithmetic-geometric mean inequality says that for
+positive numbers <span class="math inline">\(a_i\)</span> and
+nonnegative weights <span class="math inline">\(p_i\)</span> adding to
+one, <span class="math display">\[\sum_i p_i a_i\geq\prod_i
+a_i^{p_i}.\]</span> It generalizes the fact that the average of two
+positive numbers is at least their geometric mean. For rational weights
+it follows by repeating numbers in an ordinary arithmetic-geometric mean
+inequality. General weights follow by approximation.</p>
+<p>Apply it to <span class="math inline">\(a_i=e^{\eta f_i}\)</span>. We
+obtain <span class="math display">\[Z\geq e^{\eta\sum_i
+p_if_i}=1.\]</span> For an interior state other than the center, the
+scores differ, giving strict inequality. Consequently <span
+class="math inline">\(P(p^+)&lt;P(p)\)</span>. A finite cyclic update
+decreases this product; it does not conserve it.</p>
+<p>The product is largest at the center, where it equals <span
+class="math inline">\(1/27\)</span>. Its decrease describes crossing
+toward lower product contours. It does not prove that every coordinate
+approaches zero or that the trajectory has a particular limit. A single
+scalar diagnostic gives one piece of a multidimensional story.</p>
+<figure><img src="../assets/fig-cyclic.svg" alt="Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases." width="358" height="196" loading="lazy"><figcaption>Balanced cyclic exponential updates at intensity 0.35. The triangle trajectory circulates while the coordinate product decreases.</figcaption></figure>
+<p>For comparison, the permutation <span
+class="math inline">\(T(p_A,p_B,p_C)=(p_C,p_A,p_B)\)</span> has <span
+class="math inline">\(T^3(p)=p\)</span> and preserves the product
+exactly. Two rules can both look cyclic while having different
+invariants. An <strong>invariant</strong> is a quantity unchanged at
+every step of the particular recurrence.</p>
+<p>Use the simplex view of the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
+explorer</a> to compare neighboring entropy values. The <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week03.html">weekly
+demonstration</a> also explores lattices and cyclic selection. Chapter 4
+turns the flux bookkeeping into a model for transporting actual
+probability among labeled locations.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
 <li>Plot <span class="math inline">\((1,0,0)\)</span>, <span
 class="math inline">\((0,1/2,1/2)\)</span>, and <span
-class="math inline">\((1/4,1/4,1/2)\)</span> using barycentric
+class="math inline">\((1/4,1/4,1/2)\)</span> in barycentric
 coordinates.</li>
-<li>Recover the probabilities of the point <span
-class="math inline">\((u,v)=(1/2,\sqrt3/6)\)</span>.</li>
-<li>List all count triples with <span
-class="math inline">\(N=2\)</span>. Verify the formula for their
-number.</li>
-<li>How many lattice states are there for <span
-class="math inline">\(N=10\)</span>? How many have all three counts
-positive?</li>
+<li>List all six states for <span class="math inline">\(N=2\)</span>,
+and verify the state-count formula.</li>
 <li>List the neighbors of <span class="math inline">\((2,1,1)\)</span>
-under one-token moves.</li>
-<li>Compute the scores of the balanced cyclic table at <span
-class="math inline">\((1/5,1/2,3/10)\)</span>.</li>
-<li>Verify algebraically that <span class="math inline">\(\sum_i
-p_if_i=0\)</span> for the balanced table.</li>
-<li>Derive the product update formula for exponential multipliers for
-any three scores, without assuming balance.</li>
-<li>Explain why the product test says nothing new on an edge of the
-triangle. Determine whether the update can leave that edge.</li>
-<li>Show that the center is the unique interior state where all balanced
-cyclic scores agree.</li>
-<li>For the permutation rule, determine all fixed states and all
-possible periods.</li>
-<li>Compare deterministic normalization with sampling a fixed number of
-individuals after normalization. Which can lose a type in a single step
-when every initial proportion is positive?</li>
+for <span class="math inline">\(N=4\)</span>. Explain why the corner
+<span class="math inline">\((4,0,0)\)</span> has fewer neighbors.</li>
+<li>For <span class="math inline">\(N=4\)</span> and counts <span
+class="math inline">\((2,1,1)\)</span>, calculate the concentration
+differences for transfers <span class="math inline">\(A\)</span> to
+<span class="math inline">\(B\)</span> and <span
+class="math inline">\(B\)</span> to <span
+class="math inline">\(C\)</span>.</li>
+<li>Calculate the entropy difference for the transfer from counts <span
+class="math inline">\((2,1,1)\)</span> to <span
+class="math inline">\((2,2,0)\)</span>. Compare its sign with the
+concentration change.</li>
+<li>Explain why <span class="math inline">\(D_{A\leftarrow C}F\)</span>
+and <span class="math inline">\(D_{C\leftarrow A}F\)</span> at the same
+starting state need not be negatives of each other. Identify the edge
+reversal that does give the negative.</li>
+<li>Choose two paths from <span class="math inline">\((4,0,0)\)</span>
+to <span class="math inline">\((2,2,0)\)</span>. Add the concentration
+differences along each path and compare the totals.</li>
+<li>Give a scalar potential on three vertices with values <span
+class="math inline">\(0,2,5\)</span>. Calculate its three gradient edge
+values and the circulation around the triangle.</li>
+<li>Assign a clockwise unit flux around a triangle. Calculate divergence
+at each vertex and circulation around the triangle.</li>
+<li>Count the strictly positive three-category states for <span
+class="math inline">\(N=10\)</span> by first placing one token in each
+category.</li>
+<li>For the balanced cyclic table, verify <span
+class="math inline">\(\sum_i f_i=0\)</span> and <span
+class="math inline">\(\sum_i p_if_i=0\)</span>. Derive the product
+update identity.</li>
+<li>Explain why strict ascent of a scalar field must stop on a finite
+graph. Describe what could change if equal-valued moves were
+allowed.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>2.</strong> The recovered probabilities are <span
-class="math inline">\((1/3,1/3,1/3)\)</span>, the center.</p>
-<p><strong>4.</strong> There are <span
-class="math inline">\(\binom{12}{2}=66\)</span> states. Subtract one
-token from each positive count; the remaining three nonnegative counts
-sum to <span class="math inline">\(7\)</span>, giving <span
-class="math inline">\(\binom92=36\)</span> strictly positive states.</p>
-<p><strong>5.</strong> The neighbors are <span
-class="math inline">\((1,2,1)\)</span>, <span
-class="math inline">\((1,1,2)\)</span>, <span
-class="math inline">\((3,0,1)\)</span>, <span
-class="math inline">\((2,0,2)\)</span>, <span
-class="math inline">\((3,1,0)\)</span>, and <span
-class="math inline">\((2,2,0)\)</span>.</p>
-<p><strong>6.</strong> The scores are <span
-class="math inline">\((1/5,1/10,-3/10)\)</span>.</p>
-<p><strong>8.</strong> Multiplying the three update equations gives
-<span class="math inline">\(P(p^+)=P(p)e^{\eta\sum_i f_i}/Z^3\)</span>.
-Balance is needed only to simplify the exponential factor to one.</p>
-<p><strong>11.</strong> A fixed state has three equal coordinates and is
-therefore the center. Every other state has period three, since applying
-the permutation three times is the identity and a period dividing three
-is either one or three.</p>
+<p><strong>2.</strong> The states are <span
+class="math inline">\((2,0,0),(1,1,0),(1,0,1),(0,2,0),(0,1,1),(0,0,2)\)</span>
+in counts. The formula gives <span
+class="math inline">\((3)(4)/2=6\)</span>.</p>
+<p><strong>3.</strong> The neighbors are <span
+class="math inline">\((1,2,1),(1,1,2),(3,0,1),(2,0,2),(3,1,0),(2,2,0)\)</span>.
+At the corner only the occupied category can donate.</p>
+<p><strong>4.</strong> The initial concentration is <span
+class="math inline">\(3/8\)</span>. The first transfer gives <span
+class="math inline">\((1,2,1)\)</span> and zero change. The second gives
+<span class="math inline">\((2,0,2)\)</span> with concentration <span
+class="math inline">\(1/2\)</span>, hence change <span
+class="math inline">\(1/8\)</span>.</p>
+<p><strong>5.</strong> The new entropy is <span
+class="math inline">\(\ln2\approx0.6931\)</span>, giving change <span
+class="math inline">\(-\tfrac12\ln2\approx-0.3466\)</span>.
+Concentration rises from <span class="math inline">\(3/8\)</span> to
+<span class="math inline">\(1/2\)</span>, so its change is positive.</p>
+<p><strong>8.</strong> Orient the triangle <span
+class="math inline">\(U\to V\to W\to U\)</span>. The edge values are
+<span class="math inline">\(2,3,-5\)</span>. Their circulation is
+zero.</p>
+<p><strong>10.</strong> After reserving three tokens, the remaining
+seven can be distributed in <span
+class="math inline">\((8)(9)/2=36\)</span> ways. The total number of
+states, including the boundary, is sixty-six.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week02.html">← Week 2</a><a href="../readings/week04.html">Week 4 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

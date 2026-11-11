@@ -1,0 +1,13 @@
+\begin{tikzpicture}[>=Stealth,every node/.style={font=\small}]
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (A) at (0,0) {$A$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (B) at (4.2,0) {$B$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (C) at (8.4,0) {$C$};
+\draw[->,copper,line width=1.4pt] (A)--node[above=5pt] {$J_{AB}=1/8$}(B);
+\draw[->,copper,line width=1.4pt] (B)--node[above=5pt] {$J_{BC}=1/16$}(C);
+\node[above=13pt] at (A) {$p_A=3/4$};
+\node[above=13pt] at (B) {$p_B=1/4$};
+\node[above=13pt] at (C) {$p_C=0$};
+\node[below=15pt,align=center] at (A) {$\operatorname{div}J=1/8$\\$\Delta p_A=-1/8$\\$p_A^+=5/8$};
+\node[below=15pt,align=center] at (B) {$\operatorname{div}J=-1/16$\\$\Delta p_B=1/16$\\$p_B^+=5/16$};
+\node[below=15pt,align=center] at (C) {$\operatorname{div}J=-1/16$\\$\Delta p_C=1/16$\\$p_C^+=1/16$};
+\end{tikzpicture}

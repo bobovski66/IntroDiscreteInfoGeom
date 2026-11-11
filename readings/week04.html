@@ -1,383 +1,561 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 4: Probability transport and conservation · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="4"><p class="eyebrow">Week 4 · Reading</p><h1>Probability transport and conservation</h1><nav class="week-nav" aria-label="Week 4 resources"><a aria-current=page href="../readings/week04.html">Reading</a><a  href="../demos/week04.html">Demonstration</a><a  href="../labs/week04.html">Lab</a><a  href="../quizzes/week04.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter04.pdf">Chapter 4 PDF</a> · <a href="../textbook/latex/chapter04.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Check stochastic matrices and probability conservation.</li><li>Compute graph currents and their divergence.</li><li>Separate expected probability transport from sampled integer counts.</li></ul></aside><article class="reading-text"><!-- Discrete calculus core: Week 4 -->
-<h2 id="probabilities-move-between-states">Probabilities move between
-states</h2>
-<p>Suppose a system has finitely many labeled locations. A
-column-stochastic matrix <span class="math inline">\(K\)</span> assigns
-probabilities of arriving at location <span
-class="math inline">\(i\)</span> from each starting location <span
-class="math inline">\(j\)</span>: <span
-class="math display">\[K_{ij}\geq0,\qquad\sum_iK_{ij}=1.\]</span> If
-<span class="math inline">\(p_n\)</span> is the current probability
-vector, one step is <span
-class="math display">\[\boxed{p_{n+1}=Kp_n,\qquad\Delta
-p_n=(K-I)p_n.}\]</span> The second formula is a vector-valued difference
-equation. Because the columns of <span class="math inline">\(K\)</span>
-sum to one, the sum of the coordinates of <span
-class="math inline">\(\Delta p_n\)</span> is zero. Probability is
-redistributed rather than created.</p>
-<h2 id="a-current-on-a-graph">A current on a graph</h2>
-<p>Picture locations as vertices and possible transitions as edges. Let
-<span class="math inline">\(J_{ij,n}=-J_{ji,n}\)</span> be the
-<em>net</em> probability current from <span
-class="math inline">\(i\)</span> to <span
-class="math inline">\(j\)</span> during step <span
-class="math inline">\(n\)</span>. Define outgoing divergence by <span
-class="math display">\[\operatorname{div}J_n(i)=\sum_{j\sim
-i}J_{ij,n}.\]</span> The discrete continuity equation is <span
-class="math display">\[\boxed{\Delta
-p_n(i)=-\operatorname{div}J_n(i).}\]</span> If we sum this equation over
-every vertex, each current appears twice with opposite signs. Therefore
-<span class="math inline">\(\sum_i p_{n+1}(i)=\sum_i p_n(i)\)</span>.
-This is an exact conservation law.</p>
-<h2 id="an-example-on-three-locations">An example on three
-locations</h2>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Week 4: Probability transport and conservation · Discrete Information Geometry</title><meta name="description" content="A ten-week course in finite information geometry through probability, counting, difference equations, and graphs."><link rel="stylesheet" href="../assets/style.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},svg:{fontCache:'none'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script><script defer src="../assets/site.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="../index.html">Discrete Information Geometry</a><nav aria-label="Main"><a href="../index.html#weeks">Ten weeks</a><a href="../textbook/pdf/discrete_information_geometry.pdf">Textbook</a><a href="../guide.html">Course guide</a></nav></header><main id="main" class="weekly reading" data-week="4"><p class="eyebrow">Week 4 · Reading</p><h1>Probability transport and conservation</h1><nav class="week-nav" aria-label="Week 4 resources"><a aria-current=page href="../readings/week04.html">Reading</a><a  href="../demos/week04.html">Demonstration</a><a  href="../labs/week04.html">Lab</a><a  href="../quizzes/week04.html">Quiz</a></nav><p class="chapter-download"><a href="../textbook/pdf/chapter04.pdf">Chapter 4 PDF</a> · <a href="../textbook/latex/chapter04.tex">LaTeX source</a></p><aside class="objectives"><h2>Learning goals</h2><ul><li>Check stochastic matrices and probability conservation.</li><li>Compute graph currents and their divergence.</li><li>Separate expected probability transport from sampled integer counts.</li></ul></aside><details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol><li><a href="#what-one-transition-probability-means">What one transition
+probability means</a></li><li><a href="#matrix-multiplication-adds-contributions-from-origins">Matrix
+multiplication adds contributions from origins</a></li><li><a href="#conservation-follows-from-column-sums">Conservation follows from
+column sums</a></li><li><a href="#currents-recover-the-local-picture">Currents recover the local
+picture</a></li><li><a href="#stationarity-permits-motion-without-accumulation">Stationarity
+permits motion without accumulation</a></li><li><a href="#a-distribution-and-an-observed-count-are-different-objects">A
+distribution and an observed count are different objects</a></li><li><a href="#counting-ordered-samples-with-the-same-composition">Counting
+ordered samples with the same composition</a></li><li><a href="#expected-values-explain-what-the-update-predicts">Expected
+values explain what the update predicts</a></li><li><a href="#what-can-disappear-in-a-finite-observation">What can disappear
+in a finite observation</a></li><li><a href="#exercises">Exercises</a></li></ol></nav></details><article class="reading-text"><p>A shared bicycle can be at one of several stations at the end of a
+day. A mobile device can connect to one of several towers. A system can
+report one of several operating modes. In each case, we can describe
+uncertainty about its location or mode by a probability vector, then ask
+how that vector changes after one step.</p>
+<p>The edge bookkeeping from Chapter 3 gives us a local description of
+these changes: what leaves one location enters another. A stochastic
+matrix packages all the transition rules into a single table. We will
+derive the matrix update from individual contributions, recover its
+currents, and then explain how a finite collection of observations
+fluctuates around the predicted probabilities.</p>
+<h2 id="what-one-transition-probability-means">What one transition
+probability means</h2>
+<p>Let the possible locations be <span
+class="math inline">\(A,B,C\)</span>. The entry <span
+class="math inline">\(K_{ij}\)</span> will mean the probability of
+arriving at location <span class="math inline">\(i\)</span> when the
+starting location is <span class="math inline">\(j\)</span>. The first
+index gives the destination; the second gives the origin.</p>
+<p>Each column therefore lists all possible destinations from one
+origin. Its entries must be nonnegative and add to one: <span
+class="math display">\[K_{ij}\geq0,\qquad \sum_i K_{ij}=1.\]</span> Such
+a table is called <strong>column-stochastic</strong>. The diagonal entry
+<span class="math inline">\(K_{jj}\)</span> is the probability of
+remaining at <span class="math inline">\(j\)</span>.</p>
 <p>Consider a path <span class="math inline">\(A\)</span>–<span
 class="math inline">\(B\)</span>–<span class="math inline">\(C\)</span>.
-At each step, move one quarter of the probability at each location to
-each adjacent location, leaving the rest where it was. The resulting
-matrix is <span
-class="math display">\[K=\begin{pmatrix}3/4&amp;1/4&amp;0\\1/4&amp;1/2&amp;1/4\\0&amp;1/4&amp;3/4\end{pmatrix}.\]</span>
-Starting with all the probability at <span
-class="math inline">\(A\)</span> gives <span
-class="math inline">\(p_0=(1,0,0)\)</span> and <span
-class="math inline">\(p_1=(3/4,1/4,0)\)</span>. Thus <span
-class="math inline">\(\Delta p_0=(-1/4,1/4,0)\)</span>: one quarter of
-the total mass crossed edge <span class="math inline">\(A\)</span>–<span
-class="math inline">\(B\)</span>.</p>
-<p>A fixed point of the transport rule satisfies <span
-class="math inline">\(Kp=p\)</span>. Here the uniform distribution <span
-class="math inline">\((1/3,1/3,1/3)\)</span> is fixed. Stationarity does
-not always imply that every trajectory converges: a deterministic cyclic
-permutation has periodic orbits.</p>
-<h2 id="counts-and-sampled-probabilities">Counts and sampled
-probabilities</h2>
-<p>The probability vector above describes a distribution of mass.
-Another model could draw <span class="math inline">\(N\)</span>
-independent samples from that distribution and retain only the observed
-integer counts. The probability of each possible count table is then
-determined by binomial or multinomial counting. The expected proportions
-follow the matrix update, but a particular sample generally fluctuates
-around them.</p>
-<p>This distinction explains the role of counting in discrete
-information geometry: probability transport determines the expected
-distribution, and combinatorics describes possible finite observations
-of it.</p>
-<h2
-id="further-investigations-probability-transport-and-conservation">Further
-investigations: Probability transport and conservation</h2>
-<p>Probability describes both a population’s composition and the
-uncertainty of an observation. If a population has proportions <span
-class="math inline">\(p_A,p_B,p_C\)</span> and one individual is chosen
-uniformly, these proportions are the probabilities of the observed type.
-Repeating the observation produces a sample. Its composition fluctuates,
-even when the underlying population stays fixed.</p>
-<p>Counting tells us which sample compositions are possible and how many
-ordered samples produce each one. It supplies exact formulas for
-uncertainty at a finite sample size.</p>
-<h2 id="outcomes-events-and-trees">Outcomes, events, and trees</h2>
-<p>An <strong>outcome</strong> is a single possible result. An
-<strong>event</strong> is a collection of outcomes. For a finite
-probability model, the probability of an event is the sum of the
-probabilities of its outcomes. The total probability of all outcomes is
-one.</p>
-<p>Two observations are <strong>independent</strong> when the
-probability of a specified pair is the product of the individual
-probabilities. More generally, the probability of an ordered independent
-sample <span class="math inline">\((i_1,\ldots,i_N)\)</span> is <span
-class="math inline">\(p_{i_1}\cdots p_{i_N}\)</span>. A tree represents
-this multiplication: each level is another observation, and the
-probability of a leaf is the product of the branch probabilities along
-its path.</p>
-<div class="example" title="Sampling with and without replacement">
-<p><strong>Example. Sampling with and without replacement</strong></p>
-<p>A box contains two red tokens and one blue token. Two draws with
-replacement give <span
-class="math inline">\(P(RB)=(2/3)(1/3)=2/9\)</span>. Without
-replacement, the second draw depends on the first, and <span
-class="math inline">\(P(RB)=(2/3)(1/2)=1/3\)</span>. The
-independent-sampling formulas below apply to the first procedure. A
-finite-population procedure without replacement requires its own
-probabilities.</p>
+During one step, send one quarter of the mass at each location to each
+adjacent location and retain the rest. From <span
+class="math inline">\(A\)</span>, the only neighbor is <span
+class="math inline">\(B\)</span>, so three quarters remain. From <span
+class="math inline">\(B\)</span>, there are two neighbors, so one half
+remains. The table is <span class="math display">\[K=\begin{pmatrix}
+3/4&amp;1/4&amp;0\\
+1/4&amp;1/2&amp;1/4\\
+0&amp;1/4&amp;3/4
+\end{pmatrix}.\]</span> Reading the middle column gives the destinations
+from <span class="math inline">\(B\)</span>: a quarter at <span
+class="math inline">\(A\)</span>, half at <span
+class="math inline">\(B\)</span>, and a quarter at <span
+class="math inline">\(C\)</span>.</p>
+<p>This table can model a random transition of one object or a
+deterministic redistribution of a divisible mass. Both interpretations
+use the same arithmetic, but they describe different kinds of
+uncertainty.</p>
+<h2 id="matrix-multiplication-adds-contributions-from-origins">Matrix
+multiplication adds contributions from origins</h2>
+<p>Suppose the current distribution is <span
+class="math inline">\(p=(p_A,p_B,p_C)\)</span>. To calculate the next
+probability at <span class="math inline">\(A\)</span>, add contributions
+from every origin: <span
+class="math display">\[p_A^+=\frac34p_A+\frac14p_B+0p_C.\]</span> The
+same calculation for every destination gives <span
+class="math display">\[p_i^+=\sum_j K_{ij}p_j.\]</span> This collection
+of weighted sums is <strong>matrix multiplication</strong>, written
+<span class="math inline">\(p^+=Kp\)</span>. We regard <span
+class="math inline">\(p\)</span> as a column when multiplying, even when
+displaying it compactly as a tuple.</p>
+<div class="example" title="Two steps starting at one location">
+<p><strong>Example. Two steps starting at one location</strong></p>
+<p>Start at <span class="math inline">\(p_0=(1,0,0)\)</span>.
+Multiplication selects the first column: <span
+class="math display">\[p_1=\left(\frac34,\frac14,0\right).\]</span> For
+the next step, <span class="math display">\[\begin{aligned}
+p_{A,2}&amp;=\frac34\frac34+\frac14\frac14=\frac58,\\
+p_{B,2}&amp;=\frac14\frac34+\frac12\frac14=\frac5{16},\\
+p_{C,2}&amp;=\frac14\frac14=\frac1{16}.
+\end{aligned}\]</span> Thus <span
+class="math inline">\(p_2=(10/16,5/16,1/16)\)</span>. Probability
+reaches <span class="math inline">\(C\)</span> only after passing
+through <span class="math inline">\(B\)</span>. The entries add to one,
+which checks the arithmetic.</p>
 </div>
-<h2 id="binomial-counting">Binomial counting</h2>
-<p>Suppose each observation is a success with probability <span
-class="math inline">\(p\)</span> and a failure with probability <span
-class="math inline">\(1-p\)</span>. An ordered sample with <span
-class="math inline">\(k\)</span> successes has probability <span
-class="math inline">\(p^k(1-p)^{N-k}\)</span>. The successes can occupy
-<span class="math inline">\(\binom Nk\)</span> different sets of
-positions, where <span class="math display">\[\binom
-Nk=\frac{N!}{k!(N-k)!},\qquad N!=1\cdot2\cdots N,\quad 0!=1.\]</span>
-Therefore the success count <span class="math inline">\(K\)</span> has
-the <strong>binomial distribution</strong> <span
-class="math display">\[P(K=k)=\binom Nk p^k(1-p)^{N-k},\qquad
-k=0,\ldots,N.\]</span> The binomial coefficient counts positions, while
-the powers account for their probabilities. Keeping these two roles
-separate helps prevent common mistakes.</p>
-<div class="example" title="Exactly three successes">
-<p><strong>Example. Exactly three successes</strong></p>
-<p>With <span class="math inline">\(N=5\)</span> and <span
-class="math inline">\(p=2/3\)</span>, the probability of exactly three
-successes is <span
-class="math display">\[\binom53(2/3)^3(1/3)^2=80/243.\]</span> The
-probability of one particular ordered sample, such as <span
-class="math inline">\(SSFSF\)</span>, is only <span
-class="math inline">\(8/243\)</span>. There are ten orders with the same
-count.</p>
+<p>A matrix of transition probabilities defines a <strong>Markov
+update</strong> when the next distribution depends on the present state
+through this rule, without additional dependence on earlier history. A
+model with delays may need a larger state that records the relevant
+history.</p>
+<p>The identity matrix <span class="math inline">\(I\)</span> leaves
+every vector unchanged. Subtracting <span
+class="math inline">\(p_n=Ip_n\)</span> gives a vector difference
+equation: <span class="math display">\[\boxed{p_{n+1}=Kp_n,\qquad \Delta
+p_n=(K-I)p_n.}\]</span> A difference is now a vector of coordinate
+changes. The definition still means next minus current.</p>
+<p>The calculation of <span class="math inline">\(p_{A,2}=5/8\)</span>
+can also be read as a sum over two-step histories. Starting at <span
+class="math inline">\(A\)</span>, the histories that end at <span
+class="math inline">\(A\)</span> are <span class="math inline">\(A\to
+A\to A\)</span> and <span class="math inline">\(A\to B\to A\)</span>.
+Their probabilities are <span class="math inline">\((3/4)(3/4)\)</span>
+and <span class="math inline">\((1/4)(1/4)\)</span>. Adding them gives
+<span class="math inline">\(10/16\)</span>. Matrix multiplication
+performs this path accounting simultaneously for all destinations.</p>
+<p>This interpretation explains why transition matrices compose by
+multiplication. If one step uses <span class="math inline">\(K\)</span>
+and the next uses <span class="math inline">\(R\)</span>, the final
+distribution is <span class="math inline">\(R(Kp)=(RK)p\)</span>. An
+entry of <span class="math inline">\(RK\)</span> adds probabilities over
+all possible intermediate locations. Reversing the steps gives <span
+class="math inline">\(KR\)</span>, which need not be the same matrix.
+The chronological order is read from right to left in the product
+because the rightmost operation acts first.</p>
+<p>A column convention should be tested on a concentrated input.
+Multiplying by <span class="math inline">\((1,0,0)\)</span> must
+reproduce the destinations from <span class="math inline">\(A\)</span>.
+This quick check is especially useful when consulting a source that uses
+row distributions instead. Both conventions are valid when used
+consistently; mixing them changes the transition rule.</p>
+<h2 id="conservation-follows-from-column-sums">Conservation follows from
+column sums</h2>
+<p>The sum of all new probabilities is <span
+class="math display">\[\begin{aligned}
+\sum_i p_i^+
+&amp;=\sum_i\sum_j K_{ij}p_j
+=\sum_j p_j\left(\sum_i K_{ij}\right)\\
+&amp;=\sum_j p_j=1.
+\end{aligned}\]</span> We have exchanged the order of two finite sums:
+adding a rectangular collection by rows or by columns gives the same
+total. The column-sum condition then supplies the conservation law.</p>
+<p>Nonnegativity is also preserved because each new entry is a sum of
+nonnegative products. The matrix therefore sends probability vectors to
+probability vectors.</p>
+<p>Taking the difference of the two total masses gives <span
+class="math display">\[\sum_i\Delta p_n(i)=0.\]</span> Some coordinates
+can rise and others fall, but their changes balance. For the two-step
+example, <span class="math display">\[\Delta p_0=(-1/4,1/4,0),\qquad
+\Delta p_1=(-1/8,1/16,1/16).\]</span> Both vectors have total zero.</p>
+<h2 id="currents-recover-the-local-picture">Currents recover the local
+picture</h2>
+<p>The amount traveling from <span class="math inline">\(i\)</span> to
+<span class="math inline">\(j\)</span> is <span
+class="math inline">\(K_{ji}p_i\)</span>. The amount traveling the other
+way is <span class="math inline">\(K_{ij}p_j\)</span>. Define the
+<strong>net current from <span class="math inline">\(i\)</span> to <span
+class="math inline">\(j\)</span></strong> by <span
+class="math display">\[J_{ij}=K_{ji}p_i-K_{ij}p_j.\]</span> Then <span
+class="math inline">\(J_{ji}=-J_{ij}\)</span>. A negative net current
+simply means that the opposite direction carries more mass.</p>
+<p>For the symmetric path example, <span
+class="math display">\[J_{AB}=\frac14(p_A-p_B),\qquad
+J_{BC}=\frac14(p_B-p_C).\]</span> Mass flows from the larger probability
+to the smaller one along each edge. With <span
+class="math inline">\(p=(1,0,0)\)</span>, the currents are <span
+class="math inline">\(J_{AB}=1/4\)</span> and <span
+class="math inline">\(J_{BC}=0\)</span>.</p>
+<p>Choose arrows <span class="math inline">\(A\to B\)</span> and <span
+class="math inline">\(B\to C\)</span>. The outward divergences are <span
+class="math display">\[\operatorname{div}J(A)=J_{AB},\quad
+\operatorname{div}J(B)=J_{BC}-J_{AB},\quad
+\operatorname{div}J(C)=-J_{BC}.\]</span> At <span
+class="math inline">\(B\)</span>, the current on <span
+class="math inline">\(AB\)</span> is incoming and therefore subtracted.
+The update is <span class="math display">\[\boxed{\Delta
+p(i)=-\operatorname{div}J(i).}\]</span> This <strong>continuity
+equation</strong> says that stored mass decreases by the net amount sent
+outward.</p>
+<p>The equation holds for a general column-stochastic matrix as well.
+Subtracting outgoing transport from incoming transport gives <span
+class="math display">\[\sum_{j\ne i}(K_{ij}p_j-K_{ji}p_i)
+=\sum_jK_{ij}p_j-p_i,\]</span> where the last step uses the sum of
+column <span class="math inline">\(i\)</span>. The diagonal stay-put
+term cancels correctly.</p>
+<div class="example" title="Checking currents at the second step">
+<p><strong>Example. Checking currents at the second step</strong></p>
+<p>At <span class="math inline">\(p_1=(3/4,1/4,0)\)</span>, we obtain
+<span class="math inline">\(J_{AB}=1/8\)</span> and <span
+class="math inline">\(J_{BC}=1/16\)</span>. Thus the divergences are
+<span class="math inline">\((1/8,-1/16,-1/16)\)</span>. Their negatives
+reproduce <span class="math inline">\(\Delta p_1\)</span>. Location
+<span class="math inline">\(B\)</span> sends some mass onward to <span
+class="math inline">\(C\)</span>, yet gains overall because more arrives
+from <span class="math inline">\(A\)</span>.</p>
 </div>
-<p>Adding the binomial probabilities gives one. This follows either
-because the counts partition all possible samples or by expanding <span
-class="math inline">\((p+(1-p))^N\)</span> and grouping terms by the
-number of factors <span class="math inline">\(p\)</span>.</p>
-<h2 id="multinomial-counts-and-empirical-distributions">Multinomial
-counts and empirical distributions</h2>
-<p>For <span class="math inline">\(k\)</span> categories, let <span
-class="math inline">\(n_i\)</span> be the observed count of category
-<span class="math inline">\(i\)</span>, so <span
-class="math inline">\(\sum_i n_i=N\)</span>. The number of ordered
-samples with these counts is <span
-class="math display">\[\Omega(n_1,\ldots,n_k)=\frac{N!}{n_1!\cdots
-n_k!}.\]</span> One derivation chooses the positions of category one,
-then category two among the remaining positions, and continues. The
-resulting binomial coefficients telescope to the displayed ratio.</p>
-<p>The probability of this count vector is <span
-class="math display">\[P(n_1,\ldots,n_k)=\Omega(n_1,\ldots,n_k)\prod_i
-p_i^{n_i}.\]</span> The <strong>empirical distribution</strong> is <span
-class="math inline">\(\widehat p_i=n_i/N\)</span>. It belongs to the
-token lattice of Chapter 3. Several ordered samples can have the same
-empirical distribution, and <span class="math inline">\(\Omega\)</span>
-measures this multiplicity. If <span
-class="math inline">\(n_i=0\)</span>, the factor <span
-class="math inline">\(p_i^{n_i}\)</span> is taken as one, including when
-<span class="math inline">\(p_i=0\)</span>; no observation of that
-category is being required.</p>
-<div class="example" title="A count vector on the triangle">
-<p><strong>Example. A count vector on the triangle</strong></p>
-<p>For <span class="math inline">\(N=4\)</span> and counts <span
-class="math inline">\((2,1,1)\)</span>, the multiplicity is <span
-class="math inline">\(4!/(2!1!1!)=12\)</span>. Under <span
-class="math inline">\(p=(1/2,1/3,1/6)\)</span>, each compatible ordered
-sample has probability <span
-class="math inline">\((1/2)^2(1/3)(1/6)=1/72\)</span>. The count vector
-therefore has probability <span
-class="math inline">\(12/72=1/6\)</span>.</p>
+<p>For a group of locations, sum their continuity equations. Internal
+currents cancel and only currents crossing the group’s boundary remain.
+This is the same cancellation proved on the lattice in Chapter 3, now
+describing changes of an actual probability distribution.</p>
+<div class="example"
+title="Conservation across the boundary of a region">
+<p><strong>Example. Conservation across the boundary of a
+region</strong></p>
+<p>Treat locations <span class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span> as one region of the three-node path.
+Its stored probability is <span
+class="math inline">\(s_n=p_{A,n}+p_{B,n}\)</span>. The continuity
+equations give <span class="math display">\[\Delta
+s_n=-J_{AB}+(J_{AB}-J_{BC})=-J_{BC}.\]</span> Only the current from
+<span class="math inline">\(B\)</span> to <span
+class="math inline">\(C\)</span> changes the region’s total. At <span
+class="math inline">\(p_1=(3/4,1/4,0)\)</span>, that current is <span
+class="math inline">\(1/16\)</span>, so the regional mass falls from one
+to <span class="math inline">\(15/16\)</span> during the next step.</p>
 </div>
-<h2 id="expectation-and-spread-from-finite-sums">Expectation and spread
-from finite sums</h2>
+<p>Over several steps, summation gives <span
+class="math display">\[s_T-s_0=-\sum_{n=0}^{T-1}J_{BC,n}.\]</span>
+Spatial cancellation removes the internal edge, and temporal
+cancellation removes intermediate stored values. The final identity
+combines the two fundamental operations of our calculus. It is a useful
+model for inventory crossing a facility boundary, traffic entering and
+leaving a district, or probability entering a selected set of
+states.</p>
+<figure><img src="../assets/fig-transport.svg" alt="One transport step from (3/4,1/4,0). The middle vertex gains mass even while sending some onward, because its incoming current is larger." width="312" height="94" loading="lazy"><figcaption>One transport step from (3/4,1/4,0). The middle vertex gains mass even while sending some onward, because its incoming current is larger.</figcaption></figure>
+<h2 id="stationarity-permits-motion-without-accumulation">Stationarity
+permits motion without accumulation</h2>
+<p>A <strong>stationary distribution</strong> <span
+class="math inline">\(\pi\)</span> satisfies <span
+class="math inline">\(K\pi=\pi\)</span>. Every coordinate then has zero
+net change. For the symmetric path, <span
+class="math inline">\(\pi=(1/3,1/3,1/3)\)</span> is stationary because
+every row also sums to one.</p>
+<p>Stationarity does not mean that individual objects stay still. At
+uniform probabilities, equal amounts travel in both directions across
+each path edge. Net current is zero, although the separate one-way flows
+are positive.</p>
+<p>Stationarity also does not guarantee convergence from every starting
+state. The cyclic rule <span
+class="math inline">\(T(p_A,p_B,p_C)=(p_C,p_A,p_B)\)</span> fixes the
+uniform distribution but rotates every nonuniform state with period
+three.</p>
+<p>A two-location example makes the possibilities explicit. Let the
+transition probability from <span class="math inline">\(A\)</span> to
+<span class="math inline">\(B\)</span> be <span
+class="math inline">\(a\)</span> and the reverse probability be <span
+class="math inline">\(b\)</span>, with <span class="math inline">\(0\leq
+a,b\leq1\)</span>. Then <span
+class="math display">\[K=\begin{pmatrix}1-a&amp;b\\a&amp;1-b\end{pmatrix}.\]</span>
+Writing <span class="math inline">\(x=p_A\)</span> gives <span
+class="math display">\[x^+=(1-a)x+b(1-x)=b+(1-a-b)x.\]</span> When <span
+class="math inline">\(a+b&gt;0\)</span>, the stationary value is <span
+class="math inline">\(c=b/(a+b)\)</span>. Subtracting it gives <span
+class="math display">\[x^+-c=(1-a-b)(x-c).\]</span> This is precisely
+the feedback error equation from Chapter 2. If <span
+class="math inline">\(0&lt;a+b&lt;2\)</span>, errors shrink. If <span
+class="math inline">\(a=b=1\)</span>, the multiplier is <span
+class="math inline">\(-1\)</span> and the two locations alternate. If
+<span class="math inline">\(a=b=0\)</span>, every state is
+stationary.</p>
+<h2 id="a-distribution-and-an-observed-count-are-different-objects">A
+distribution and an observed count are different objects</h2>
+<p>Suppose a model predicts <span
+class="math inline">\(p=(1/2,1/3,1/6)\)</span>. Twelve independent
+observations have expected counts <span
+class="math inline">\((6,4,2)\)</span>, but the realized counts could be
+<span class="math inline">\((7,4,1)\)</span> or another feasible triple.
+The empirical proportions are the observed counts divided by twelve.</p>
+<p>An <strong>outcome</strong> is one possible result. An
+<strong>event</strong> is a collection of results. Event probabilities
+are added over their constituent outcomes. For
+<strong>independent</strong> observations, probabilities of specified
+successive outcomes multiply.</p>
+<p>If two independent observations each have probabilities <span
+class="math inline">\(p_A,p_B,p_C\)</span>, the ordered pair <span
+class="math inline">\(AC\)</span> has probability <span
+class="math inline">\(p_Ap_C\)</span>. A probability tree records this
+multiplication along a path. To find the probability of several paths,
+add their probabilities.</p>
+<p>Independence is a model assumption. Drawing from a finite box with
+replacement can produce independent draws; drawing without replacement
+generally does not. From a box with two red tokens and one blue token,
+<span class="math display">\[P(R\text{ then
+}B)=\frac23\frac13=\frac29\]</span> with replacement, but it is <span
+class="math inline">\((2/3)(1/2)=1/3\)</span> without replacement. The
+second procedure changes the probabilities available at the next
+draw.</p>
+<h2 id="counting-ordered-samples-with-the-same-composition">Counting
+ordered samples with the same composition</h2>
+<p>For <span class="math inline">\(N\)</span> independent binary
+observations with success probability <span
+class="math inline">\(p\)</span>, a particular ordered sample containing
+<span class="math inline">\(k\)</span> successes has probability <span
+class="math inline">\(p^k(1-p)^{N-k}\)</span>. There are <span
+class="math display">\[\binom Nk=\frac{N!}{k!(N-k)!}\]</span> ways to
+choose the success positions. Here <span
+class="math inline">\(N!=1\cdot2\cdots N\)</span>, and <span
+class="math inline">\(0!=1\)</span>. Consequently <span
+class="math display">\[P(\text{exactly }k\text{ successes})=\binom Nk
+p^k(1-p)^{N-k}.\]</span> The coefficient counts orders; the powers give
+the probability of each order.</p>
+<div class="example" title="One count, several orders">
+<p><strong>Example. One count, several orders</strong></p>
+<p>With four trials and two successes, the six orders are <span
+class="math inline">\(SSFF,SFSF,SFFS,FSSF,FSFS,FFSS\)</span>. If <span
+class="math inline">\(p=1/3\)</span>, each has probability <span
+class="math inline">\((1/3)^2(2/3)^2=4/81\)</span>. The event of exactly
+two successes has probability <span
+class="math inline">\(6(4/81)=8/27\)</span>.</p>
+</div>
+<p>For <span class="math inline">\(k\)</span> categories and counts
+<span class="math inline">\(n_1,\ldots,n_k\)</span> adding to <span
+class="math inline">\(N\)</span>, the number of compatible ordered
+samples is the <strong>multinomial coefficient</strong> <span
+class="math display">\[\Omega(n)=\frac{N!}{n_1!\cdots n_k!}.\]</span>
+Choose the positions of category one, then category two among the
+remaining positions, and continue. The factorials cancel to this
+expression.</p>
+<p>The count probability is <span
+class="math display">\[\boxed{P(n_1,\ldots,n_k)=\Omega(n)\prod_i
+p_i^{n_i}.}\]</span> The product sign <span
+class="math inline">\(\prod\)</span> means multiply over the indices. A
+factor with exponent zero contributes one because no occurrence of that
+category is required.</p>
+<p>For <span class="math inline">\(N=4\)</span>, counts <span
+class="math inline">\((2,1,1)\)</span> have multiplicity twelve. Under
+<span class="math inline">\(p=(1/2,1/3,1/6)\)</span>, each compatible
+ordered sample has probability <span
+class="math inline">\(1/72\)</span>, so the count event has probability
+<span class="math inline">\(1/6\)</span>. The empirical distribution
+<span class="math inline">\((1/2,1/4,1/4)\)</span> is a lattice point
+from Chapter 3.</p>
+<p>All count probabilities add to one because every ordered sample
+belongs to exactly one count category. Grouping the samples changes the
+description, not the total probability.</p>
+<div class="example"
+title="All possible count outcomes for two observations">
+<p><strong>Example. All possible count outcomes for two
+observations</strong></p>
+<p>For two independent observations from <span
+class="math inline">\(p=(1/2,1/3,1/6)\)</span>, the six possible count
+states have probabilities:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr class="header">
+<th>Counts</th>
+<th>Multiplicity</th>
+<th>Count probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\((2,0,0)\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(1/4\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((0,2,0)\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(1/9\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\((0,0,2)\)</span></td>
+<td>1</td>
+<td><span class="math inline">\(1/36\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((1,1,0)\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(1/3\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\((1,0,1)\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(1/6\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\((0,1,1)\)</span></td>
+<td>2</td>
+<td><span class="math inline">\(1/9\)</span></td>
+</tr>
+</tbody>
+</table></div>
+<p>With denominator thirty-six, the numerators are <span
+class="math inline">\(9,4,1,12,6,4\)</span>, summing to thirty-six. This
+checks the whole count distribution.</p>
+</div>
+<p>The most probable single count state in this example is <span
+class="math inline">\((1,1,0)\)</span>, but many other states remain
+possible. The expected counts are <span
+class="math inline">\((1,2/3,1/3)\)</span>, which are not themselves a
+realizable integer count state. An average over possible samples need
+not be one of those samples.</p>
+<p>The chance of observing no <span class="math inline">\(A\)</span> can
+be read either from the table or directly. Adding the three no-<span
+class="math inline">\(A\)</span> count probabilities gives <span
+class="math inline">\(1/4\)</span>; requiring two observations from the
+complement gives <span class="math inline">\((1-p_A)^2=(1/2)^2\)</span>.
+Agreement between these two calculations checks both the counting and
+the independence assumption.</p>
+<h2 id="expected-values-explain-what-the-update-predicts">Expected
+values explain what the update predicts</h2>
 <p>A <strong>random variable</strong> assigns a numerical value to each
-outcome. If it takes values <span class="math inline">\(x_i\)</span>
-with probabilities <span class="math inline">\(p_i\)</span>, its
-<strong>expectation</strong> is <span class="math display">\[\mathbb
-E[X]=\sum_i p_ix_i.\]</span> This weighted average describes the center
-of its distribution. Its <strong>variance</strong> is the average
-squared distance from that center: <span
+outcome. Its <strong>expectation</strong> is the probability-weighted
+average: <span class="math display">\[\mathbb E[X]=\sum_i
+p_ix_i.\]</span> The <strong>variance</strong> measures average squared
+deviation from that mean: <span
 class="math display">\[\operatorname{Var}(X)=\sum_i p_i(x_i-\mathbb
 E[X])^2
-=\mathbb E[X^2]-(\mathbb E[X])^2.\]</span> The last equality follows by
-expanding the square and using <span class="math inline">\(\sum_i
-p_i=1\)</span>. Variance is nonnegative. Its square root, the
-<strong>standard deviation</strong>, has the same units as the original
-readings.</p>
-<div class="example" title="A finite measurement table">
-<p><strong>Example. A finite measurement table</strong></p>
-<p>Suppose a device reads <span class="math inline">\(0,1,3\)</span>
-with probabilities <span class="math inline">\(1/2,1/3,1/6\)</span>. Its
-mean is <span class="math inline">\(0+1/3+3/6=5/6\)</span>. Its second
-moment is <span class="math inline">\(0+1/3+9/6=11/6\)</span>, so its
-variance is <span class="math inline">\(11/6-25/36=41/36\)</span>. The
-mean need not be one of the possible readings.</p>
-</div>
-<p>For two random variables, finite-sum expansion gives <span
-class="math inline">\(\mathbb E[X+Y]=\mathbb E[X]+\mathbb E[Y]\)</span>,
-whether or not they are independent. For independent variables,
-multiplication of probabilities also gives <span
-class="math inline">\(\mathbb E[XY]=\mathbb E[X]\mathbb E[Y]\)</span>.
-Expanding the square then shows that independent variances add.</p>
-<p>Apply these facts to indicator variables <span
-class="math inline">\(I_t\)</span>, equal to one on a success and zero
-on a failure. They satisfy <span class="math inline">\(\mathbb
-E[I_t]=p\)</span> and <span
-class="math inline">\(\operatorname{Var}(I_t)=p(1-p)\)</span>. Since
-<span class="math inline">\(K=I_1+\cdots+I_N\)</span> for independent
-trials, <span class="math display">\[\mathbb E[K]=Np,\qquad
-\operatorname{Var}(K)=Np(1-p).\]</span> Dividing by <span
-class="math inline">\(N\)</span> gives the empirical proportion’s mean
-and variance: <span class="math display">\[\mathbb E[\widehat
-p]=p,\qquad
-\operatorname{Var}(\widehat p)=\frac{p(1-p)}{N}.\]</span> Thus a
-fourfold increase in sample size halves the standard deviation. A
-particular sample may still fluctuate more than an earlier smaller
-sample; the formula concerns the distribution over repeated samples.</p>
-<h2 id="rare-categories-and-missing-observations">Rare categories and
-missing observations</h2>
+=\mathbb E[X^2]-(\mathbb E[X])^2.\]</span> The second identity follows
+by expanding the square. Its square root is the standard deviation.</p>
+<p>For a success indicator <span class="math inline">\(I\)</span>, the
+values are one with probability <span class="math inline">\(p\)</span>
+and zero otherwise. Hence <span class="math inline">\(\mathbb
+E[I]=p\)</span> and <span
+class="math inline">\(\operatorname{Var}(I)=p(1-p)\)</span>. A success
+count is the sum of <span class="math inline">\(N\)</span> such
+indicators. Expectations add; for independent indicators the variances
+also add. Thus <span class="math display">\[\mathbb E[K]=Np,\qquad
+\operatorname{Var}(K)=Np(1-p).\]</span> The empirical proportion <span
+class="math inline">\(\widehat p=K/N\)</span> satisfies <span
+class="math display">\[\mathbb E[\widehat p]=p,\qquad
+\operatorname{Var}(\widehat p)=\frac{p(1-p)}N.\]</span></p>
+<p>For <span class="math inline">\(N=100\)</span> and <span
+class="math inline">\(p=0.2\)</span>, the count has mean twenty and
+standard deviation four. The empirical proportion has mean <span
+class="math inline">\(0.2\)</span> and standard deviation <span
+class="math inline">\(0.04\)</span>. Increasing the sample size fourfold
+halves this standard deviation. It reduces the typical scale of
+fluctuations across repeated samples; it does not force every larger
+sample to be closer.</p>
+<figure><img src="../assets/fig-sampling.svg" alt="Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples." width="356" height="167" loading="lazy"><figcaption>Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.</figcaption></figure>
+<p>A finite bound also follows directly from the variance. On the event
+<span class="math inline">\(|\widehat p-p|\geq\varepsilon\)</span>, the
+squared deviation is at least <span
+class="math inline">\(\varepsilon^2\)</span>. Its average is therefore
+at least <span class="math inline">\(\varepsilon^2\)</span> times the
+probability of that event. Rearranging gives <span
+class="math display">\[P(|\widehat p-p|\geq\varepsilon)
+\leq\frac{p(1-p)}{N\varepsilon^2}.\]</span> This is an instance of
+Chebyshev’s inequality. It can be a loose bound, but it requires no
+approximation to the sampling distribution.</p>
+<p>Why do expectations add without independence? Expand an average over
+all joint outcomes and group the contribution of the first variable
+separately from that of the second. Each variable’s marginal
+probabilities emerge when the other is summed out. Correlations do not
+affect this linear accounting.</p>
+<p>Variances behave differently. Expanding <span
+class="math inline">\((X+Y)^2\)</span> introduces the product term <span
+class="math inline">\(2XY\)</span>. Under independence its average
+factors as <span class="math inline">\(2\mathbb E[X]\mathbb
+E[Y]\)</span>, producing variance addition. Without independence, that
+cancellation need not occur. A batch of observations influenced by the
+same event can fluctuate together, making the independent-trial formula
+underestimate their collective variability.</p>
+<p>For physical objects taking random transitions, a deterministic
+matrix update predicts mean counts. If there are twenty objects at <span
+class="math inline">\(A\)</span>, each independently following the first
+column of the path matrix, the expected numbers are fifteen at <span
+class="math inline">\(A\)</span> and five at <span
+class="math inline">\(B\)</span>. The actual allocation is random. If
+there are three objects, the expected numbers are <span
+class="math inline">\(9/4\)</span> and <span
+class="math inline">\(3/4\)</span>; these fractional expectations do not
+mean an object was divided.</p>
+<p>For a fixed matrix, averaging sampled trajectories is compatible with
+the linear update: conditional expected next proportions are <span
+class="math inline">\(Kp_n\)</span>. For a nonlinear selection rule,
+averaging before and after applying the rule need not give the same
+result. This is another reason to specify which level of the model a
+probability vector describes.</p>
+<h2 id="what-can-disappear-in-a-finite-observation">What can disappear
+in a finite observation</h2>
 <p>If a category has probability <span
-class="math inline">\(p&gt;0\)</span>, the chance of missing it in all
-<span class="math inline">\(N\)</span> independent observations is <span
-class="math inline">\((1-p)^N\)</span>. A zero empirical count therefore
-does not establish that the underlying probability is zero. This matters
-when empirical probabilities will later appear inside logarithms or
-ratios.</p>
-<div class="example" title="How often is a rare type missed?">
-<p><strong>Example. How often is a rare type missed?</strong></p>
-<p>A type with probability <span class="math inline">\(1/20\)</span> is
-absent from a sample of size <span class="math inline">\(20\)</span>
-with probability <span
-class="math inline">\((19/20)^{20}\approx0.3585\)</span>. Even though
-its expected count is one, observing no copies is quite common. At size
-<span class="math inline">\(100\)</span>, the probability of missing it
-is approximately <span class="math inline">\(0.00592\)</span>.</p>
-</div>
-<p>The deterministic update of a composition and the random sampling of
-a composition can be combined in a two-stage model. First compute <span
-class="math inline">\(p^+\)</span> using a growth rule. Then draw a
-multinomial sample of size <span class="math inline">\(N\)</span> with
-probabilities <span class="math inline">\(p^+\)</span>. The conditional
-average of the sampled composition is <span
-class="math inline">\(p^+\)</span>, but the realized composition is a
-random lattice point. This provides a precise way to model
-finite-population variation.</p>
-<figure><img src="../assets/fig-sampling.svg" alt="Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples." loading="lazy"><figcaption>Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.</figcaption></figure>
-<h2 id="conditional-probability-and-dependent-draws">Conditional
-probability and dependent draws</h2>
-<p>If an event <span class="math inline">\(B\)</span> has positive
-probability, the <strong>conditional probability</strong> of <span
-class="math inline">\(A\)</span> given <span
-class="math inline">\(B\)</span> is <span class="math inline">\(P(A\mid
-B)=P(A\cap B)/P(B)\)</span>. Here <span class="math inline">\(A\cap
-B\)</span> means that both events occur. Rearranging gives the
-multiplication rule <span class="math inline">\(P(A\cap B)=P(B)P(A\mid
-B)\)</span>. Independence is the special case in which conditioning on
-one event does not change the probability of the other.</p>
-<p>An outcome tree can therefore represent dependent observations as
-well. Its branch probabilities must be conditioned on the path already
-followed. The product along a path still gives the leaf probability.
-What changes is the branch labeling.</p>
-<div class="example" title="Two red tokens without replacement">
-<p><strong>Example. Two red tokens without replacement</strong></p>
-<p>A box has three red and two blue tokens. The probability of two red
-draws without replacement is <span
-class="math inline">\((3/5)(2/4)=3/10\)</span>. With replacement it is
-<span class="math inline">\((3/5)^2=9/25\)</span>. In the first
-procedure, observing a red token changes the available composition. The
-second red branch must use the updated box, rather than the initial
-probability.</p>
-</div>
-<h2 id="why-multinomial-probabilities-add-to-one">Why multinomial
-probabilities add to one</h2>
-<p>There are <span class="math inline">\(k^N\)</span> ordered
-length-<span class="math inline">\(N\)</span> samples from <span
-class="math inline">\(k\)</span> labels. Each receives its product
-probability. Summing over all possible labels at the first position,
-then the second, and continuing gives <span
-class="math display">\[\sum_{i_1,\ldots,i_N}p_{i_1}\cdots
-p_{i_N}=(p_1+\cdots+p_k)^N=1.\]</span> Grouping these ordered samples by
-their count vectors replaces each collection of equal products with its
-multiplicity times one product. The resulting sum is exactly the sum of
-the multinomial probabilities. This establishes normalization and
-explains the multinomial expansion as a grouping of outcomes.</p>
-<p>At <span class="math inline">\(N=2\)</span> with three labels, there
-are nine ordered samples but only six count vectors. The vectors <span
-class="math inline">\((2,0,0)\)</span>, <span
-class="math inline">\((0,2,0)\)</span>, and <span
-class="math inline">\((0,0,2)\)</span> each have multiplicity one. The
-three other vectors each have multiplicity two. Counting a vector once
-without this factor would omit ordered outcomes.</p>
-<h2 id="a-finite-bound-on-sampling-error">A finite bound on sampling
-error</h2>
-<p>Variance can control the probability of a large error using a simple
-comparison of sums. For a random variable <span
-class="math inline">\(X\)</span> with mean <span
-class="math inline">\(\mu\)</span>, every outcome satisfying <span
-class="math inline">\(|X-\mu|\geq a\)</span> contributes at least <span
-class="math inline">\(a^2\)</span> to the squared deviation. Therefore
-<span class="math display">\[\operatorname{Var}(X)=\mathbb
-E[(X-\mu)^2]\geq a^2P(|X-\mu|\geq a),\]</span> and hence <span
-class="math inline">\(P(|X-\mu|\geq
-a)\leq\operatorname{Var}(X)/a^2\)</span>. This is <strong>Chebyshev’s
-inequality</strong>. The argument works for a finite distribution by
-comparing the indicated terms in its expectation sum.</p>
-<p>For an empirical binary proportion, it gives <span
-class="math display">\[P(|\widehat
-p-p|\geq\varepsilon)\leq\frac{p(1-p)}{N\varepsilon^2}\leq\frac{1}{4N\varepsilon^2}.\]</span>
-The last inequality follows from <span
-class="math inline">\(p(1-p)=1/4-(p-1/2)^2\leq1/4\)</span>. This bound
-is often conservative, but it is valid for every <span
-class="math inline">\(p\)</span> under independent sampling.</p>
-<div class="example" title="Choosing a sample size from a bound">
-<p><strong>Example. Choosing a sample size from a bound</strong></p>
-<p>To make the probability of an empirical error of at least <span
-class="math inline">\(0.1\)</span> no greater than <span
-class="math inline">\(0.05\)</span>, uniformly over binary
-probabilities, it is sufficient that <span
-class="math inline">\(1/(4N(0.1)^2)\leq0.05\)</span>. Solving gives
-<span class="math inline">\(N\geq500\)</span>. A sharper calculation for
-a specified <span class="math inline">\(p\)</span> can use the exact
-binomial probabilities. The bound provides a guaranteed size without
-that longer calculation.</p>
-</div>
-<p>A probability bound concerns repetitions of the stated sampling
-procedure. It does not certify that an already observed empirical table
-lies within the tolerance. The model, its independence assumption, and
-its sample size remain part of the conclusion.</p>
+class="math inline">\(p&gt;0\)</span>, the chance of missing it in <span
+class="math inline">\(N\)</span> independent observations is <span
+class="math inline">\((1-p)^N\)</span>. With <span
+class="math inline">\(p=1/20\)</span> and <span
+class="math inline">\(N=20\)</span>, this probability is about <span
+class="math inline">\(0.3585\)</span>. An expected count of one is
+compatible with observing zero.</p>
+<p>This distinction matters for both geometry and information. Exact
+positive multiplication preserves an existing category. Finite sampling
+can land on a boundary lattice state where its observed count is zero.
+Treating an observed zero as an impossible event would be a further
+modeling choice.</p>
+<p>One can combine transport and sampling: compute <span
+class="math inline">\(p^+=Kp\)</span>, then draw <span
+class="math inline">\(N\)</span> observations from <span
+class="math inline">\(p^+\)</span>. The conditional mean of the sampled
+proportions is <span class="math inline">\(p^+\)</span>. The realized
+proportions fluctuate around it and need not obey the deterministic
+trajectory exactly. This two-stage model separates the transition
+mechanism from observation noise.</p>
+<p>Use the transport view of the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
+explorer</a> to check that the negative divergence equals each
+coordinate change. Use the <a
+href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week04.html">sampling
+demonstration</a> to compare repeated empirical distributions.</p>
+<p>So far we can describe where probability goes and how observations
+fluctuate. Chapter 5 asks what uncertainty does during those changes. It
+turns entropy from a field we can evaluate into a quantity whose
+differences we can interpret and analyze.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
-<li>Draw the two-level probability tree for independent binary
-observations with <span class="math inline">\(p=1/3\)</span>.</li>
-<li>Find the probability of exactly two successes in four independent
-trials with success probability <span
-class="math inline">\(1/3\)</span>.</li>
-<li>List the six ordered binary samples of length four with two
-successes.</li>
-<li>Derive the multinomial coefficient for three categories by choosing
-positions in two stages.</li>
+<li>Explain the meaning of every column in the three-location transition
+matrix. Check nonnegativity and column sums.</li>
+<li>Starting from <span class="math inline">\(p_0=(0,1,0)\)</span>,
+compute <span class="math inline">\(p_1,p_2\)</span> and both vector
+differences.</li>
+<li>For <span class="math inline">\(p=(1/2,1/3,1/6)\)</span>, compute
+the two path currents, all divergences, and the next state.</li>
+<li>Prove that the general net-current formula gives <span
+class="math inline">\(\Delta p=-\operatorname{div}J\)</span>.</li>
+<li>For the two-location rule with <span
+class="math inline">\(a=1/4\)</span>, <span
+class="math inline">\(b=1/2\)</span>, find the stationary distribution
+and error multiplier. Calculate two updates from <span
+class="math inline">\((1,0)\)</span>.</li>
+<li>Explain why the swap rule <span class="math inline">\(a=b=1\)</span>
+has a stationary distribution but does not converge from <span
+class="math inline">\((1,0)\)</span>.</li>
+<li>Calculate the probability of exactly three successes in five
+independent trials with success probability <span
+class="math inline">\(2/3\)</span>.</li>
 <li>Find the multiplicity and probability of counts <span
 class="math inline">\((1,2,1)\)</span> under <span
 class="math inline">\(p=(1/2,1/3,1/6)\)</span>.</li>
 <li>For readings <span class="math inline">\(1,2,5\)</span> with
-probabilities <span class="math inline">\(1/4,1/2,1/4\)</span>, compute
-the mean and variance.</li>
-<li>Prove the identity <span
-class="math inline">\(\operatorname{Var}(X)=\mathbb E[X^2]-(\mathbb
-E[X])^2\)</span> by expansion.</li>
-<li>For a binomial sample with <span
-class="math inline">\(N=100\)</span>, <span
-class="math inline">\(p=0.2\)</span>, find the mean and standard
-deviation of the count and of the empirical proportion.</li>
+probabilities <span class="math inline">\(1/4,1/2,1/4\)</span>,
+calculate expectation and variance.</li>
+<li>For <span class="math inline">\(N=100\)</span> and <span
+class="math inline">\(p=0.2\)</span>, find the standard deviations of
+the count and empirical proportion. Repeat for <span
+class="math inline">\(N=400\)</span>.</li>
 <li>A category has probability <span class="math inline">\(0.1\)</span>.
 Find the first integer sample size for which its probability of being
-missed is below <span class="math inline">\(0.05\)</span>. A calculator
-may be used.</li>
-<li>Explain why observing zero copies of a category is compatible with a
-positive underlying probability. Give a numerical example.</li>
-<li>For two independent samples of size <span
-class="math inline">\(N\)</span>, find the variance of the difference of
-their empirical success proportions.</li>
-<li>Describe a simulation of a population with normalized selection
-followed by multinomial sampling. Identify which stage is deterministic
-and which stage is random.</li>
+missed is below <span class="math inline">\(0.05\)</span>.</li>
+<li>Describe a simulation that first transports probability by <span
+class="math inline">\(K\)</span> and then draws a finite sample. Explain
+which quantities are deterministic and which are random.</li>
 </ol>
 </div>
 <details class="solutions"><summary>Selected exercise solutions</summary>
-<p><strong>2.</strong> The probability is <span
-class="math inline">\(\binom42(1/3)^2(2/3)^2=8/27\)</span>.</p>
-<p><strong>5.</strong> The multiplicity is <span
-class="math inline">\(12\)</span>. The probability is <span
-class="math inline">\(12(1/2)(1/3)^2(1/6)=1/9\)</span>.</p>
-<p><strong>6.</strong> The mean is <span
-class="math inline">\(5/2\)</span> and the second moment is <span
-class="math inline">\(17/2\)</span>, giving variance <span
-class="math inline">\(9/4\)</span>.</p>
-<p><strong>8.</strong> The count has mean <span
-class="math inline">\(20\)</span> and standard deviation <span
-class="math inline">\(4\)</span>. The empirical proportion has mean
-<span class="math inline">\(0.2\)</span> and standard deviation <span
-class="math inline">\(0.04\)</span>.</p>
-<p><strong>9.</strong> Since <span
+<p><strong>2.</strong> The new states are <span
+class="math inline">\((1/4,1/2,1/4)\)</span> and <span
+class="math inline">\((5/16,3/8,5/16)\)</span>. Their differences from
+their predecessors are <span
+class="math inline">\((1/4,-1/2,1/4)\)</span> and <span
+class="math inline">\((1/16,-1/8,1/16)\)</span>.</p>
+<p><strong>3.</strong> Both currents are <span
+class="math inline">\(1/24\)</span>. Divergence is <span
+class="math inline">\((1/24,0,-1/24)\)</span>, so the next state is
+<span class="math inline">\((11/24,1/3,5/24)\)</span>.</p>
+<p><strong>5.</strong> The stationary state is <span
+class="math inline">\((2/3,1/3)\)</span> and the multiplier is <span
+class="math inline">\(1-a-b=1/4\)</span>. Starting at <span
+class="math inline">\((1,0)\)</span> gives <span
+class="math inline">\((3/4,1/4)\)</span> and <span
+class="math inline">\((11/16,5/16)\)</span>.</p>
+<p><strong>7.</strong> The count probability is <span
+class="math inline">\(\binom53(2/3)^3(1/3)^2=80/243\)</span>. A single
+specified order with those counts has probability <span
+class="math inline">\(8/243\)</span>.</p>
+<p><strong>8.</strong> The multiplicity is <span
+class="math inline">\(4!/(1!2!1!)=12\)</span>. Multiplying by <span
+class="math inline">\((1/2)(1/3)^2(1/6)\)</span> gives probability <span
+class="math inline">\(1/9\)</span>.</p>
+<p><strong>11.</strong> Since <span
 class="math inline">\(0.9^{28}\approx0.05233\)</span> and <span
 class="math inline">\(0.9^{29}\approx0.04710\)</span>, the first
-qualifying size is <span class="math inline">\(29\)</span>.</p>
-<p><strong>11.</strong> Independence makes the variance of the
-difference equal to the sum of the variances, namely <span
-class="math inline">\(2p(1-p)/N\)</span>.</p>
+qualifying size is twenty-nine.</p>
 </details></article><nav class="prev-next" aria-label="Adjacent weeks"><a href="../readings/week03.html">← Week 3</a><a href="../readings/week05.html">Week 5 →</a></nav></main><footer><p>Discrete Information Geometry<br><span>Finite Differences, Probability, and Information Flows</span></p><p><a href="../index.html#weeks">Weekly materials</a> · <a href="https://github.com/bobovski66/IntroDiscreteInfoGeom">Source and downloads</a><br>Related course: <a href="https://bobovski66.github.io/IntroInfoGeom/">Introduction to Information Geometry</a></p></footer></body></html>

@@ -92,6 +92,9 @@
 \displaywidowpenalty=10000
 \raggedbottom
 \setcounter{tocdepth}{1}
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3.2em}}
+\makeatother
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\passthrough}[1]{#1}
@@ -102,95 +105,182 @@
 \setcounter{chapter}{3}
 
 \chapter{Probability transport and conservation}
-\section{Probabilities move between states}\label{ch04-probabilities-move-between-states}
+A shared bicycle can be at one of several stations at the end of a day. A mobile device can connect to one of several towers. A system can report one of several operating modes. In each case, we can describe uncertainty about its location or mode by a probability vector, then ask how that vector changes after one step.
 
-Suppose a system has finitely many labeled locations. A column-stochastic matrix \(K\) assigns probabilities of arriving at location \(i\) from each starting location \(j\): \[K_{ij}\geq0,\qquad\sum_iK_{ij}=1.\] If \(p_n\) is the current probability vector, one step is \[\boxed{p_{n+1}=Kp_n,\qquad\Delta p_n=(K-I)p_n.}\] The second formula is a vector-valued difference equation. Because the columns of \(K\) sum to one, the sum of the coordinates of \(\Delta p_n\) is zero. Probability is redistributed rather than created.
+The edge bookkeeping from Chapter 3 gives us a local description of these changes: what leaves one location enters another. A stochastic matrix packages all the transition rules into a single table. We will derive the matrix update from individual contributions, recover its currents, and then explain how a finite collection of observations fluctuates around the predicted probabilities.
 
-\section{A current on a graph}\label{ch04-a-current-on-a-graph}
+\section{What one transition probability means}\label{ch04-what-one-transition-probability-means}
 
-Picture locations as vertices and possible transitions as edges. Let \(J_{ij,n}=-J_{ji,n}\) be the \emph{net} probability current from \(i\) to \(j\) during step \(n\). Define outgoing divergence by \[\operatorname{div}J_n(i)=\sum_{j\sim i}J_{ij,n}.\] The discrete continuity equation is \[\boxed{\Delta p_n(i)=-\operatorname{div}J_n(i).}\] If we sum this equation over every vertex, each current appears twice with opposite signs. Therefore \(\sum_i p_{n+1}(i)=\sum_i p_n(i)\). This is an exact conservation law.
+Let the possible locations be \(A,B,C\). The entry \(K_{ij}\) will mean the probability of arriving at location \(i\) when the starting location is \(j\). The first index gives the destination; the second gives the origin.
 
-\section{An example on three locations}\label{ch04-an-example-on-three-locations}
+Each column therefore lists all possible destinations from one origin. Its entries must be nonnegative and add to one: \[K_{ij}\geq0,\qquad \sum_i K_{ij}=1.\] Such a table is called \textbf{column-stochastic}. The diagonal entry \(K_{jj}\) is the probability of remaining at \(j\).
 
-Consider a path \(A\)--\(B\)--\(C\). At each step, move one quarter of the probability at each location to each adjacent location, leaving the rest where it was. The resulting matrix is \[K=\begin{pmatrix}3/4&1/4&0\\1/4&1/2&1/4\\0&1/4&3/4\end{pmatrix}.\] Starting with all the probability at \(A\) gives \(p_0=(1,0,0)\) and \(p_1=(3/4,1/4,0)\). Thus \(\Delta p_0=(-1/4,1/4,0)\): one quarter of the total mass crossed edge \(A\)--\(B\).
+Consider a path \(A\)--\(B\)--\(C\). During one step, send one quarter of the mass at each location to each adjacent location and retain the rest. From \(A\), the only neighbor is \(B\), so three quarters remain. From \(B\), there are two neighbors, so one half remains. The table is \[K=\begin{pmatrix}
+3/4&1/4&0\\
+1/4&1/2&1/4\\
+0&1/4&3/4
+\end{pmatrix}.\] Reading the middle column gives the destinations from \(B\): a quarter at \(A\), half at \(B\), and a quarter at \(C\).
 
-A fixed point of the transport rule satisfies \(Kp=p\). Here the uniform distribution \((1/3,1/3,1/3)\) is fixed. Stationarity does not always imply that every trajectory converges: a deterministic cyclic permutation has periodic orbits.
+This table can model a random transition of one object or a deterministic redistribution of a divisible mass. Both interpretations use the same arithmetic, but they describe different kinds of uncertainty.
 
-\section{Counts and sampled probabilities}\label{ch04-counts-and-sampled-probabilities}
+\section{Matrix multiplication adds contributions from origins}\label{ch04-matrix-multiplication-adds-contributions-from-origins}
 
-The probability vector above describes a distribution of mass. Another model could draw \(N\) independent samples from that distribution and retain only the observed integer counts. The probability of each possible count table is then determined by binomial or multinomial counting. The expected proportions follow the matrix update, but a particular sample generally fluctuates around them.
+Suppose the current distribution is \(p=(p_A,p_B,p_C)\). To calculate the next probability at \(A\), add contributions from every origin: \[p_A^+=\frac34p_A+\frac14p_B+0p_C.\] The same calculation for every destination gives \[p_i^+=\sum_j K_{ij}p_j.\] This collection of weighted sums is \textbf{matrix multiplication}, written \(p^+=Kp\). We regard \(p\) as a column when multiplying, even when displaying it compactly as a tuple.
 
-This distinction explains the role of counting in discrete information geometry: probability transport determines the expected distribution, and combinatorics describes possible finite observations of it.
+\begin{example}[Two steps starting at one location]
 
-\section{Further investigations: Probability transport and conservation}\label{ch04-further-investigations-probability-transport-and-conservation}
-
-Probability describes both a population's composition and the uncertainty of an observation. If a population has proportions \(p_A,p_B,p_C\) and one individual is chosen uniformly, these proportions are the probabilities of the observed type. Repeating the observation produces a sample. Its composition fluctuates, even when the underlying population stays fixed.
-
-Counting tells us which sample compositions are possible and how many ordered samples produce each one. It supplies exact formulas for uncertainty at a finite sample size.
-
-\section{Outcomes, events, and trees}\label{ch04-outcomes-events-and-trees}
-
-An \textbf{outcome} is a single possible result. An \textbf{event} is a collection of outcomes. For a finite probability model, the probability of an event is the sum of the probabilities of its outcomes. The total probability of all outcomes is one.
-
-Two observations are \textbf{independent} when the probability of a specified pair is the product of the individual probabilities. More generally, the probability of an ordered independent sample \((i_1,\ldots,i_N)\) is \(p_{i_1}\cdots p_{i_N}\). A tree represents this multiplication: each level is another observation, and the probability of a leaf is the product of the branch probabilities along its path.
-
-\begin{example}[Sampling with and without replacement]
-
-A box contains two red tokens and one blue token. Two draws with replacement give \(P(RB)=(2/3)(1/3)=2/9\). Without replacement, the second draw depends on the first, and \(P(RB)=(2/3)(1/2)=1/3\). The independent-sampling formulas below apply to the first procedure. A finite-population procedure without replacement requires its own probabilities.
+Start at \(p_0=(1,0,0)\). Multiplication selects the first column: \[p_1=\left(\frac34,\frac14,0\right).\] For the next step, \[\begin{aligned}
+p_{A,2}&=\frac34\frac34+\frac14\frac14=\frac58,\\
+p_{B,2}&=\frac14\frac34+\frac12\frac14=\frac5{16},\\
+p_{C,2}&=\frac14\frac14=\frac1{16}.
+\end{aligned}\] Thus \(p_2=(10/16,5/16,1/16)\). Probability reaches \(C\) only after passing through \(B\). The entries add to one, which checks the arithmetic.
 
 \end{example}
 
-\section{Binomial counting}\label{ch04-binomial-counting}
+A matrix of transition probabilities defines a \textbf{Markov update} when the next distribution depends on the present state through this rule, without additional dependence on earlier history. A model with delays may need a larger state that records the relevant history.
 
-Suppose each observation is a success with probability \(p\) and a failure with probability \(1-p\). An ordered sample with \(k\) successes has probability \(p^k(1-p)^{N-k}\). The successes can occupy \(\binom Nk\) different sets of positions, where \[\binom Nk=\frac{N!}{k!(N-k)!},\qquad N!=1\cdot2\cdots N,\quad 0!=1.\] Therefore the success count \(K\) has the \textbf{binomial distribution} \[P(K=k)=\binom Nk p^k(1-p)^{N-k},\qquad k=0,\ldots,N.\] The binomial coefficient counts positions, while the powers account for their probabilities. Keeping these two roles separate helps prevent common mistakes.
+The identity matrix \(I\) leaves every vector unchanged. Subtracting \(p_n=Ip_n\) gives a vector difference equation: \[\boxed{p_{n+1}=Kp_n,\qquad \Delta p_n=(K-I)p_n.}\] A difference is now a vector of coordinate changes. The definition still means next minus current.
 
-\begin{example}[Exactly three successes]
+The calculation of \(p_{A,2}=5/8\) can also be read as a sum over two-step histories. Starting at \(A\), the histories that end at \(A\) are \(A\to A\to A\) and \(A\to B\to A\). Their probabilities are \((3/4)(3/4)\) and \((1/4)(1/4)\). Adding them gives \(10/16\). Matrix multiplication performs this path accounting simultaneously for all destinations.
 
-With \(N=5\) and \(p=2/3\), the probability of exactly three successes is \[\binom53(2/3)^3(1/3)^2=80/243.\] The probability of one particular ordered sample, such as \(SSFSF\), is only \(8/243\). There are ten orders with the same count.
+This interpretation explains why transition matrices compose by multiplication. If one step uses \(K\) and the next uses \(R\), the final distribution is \(R(Kp)=(RK)p\). An entry of \(RK\) adds probabilities over all possible intermediate locations. Reversing the steps gives \(KR\), which need not be the same matrix. The chronological order is read from right to left in the product because the rightmost operation acts first.
 
-\end{example}
+A column convention should be tested on a concentrated input. Multiplying by \((1,0,0)\) must reproduce the destinations from \(A\). This quick check is especially useful when consulting a source that uses row distributions instead. Both conventions are valid when used consistently; mixing them changes the transition rule.
 
-Adding the binomial probabilities gives one. This follows either because the counts partition all possible samples or by expanding \((p+(1-p))^N\) and grouping terms by the number of factors \(p\).
+\section{Conservation follows from column sums}\label{ch04-conservation-follows-from-column-sums}
 
-\section{Multinomial counts and empirical distributions}\label{ch04-multinomial-counts-and-empirical-distributions}
+The sum of all new probabilities is \[\begin{aligned}
+\sum_i p_i^+
+&=\sum_i\sum_j K_{ij}p_j
+=\sum_j p_j\left(\sum_i K_{ij}\right)\\
+&=\sum_j p_j=1.
+\end{aligned}\] We have exchanged the order of two finite sums: adding a rectangular collection by rows or by columns gives the same total. The column-sum condition then supplies the conservation law.
 
-For \(k\) categories, let \(n_i\) be the observed count of category \(i\), so \(\sum_i n_i=N\). The number of ordered samples with these counts is \[\Omega(n_1,\ldots,n_k)=\frac{N!}{n_1!\cdots n_k!}.\] One derivation chooses the positions of category one, then category two among the remaining positions, and continues. The resulting binomial coefficients telescope to the displayed ratio.
+Nonnegativity is also preserved because each new entry is a sum of nonnegative products. The matrix therefore sends probability vectors to probability vectors.
 
-The probability of this count vector is \[P(n_1,\ldots,n_k)=\Omega(n_1,\ldots,n_k)\prod_i p_i^{n_i}.\] The \textbf{empirical distribution} is \(\widehat p_i=n_i/N\). It belongs to the token lattice of Chapter 3. Several ordered samples can have the same empirical distribution, and \(\Omega\) measures this multiplicity. If \(n_i=0\), the factor \(p_i^{n_i}\) is taken as one, including when \(p_i=0\); no observation of that category is being required.
+Taking the difference of the two total masses gives \[\sum_i\Delta p_n(i)=0.\] Some coordinates can rise and others fall, but their changes balance. For the two-step example, \[\Delta p_0=(-1/4,1/4,0),\qquad
+\Delta p_1=(-1/8,1/16,1/16).\] Both vectors have total zero.
 
-\begin{example}[A count vector on the triangle]
+\section{Currents recover the local picture}\label{ch04-currents-recover-the-local-picture}
 
-For \(N=4\) and counts \((2,1,1)\), the multiplicity is \(4!/(2!1!1!)=12\). Under \(p=(1/2,1/3,1/6)\), each compatible ordered sample has probability \((1/2)^2(1/3)(1/6)=1/72\). The count vector therefore has probability \(12/72=1/6\).
+The amount traveling from \(i\) to \(j\) is \(K_{ji}p_i\). The amount traveling the other way is \(K_{ij}p_j\). Define the \textbf{net current from \(i\) to \(j\)} by \[J_{ij}=K_{ji}p_i-K_{ij}p_j.\] Then \(J_{ji}=-J_{ij}\). A negative net current simply means that the opposite direction carries more mass.
 
-\end{example}
+For the symmetric path example, \[J_{AB}=\frac14(p_A-p_B),\qquad
+J_{BC}=\frac14(p_B-p_C).\] Mass flows from the larger probability to the smaller one along each edge. With \(p=(1,0,0)\), the currents are \(J_{AB}=1/4\) and \(J_{BC}=0\).
 
-\section{Expectation and spread from finite sums}\label{ch04-expectation-and-spread-from-finite-sums}
+Choose arrows \(A\to B\) and \(B\to C\). The outward divergences are \[\operatorname{div}J(A)=J_{AB},\quad
+\operatorname{div}J(B)=J_{BC}-J_{AB},\quad
+\operatorname{div}J(C)=-J_{BC}.\] At \(B\), the current on \(AB\) is incoming and therefore subtracted. The update is \[\boxed{\Delta p(i)=-\operatorname{div}J(i).}\] This \textbf{continuity equation} says that stored mass decreases by the net amount sent outward.
 
-A \textbf{random variable} assigns a numerical value to each outcome. If it takes values \(x_i\) with probabilities \(p_i\), its \textbf{expectation} is \[\mathbb E[X]=\sum_i p_ix_i.\] This weighted average describes the center of its distribution. Its \textbf{variance} is the average squared distance from that center: \[\operatorname{Var}(X)=\sum_i p_i(x_i-\mathbb E[X])^2
-=\mathbb E[X^2]-(\mathbb E[X])^2.\] The last equality follows by expanding the square and using \(\sum_i p_i=1\). Variance is nonnegative. Its square root, the \textbf{standard deviation}, has the same units as the original readings.
+The equation holds for a general column-stochastic matrix as well. Subtracting outgoing transport from incoming transport gives \[\sum_{j\ne i}(K_{ij}p_j-K_{ji}p_i)
+=\sum_jK_{ij}p_j-p_i,\] where the last step uses the sum of column \(i\). The diagonal stay-put term cancels correctly.
 
-\begin{example}[A finite measurement table]
+\begin{example}[Checking currents at the second step]
 
-Suppose a device reads \(0,1,3\) with probabilities \(1/2,1/3,1/6\). Its mean is \(0+1/3+3/6=5/6\). Its second moment is \(0+1/3+9/6=11/6\), so its variance is \(11/6-25/36=41/36\). The mean need not be one of the possible readings.
-
-\end{example}
-
-For two random variables, finite-sum expansion gives \(\mathbb E[X+Y]=\mathbb E[X]+\mathbb E[Y]\), whether or not they are independent. For independent variables, multiplication of probabilities also gives \(\mathbb E[XY]=\mathbb E[X]\mathbb E[Y]\). Expanding the square then shows that independent variances add.
-
-Apply these facts to indicator variables \(I_t\), equal to one on a success and zero on a failure. They satisfy \(\mathbb E[I_t]=p\) and \(\operatorname{Var}(I_t)=p(1-p)\). Since \(K=I_1+\cdots+I_N\) for independent trials, \[\mathbb E[K]=Np,\qquad \operatorname{Var}(K)=Np(1-p).\] Dividing by \(N\) gives the empirical proportion's mean and variance: \[\mathbb E[\widehat p]=p,\qquad
-\operatorname{Var}(\widehat p)=\frac{p(1-p)}{N}.\] Thus a fourfold increase in sample size halves the standard deviation. A particular sample may still fluctuate more than an earlier smaller sample; the formula concerns the distribution over repeated samples.
-
-\section{Rare categories and missing observations}\label{ch04-rare-categories-and-missing-observations}
-
-If a category has probability \(p>0\), the chance of missing it in all \(N\) independent observations is \((1-p)^N\). A zero empirical count therefore does not establish that the underlying probability is zero. This matters when empirical probabilities will later appear inside logarithms or ratios.
-
-\begin{example}[How often is a rare type missed?]
-
-A type with probability \(1/20\) is absent from a sample of size \(20\) with probability \((19/20)^{20}\approx0.3585\). Even though its expected count is one, observing no copies is quite common. At size \(100\), the probability of missing it is approximately \(0.00592\).
+At \(p_1=(3/4,1/4,0)\), we obtain \(J_{AB}=1/8\) and \(J_{BC}=1/16\). Thus the divergences are \((1/8,-1/16,-1/16)\). Their negatives reproduce \(\Delta p_1\). Location \(B\) sends some mass onward to \(C\), yet gains overall because more arrives from \(A\).
 
 \end{example}
 
-The deterministic update of a composition and the random sampling of a composition can be combined in a two-stage model. First compute \(p^+\) using a growth rule. Then draw a multinomial sample of size \(N\) with probabilities \(p^+\). The conditional average of the sampled composition is \(p^+\), but the realized composition is a random lattice point. This provides a precise way to model finite-population variation.
+For a group of locations, sum their continuity equations. Internal currents cancel and only currents crossing the group's boundary remain. This is the same cancellation proved on the lattice in Chapter 3, now describing changes of an actual probability distribution.
+
+\begin{example}[Conservation across the boundary of a region]
+
+Treat locations \(A\) and \(B\) as one region of the three-node path. Its stored probability is \(s_n=p_{A,n}+p_{B,n}\). The continuity equations give \[\Delta s_n=-J_{AB}+(J_{AB}-J_{BC})=-J_{BC}.\] Only the current from \(B\) to \(C\) changes the region's total. At \(p_1=(3/4,1/4,0)\), that current is \(1/16\), so the regional mass falls from one to \(15/16\) during the next step.
+
+\end{example}
+
+Over several steps, summation gives \[s_T-s_0=-\sum_{n=0}^{T-1}J_{BC,n}.\] Spatial cancellation removes the internal edge, and temporal cancellation removes intermediate stored values. The final identity combines the two fundamental operations of our calculus. It is a useful model for inventory crossing a facility boundary, traffic entering and leaving a district, or probability entering a selected set of states.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}[>=Stealth,every node/.style={font=\small}]
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (A) at (0,0) {$A$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (B) at (4.2,0) {$B$};
+\node[draw=teal,circle,line width=1pt,minimum size=1cm] (C) at (8.4,0) {$C$};
+\draw[->,copper,line width=1.4pt] (A)--node[above=5pt] {$J_{AB}=1/8$}(B);
+\draw[->,copper,line width=1.4pt] (B)--node[above=5pt] {$J_{BC}=1/16$}(C);
+\node[above=13pt] at (A) {$p_A=3/4$};
+\node[above=13pt] at (B) {$p_B=1/4$};
+\node[above=13pt] at (C) {$p_C=0$};
+\node[below=15pt,align=center] at (A) {$\operatorname{div}J=1/8$\\$\Delta p_A=-1/8$\\$p_A^+=5/8$};
+\node[below=15pt,align=center] at (B) {$\operatorname{div}J=-1/16$\\$\Delta p_B=1/16$\\$p_B^+=5/16$};
+\node[below=15pt,align=center] at (C) {$\operatorname{div}J=-1/16$\\$\Delta p_C=1/16$\\$p_C^+=1/16$};
+\end{tikzpicture}}
+\caption{One transport step from (3/4,1/4,0). The middle vertex gains mass even while sending some onward, because its incoming current is larger.}\end{figure}
+
+\section{Stationarity permits motion without accumulation}\label{ch04-stationarity-permits-motion-without-accumulation}
+
+A \textbf{stationary distribution} \(\pi\) satisfies \(K\pi=\pi\). Every coordinate then has zero net change. For the symmetric path, \(\pi=(1/3,1/3,1/3)\) is stationary because every row also sums to one.
+
+Stationarity does not mean that individual objects stay still. At uniform probabilities, equal amounts travel in both directions across each path edge. Net current is zero, although the separate one-way flows are positive.
+
+Stationarity also does not guarantee convergence from every starting state. The cyclic rule \(T(p_A,p_B,p_C)=(p_C,p_A,p_B)\) fixes the uniform distribution but rotates every nonuniform state with period three.
+
+A two-location example makes the possibilities explicit. Let the transition probability from \(A\) to \(B\) be \(a\) and the reverse probability be \(b\), with \(0\leq a,b\leq1\). Then \[K=\begin{pmatrix}1-a&b\\a&1-b\end{pmatrix}.\] Writing \(x=p_A\) gives \[x^+=(1-a)x+b(1-x)=b+(1-a-b)x.\] When \(a+b>0\), the stationary value is \(c=b/(a+b)\). Subtracting it gives \[x^+-c=(1-a-b)(x-c).\] This is precisely the feedback error equation from Chapter 2. If \(0<a+b<2\), errors shrink. If \(a=b=1\), the multiplier is \(-1\) and the two locations alternate. If \(a=b=0\), every state is stationary.
+
+\section{A distribution and an observed count are different objects}\label{ch04-a-distribution-and-an-observed-count-are-different-objects}
+
+Suppose a model predicts \(p=(1/2,1/3,1/6)\). Twelve independent observations have expected counts \((6,4,2)\), but the realized counts could be \((7,4,1)\) or another feasible triple. The empirical proportions are the observed counts divided by twelve.
+
+An \textbf{outcome} is one possible result. An \textbf{event} is a collection of results. Event probabilities are added over their constituent outcomes. For \textbf{independent} observations, probabilities of specified successive outcomes multiply.
+
+If two independent observations each have probabilities \(p_A,p_B,p_C\), the ordered pair \(AC\) has probability \(p_Ap_C\). A probability tree records this multiplication along a path. To find the probability of several paths, add their probabilities.
+
+Independence is a model assumption. Drawing from a finite box with replacement can produce independent draws; drawing without replacement generally does not. From a box with two red tokens and one blue token, \[P(R\text{ then }B)=\frac23\frac13=\frac29\] with replacement, but it is \((2/3)(1/2)=1/3\) without replacement. The second procedure changes the probabilities available at the next draw.
+
+\section{Counting ordered samples with the same composition}\label{ch04-counting-ordered-samples-with-the-same-composition}
+
+For \(N\) independent binary observations with success probability \(p\), a particular ordered sample containing \(k\) successes has probability \(p^k(1-p)^{N-k}\). There are \[\binom Nk=\frac{N!}{k!(N-k)!}\] ways to choose the success positions. Here \(N!=1\cdot2\cdots N\), and \(0!=1\). Consequently \[P(\text{exactly }k\text{ successes})=\binom Nk p^k(1-p)^{N-k}.\] The coefficient counts orders; the powers give the probability of each order.
+
+\begin{example}[One count, several orders]
+
+With four trials and two successes, the six orders are \(SSFF,SFSF,SFFS,FSSF,FSFS,FFSS\). If \(p=1/3\), each has probability \((1/3)^2(2/3)^2=4/81\). The event of exactly two successes has probability \(6(4/81)=8/27\).
+
+\end{example}
+
+For \(k\) categories and counts \(n_1,\ldots,n_k\) adding to \(N\), the number of compatible ordered samples is the \textbf{multinomial coefficient} \[\Omega(n)=\frac{N!}{n_1!\cdots n_k!}.\] Choose the positions of category one, then category two among the remaining positions, and continue. The factorials cancel to this expression.
+
+The count probability is \[\boxed{P(n_1,\ldots,n_k)=\Omega(n)\prod_i p_i^{n_i}.}\] The product sign \(\prod\) means multiply over the indices. A factor with exponent zero contributes one because no occurrence of that category is required.
+
+For \(N=4\), counts \((2,1,1)\) have multiplicity twelve. Under \(p=(1/2,1/3,1/6)\), each compatible ordered sample has probability \(1/72\), so the count event has probability \(1/6\). The empirical distribution \((1/2,1/4,1/4)\) is a lattice point from Chapter 3.
+
+All count probabilities add to one because every ordered sample belongs to exactly one count category. Grouping the samples changes the description, not the total probability.
+
+\begin{example}[All possible count outcomes for two observations]
+
+For two independent observations from \(p=(1/2,1/3,1/6)\), the six possible count states have probabilities:
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Counts & Multiplicity & Count probability \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\((2,0,0)\) & 1 & \(1/4\) \\
+\((0,2,0)\) & 1 & \(1/9\) \\
+\((0,0,2)\) & 1 & \(1/36\) \\
+\((1,1,0)\) & 2 & \(1/3\) \\
+\((1,0,1)\) & 2 & \(1/6\) \\
+\((0,1,1)\) & 2 & \(1/9\) \\
+\end{longtable}
+
+With denominator thirty-six, the numerators are \(9,4,1,12,6,4\), summing to thirty-six. This checks the whole count distribution.
+
+\end{example}
+
+The most probable single count state in this example is \((1,1,0)\), but many other states remain possible. The expected counts are \((1,2/3,1/3)\), which are not themselves a realizable integer count state. An average over possible samples need not be one of those samples.
+
+The chance of observing no \(A\) can be read either from the table or directly. Adding the three no-\(A\) count probabilities gives \(1/4\); requiring two observations from the complement gives \((1-p_A)^2=(1/2)^2\). Agreement between these two calculations checks both the counting and the independence assumption.
+
+\section{Expected values explain what the update predicts}\label{ch04-expected-values-explain-what-the-update-predicts}
+
+A \textbf{random variable} assigns a numerical value to each outcome. Its \textbf{expectation} is the probability-weighted average: \[\mathbb E[X]=\sum_i p_ix_i.\] The \textbf{variance} measures average squared deviation from that mean: \[\operatorname{Var}(X)=\sum_i p_i(x_i-\mathbb E[X])^2
+=\mathbb E[X^2]-(\mathbb E[X])^2.\] The second identity follows by expanding the square. Its square root is the standard deviation.
+
+For a success indicator \(I\), the values are one with probability \(p\) and zero otherwise. Hence \(\mathbb E[I]=p\) and \(\operatorname{Var}(I)=p(1-p)\). A success count is the sum of \(N\) such indicators. Expectations add; for independent indicators the variances also add. Thus \[\mathbb E[K]=Np,\qquad \operatorname{Var}(K)=Np(1-p).\] The empirical proportion \(\widehat p=K/N\) satisfies \[\mathbb E[\widehat p]=p,\qquad
+\operatorname{Var}(\widehat p)=\frac{p(1-p)}N.\]
+
+For \(N=100\) and \(p=0.2\), the count has mean twenty and standard deviation four. The empirical proportion has mean \(0.2\) and standard deviation \(0.04\). Increasing the sample size fourfold halves this standard deviation. It reduces the typical scale of fluctuations across repeated samples; it does not force every larger sample to be closer.
 
 \begin{figure}[htbp]\centering
 \resizebox{.98\linewidth}{!}{\begin{tikzpicture}\begin{axis}[width=12.5cm,height=5.8cm,xlabel={Success count $k$},ylabel={Probability or frequency},xmin=-.5,xmax=10.5,ymin=0,ymax=.35,xtick={0,1,...,10},legend pos=north east,ybar,bar width=5pt]
@@ -199,37 +289,28 @@ The deterministic update of a composition and the random sampling of a compositi
 \end{axis}\end{tikzpicture}}
 \caption{Exact probabilities for ten independent trials with success probability 0.3, compared with frequencies from 200 reproducible simulated samples.}\end{figure}
 
-\section{Conditional probability and dependent draws}\label{ch04-conditional-probability-and-dependent-draws}
+A finite bound also follows directly from the variance. On the event \(|\widehat p-p|\geq\varepsilon\), the squared deviation is at least \(\varepsilon^2\). Its average is therefore at least \(\varepsilon^2\) times the probability of that event. Rearranging gives \[P(|\widehat p-p|\geq\varepsilon)
+\leq\frac{p(1-p)}{N\varepsilon^2}.\] This is an instance of Chebyshev's inequality. It can be a loose bound, but it requires no approximation to the sampling distribution.
 
-If an event \(B\) has positive probability, the \textbf{conditional probability} of \(A\) given \(B\) is \(P(A\mid B)=P(A\cap B)/P(B)\). Here \(A\cap B\) means that both events occur. Rearranging gives the multiplication rule \(P(A\cap B)=P(B)P(A\mid B)\). Independence is the special case in which conditioning on one event does not change the probability of the other.
+Why do expectations add without independence? Expand an average over all joint outcomes and group the contribution of the first variable separately from that of the second. Each variable's marginal probabilities emerge when the other is summed out. Correlations do not affect this linear accounting.
 
-An outcome tree can therefore represent dependent observations as well. Its branch probabilities must be conditioned on the path already followed. The product along a path still gives the leaf probability. What changes is the branch labeling.
+Variances behave differently. Expanding \((X+Y)^2\) introduces the product term \(2XY\). Under independence its average factors as \(2\mathbb E[X]\mathbb E[Y]\), producing variance addition. Without independence, that cancellation need not occur. A batch of observations influenced by the same event can fluctuate together, making the independent-trial formula underestimate their collective variability.
 
-\begin{example}[Two red tokens without replacement]
+For physical objects taking random transitions, a deterministic matrix update predicts mean counts. If there are twenty objects at \(A\), each independently following the first column of the path matrix, the expected numbers are fifteen at \(A\) and five at \(B\). The actual allocation is random. If there are three objects, the expected numbers are \(9/4\) and \(3/4\); these fractional expectations do not mean an object was divided.
 
-A box has three red and two blue tokens. The probability of two red draws without replacement is \((3/5)(2/4)=3/10\). With replacement it is \((3/5)^2=9/25\). In the first procedure, observing a red token changes the available composition. The second red branch must use the updated box, rather than the initial probability.
+For a fixed matrix, averaging sampled trajectories is compatible with the linear update: conditional expected next proportions are \(Kp_n\). For a nonlinear selection rule, averaging before and after applying the rule need not give the same result. This is another reason to specify which level of the model a probability vector describes.
 
-\end{example}
+\section{What can disappear in a finite observation}\label{ch04-what-can-disappear-in-a-finite-observation}
 
-\section{Why multinomial probabilities add to one}\label{ch04-why-multinomial-probabilities-add-to-one}
+If a category has probability \(p>0\), the chance of missing it in \(N\) independent observations is \((1-p)^N\). With \(p=1/20\) and \(N=20\), this probability is about \(0.3585\). An expected count of one is compatible with observing zero.
 
-There are \(k^N\) ordered length-\(N\) samples from \(k\) labels. Each receives its product probability. Summing over all possible labels at the first position, then the second, and continuing gives \[\sum_{i_1,\ldots,i_N}p_{i_1}\cdots p_{i_N}=(p_1+\cdots+p_k)^N=1.\] Grouping these ordered samples by their count vectors replaces each collection of equal products with its multiplicity times one product. The resulting sum is exactly the sum of the multinomial probabilities. This establishes normalization and explains the multinomial expansion as a grouping of outcomes.
+This distinction matters for both geometry and information. Exact positive multiplication preserves an existing category. Finite sampling can land on a boundary lattice state where its observed count is zero. Treating an observed zero as an impossible event would be a further modeling choice.
 
-At \(N=2\) with three labels, there are nine ordered samples but only six count vectors. The vectors \((2,0,0)\), \((0,2,0)\), and \((0,0,2)\) each have multiplicity one. The three other vectors each have multiplicity two. Counting a vector once without this factor would omit ordered outcomes.
+One can combine transport and sampling: compute \(p^+=Kp\), then draw \(N\) observations from \(p^+\). The conditional mean of the sampled proportions is \(p^+\). The realized proportions fluctuate around it and need not obey the deterministic trajectory exactly. This two-stage model separates the transition mechanism from observation noise.
 
-\section{A finite bound on sampling error}\label{ch04-a-finite-bound-on-sampling-error}
+Use the transport view of the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html}{operator explorer} to check that the negative divergence equals each coordinate change. Use the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week04.html}{sampling demonstration} to compare repeated empirical distributions.
 
-Variance can control the probability of a large error using a simple comparison of sums. For a random variable \(X\) with mean \(\mu\), every outcome satisfying \(|X-\mu|\geq a\) contributes at least \(a^2\) to the squared deviation. Therefore \[\operatorname{Var}(X)=\mathbb E[(X-\mu)^2]\geq a^2P(|X-\mu|\geq a),\] and hence \(P(|X-\mu|\geq a)\leq\operatorname{Var}(X)/a^2\). This is \textbf{Chebyshev's inequality}. The argument works for a finite distribution by comparing the indicated terms in its expectation sum.
-
-For an empirical binary proportion, it gives \[P(|\widehat p-p|\geq\varepsilon)\leq\frac{p(1-p)}{N\varepsilon^2}\leq\frac{1}{4N\varepsilon^2}.\] The last inequality follows from \(p(1-p)=1/4-(p-1/2)^2\leq1/4\). This bound is often conservative, but it is valid for every \(p\) under independent sampling.
-
-\begin{example}[Choosing a sample size from a bound]
-
-To make the probability of an empirical error of at least \(0.1\) no greater than \(0.05\), uniformly over binary probabilities, it is sufficient that \(1/(4N(0.1)^2)\leq0.05\). Solving gives \(N\geq500\). A sharper calculation for a specified \(p\) can use the exact binomial probabilities. The bound provides a guaranteed size without that longer calculation.
-
-\end{example}
-
-A probability bound concerns repetitions of the stated sampling procedure. It does not certify that an already observed empirical table lies within the tolerance. The model, its independence assumption, and its sample size remain part of the conclusion.
+So far we can describe where probability goes and how observations fluctuate. Chapter 5 asks what uncertainty does during those changes. It turns entropy from a field we can evaluate into a quantity whose differences we can interpret and analyze.
 
 \section{Exercises}\label{ch04-exercises}
 
@@ -237,19 +318,31 @@ A probability bound concerns repetitions of the stated sampling procedure. It do
 
 \item 
 
-Draw the two-level probability tree for independent binary observations with \(p=1/3\).
+Explain the meaning of every column in the three-location transition matrix. Check nonnegativity and column sums.
 
 \item 
 
-Find the probability of exactly two successes in four independent trials with success probability \(1/3\).
+Starting from \(p_0=(0,1,0)\), compute \(p_1,p_2\) and both vector differences.
 
 \item 
 
-List the six ordered binary samples of length four with two successes.
+For \(p=(1/2,1/3,1/6)\), compute the two path currents, all divergences, and the next state.
 
 \item 
 
-Derive the multinomial coefficient for three categories by choosing positions in two stages.
+Prove that the general net-current formula gives \(\Delta p=-\operatorname{div}J\).
+
+\item 
+
+For the two-location rule with \(a=1/4\), \(b=1/2\), find the stationary distribution and error multiplier. Calculate two updates from \((1,0)\).
+
+\item 
+
+Explain why the swap rule \(a=b=1\) has a stationary distribution but does not converge from \((1,0)\).
+
+\item 
+
+Calculate the probability of exactly three successes in five independent trials with success probability \(2/3\).
 
 \item 
 
@@ -257,47 +350,35 @@ Find the multiplicity and probability of counts \((1,2,1)\) under \(p=(1/2,1/3,1
 
 \item 
 
-For readings \(1,2,5\) with probabilities \(1/4,1/2,1/4\), compute the mean and variance.
+For readings \(1,2,5\) with probabilities \(1/4,1/2,1/4\), calculate expectation and variance.
 
 \item 
 
-Prove the identity \(\operatorname{Var}(X)=\mathbb E[X^2]-(\mathbb E[X])^2\) by expansion.
+For \(N=100\) and \(p=0.2\), find the standard deviations of the count and empirical proportion. Repeat for \(N=400\).
 
 \item 
 
-For a binomial sample with \(N=100\), \(p=0.2\), find the mean and standard deviation of the count and of the empirical proportion.
+A category has probability \(0.1\). Find the first integer sample size for which its probability of being missed is below \(0.05\).
 
 \item 
 
-A category has probability \(0.1\). Find the first integer sample size for which its probability of being missed is below \(0.05\). A calculator may be used.
-
-\item 
-
-Explain why observing zero copies of a category is compatible with a positive underlying probability. Give a numerical example.
-
-\item 
-
-For two independent samples of size \(N\), find the variance of the difference of their empirical success proportions.
-
-\item 
-
-Describe a simulation of a population with normalized selection followed by multinomial sampling. Identify which stage is deterministic and which stage is random.
+Describe a simulation that first transports probability by \(K\) and then draws a finite sample. Explain which quantities are deterministic and which are random.
 
 \end{exercises}
 
 \section{Selected solutions}\label{ch04-selected-solutions}
 
-\textbf{2.} The probability is \(\binom42(1/3)^2(2/3)^2=8/27\).
+\textbf{2.} The new states are \((1/4,1/2,1/4)\) and \((5/16,3/8,5/16)\). Their differences from their predecessors are \((1/4,-1/2,1/4)\) and \((1/16,-1/8,1/16)\).
 
-\textbf{5.} The multiplicity is \(12\). The probability is \(12(1/2)(1/3)^2(1/6)=1/9\).
+\textbf{3.} Both currents are \(1/24\). Divergence is \((1/24,0,-1/24)\), so the next state is \((11/24,1/3,5/24)\).
 
-\textbf{6.} The mean is \(5/2\) and the second moment is \(17/2\), giving variance \(9/4\).
+\textbf{5.} The stationary state is \((2/3,1/3)\) and the multiplier is \(1-a-b=1/4\). Starting at \((1,0)\) gives \((3/4,1/4)\) and \((11/16,5/16)\).
 
-\textbf{8.} The count has mean \(20\) and standard deviation \(4\). The empirical proportion has mean \(0.2\) and standard deviation \(0.04\).
+\textbf{7.} The count probability is \(\binom53(2/3)^3(1/3)^2=80/243\). A single specified order with those counts has probability \(8/243\).
 
-\textbf{9.} Since \(0.9^{28}\approx0.05233\) and \(0.9^{29}\approx0.04710\), the first qualifying size is \(29\).
+\textbf{8.} The multiplicity is \(4!/(1!2!1!)=12\). Multiplying by \((1/2)(1/3)^2(1/6)\) gives probability \(1/9\).
 
-\textbf{11.} Independence makes the variance of the difference equal to the sum of the variances, namely \(2p(1-p)/N\).
+\textbf{11.} Since \(0.9^{28}\approx0.05233\) and \(0.9^{29}\approx0.04710\), the first qualifying size is twenty-nine.
 \labheading\begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist

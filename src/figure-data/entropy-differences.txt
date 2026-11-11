@@ -1,0 +1,1 @@
+Binary entropy on the four-token lattice and its forward differences. The differences decrease and change sign at the balanced composition.

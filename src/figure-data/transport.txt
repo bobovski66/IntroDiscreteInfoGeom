@@ -1,0 +1,1 @@
+One transport step from (3/4,1/4,0). The middle vertex gains mass even while sending some onward, because its incoming current is larger.

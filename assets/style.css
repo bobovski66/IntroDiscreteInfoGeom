@@ -4,3 +4,14 @@
 @media(max-width:430px){.hero h1{font-size:2.65rem}.demo-controls{grid-template-columns:1fr}.weekly h1{font-size:2.15rem}.week-nav{gap:1rem}.site-header nav{font-size:.82rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 @media print{.site-header,.week-nav,.prev-next,footer,.lab-actions,.quiz-actions,.skip{display:none}body{background:white;color:black;font-size:11pt}main,.weekly,.reading-text{max-width:none;padding:0}.solutions{display:block}.lab-question{break-inside:avoid}a{color:black}.hero{display:block}.hero figure{max-width:400px}.completion{display:none}}
+
+.reading-contents{max-width:790px;margin:1.2rem auto 2rem;padding:1rem 1.4rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.reading-contents summary{font-size:.92rem}
+.reading-contents ol{columns:2;column-gap:2.5rem;padding-left:1.3rem;font-size:.87rem;line-height:1.5}
+.reading-contents li{break-inside:avoid;margin:.6rem 0;padding-left:.2rem}
+.reading-text table{border-collapse:collapse;width:100%;font-size:.89em;line-height:1.5;margin:1.2rem 0}
+.reading-text th,.reading-text td{padding:.6rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+.reading-text th{background:var(--soft);font-weight:600}
+.reading-text .table-scroll{max-width:100%;margin:1.5rem 0}
+@media(max-width:600px){.reading-contents ol{columns:1}.reading-text table{font-size:.86em}.reading-text th,.reading-text td{padding:.5rem}}
+@media print{.reading-contents{display:none}}

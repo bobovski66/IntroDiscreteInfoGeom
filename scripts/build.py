@@ -6,7 +6,6 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
 from course import WEEKS,TITLE,SUBTITLE
 from figures import FIGURES
-from extensions import EXTENSIONS
 E=html.escape
 def run(args,**kw):
     p=subprocess.run(args,cwd=ROOT,capture_output=True,text=True,**kw)
@@ -53,22 +52,28 @@ def make_figures():
 
 PREFACE=r'''
 \chapter*{Preface}\addcontentsline{toc}{chapter}{Preface}
-This book develops a discrete calculus of information. Finite differences measure changes of sequences and probability distributions, summation reconstructs accumulated changes, and discrete vector calculus describes flows across the edges of probability lattices. Its prerequisites are algebra, fractions, powers, and an interest in mathematical models. Logarithms, matrix notation, probability, and the needed trigonometry are introduced where they are used.
+A record of daily arrivals, a population's changing composition, and a sequence of model predictions all describe quantities at separate steps. To understand them, we subtract neighboring values, accumulate changes, and ask what repeated updates will do. This book develops those elementary operations into a calculus of probability distributions and information.
 
-The central objects are sequences and probability distributions on finitely many labels. The first chapters develop finite differences, discrete integration, and difference equations, before using token transfers to define directional derivatives on a probability simplex. A list of population counts becomes a distribution by division by its total. A growth rule becomes a difference equation after normalization. Counting ordered samples leads to multinomial coefficients; logarithmic surprise leads to entropy and relative entropy. Taking square roots places distributions on a sphere, where angles provide statistical distances. Graphs impose finite constraints on possible movements, and stochastic matrices model noisy observations and information networks.
+The starting prerequisites are fractions, powers, basic algebra, and coordinate graphs. Logarithms, probability, matrices, and the trigonometry used for statistical distance are developed where they enter the argument. Continuous calculus is not assumed. A calculator with logarithm, exponential, square-root, and inverse-trigonometric functions is useful for checking the numerical examples.
 
-Every recurrence has a stated meaning for one step. Its conclusions are established for that finite rule. In particular, properties of a continuous-time model need not survive repeated finite updates. Exact identities, inequalities, and small examples allow us to examine this issue directly.
+The chapters follow one accumulating line of inquiry. Chapters 1 and 2 establish finite differences, summation, and difference equations. Growth and feedback provide settings in which the meaning of a step and the size of a correction can be examined exactly. Chapters 3 and 4 turn a probability vector into a geometric state, define directional changes on a token lattice, and connect currents to conservation. Finite sampling then explains the gap between a model's probabilities and an observed composition.
 
-The ten chapters are arranged for ten weeks of study. Each chapter contains worked examples, exercises, selected solutions, and a laboratory investigation. The accompanying course site supplies interactive demonstrations and short quizzes. A suggested weekly rhythm is to read the first half of a chapter, work through examples, explore the demonstration, and then complete the remaining reading and laboratory. Four to six hours of preparation and independent work per week is a reasonable starting estimate; discussion time can be adapted to the class.
+Chapters 5 and 6 ask what uncertainty and model discrepancy do during an update. Entropy grows from average surprise into a function with finite directional differences. Relative entropy compares a state with a reference and supplies a potential whose one-step change can establish contraction. The proofs use finite inequalities and explicit calculations.
 
-Calculations use natural logarithms unless bits are specified. A distribution is a column of nonnegative entries adding to one. A positive distribution has no zero entries. For relative entropy, terms with zero first argument contribute zero, while a positive first entry over a zero reference entry gives infinity. Square-root distances remain finite at the boundary. These conventions are explained at their first use and used consistently thereafter.
+Chapters 7 and 8 construct statistical distance through square-root coordinates on a sphere. Exact distances are distinguished from local quadratic estimates, and unrestricted shortest arcs are compared with permitted routes through a lattice. Chapter 9 uses these ideas to choose a learning update by balancing a score against the information cost of change. Chapter 10 brings the operators together on networks and examines which model distinctions remain visible after transport or observation.
 
-This course is a companion to \emph{Introduction to Information Geometry}, available at \url{https://bobovski66.github.io/IntroInfoGeom/}. It follows a related progression from population models to information and geometry. Its finite proofs and combinatorial investigations provide a separate entry into the subject.
+Several distinctions recur because they change the mathematics. Discrete time does not require a finite state space. Expected proportions are different from sampled counts. A direction of movement does not determine its length. A quantity that is monotone under one rule need not be monotone under another. Each distinction is developed through examples before it is used in a larger argument.
+
+The web readings and the textbook contain the same chapters. Each chapter begins with a setting and a question, develops its notation and calculations, and ends with exercises, selected solutions, and a laboratory investigation. The site supplies the accompanying demonstrations and check-ins. Read a chapter over several sittings: reproduce a worked calculation, explore its demonstration, and return to the argument with those numbers in view. The contents list on each web reading provides navigation through the longer developments.
+
+Natural logarithms give information quantities in nats; base-two logarithms give bits. Probability vectors have nonnegative entries totaling one, and matrices act on them as columns. Zero-probability conventions are introduced before they are needed. Local Fisher formulas require positive starting probabilities, while exact spherical distance includes boundary states. Every recurrence states a finite update, and its conclusions concern that stated rule.
+
+The companion course, \emph{Introduction to Information Geometry}, develops the continuous theory at \url{https://bobovski66.github.io/IntroInfoGeom/}. The present book supplies an algebraic entry to many of the same questions through differences, sums, finite probability, and exact geometric constructions.
 '''
 REFS=r'''
 \chapter*{Further reading}\addcontentsline{toc}{chapter}{Further reading}
 The following sources provide broader context and more advanced developments. Their prerequisites vary; the present chapters supply the definitions needed for the accompanying course.
-\begin{description}[style=nextline,leftmargin=0pt]
+\begin{description}[style=nextline,leftmargin=1.5em]
 \item[Arora, S., Hazan, E., and Kale, S. (2012).] The multiplicative weights update method: a meta-algorithm and applications. \emph{Theory of Computing} 8, 121--164. \url{https://theoryofcomputing.org/articles/v008a006/}. An extensive account of finite learning updates and their applications.
 \item[Levin, D. A., and Peres, Y. (2017).] \emph{Markov Chains and Mixing Times}, second edition, with contributions by E. L. Wilmer. American Mathematical Society. Author resources: \url{https://pages.uoregon.edu/dlevin/MARKOV/}. Develops finite Markov chains, stationarity, and convergence.
 \item[Nielsen, F. (2020).] An elementary introduction to information geometry. \emph{Entropy} 22(10), 1100. \url{https://doi.org/10.3390/e22101100}. A survey connecting statistical divergences with geometric structures.
@@ -91,7 +96,6 @@ def build():
     chapters=[]
     for w in WEEKS:
         n=w['week'];s=f'{n:02}';source=(ROOT/f'src/ch{s}.md').read_text()
-        source=source.replace('## Exercises',EXTENSIONS[n]+'\n## Exercises')
         core=md(source,'latex').replace('\\label{','\\label{ch'+s+'-').replace('\\hypertarget{','\\hypertarget{ch'+s+'-')
         labmd='\n'.join(f'{i}. {q}'for i,q in enumerate(w['lab'],1))
         labtex=r'\labheading'+md(labmd,'latex')
@@ -100,10 +104,13 @@ def build():
         single=p+'\n\\begin{document}\n'+titlepage(n)+f'\n\\setcounter{{chapter}}{{{n-1}}}\n'+ch+'\n\\end{document}\n'
         write(f'textbook/latex/chapter{s}.tex',single)
         read=md(source,'html5')
+        read=re.sub(r'(<table>.*?</table>)',r'<div class="table-scroll">\1</div>',read,flags=re.S)
+        headings=re.findall(r'<h2\b[^>]*\bid="([^"]+)"[^>]*>(.*?)</h2>',read,flags=re.S)
+        contents='<details class="reading-contents"><summary>Contents of this reading</summary><nav aria-label="Reading contents"><ol>'+''.join('<li><a href="#'+E(anchor)+'">'+label+'</a></li>' for anchor,label in headings if anchor!='selected-solutions')+'</ol></nav></details>'
         # Put solutions in an accessible expandable element on the web.
         read=re.sub(r'<h2 id="selected-solutions">Selected solutions</h2>(.*)$',r'<details class="solutions"><summary>Selected exercise solutions</summary>\1</details>',read,flags=re.S)
         objective='<aside class="objectives"><h2>Learning goals</h2><ul>'+''.join('<li>'+E(x)+'</li>'for x in w['objectives'])+'</ul></aside>'
-        body=f'<p class="chapter-download"><a href="../textbook/pdf/chapter{s}.pdf">Chapter {n} PDF</a> · <a href="../textbook/latex/chapter{s}.tex">LaTeX source</a></p>'+objective+'<article class="reading-text">'+read+'</article>'
+        body=f'<p class="chapter-download"><a href="../textbook/pdf/chapter{s}.pdf">Chapter {n} PDF</a> · <a href="../textbook/latex/chapter{s}.tex">LaTeX source</a></p>'+objective+contents+'<article class="reading-text">'+read+'</article>'
         write(f'readings/week{s}.html',weekly(w,'reading',body))
         body='<p class="lede">'+E(w['demo'])+'</p><p class="operator-link"><a href="../demos/operator-explorer.html">Open the discrete calculus operator explorer</a></p><div id="demo-root" data-demo="'+str(n)+'"></div><noscript><p>Enable JavaScript to use the controls. The reading and PDF contain the formulas and worked examples.</p></noscript><script src="../assets/math.js"></script><script src="../assets/demos.js"></script>'
         write(f'demos/week{s}.html',weekly(w,'demo',body))

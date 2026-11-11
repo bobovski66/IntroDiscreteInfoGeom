@@ -7,7 +7,12 @@ function Div(el)
     local f=io.open('src/figure-data/'..key..'.tex'); local tikz=f:read('*a');f:close()
     local f2=io.open('src/figure-data/'..key..'.txt');local cap=f2:read('*a');f2:close()
     if latex then return pandoc.RawBlock('latex','\\begin{figure}[htbp]\\centering\n\\resizebox{.98\\linewidth}{!}{'..tikz..'}\n\\caption{'..cap..'}\\end{figure}') end
-    return pandoc.RawBlock('html','<figure><img src="../assets/fig-'..key..'.svg" alt="'..cap..'" loading="lazy"><figcaption>'..cap..'</figcaption></figure>')
+    local svg=io.open('assets/fig-'..key..'.svg');local image=svg:read('*a');svg:close()
+    local width=image:match('width="([%d%.]+)')
+    local height=image:match('height="([%d%.]+)')
+    local dimensions=''
+    if width and height then dimensions=' width="'..math.floor(tonumber(width)+.5)..'" height="'..math.floor(tonumber(height)+.5)..'"' end
+    return pandoc.RawBlock('html','<figure><img src="../assets/fig-'..key..'.svg" alt="'..cap..'"'..dimensions..' loading="lazy"><figcaption>'..cap..'</figcaption></figure>')
   elseif c=='example' or c=='proposition' then
     local title=el.attributes.title or ''
     if latex then

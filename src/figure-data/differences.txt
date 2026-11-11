@@ -1,0 +1,1 @@
+Six values of the square sequence determine five first differences. Each difference is indexed by the starting step of its interval.

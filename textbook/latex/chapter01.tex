@@ -92,6 +92,9 @@
 \displaywidowpenalty=10000
 \raggedbottom
 \setcounter{tocdepth}{1}
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3.2em}}
+\makeatother
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \providecommand{\passthrough}[1]{#1}
@@ -102,92 +105,149 @@
 \setcounter{chapter}{0}
 
 \chapter{Sequences, differences, and discrete integration}
-\section{The discrete derivative}\label{ch01-the-discrete-derivative}
+Imagine recording the number of messages arriving at a help desk each day. The daily counts tell one story: when demand is high, when it is growing, and when it begins to slow. The running total tells another: how much work has accumulated. Passing between these two descriptions means subtracting consecutive totals or adding consecutive arrivals. These are the two basic operations of discrete calculus.
 
-A sequence is a function whose input is a whole-number time step. Write its values as \(a_0,a_1,a_2,\ldots\). We measure the change from one step to the next by the \textbf{forward difference} \[\Delta a_n=a_{n+1}-a_n.\] This is the discrete derivative. It records an exact change over one step, rather than a rate obtained from a limit. A positive difference means the quantity increases; a negative difference means it decreases. The size of the difference tells us how much.
+The word \textbf{discrete} tells us that we are working with separate steps: days, generations, observations, or rounds of an algorithm. We will begin with quantities measured at these steps. Later the quantities will be probabilities, and the questions will concern learning, uncertainty, and information. The same subtraction-and-addition relationship will run through the entire course.
 
-For example, let \(a_n=n^2\). Then \[\Delta a_n=(n+1)^2-n^2=2n+1.\] The first few values of \(a_n\) are \(0,1,4,9,16\) and their first differences are \(1,3,5,7\). Taking differences again gives \(2,2,2\). We write \(\Delta^2a_n=\Delta(\Delta a_n)\) and call it the \textbf{second difference}. Constant second differences are the discrete signature of quadratic sequences.
+\section{Reading a sequence as a record of change}\label{ch01-reading-a-sequence-as-a-record-of-change}
 
-\section{Summation is discrete integration}\label{ch01-summation-is-discrete-integration}
+A \textbf{sequence} is an ordered list of values. We write it as \(a_0,a_1,a_2,\ldots\), where the subscript records the step. The symbol \(a_3\) means the value at step three; it does not mean \(a\) multiplied by three. Starting with subscript zero lets us distinguish an initial measurement from measurements made after one or more updates.
 
-Suppose we know only that \(\Delta a_n=2n+1\) and \(a_0=0\). We can reconstruct the sequence by adding its changes: \[a_n=a_0+\sum_{k=0}^{n-1}(2k+1)=n^2.\] More generally, any sequence satisfies the \textbf{discrete fundamental theorem of calculus}: \[\boxed{\sum_{k=m}^{n-1}\Delta a_k=a_n-a_m.}\] Every intermediate term cancels. This is why the identity is sometimes called \emph{telescoping}. An antidifference of a sequence \(b_n\) is a sequence \(A_n\) such that \(\Delta A_n=b_n\). Two antidifferences differ by a constant.
+A formula such as \(a_n=n^2\) gives each value directly. Substituting \(n=0,1,2,3,4\) gives \(0,1,4,9,16\). Another way to specify a sequence is to give an initial value and an update rule. For example, \[a_0=10,\qquad a_{n+1}=a_n+3\] means: start at ten, then add three each step. The resulting list is \(10,13,16,19,\ldots\). The formula \(a_n=10+3n\) describes the same list.
 
-To practice, suppose the number of messages received per day is \(b_n=3n+2\) for days \(n=0,1,\ldots\). The total received in the first four days is \(2+5+8+11=26\). The cumulative total \(S_n=\sum_{k=0}^{n-1}b_k\) satisfies \(\Delta S_n=b_n\) exactly.
+Before interpreting a sequence, give its terms and its steps units. If \(a_n\) is the number of messages received by the end of day \(n\), then \(a_{n+1}-a_n\) counts messages arriving during the next day. If measurements are two hours apart, dividing the change by two gives a rate per hour. Throughout most of this course, one update is our time unit. A finite change and a rate per physical unit agree numerically only when that unit has been specified appropriately.
 
-\section{From counts to proportions}\label{ch01-from-counts-to-proportions}
+\section{The first difference measures one step}\label{ch01-the-first-difference-measures-one-step}
 
-Now let two types have counts \(A_n,B_n\) and multipliers \(w_A,w_B>0\). Their updates are \(A_{n+1}=w_AA_n\) and \(B_{n+1}=w_BB_n\). Define the proportion \[x_n=\frac{A_n}{A_n+B_n}.\] Normalizing the new counts gives the recurrence \[x_{n+1}=\frac{w_Ax_n}{w_Ax_n+w_B(1-x_n)}.\] Subtract the old proportion to obtain a genuine discrete derivative: \[\boxed{\Delta x_n=\frac{x_n(1-x_n)(w_A-w_B)}{w_Ax_n+w_B(1-x_n)}.}\] This formula distinguishes changes in total population from changes in its composition. It also proves that \(0\leq x_n\leq1\) is preserved when the multipliers are positive.
+The \textbf{forward difference} of a sequence is \[\boxed{\Delta a_n=a_{n+1}-a_n.}\] Read the symbol \(\Delta\) as ``change in.'' The subscript \(n\) identifies the step that starts at \(n\) and ends at \(n+1\). A positive difference means an increase, a negative difference means a decrease, and a zero difference means no change during that step.
 
-Take \(x_0=1/4\), \(w_A=2\), and \(w_B=1\). The next proportion is \(2/5\), so \(\Delta x_0=2/5-1/4=3/20\). We know both where the state moved and exactly how far it moved along the probability interval.
+\begin{example}[Separating a total from its increments]
 
-\section{Try it as calculus}\label{ch01-try-it-as-calculus}
-
-Use the population demonstration to record \(x_0,\ldots,x_5\) and the difference sequence \(\Delta x_0,\ldots,\Delta x_4\). Add the differences and verify that their sum is \(x_5-x_0\). Then change the relative multiplier and repeat. This is the first glimpse of information geometry: the points are probability distributions, and our calculus measures changes between them.
-
-\section{Further investigations: Sequences, differences, and discrete integration}\label{ch01-further-investigations-sequences-differences-and-discrete-integration}
-
-A population, a collection of observations, and a set of possible messages can all be described by lists of nonnegative numbers. Dividing each entry by the total produces proportions. The proportions retain the composition of the collection even when its size changes. This simple operation connects growth models with probability.
-
-Our time variable takes the values \(t=0,1,2,\ldots\). One step might represent a generation, a round of a game, or the arrival of another batch of data. A rule that determines the next state from the present state is a \textbf{difference equation}. We will study such rules by calculating successive states, solving some rules exactly, and comparing quantities before and after a step.
-
-\section{Sequences and repeated multiplication}\label{ch01-sequences-and-repeated-multiplication}
-
-A sequence is an ordered list \(a_0,a_1,a_2,\ldots\). The recurrence \(a_{t+1}=r a_t\), together with an initial value \(a_0\), determines every term. Substitution gives \(a_1=ra_0\), \(a_2=r^2a_0\), and, after \(t\) steps, \[a_t=a_0r^t.\] Here \(r\) is the multiplier per step. A multiplier of \(1.2\) means a \(20\%\) increase in one step; a multiplier of \(0.8\) means a \(20\%\) decrease. The percentage change and the multiplier are different numbers.
-
-Suppose two types, \(A\) and \(B\), have positive counts \(N_{A,t}\) and \(N_{B,t}\). With constant multipliers \(w_A,w_B>0\), their counts satisfy \[N_{A,t+1}=w_A N_{A,t},\qquad N_{B,t+1}=w_B N_{B,t}.\] Counts may be interpreted as expected counts or amounts when a multiplier produces a noninteger result. A model of literal indivisible individuals would require an additional sampling or rounding rule. We will state explicitly when such a rule is present.
-
-\begin{example}[The same population at two scales]
-
-Begin with \(20\) individuals of type \(A\) and \(80\) of type \(B\). Let \(w_A=2\) and \(w_B=1\). The count pairs are \((20,80)\), \((40,80)\), \((80,80)\), and \((160,80)\). Their \(A\) proportions are \(1/5\), \(1/3\), \(1/2\), and \(2/3\). Beginning instead at \((200,800)\) produces exactly the same proportions. Multiplying every count by a common positive number leaves composition unchanged.
+Suppose cumulative arrivals at a help desk are \(a_0=0\), \(a_1=2\), \(a_2=7\), \(a_3=15\), and \(a_4=26\). Subtract consecutive entries: \[\Delta a_0=2,\quad\Delta a_1=5,\quad\Delta a_2=8,\quad\Delta a_3=11.\] There are five totals and four intervals between them. The differences count the arrivals during those four intervals. The total rises throughout, and its increments are also rising.
 
 \end{example}
 
-\section{Normalization gives an exact update}\label{ch01-normalization-gives-an-exact-update}
+This operation plays the role of a derivative. It asks how the value changes as the input advances one step. Everything needed to compute it is present in two neighboring entries. A finite table can therefore support a useful calculus even when no formula between the observations is available.
 
-Write \(x_t=N_{A,t}/(N_{A,t}+N_{B,t})\). The other proportion is \(1-x_t\). Dividing the new \(A\) count by the new total gives \[x_{t+1}=\frac{x_t w_A}{x_t w_A+(1-x_t)w_B}.\] The denominator is the average multiplier in the current population. It accounts for the growth of the total. We often write \(x^+\) for the next value of \(x\) and \(Z=xw_A+(1-x)w_B\) for this average. Then \[x^+-x=\frac{x(1-x)(w_A-w_B)}{Z}.\] To verify the formula, put \(xw_A/Z-x\) over the denominator \(Z\) and factor the numerator. This identity gives a complete sign test: an interior proportion increases when \(w_A>w_B\), decreases when \(w_A<w_B\), and remains fixed when the multipliers agree.
+Differences obey simple algebraic rules. For sequences \(a_n,b_n\) and a fixed number \(c\), \[\Delta(a_n+b_n)=\Delta a_n+\Delta b_n,\qquad
+\Delta(ca_n)=c\Delta a_n.\] For example, the first identity follows by expanding \((a_{n+1}+b_{n+1})-(a_n+b_n)\) and regrouping. Such identities let us analyze a complicated record by separating its parts.
 
-The endpoints also have a direct meaning. If \(x=0\), there are no \(A\) individuals to multiply, so \(x^+=0\). If \(x=1\), the next state is again \(1\). An absent type remains absent under this particular rule. Introducing a type by migration or mutation requires another term in the model.
+\section{Differences themselves can change}\label{ch01-differences-themselves-can-change}
 
-\begin{example}[Both counts can grow while one proportion falls]
+If \(a_n=n^2\), then \[\Delta a_n=(n+1)^2-n^2=(n^2+2n+1)-n^2=2n+1.\] The square sequence has first differences \(1,3,5,7,\ldots\). They increase by two each time. Applying the difference operation again gives the \textbf{second difference}: \[\Delta^2a_n=\Delta a_{n+1}-\Delta a_n
+=a_{n+2}-2a_{n+1}+a_n.\] For the square sequence, every second difference is two.
 
-Take equal initial counts and multipliers \(w_A=1.1\), \(w_B=1.3\). Both types increase in number. Nevertheless, \(x^+=1.1/(1.1+1.3)=11/24\), which is smaller than \(1/2\). The proportion compares one type with the total; its change depends on relative multiplication.
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Step \(n\) & \(a_n=n^2\) & \(\Delta a_n\) & \(\Delta^2a_n\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & 0 & 1 & 2 \\
+1 & 1 & 3 & 2 \\
+2 & 4 & 5 & 2 \\
+3 & 9 & 7 & \\
+4 & 16 & & \\
+\end{longtable}
 
-\end{example}
+The blank entries cannot be obtained from this five-term table because they need values beyond its end. The formula supplies those additional values if we want them.
 
-\section{Odds turn normalization into multiplication}\label{ch01-odds-turn-normalization-into-multiplication}
+A positive second difference says the first differences are increasing. It does not, by itself, say the original values are increasing. A falling sequence can have negative increments that become less negative. For instance, the values \(9,4,1,0\) have differences \(-5,-3,-1\) and second differences \(2,2\). The quantity falls, but its fall slows.
 
-For \(0<x<1\), the \textbf{odds} of \(A\) relative to \(B\) are \(O=x/(1-x)\). Odds of \(3\) mean three \(A\) individuals per \(B\) individual, so the corresponding proportion is \(3/4\). Solving the definition for \(x\) gives \(x=O/(1+O)\).
+This distinction will matter when we study entropy. The sign of its first difference will tell us whether uncertainty rises or falls; its second difference will tell us how that tendency changes across neighboring states.
 
-The normalized rule has a particularly simple form in odds: \[O_{t+1}=\frac{x_{t+1}}{1-x_{t+1}}=\frac{w_A}{w_B}O_t.\] Let \(r=w_A/w_B\). Repeated multiplication now yields an explicit solution: \[O_t=O_0r^t,\qquad
-x_t=\frac{x_0r^t}{1-x_0+x_0r^t}.\] The expression is valid for every nonnegative integer \(t\) and for the endpoint initial states as well. It solves the normalized recurrence without computing intermediate states.
+\begin{example}[A triangular accumulation]
 
-\begin{example}[Reaching a target proportion]
-
-Let \(x_0=1/5\) and \(r=2\). Then \(O_t=2^t/4\). The condition \(x_t\geq 0.9\) is equivalent to \(O_t\geq9\), hence to \(2^t\geq36\). Since \(2^5=32\) and \(2^6=64\), the first qualifying step is \(t=6\). Checking integer powers is often the clearest way to answer a discrete timing question.
-
-\end{example}
-
-If \(r>1\) and both types are initially present, the odds become arbitrarily large and \(x_t\) approaches \(1\). If \(r<1\), the odds approach zero and \(x_t\) approaches zero. Approaching an endpoint does not mean reaching it at a finite step: all finite powers of a positive number are positive, so both types remain present in exact arithmetic.
-
-\section{Probability vectors and weighted averages}\label{ch01-probability-vectors-and-weighted-averages}
-
-For \(k\) types, let \(p_i\) denote the proportion of type \(i\). A \textbf{probability vector} satisfies \(p_i\geq0\) and \(\sum_{i=1}^k p_i=1\). The symbol \(\sum\) means addition over the indicated indices. Thus \(\sum_{i=1}^3p_i=p_1+p_2+p_3\).
-
-With positive multipliers \(w_i\), the general update is \[p_i^+=\frac{p_iw_i}{Z},\qquad Z=\sum_{j=1}^k p_jw_j.\] All new entries are nonnegative, and adding them gives \(Z/Z=1\). This verifies that the rule remains inside the set of probability vectors. The quantity \(Z\) is a \textbf{weighted average} of the multipliers: a common type contributes more to the average than a rare type.
-
-\begin{example}[Three types in one step]
-
-Let \(p=(1/2,1/3,1/6)\) and \(w=(1,2,3)\). The unnormalized entries are \((1/2,2/3,1/2)\) and their sum is \(5/3\). Dividing by that sum gives \(p^+=(3/10,2/5,3/10)\). The entries add to one, providing a quick arithmetic check.
+Suppose a workshop completes one item in its first interval, two in its second, three in its third, and so on. Let \(T_n\) be the number completed after \(n\) intervals. Then \[T_0=0,\qquad \Delta T_n=n+1.\] The initial values are \(0,1,3,6,10\). Pairing the terms of \(1+2+\cdots+n\) in forward and reverse order gives \(n\) pairs, each with sum \(n+1\). Therefore \[T_n=\frac{n(n+1)}2.\] Check the formula by subtracting neighboring values: \[\frac{(n+1)(n+2)}2-\frac{n(n+1)}2=n+1.\] The cumulative sequence is quadratic because its first differences increase linearly. Its second differences are one.
 
 \end{example}
 
-Multiplying every \(w_i\) by the same positive constant leaves the normalized result unchanged, because that constant cancels between numerator and denominator. This freedom is useful when comparing models and when computing with very large or small weights.
+This gives a way to move in both directions between patterns. Constant first differences suggest an affine formula \(an+b\). Constant second differences suggest a quadratic formula. The suggestion becomes a proof after substitution verifies the formula and its starting value. A short table alone does not determine all future terms: many rules can agree on its entries and disagree later.
 
-\section{What a finite model specifies}\label{ch01-what-a-finite-model-specifies}
+A table also makes clear what information a difference requires. Measurements at steps zero through four provide four changes. We cannot calculate the change starting at four until the fifth-step measurement arrives. A formula can supply information beyond the observed table, but that information comes from the formula's assumptions.
 
-A recurrence needs an initial state and a rule for each step. Its interpretation also needs a meaning for one step. Changing a step from one generation to ten generations can change the appropriate multiplier. For constant multipliers, ten consecutive steps multiply the odds by \(r^{10}\). A state-dependent multiplier requires reevaluation after every step and usually cannot be replaced by its tenth power at the initial state.
+For measured data, subtraction can mix several effects. If yesterday's reading was too high and today's is too low, their difference exaggerates an apparent fall. The operation is exact arithmetic; its interpretation depends on measurement quality. A deterministic sequence lets us study the operation before adding measurement error.
 
-Throughout the course, a \textbf{fixed point} is a state that one update leaves unchanged. A \textbf{trajectory} is the sequence of states generated by repeated updates. A quantity is \textbf{invariant} if it has exactly the same value at every step. These definitions refer to the stated recurrence. They will let us ask precise questions even when a closed formula for the trajectory is unavailable.
+\begin{figure}[htbp]\centering
+\resizebox{.98\linewidth}{!}{\begin{tikzpicture}
+\begin{axis}[width=6.5cm,height=5.3cm,xlabel={Step $n$},ylabel={$a_n=n^2$},xmin=-.2,xmax=5.2,ymin=0,ymax=27,xtick={0,...,5},grid=major]
+\addplot[teal,only marks,mark=*,mark size=2.5pt] coordinates {(0,0)(1,1)(2,4)(3,9)(4,16)(5,25)};
+\end{axis}
+\begin{axis}[at={(6.5cm,0)},anchor=south west,width=6.5cm,height=5.3cm,xlabel={Starting step $n$},ylabel={$\Delta a_n=2n+1$},xmin=-.3,xmax=4.3,ymin=0,ymax=10,xtick={0,...,4},grid=major]
+\addplot[copper,ycomb,mark=*,mark size=2.5pt] coordinates {(0,1)(1,3)(2,5)(3,7)(4,9)};
+\end{axis}\end{tikzpicture}}
+\caption{Six values of the square sequence determine five first differences. Each difference is indexed by the starting step of its interval.}\end{figure}
+
+\section{Summation reconstructs accumulated change}\label{ch01-summation-reconstructs-accumulated-change}
+
+Return to the arrivals \(2,5,8,11\). Starting from zero and adding them gives the cumulative values \(0,2,7,15,26\). Summation reverses the difference operation once an initial value is supplied.
+
+The notation \[\sum_{k=0}^{n-1}b_k\] means ``add the terms \(b_k\) as \(k\) takes the integer values from zero through \(n-1\).'' For example, \(\sum_{k=0}^3 b_k=b_0+b_1+b_2+b_3\). The letter \(k\) is a running index; we use a different letter from the endpoint \(n\) to keep their roles distinct.
+
+Define the running sum by \(S_0=0\) and \[S_n=\sum_{k=0}^{n-1}b_k.\] Then \(S_{n+1}\) contains all the terms in \(S_n\) plus one new term, \(b_n\). Thus \[\Delta S_n=S_{n+1}-S_n=b_n.\] A sequence whose difference is \(b_n\) is called an \textbf{antidifference} of \(b_n\). Adding a constant to an antidifference gives another one. Specifying the starting value removes that ambiguity.
+
+\begin{example}[An antidifference found by inspection]
+
+We already know that \(\Delta(n^2)=2n+1\). Therefore \(n^2\) is an antidifference of \(2n+1\). Starting at \(a_0=7\) instead of zero gives \(a_n=7+n^2\). The increments remain \(2n+1\) because the constant seven cancels in every subtraction.
+
+\end{example}
+
+\section{Why the discrete fundamental theorem works}\label{ch01-why-the-discrete-fundamental-theorem-works}
+
+Write out three successive differences: \[\begin{aligned}
+\Delta a_m+\Delta a_{m+1}+\Delta a_{m+2}
+&=(a_{m+1}-a_m)+(a_{m+2}-a_{m+1})\\
+&\quad +(a_{m+3}-a_{m+2})\\
+&=a_{m+3}-a_m.
+\end{aligned}\] Every intermediate value is added once and subtracted once. This cancellation is called \textbf{telescoping}. The same argument works for any number of steps and gives the discrete fundamental theorem of calculus: \[\boxed{\sum_{k=m}^{n-1}\Delta a_k=a_n-a_m.}\] There are \(n-m\) changes between steps \(m\) and \(n\). The last change starts at \(n-1\), which explains the upper summation limit.
+
+This identity is useful even when the changes alternate in sign. A sequence \(5,8,6,10\) has differences \(3,-2,4\). Their sum is five, exactly the endpoint change \(10-5\). Adding the absolute changes would instead give nine, a measure of total movement. Net change and total movement answer different questions. We will encounter the same distinction for paths through probability space.
+
+\begin{example}[A balance equation for a stockroom]
+
+Let \(S_n\) be stock at the beginning of a day, \(R_n\) the deliveries received during that day, and \(D_n\) the items used. Assuming no other additions or losses, \[\Delta S_n=R_n-D_n.\] Take \(S_0=20\), deliveries \((5,0,8)\), and use \((3,6,4)\) over three days. Net changes are \((2,-6,4)\), giving stock levels \(20,22,16,20\). Summing the balance equations yields \[S_3-S_0=(5+0+8)-(3+6+4)=0.\] Final and initial stocks agree, although activity occurred throughout. Summing deliveries alone would describe throughput rather than the change in stored quantity.
+
+\end{example}
+
+This balance structure will reappear when probability moves through a network. A vertex's stored mass changes by arrivals minus departures. The form of that law is already visible in a stockroom calculation.
+
+\section{Repeated multiplication gives a different kind of growth}\label{ch01-repeated-multiplication-gives-a-different-kind-of-growth}
+
+A fixed addition gives constant first differences. A fixed multiplication gives a \textbf{geometric sequence}: \[a_{n+1}=r a_n,\qquad a_n=a_0r^n.\] To see the formula, compute \(a_1=ra_0\), then \(a_2=r(ra_0)=r^2a_0\), and continue. Here \(r\) is the multiplier per step. Growth of twenty percent corresponds to \(r=1.2\); a decrease of twenty percent corresponds to \(r=0.8\).
+
+Its first difference is \[\Delta a_n=(r-1)a_n.\] The absolute increment depends on the current amount. Ten percent of a larger amount is a larger increment, even though the percentage rate is unchanged.
+
+In a population model, a multiplier may produce noninteger counts. We then interpret counts as amounts or expected counts. A rule for a literal finite population would also need a sampling or rounding procedure. Chapter 4 develops the sampling interpretation.
+
+There are two separate uses of the word discrete here. The time index may be discrete while the state takes arbitrary real values, as in \(a_{n+1}=1.2a_n\). Alternatively, the permitted states may form a finite list, as when a fixed number of tokens is allocated among categories. Both will occur in this course. A finite number of category labels does not force every probability to be an integer fraction with a fixed denominator.
+
+\section{Composition changes differently from total size}\label{ch01-composition-changes-differently-from-total-size}
+
+Suppose two types have counts \(A_n\) and \(B_n\). Their proportions are \[x_n=\frac{A_n}{A_n+B_n},\qquad 1-x_n=\frac{B_n}{A_n+B_n}.\] Dividing by the total is called \textbf{normalization}. It removes overall size and retains composition. Counts \((20,80)\) and \((200,800)\) both give \(x=1/5\).
+
+Let each type multiply once per step: \[A_{n+1}=w_AA_n,\qquad B_{n+1}=w_BB_n,\qquad w_A,w_B>0.\] The new total is \(w_AA_n+w_BB_n\). Substituting the old proportions into the ratio gives \[\boxed{x_{n+1}=\frac{w_Ax_n}{w_Ax_n+w_B(1-x_n)}.}\] The denominator is the average multiplier in the old population. It is required because both the numerator and the total can change.
+
+\begin{example}[Both counts rise while one share falls]
+
+Start with counts \((50,50)\) and multipliers \((1.1,1.3)\). The new counts are \((55,65)\), so the \(A\) share becomes \(55/120=11/24\). Although \(A\) increased from fifty to fifty-five, its share fell from \(1/2\) to about \(0.4583\). The other type grew faster.
+
+\end{example}
+
+To measure composition change, subtract \(x_n\) from the update. Write \(Z=w_Ax+w_B(1-x)\) for the denominator at the current step. Then \[\begin{aligned}
+x^+-x&=\frac{w_Ax-xZ}{Z}
+=\frac{x[w_A-w_Ax-w_B(1-x)]}{Z}\\
+&=\frac{x(1-x)(w_A-w_B)}{Z}.
+\end{aligned}\] Here \(x^+\) is a shorter name for the next value. Consequently, \[\boxed{\Delta x_n=\frac{x_n(1-x_n)(w_A-w_B)}{w_Ax_n+w_B(1-x_n)}.}\] For \(0<x_n<1\), every factor other than \(w_A-w_B\) is positive. The difference therefore has the sign of the relative advantage. This is our first example of extracting a qualitative conclusion from an exact discrete derivative.
+
+At \(x=0\) or \(x=1\), the numerator is zero. A missing type remains missing under multiplication. Positive multipliers also keep every initially present type positive at every finite step. These conclusions concern the stated update; adding migration would give another model.
+
+\begin{example}[A finite calculus calculation on proportions]
+
+With \(x_0=1/4\), \(w_A=2\), and \(w_B=1\), \[x_1=\frac{2(1/4)}{2(1/4)+3/4}=\frac25,\qquad
+\Delta x_0=\frac25-\frac14=\frac3{20}.\] The next state is \(x_2=4/7\), so \(\Delta x_1=4/7-2/5=6/35\). Adding the two differences gives \(9/28\), which equals \(x_2-x_0\). Telescoping works for this nonlinear update just as it did for a table of message totals.
+
+\end{example}
 
 \begin{figure}[htbp]\centering
 \resizebox{.98\linewidth}{!}{
@@ -201,35 +261,36 @@ Throughout the course, a \textbf{fixed point} is a state that one update leaves 
 \end{axis}\end{tikzpicture}}
 \caption{Counts and proportions for initial counts (20,80) and multipliers (2,1). The total population changes at every step.}\end{figure}
 
-\section{Reversing an update and checking a formula}\label{ch01-reversing-an-update-and-checking-a-formula}
+\section{A change of coordinates can simplify a recurrence}\label{ch01-a-change-of-coordinates-can-simplify-a-recurrence}
 
-An explicit formula is more than a shortcut. It lets us answer an inverse question: which initial composition would produce a given final composition? For a constant relative multiplier \(r>0\), the odds relation \(O_t=r^tO_0\) gives \(O_0=O_t/r^t\). Convert the observed final proportion to odds, divide by the accumulated multiplier, and convert back to a proportion. These operations reverse the update when both types are present.
+For \(0<x<1\), define the \textbf{odds} \(O=x/(1-x)\). Odds of three mean three units of type \(A\) for each unit of type \(B\), so the proportion is \(3/4\). Solving the definition gives \(x=O/(1+O)\).
 
-\begin{example}[Reconstructing an initial composition]
+In the normalized growth model, the common denominator cancels when we divide the two new proportions: \[O_{n+1}=\frac{w_A}{w_B}O_n.\] The odds follow a geometric sequence. With \(r=w_A/w_B\), \[O_n=O_0r^n,\qquad
+x_n=\frac{x_0r^n}{1-x_0+x_0r^n}.\] The final formula also makes sense for \(x_0=0\) and \(x_0=1\), even though the intermediate odds calculation assumed an interior starting value.
 
-After four steps with relative multiplier \(3/2\), the A proportion is \(3/5\). Its final odds are \(3/2\). Dividing by \((3/2)^4=81/16\) gives initial odds \(8/27\). The initial A proportion was therefore \((8/27)/(1+8/27)=8/35\). Substituting \(x_0=8/35\) into the explicit formula recovers \(3/5\) at step four.
+If \(x_0=1/5\) and \(r=2\), then \(O_n=2^n/4\). Reaching a proportion of at least \(0.9\) means reaching odds of at least nine, so \(2^n\geq36\). Since \(2^5=32\) and \(2^6=64\), the first qualifying step is six. A question about a nonlinear fraction has become a comparison of integer powers.
 
-\end{example}
+This use of coordinates anticipates information geometry. Different numerical descriptions of the same state can make different features easy to see. Proportions display composition; odds simplify relative multiplication.
 
-Sometimes the multiplier is unknown instead. If both \(O_0\) and \(O_t\) are known, then \(r^t=O_t/O_0\). For example, doubling the odds in three steps requires \(r=2^{1/3}\) per step. This is a relative multiplier. Many absolute pairs \((w_A,w_B)\) have this ratio, so compositions alone do not determine absolute population growth.
+We can also run a positive growth step backward. New odds satisfy \(O^+=rO\), so old odds are \(O=O^+/r\). Converting back gives \[x=\frac{x^+}{r(1-x^+)+x^+}.\] Substituting a forward update recovers the starting proportion. This checks a simulation and explains why exact positive multiplication cannot delete a present type in one step. Rounding can destroy that reversibility: a small positive proportion rounded to zero loses the information needed to reconstruct its earlier value.
 
-The exact solution can be verified by \textbf{mathematical induction}. First check the initial step \(t=0\), where the formula returns \(x_0\). Then assume the formula holds at a particular step \(t\). Substituting into the recurrence and canceling its common denominator gives the same formula with \(t+1\) in place of \(t\). These two statements establish the formula for every nonnegative integer step. Induction is particularly well suited to recurrences because the proof follows the way the sequence is constructed.
+\section{Turning a record into a model}\label{ch01-turning-a-record-into-a-model}
 
-\section{Replenishment gives an affine recurrence}\label{ch01-replenishment-gives-an-affine-recurrence}
+A sequence of observations and an update law are different starting points. With observations, compute differences and look for patterns. With a law, generate observations and prove identities. In applications we move between these tasks, and it helps to record which statements come from data and which come from assumptions.
 
-Repeated multiplication is one useful mechanism; partial replacement is another. Suppose a fixed-size collection replaces a fraction \(\lambda\) of its members each round with an external source whose A proportion is \(q\). The next composition is \[x^+=(1-\lambda)x+\lambda q,\qquad 0<\lambda\leq1.\] This is an \textbf{affine recurrence}, consisting of a multiple of \(x\) plus a constant. Its fixed point is \(q\). Subtracting that fixed point gives a pure multiplication rule for the error: \[x^+-q=(1-\lambda)(x-q).\] Thus \(x_t=q+(1-\lambda)^t(x_0-q)\). This technique, shifting coordinates to a fixed point, will recur in later chapters.
+A count table that doubles for three days supports the description ``doubling occurred during these intervals.'' Predicting doubling for a hundred days assumes a continuing multiplier of two. Resource limits or environmental changes might alter that rule. Similarly, a constant count ratio in a short record is evidence about composition, while the normalization calculation proves scale independence under the stated multiplier model.
 
-\begin{example}[Replacing one quarter of a collection]
+A useful calculation record includes the initial state, the meaning of one step, the rule, and a check suited to the quantity. For cumulative totals, increments should add to the endpoint change. For probabilities, check nonnegativity and total one. For an explicit solution, check both its initial value and recurrence. These checks connect an answer to the question it is meant to resolve.
 
-Let \(x_0=0.8\), let the external source have proportion \(q=0.2\), and replace one quarter each round. Then \(x_t=0.2+0.6(3/4)^t\). The first two new values are \(0.65\) and \(0.5375\). Every step removes one quarter of the remaining difference from the source composition. It does not remove one quarter of the current A proportion.
+\section{From an interval to probability vectors}\label{ch01-from-an-interval-to-probability-vectors}
 
-\end{example}
+For three or more categories, collect the proportions into a vector \(p=(p_1,\ldots,p_k)\) with \[p_i\geq0,\qquad \sum_{i=1}^k p_i=1.\] The index \(i\) labels a category. Such a list is a \textbf{probability vector} because selecting one individual uniformly gives category \(i\) with probability \(p_i\). The same list can describe uncertain outcomes even without a population interpretation.
 
-The multiplying-growth model and the replacement model can be distinguished by their formulas. Positive multiplication preserves absence. Replacement introduces A from the source whenever \(q>0\) and \(\lambda>0\), even if A is initially absent. Choosing a recurrence therefore includes choosing the mechanisms that can change a population.
+Positive multipliers give the general normalized update \[p_i^+=\frac{p_iw_i}{Z},\qquad Z=\sum_{j=1}^k p_jw_j.\] The new entries are nonnegative. Adding them gives \(Z/Z=1\), so they are still a probability vector. Multiplying every multiplier by the same positive constant changes both numerator and denominator by that factor and leaves the answer unchanged.
 
-\section{A calculation routine}\label{ch01-a-calculation-routine}
+For \(p=(1/2,1/3,1/6)\) and \(w=(1,2,3)\), the unnormalized entries are \((1/2,2/3,1/2)\). Their sum is \(5/3\), giving \(p^+=(3/10,2/5,3/10)\). The changes add to zero because one unit of total probability has been redistributed. This conservation will become a vector calculus identity later in the course.
 
-To compute an update reliably, make a short table with columns for the old proportion, multiplier, and product. Add the products to obtain \(Z\), then divide every product by \(Z\). Check the new sum before rounding the displayed values. Store more digits than are printed, since feeding rounded output back into the next step changes the recurrence. Finally, compare a simple diagnostic, such as the two-type odds ratio, with its expected update. An independent identity often detects an indexing error that a unit-sum check alone would miss.
+In the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html}{operator explorer}, use the differences-and-sums view to compare a sequence with its difference table. Then use the \href{https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week01.html}{growth demonstration} to record a proportion trajectory and check a telescoping sum. Chapter 2 asks a new question about such trajectories: when repeated corrections move a state toward a target, what prevents them from overshooting and growing unstable?
 
 \section{Exercises}\label{ch01-exercises}
 
@@ -237,67 +298,67 @@ To compute an update reliably, make a short table with columns for the old propo
 
 \item 
 
-Starting from \(a_0=12\), list the first five terms of \(a_{t+1}=(3/2)a_t\), including \(a_0\).
+A sequence records cumulative arrivals \(0,3,8,15,24\). Find all first and second differences available from the table. Interpret both in the context of arrivals.
 
 \item 
 
-A quantity decreases by \(15\%\) each step. Write its multiplier and its value after eight steps in terms of its initial value.
+For \(a_n=3n^2+2n+5\), calculate \(\Delta a_n\) and \(\Delta^2a_n\) by expanding the expressions.
 
 \item 
 
-Normalize the count triples \((6,9,15)\) and \((14,21,35)\). Explain why the results agree.
+Starting from \(a_0=7\), reconstruct \(a_1,a_2,a_3,a_4\) when \(\Delta a_n=2n+3\). Check the endpoint change by summation.
 
 \item 
 
-Starting with counts \((30,70)\) and multipliers \((3,2)\), find the counts and proportions after two steps.
+Find an antidifference of \(2n+1\). Explain why specifying its value at zero determines it uniquely.
 
 \item 
 
-Derive the formula for \(x^+-x\) by putting the two fractions over a common denominator.
+A sequence is \(10,7,5,4\). Calculate its differences and second differences. Explain how it can be decreasing while its second differences are positive.
 
 \item 
 
-Convert proportions \(1/4\), \(2/3\), and \(0.9\) to odds. Convert odds \(1/5\), \(1\), and \(7\) to proportions.
+Starting from \(a_0=12\), list five terms, including the initial value, of \(a_{n+1}=(3/2)a_n\). Give the first difference as a multiple of \(a_n\).
 
 \item 
 
-Let \(x_0=1/10\) and \(w_A/w_B=3\). Find the first integer step at which \(x_t\geq1/2\).
+Normalize \((6,9,15)\) and \((14,21,35)\). Explain why the results agree.
 
 \item 
 
-Prove that the general normalized update preserves the sum of the entries and preserves all zero entries.
+Starting with counts \((30,70)\) and multipliers \((3,2)\), calculate counts and proportions after two steps. Verify the sum of the two proportion changes.
 
 \item 
 
-Compute one update for \(p=(1/4,1/4,1/2)\) and \(w=(4,2,1)\). Repeat with \(w=(20,10,5)\).
+Derive the displayed formula for \(x^+-x\) without skipping the common-denominator step. Use it to explain why equal multipliers preserve composition.
 
 \item 
 
-Show that, for constant multipliers, \(p_{i,t}=p_{i,0}w_i^t/\sum_jp_{j,0}w_j^t\).
+Let \(x_0=1/10\) and \(w_A/w_B=3\). Find the first step at which \(x_n\geq1/2\) by using odds.
 
 \item 
 
-A program rounds each new proportion to two decimal places. Explain how this can remove a type that the exact recurrence would preserve. Give numerical values.
+Compute one normalized update for \(p=(1/4,1/4,1/2)\) and \(w=(4,2,1)\). Prove that the answer is unchanged for \(w=(20,10,5)\).
 
 \item 
 
-Two populations have the same initial composition but different total sizes. State assumptions under which their compositions remain identical, and describe one modification of the model that can break this conclusion.
+For constant positive multipliers, prove by induction that \(p_{i,n}=p_{i,0}w_i^n/\sum_jp_{j,0}w_j^n\). State what changes if the multipliers depend on the current proportions.
 
 \end{exercises}
 
 \section{Selected solutions}\label{ch01-selected-solutions}
 
-\textbf{1.} The terms are \(12,18,27,81/2,243/4\). Each is obtained by multiplying its predecessor by \(3/2\).
+\textbf{1.} First differences are \(3,5,7,9\) and second differences are \(2,2,2\). Arrivals increase by two from one recorded interval to the next.
 
-\textbf{3.} Both triples normalize to \((1/5,3/10,1/2)\). The second count triple is \(7/3\) times the first, and this factor cancels upon normalization.
+\textbf{2.} Expanding \(3(n+1)^2+2(n+1)+5-(3n^2+2n+5)\) gives \(6n+5\). Taking its difference gives six.
 
-\textbf{4.} The new counts are \((90,140)\) and then \((270,280)\). The \(A\) proportions are \(9/23\) and \(27/55\).
+\textbf{3.} The successive increments are \(3,5,7,9\), giving \(7,10,15,22,31\). Their sum is \(24=31-7\).
 
-\textbf{7.} Initial odds are \(1/9\). At step \(t\) they are \(3^t/9\). Reaching \(1/2\) means reaching odds at least one, which first occurs at \(t=2\).
+\textbf{8.} Counts become \((90,140)\) and \((270,280)\). The proportions are \(x_0=3/10\), \(x_1=9/23\), \(x_2=27/55\). The sum of the changes is \(27/55-3/10=21/110\).
 
-\textbf{9.} The unnormalized weights are \((1,1/2,1/2)\), so the answer is \((1/2,1/4,1/4)\) in both calculations.
+\textbf{10.} Initial odds are \(1/9\), so \(O_n=3^n/9\). A proportion of at least one half requires odds of at least one. The first such step is \(n=2\).
 
-\textbf{10.} The formula holds at \(t=0\). If it holds at \(t\), multiplying each numerator by \(w_i\) and normalizing cancels the previous common denominator, giving the formula with \(t+1\). This is a proof by induction.
+\textbf{11.} The unnormalized entries are \((1,1/2,1/2)\) and their total is two. The new table is \((1/2,1/4,1/4)\). Scaling all multipliers by five scales this total and each numerator by five, which cancels.
 \labheading\begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
