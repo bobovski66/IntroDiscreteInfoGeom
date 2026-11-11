@@ -14,13 +14,7 @@ growing, and when it begins to slow. The running total tells another:
 how much work has accumulated. Passing between these two descriptions
 means subtracting consecutive totals or adding consecutive arrivals.
 These are the two basic operations of discrete calculus.</p>
-<p>The word <strong>discrete</strong> tells us that we are working with
-separate steps: days, generations, observations, or rounds of an
-algorithm. We will begin with quantities measured at these steps. Later
-the quantities will be probabilities, and the questions will concern
-learning, uncertainty, and information. The same
-subtraction-and-addition relationship will run through the entire
-course.</p>
+<p>Here, <strong>discrete</strong> means that the observations come in separate steps: one day, one generation, or one round of an algorithm. We can read the values one at a time. To learn what happened between steps, we compare neighboring entries.</p>
 <h2 id="reading-a-sequence-as-a-record-of-change">Reading a sequence as
 a record of change</h2>
 <p>A <strong>sequence</strong> is an ordered list of values. We write it
@@ -50,6 +44,7 @@ physical unit agree numerically only when that unit has been specified
 appropriately.</p>
 <h2 id="the-first-difference-measures-one-step">The first difference
 measures one step</h2>
+<p>A table tells us how much has accumulated. Suppose we want to know how much arrived during a particular interval instead. We need only the totals at its two ends.</p>
 <p>The <strong>forward difference</strong> of a sequence is <span
 class="math display">\[\boxed{\Delta a_n=a_{n+1}-a_n.}\]</span> Read the
 symbol <span class="math inline">\(\Delta\)</span> as “change in.” The
@@ -150,10 +145,7 @@ class="math inline">\(9,4,1,0\)</span> have differences <span
 class="math inline">\(-5,-3,-1\)</span> and second differences <span
 class="math inline">\(2,2\)</span>. The quantity falls, but its fall
 slows.</p>
-<p>This distinction will matter when we study entropy. The sign of its
-first difference will tell us whether uncertainty rises or falls; its
-second difference will tell us how that tendency changes across
-neighboring states.</p>
+<p>The two signs tell different stories. A sequence can be falling even while its increments are rising toward zero. Looking at the first and second differences separately lets us describe both features without confusing them.</p>
 <div class="example" title="A triangular accumulation">
 <p><strong>Example. A triangular accumulation</strong></p>
 <p>Suppose a workshop completes one item in its first interval, two in
@@ -291,10 +283,7 @@ corresponds to <span class="math inline">\(r=0.8\)</span>.</p>
 a_n=(r-1)a_n.\]</span> The absolute increment depends on the current
 amount. Ten percent of a larger amount is a larger increment, even
 though the percentage rate is unchanged.</p>
-<p>In a population model, a multiplier may produce noninteger counts. We
-then interpret counts as amounts or expected counts. A rule for a
-literal finite population would also need a sampling or rounding
-procedure. Chapter 4 develops the sampling interpretation.</p>
+<p>In a population model, a multiplier may give noninteger counts. Such numbers can describe amounts or expected counts. If the objects are indivisible individuals, an additional sampling or rounding rule is needed. The multiplication rule alone does not specify which individuals are present.</p>
 <p>There are two separate uses of the word discrete here. The time index
 may be discrete while the state takes arbitrary real values, as in <span
 class="math inline">\(a_{n+1}=1.2a_n\)</span>. Alternatively, the
@@ -458,15 +447,7 @@ class="math inline">\(p^+=(3/10,2/5,3/10)\)</span>. The changes add to
 zero because one unit of total probability has been redistributed. This
 conservation will become a vector calculus identity later in the
 course.</p>
-<p>In the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/operator-explorer.html">operator
-explorer</a>, use the differences-and-sums view to compare a sequence
-with its difference table. Then use the <a
-href="https://bobovski66.github.io/IntroDiscreteInfoGeom/demos/week01.html">growth
-demonstration</a> to record a proportion trajectory and check a
-telescoping sum. Chapter 2 asks a new question about such trajectories:
-when repeated corrections move a state toward a target, what prevents
-them from overshooting and growing unstable?</p>
+<p>In the operator explorer, compare a sequence with its difference table, then recover the totals by adding the differences. In the growth demonstration, record a proportion trajectory and check a telescoping sum. Which descriptions make the pattern easier to see?</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
