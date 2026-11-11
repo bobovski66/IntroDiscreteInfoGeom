@@ -13,12 +13,7 @@ survey composition can be changed one response at a time. A model can be
 adjusted by mixing it with a target. A sequence of distributions can
 also follow equal increments of statistical distance. The endpoints
 alone do not specify the permitted journey.</p>
-<p>Chapter 7 gave us an exact distance between distributions. We now
-distinguish that endpoint distance from quantities accumulated along a
-route. The discrete fundamental theorem will identify sums that depend
-only on endpoints. Positive edge lengths will lead to shortest-path
-problems, and the sphere construction will give an explicit shortest
-route when intermediate states are unrestricted.</p>
+<p>We know how to measure the distance between two probability distributions. But imagine changing a survey one response at a time: a direct move to the destination may not be permitted. We need to specify the allowed steps before asking how long a route is. Some quantities will add up to an endpoint change; others will accumulate along every step.</p>
 <h2 id="a-path-is-a-finite-sequence-of-legal-moves">A path is a finite
 sequence of legal moves</h2>
 <p>Let a graph have probability states as its vertices. Two states are
@@ -234,6 +229,7 @@ arc passes through distributions unavailable to a two-token
 allocation.</p>
 <h2 id="finding-weighted-shortest-paths-systematically">Finding weighted
 shortest paths systematically</h2>
+<p>On a small graph, we can list a few routes and add their costs. When there are many routes, that becomes impractical. We need a method that compares partial routes without having to list every complete one.</p>
 <p>For a finite graph with nonnegative edge weights, <strong>Dijkstra’s
 algorithm</strong> computes shortest distances from a starting
 vertex.</p>
@@ -442,9 +438,7 @@ permitted lattice routes for the same endpoints. Record both the
 endpoint distance and the sum of edge lengths. For a scalar field such
 as entropy, also record the signed gradient sum and verify that it
 depends only on the endpoints.</p>
-<p>Chapter 9 uses geometry to choose an update rather than merely
-measure one. We will balance improvement in a score against the
-information cost of changing the current distribution.</p>
+<p>There are now two questions we can ask about a change of distribution: how far did it go, and which changes were permitted? Once those are clear, we can also ask how a rule might choose its next step in the first place.</p>
 <h2 id="exercises">Exercises</h2>
 <div class="exercises">
 <ol type="1">
