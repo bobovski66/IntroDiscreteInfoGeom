@@ -13,12 +13,7 @@ random walker changes location on a graph. A sensor converts a detailed
 physical state into an imperfect report. An observer may see only a
 group label rather than the original category. Each operation transforms
 a probability distribution.</p>
-<p>The tools developed throughout the course now meet in one setting.
-Edge differences produce currents; divergence gives conservation;
-entropy measures uncertainty; relative entropy and spherical distance
-measure distinctions between models. We will examine which quantities a
-network preserves, which it changes, and what becomes impossible to
-recover after observations are grouped.</p>
+<p>Begin with a walker moving between the vertices of a graph. Probability leaves some vertices and arrives at others. The first task is to write that motion as an update that keeps every probability nonnegative and the total equal to one. Once we can follow the motion, we can ask what an observer can still distinguish after the system reports a less detailed result.</p>
 <h2 id="from-an-edge-gradient-to-diffusion">From an edge gradient to
 diffusion</h2>
 <p>Let a finite undirected graph have vertices <span
@@ -215,6 +210,7 @@ same framework as one. Data processing can be applied successively to
 compare the distinctions visible at each stage.</p>
 <h2 id="the-log-sum-inequality-organizes-the-proof">The log-sum
 inequality organizes the proof</h2>
+<p>When a channel groups several possible inputs into one reported output, their probabilities are added together. We need to understand what this addition does to the difference between two models. The following inequality is built for exactly that calculation.</p>
 <p>For nonnegative lists <span class="math inline">\(a_i,b_i\)</span>,
 let <span class="math inline">\(A=\sum_i a_i\)</span> and <span
 class="math inline">\(B=\sum_i b_i\)</span>. When the relevant sums are
